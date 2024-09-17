@@ -1,38 +1,61 @@
-# Version minimale de CMake
+# Minimum version de CMake requise
 cmake_minimum_required(VERSION 3.10)
 
-# Nom du projet
+# Project name
 project(r-type)
 
-# Définition des fichiers sources
-set(SRC_SERVER src/server/main.cpp)
+# Include CMake modules for FetchContent
+include(FetchContent)
 
-# Options de compilation
+# Compiler flags
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
 
-# Ajout de l'exécutable serveur et nom explicite du binaire r-type_server
+# Download and configure Boost
+find_package(Boost 1.70 REQUIRED)
+if (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+# Download and configure SFML
+find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+if (SFML_FOUND)
+    include_directories(${SFML_INCLUDE_DIR})
+endif()
+
+
+
+# Source files for the Server
+set(SRC_SERVER
+    src/server/main.cpp
+)
+
+# Source files for the Client
 add_executable(r-type_server ${SRC_SERVER})
 
-# Spécifie le dossier de sortie pour l'exécutable
+# Linkage for SFML and Boost libraries
+target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+
+# Output directory for the server
 set_target_properties(r-type_server PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-# Ajout d'une cible pour le nettoyage (renommée en custom_clean)
+# Clean commands
 add_custom_target(custom_clean
     COMMAND ${CMAKE_COMMAND} -E remove -f *.o
     COMMAND ${CMAKE_COMMAND} -E remove -f r-type_server
 )
 
-# Tests (pas encore implémentés)
+# Commands for the tests
 add_custom_target(tests_run
-    COMMAND echo "No tests for the moment"
+    COMMAND echo "Aucun test pour le moment"
 )
 
-# Commande pour la couverture de code
+# Commands for the coverage
 add_custom_target(coverage
     COMMAND gcovr --exclude tests/
 )
 
-# Commande pour lancer les tests Docker epitest
+# Commands to run epitest
 add_custom_target(run_epitest
     COMMAND sudo docker build -t epitest:latest .
     COMMAND sudo docker run -it epitest:latest
