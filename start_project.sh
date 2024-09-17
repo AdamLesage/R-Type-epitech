@@ -1,5 +1,5 @@
 # This file is used to start the project such as:
-# Compile the project with Cmake, move binaries to the root directory and delete build/ directory
+# Compile the project with install dependencies on your OS, Cmake, move binaries to the root directory and delete build/ directory
 
 # Check if the build directory exists
 if [ -d "build" ]; then
