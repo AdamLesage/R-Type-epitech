@@ -14,6 +14,7 @@
 
 void logging_system( Registery & r );
 void position_system( Registery & r );
+void control_system( Registery & r );
 
 int main() {
     Registery registery;
@@ -36,6 +37,6 @@ int main() {
         sleep(1);
         logging_system(registery);
         position_system(registery);
-
+        control_system(registery);
     }
 }

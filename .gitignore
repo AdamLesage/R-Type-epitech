@@ -40,3 +40,6 @@ build/
 # Binary files
 r-type_server
 r-type_client
+
+# Vscode
+.vscode/
