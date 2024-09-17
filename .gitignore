@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# CMake files
+CMakeCache.txt
+CMakeFiles
+*.cmake
+build/
+
+# Binary files
+r-type_server
+r-type_client
