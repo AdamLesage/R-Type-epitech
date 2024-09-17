@@ -16,15 +16,21 @@
 #include <algorithm>
 #include "SparseArray.hpp"
 #include "Entity.hpp"
+#include <functional>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 class Registery {
     public:
-        Registery() {
+        std::shared_ptr<sf::RenderWindow> window;
+
+        Registery(std::shared_ptr<sf::RenderWindow> win) {
+            window = win;
             max_entity = 0;
+            
         }
         ~Registery() {
         }
-
         template <class Component>
         SparseArray<std::optional<Component>>& register_component()
         {
@@ -87,10 +93,25 @@ class Registery {
         {
             this->get_components<Component>().erase((std::size_t)from);
         }
+        template <class ...Components, typename Function>
+        void add_system ( Function && f ) {
+            systems.push_back(std::move(f));
+        }
+        template <class ...Components, typename Function>
+        void add_system ( Function const & f ) {
+            systems.push_back(f);
+        }
+        void run_systems() {
+            for (auto & system : systems) {
+                system(*this);
+            }
+        }
     protected:
     private:
         std::unordered_map<std::type_index, std::any> _container;
         std::vector<Entity> entity;
+        using SystemFunction = std::function<void(Registery & r)>;
+        std::vector<SystemFunction> systems;
         int max_entity;
 };
 
