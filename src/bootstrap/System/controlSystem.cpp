@@ -10,8 +10,11 @@
 #include "../Components/position.hpp"
 #include <iostream>
 #include <SFML/Window/Keyboard.hpp>
+#include "../../accessibility_requirements/PhysicalMotor.hpp"
 
 void control_system(Registery& r) {
+    PhysicalMotor motor;
+
     auto& positions = r.get_components<position>();
     auto& velocities = r.get_components<velocity>();
     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
@@ -19,10 +22,10 @@ void control_system(Registery& r) {
         auto& vel = velocities[i];
         if (pos && vel) {
             // Get keyboard inputs
-            bool leftKeyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
-            bool rightKeyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
-            bool upKeyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
-            bool downKeyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+            bool leftKeyPressed = motor.isLeftKeyPressed();
+            bool rightKeyPressed = motor.isRightKeyPressed();
+            bool upKeyPressed = motor.isUpKeyPressed();
+            bool downKeyPressed = motor.isDownKeyPressed();
 
             // Update velocity based on inputs
             if (leftKeyPressed) {
