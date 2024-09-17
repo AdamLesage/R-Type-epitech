@@ -17,15 +17,15 @@
 
 void logging_system( Registery & r );
 void position_system( Registery & r );
-void draw_system(Registery &r, std::shared_ptr<sf::RenderWindow> window);
+void draw_system(Registery &r);
 void control_system( Registery & r );
 
 int main() {
-    Registery registery;
     
     bool is_running = true;
     std::shared_ptr<sf::RenderWindow> window;
     window.reset(new sf::RenderWindow(sf::VideoMode(1800, 1000), "r-type"));
+    Registery registery(window);
     registery.register_component<position>();
     registery.register_component<velocity>();
     registery.register_component<drawable>();
@@ -43,12 +43,14 @@ int main() {
     registery.add_component<position>(entity, std::move(position_test));
     registery.add_component<velocity>(entity, std::move(velocity_test));
     registery.add_component<drawable>(entity, std::move(draw));
+    registery.add_system(position_system);
+    registery.add_system(control_system);
+    registery.add_system(draw_system);
     logging_system(registery);
     while (is_running) {
         usleep(1000);
         window->clear();
-        position_system(registery);
-        draw_system(registery, window);
+        registery.run_systems();
         window->display();
         sf::Event event;
         while (window->pollEvent(event))
@@ -57,6 +59,6 @@ int main() {
                 window->close();
                 return 0;
             }
-        }        control_system(registery);
+        }
     }
 }

@@ -12,7 +12,7 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 
-void draw_system(Registery & r, std::shared_ptr<sf::RenderWindow> window)
+void draw_system(Registery & r)
 {
     auto const &positions = r.get_components<position>();
     auto const &drawables = r.get_components<drawable>();
@@ -23,7 +23,7 @@ void draw_system(Registery & r, std::shared_ptr<sf::RenderWindow> window)
             sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(100, 100));
             rect.setPosition(pos.value()->x, pos.value()->y);
             rect.setFillColor(sf::Color::Blue);
-            window->draw(rect);
+            r.window->draw(rect);
         }
     }
 }
