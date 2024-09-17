@@ -18,7 +18,8 @@ jobs:
       with:
         fetch-depth: 0
     - run: |
-        make
+        chmod +x start_project.sh
+        ./start_project.sh
       timeout-minutes: 1
   push_to_mirror:
     needs:
