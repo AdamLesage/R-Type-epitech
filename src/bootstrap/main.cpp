@@ -32,9 +32,10 @@ int main() {
     velocity_test.vy = 2;
     registery.add_component<position>(entity, std::move(position_test));
     registery.add_component<velocity>(entity, std::move(velocity_test));
-    logging_system(registery);
     while (is_running) {
         sleep(1);
+        logging_system(registery);
         position_system(registery);
+
     }
 }
