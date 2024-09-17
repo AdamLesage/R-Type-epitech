@@ -10,11 +10,14 @@
 #include "Registery.hpp"
 #include "Components/velocity.hpp"
 #include "Components/position.hpp"
+#include <unistd.h>
 
 void logging_system( Registery & r );
+void position_system( Registery & r );
 
 int main() {
     Registery registery;
+    bool is_running = true;
 
     registery.register_component<position>();
     registery.register_component<velocity>();
@@ -30,4 +33,8 @@ int main() {
     registery.add_component<position>(entity, std::move(position_test));
     registery.add_component<velocity>(entity, std::move(velocity_test));
     logging_system(registery);
+    while (is_running) {
+        sleep(1);
+        position_system(registery);
+    }
 }
