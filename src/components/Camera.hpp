@@ -1,6 +1,5 @@
 /*
 ** EPITECH PROJECT, 2024
-** R-Type-epitech [WSL: Ubuntu]
 ** File description:
 ** Camera
 */

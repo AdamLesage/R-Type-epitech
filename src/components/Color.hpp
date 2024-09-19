@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** R-Type-epitech [WSL: Ubuntu]
+** R-Type-epitech
 ** File description:
 ** Color
 */
@@ -20,6 +20,5 @@
          */
         sf::Color color; //color of an entity
     } Color;
-
 
 #endif /* !COLOR_HPP_ */
