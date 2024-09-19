@@ -6,20 +6,19 @@
 */
 
 #ifndef LEVEL_HPP_
-#define LEVEL_HPP_
+    #define LEVEL_HPP_
 
-#include <iostream>
+    #include <cstddef>
 
-namespace Component {
-    class Level {
-        public:
-            Level();
-            ~Level();
-
-        protected:
-            std::size_t _level;
-        private:
-    };
-}
+    /**
+     * @struct Level_s
+     */
+    typedef struct Level_s {
+        /**
+         * @brief Level component, add a level to an entity
+         *
+         */
+        size_t level; //level of an entity (can't be negative)
+    } Level;
 
 #endif /* !LEVEL_HPP_ */

@@ -6,22 +6,20 @@
 */
 
 #ifndef HEALTH_HPP_
-#define HEALTH_HPP_
+    #define HEALTH_HPP_
 
-#include <iostream>
+    #include <cstddef>
 
-namespace Component {
-    class Health {
-        public:
-            Health();
-            ~Health();
-
-        protected:
-            std::size_t _health;
-            bool _isAlive;
-            bool _isDamageable;
-        private:
-    };
-}
+    /**
+     * @struct Health_s
+     */
+    typedef struct Health_s {
+        /**
+         * @brief Health component, add a health to an entity
+         *
+         */
+        size_t health;      //health of an entity
+        bool isDamageable;  //is the entity damageable
+    } Health;
 
 #endif /* !HEALTH_HPP_ */

@@ -6,18 +6,17 @@
 */
 
 #ifndef REVIVABLE_HPP_
-#define REVIVABLE_HPP_
+    #define REVIVABLE_HPP_
 
-namespace Component {
-    class Revivable {
-        public:
-            Revivable();
-            ~Revivable();
-
-        protected:
-            bool _isRevivable;
-        private:
-    };
-}
+    /**
+     * @struct Revivable_s
+     */
+    typedef struct Revivable_s {
+        /**
+         * @brief Revivable component, add a revivable to an entity
+         *
+         */
+        bool isRevivable; //is the entity revivable
+    } Revivable;
 
 #endif /* !REVIVABLE_HPP_ */

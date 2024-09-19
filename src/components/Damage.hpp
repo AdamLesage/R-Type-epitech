@@ -6,20 +6,19 @@
 */
 
 #ifndef DAMAGE_HPP_
-#define DAMAGE_HPP_
+    #define DAMAGE_HPP_
 
-#include <iostream>
+    #include <cstddef>
 
-namespace Component {
-    class Damage {
-        public:
-            Damage();
-            ~Damage();
-
-        protected:
-            std::size_t _damage;
-        private:
-    };
-}
+    /**
+     * @struct Damage_s
+     */
+    typedef struct Damage_s {
+        /**
+         * @brief Damage component, add a damage to an entity
+         *
+         */
+        size_t damage; //damage of an entity
+    } Damage;
 
 #endif /* !DAMAGE_HPP_ */

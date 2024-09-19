@@ -6,20 +6,19 @@
 */
 
 #ifndef COLOR_HPP_
-#define COLOR_HPP_
+    #define COLOR_HPP_
 
-#include <SFML/Graphics/Color.hpp>
+    #include <SFML/Graphics.hpp>
 
-namespace Component {
-    class Color {
-        public:
-            Color();
-            ~Color();
-
-        protected:
-            sf::Color _color;
-        private:
-    };
-}
+    /**
+     * @struct Color_s
+     */
+    typedef struct Color_s {
+        /**
+         * @brief Color component, add a color to an entity
+         *
+         */
+        sf::Color color; //color of an entity
+    } Color;
 
 #endif /* !COLOR_HPP_ */

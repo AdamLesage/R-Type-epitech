@@ -6,19 +6,18 @@
 */
 
 #ifndef VELOCITY_HPP_
-#define VELOCITY_HPP_
+    #define VELOCITY_HPP_
 
-namespace Component {
-    class Velocity {
-        public:
-            Velocity();
-            ~Velocity();
-
-        protected:
-            float _x;
-            float _y;
-        private:
-    };
-}
+    /**
+    * @struct Velocity_s
+    */
+    typedef struct Velocity_s {
+        /**
+        * @brief Velocity component, add a velocity to an entity
+        *
+        */
+        float x; //velocity on x axis
+        float y; //velocity on y axis
+    } Velocity;
 
 #endif /* !VELOCITY_HPP_ */

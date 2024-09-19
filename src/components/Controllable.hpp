@@ -6,17 +6,17 @@
 */
 
 #ifndef CONTROLLABLE_HPP_
-#define CONTROLLABLE_HPP_
+    #define CONTROLLABLE_HPP_
 
-namespace Component {
-    class Controllable {
-        public:
-            Controllable();
-            ~Controllable();
+    /**
+     * @struct Controllable_s
+     */
+    typedef struct Controllable_s {
+        /**
+         * @brief Controllable component, add a controllable to an entity if it can be controlled
+         *
+         */
+        bool isControllable; //is the entity controllable (ex: player = true, enemy = false)
+    } Controllable;
 
-        protected:
-            bool _isControllable;
-        private:
-    };
-}
 #endif /* !CONTROLLABLE_HPP_ */

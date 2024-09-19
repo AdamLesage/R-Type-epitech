@@ -6,19 +6,20 @@
 */
 
 #ifndef POSITION_HPP_
-#define POSITION_HPP_
+    #define POSITION_HPP_
 
-namespace Component {
-    class Position {
-        public:
-            Position();
-            ~Position();
+    #include <cstddef>
 
-        protected:
-            float _x;
-            float _y;
-        private:
-    };
-}
+    /**
+     * @struct Position_s
+     */
+    typedef struct Position_s {
+        /**
+         * @brief Position component, add a position to an entity (as size_t can't be negative)
+         *
+         */
+        size_t x; //position on x axis
+        size_t y; //position on y axis
+    } Position;
 
 #endif /* !POSITION_HPP_ */

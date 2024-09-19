@@ -6,18 +6,19 @@
 */
 
 #ifndef SCALE_HPP_
-#define SCALE_HPP_
+    #define SCALE_HPP_
 
-namespace Component {
-    class Scale {
-        public:
-            Scale();
-            ~Scale();
+    #include <cstddef>
 
-        protected:
-            float _scale;
-        private:
-    };
-}
+    /**
+     * @struct Scale_s
+     */
+    typedef struct Scale_s {
+        /**
+         * @brief Scale component, add a scale to an entity
+         *
+         */
+        size_t scale; //scale of an entity
+    } Scale;
 
 #endif /* !SCALE_HPP_ */

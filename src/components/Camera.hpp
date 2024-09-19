@@ -1,25 +1,23 @@
 /*
 ** EPITECH PROJECT, 2024
-** R-Type-epitech
 ** File description:
 ** Camera
 */
 
 #ifndef CAMERA_HPP_
-#define CAMERA_HPP_
+    #define CAMERA_HPP_
 
-#include <SFML/Graphics/View.hpp>
+    #include <SFML/Graphics.hpp>
 
-namespace Component {
-    class Camera {
-        public:
-            Camera();
-            ~Camera();
-
-        protected:
-            sf::View _view;
-        private:
-    };
-}
+    /**
+     * @struct Camera_s
+     */
+    typedef struct Camera_s {
+        /**
+         * @brief Camera component, add a camera to an entity
+         *
+         */
+        sf::View camera; //camera of an entity
+    } Camera;
 
 #endif /* !CAMERA_HPP_ */

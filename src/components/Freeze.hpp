@@ -6,19 +6,18 @@
 */
 
 #ifndef FREEZE_HPP_
-#define FREEZE_HPP_
+    #define FREEZE_HPP_
 
-namespace Component {
-    class Freeze {
-        public:
-            Freeze();
-            ~Freeze();
-
-        protected:
-            bool _isFrozen;
-            bool _isFreezeDamaging;
-        private:
-    };
-}
+    /**
+     * @struct Freeze_s
+     */
+    typedef struct Freeze_s {
+        /**
+         * @brief Freeze component, add a freeze to an entity
+         *
+         */
+        bool isFrozen;          //is the entity frozen
+        bool isFreezeDamaging;  //is the entity damaging when frozen
+    } Freeze;
 
 #endif /* !FREEZE_HPP_ */

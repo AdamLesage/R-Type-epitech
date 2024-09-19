@@ -6,20 +6,17 @@
 */
 
 #ifndef SHOOT_HPP_
-#define SHOOT_HPP_
+    #define SHOOT_HPP_
 
-namespace Component {
-    class Shoot {
-        public:
-            Shoot();
-            ~Shoot();
-
-        protected:
-            bool _canShoot;
-            float _shootingSpeed;
-
-        private:
-    };
-}
+    /**
+     * @struct Shoot_s
+     */
+     typedef struct Shoot_s {
+        /**
+         * @brief Shoot component, add a shoot to an entity
+         *
+         */
+        bool canShoot; //can the entity shoot
+    } Shoot;
 
 #endif /* !SHOOT_HPP_ */

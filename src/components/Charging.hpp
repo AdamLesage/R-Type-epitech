@@ -6,18 +6,17 @@
 */
 
 #ifndef CHARGING_HPP_
-#define CHARGING_HPP_
+    #define CHARGING_HPP_
 
-namespace Component {
-    class Charging {
-        public:
-            Charging();
-            ~Charging();
-
-        protected:
-            bool _isCharging;
-        private:
-    };
-}
+    /**
+     * @struct Charging_s
+     */
+    typedef struct Charging_s {
+        /**
+         * @brief Charging component, add a charging to an entity
+         *
+         */
+        bool isCharging; //is the entity charging
+    } Charging;
 
 #endif /* !CHARGING_HPP_ */

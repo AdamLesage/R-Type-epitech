@@ -6,18 +6,19 @@
 */
 
 #ifndef CONTROL_HPP_
-#define CONTROL_HPP_
+    #define CONTROL_HPP_
 
-namespace Component {
-    class Control {
-        public:
-            Control();
-            ~Control();
+    #include <map>
 
-        protected:
-            
-        private:
-    };
-}
+    /**
+     * @struct Control_s
+     */
+    typedef struct Control_s {
+        /**
+         * @brief Control component, add a control to an entity
+         *
+         */
+        // std::map</*Direction ENUM & Associated KEY ?*/>; //control of an entity
+    } Control;
 
 #endif /* !CONTROL_HPP_ */
