@@ -18,6 +18,8 @@ namespace Component {
 
         protected:
             sf::Sound _sound;
+            bool _isPlaying;
+            size_t _volume;
         private:
     };
 }
