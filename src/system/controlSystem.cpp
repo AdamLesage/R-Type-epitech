@@ -6,8 +6,8 @@
 */
 
 #include "../Registery.hpp"
-#include "../Components/velocity.hpp"
-#include "../Components/position.hpp"
+#include "../components/Velocity.hpp"
+#include "../components/Position.hpp"
 #include <iostream>
 #include <SFML/Window/Keyboard.hpp>
 #include "../../accessibility_requirements/PhysicalMotor.hpp"
