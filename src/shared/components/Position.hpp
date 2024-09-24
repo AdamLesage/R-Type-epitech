@@ -18,8 +18,8 @@
          * @brief Position component, add a position to an entity (as size_t can't be negative)
          *
          */
-        size_t x; //position on x axis
-        size_t y; //position on y axis
+        float x; //position on x axis
+        float y; //position on y axis
     } Position;
 
 #endif /* !POSITION_HPP_ */

@@ -17,6 +17,15 @@
          *
          */
         bool isControllable; //is the entity controllable (ex: player = true, enemy = false)
+
+        /**
+         * @brief Values to check if the entity is moving up, down, left or right
+         *
+         */
+        bool up;
+        bool down;
+        bool left;
+        bool right;
     } Controllable;
 
 #endif /* !CONTROLLABLE_HPP_ */
