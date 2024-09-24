@@ -8,8 +8,10 @@
 #ifndef EDITCONFIGFILE_HPP_
 #define EDITCONFIGFILE_HPP_
 
-#include <string>
 #include <libconfig.h++>
+#include <map>
+#include <iostream>
+#include <variant>
 
 class EditConfigFile {
     public:
@@ -26,29 +28,30 @@ class EditConfigFile {
         ~EditConfigFile() = default;
 
         /**
-         * @brief Read the configuration file.
+         * @brief Save and update the configuration file according to modificaitons in the queue.
          */
-        void readConfig();
+        void saveModifications();
 
         /**
-         * @brief Modify config file's int value.
+         * @brief Add int value modification to the queue.
          * 
          * @param settingPath The path to setting to modify in config file
          * @param newValue The new value to replace the old one
          */
-        void modifyConfig(const std::string &settingPath, int newValue);
+        void queueModification(const std::string &settingPath, int newValue);
 
         /**
-         * @brief Modify config file's string value.
+         * @brief Add string value modification to the queue.
          * 
          * @param settingPath The path to setting to modify in config file
          * @param newValue The new value to replace the old one
          */
-        void modifyConfig(const std::string &settingPath, const std::string &newValue);
+        void queueModification(const std::string &settingPath, const std::string &newValue);
 
     private:
         std::string configFilePath;
         libconfig::Config cfg;
+        std::map<std::string, std::variant<int, std::string>> newValues;
 };
 
 #endif /* !EDITCONFIGFILE_HPP_ */
