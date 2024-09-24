@@ -1,9 +1,22 @@
-#include <iostream>
-#include <boost/asio.hpp>
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech
+** File description:
+** server
+*/
+
+#include "Server.hpp"
+#include "Factory.hpp"
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Hello, World!" << std::endl;
+    NetworkLib::Factory factory;
 
-    return 0;
+    NetworkLib::Server server(50000);
+
+    while (1)
+    {
+        sleep(1);
+        server.sendToAll("test\n");
+    }
 }
