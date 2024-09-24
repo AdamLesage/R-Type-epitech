@@ -23,11 +23,16 @@ if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
 endif()
 
-
-
 # Source files for the Server
 set(SRC_SERVER
     src/server/main.cpp
+    src/shared/entities/Entity.cpp
+    src/shared/entities/Entity.hpp
+    src/server/registry/Registry.cpp
+    src/server/registry/Registry.hpp
+    src/server/sparse_array/SparseArray.hpp
+    src/server/systems/Systems.cpp
+    src/server/systems/Systems.hpp
 )
 
 # Source files for the Client
