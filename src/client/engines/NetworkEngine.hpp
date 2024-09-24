@@ -8,18 +8,17 @@
 #ifndef NETWORKENGINE_HPP_
 #define NETWORKENGINE_HPP_
 
+#include "AEngine.hpp"
 #include "IMediator.hpp"
 
-namespace NetworkLib {
-    class NetworkEngine : public IMediator {
-        public:
-            NetworkEngine() {}
-            ~NetworkEngine() {}
+class NetworkEngine : public AEngine {
+    public:
+        NetworkEngine();
+        ~NetworkEngine();
 
-            void notify(std::string sender, std::string event) override {};
-        protected:
-        private:
-    };
-}
+        void doSomething();
+    protected:
+    private:
+};
 
 #endif /* !NETWORKENGINE_HPP_ */

@@ -28,6 +28,10 @@ endif()
 set(SRC_CLIENT
     src/client/main.cpp
     src/client/network/Client.cpp
+    src/client/engines/GameEngine.cpp
+    src/client/engines/NetworkEngine.cpp
+    src/client/engines/RenderingEngine.cpp
+    src/client/engines/Mediator.cpp
 )
 
 add_executable(r-type_client ${SRC_CLIENT})
@@ -41,7 +45,8 @@ set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_
 
 # Source files for the Server
 set(SRC_SERVER
-    src/server/main.cpp
+    src/server/main_server.cpp # temp main waiting for the real one because current main should be client main
+    src/server/network/Server.cpp
     src/shared/entities/Entity.cpp
     src/shared/entities/Entity.hpp
     src/server/registry/Registry.cpp

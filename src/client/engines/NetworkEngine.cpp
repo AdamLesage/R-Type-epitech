@@ -7,10 +7,16 @@
 
 #include "NetworkEngine.hpp"
 
-NetworkLib::NetworkEngine::NetworkEngine()
+NetworkEngine::NetworkEngine()
 {
 }
 
-NetworkLib::NetworkEngine::~NetworkEngine()
+NetworkEngine::~NetworkEngine()
 {
+}
+
+void NetworkEngine::doSomething()
+{
+    std::cout << "NetworkEngine" << std::endl;
+    this->_mediator->notify("NetworkEngine", "doSomething");
 }

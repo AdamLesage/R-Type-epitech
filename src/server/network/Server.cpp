@@ -64,9 +64,6 @@ namespace NetworkLib {
 				if (!message.first.empty())
 					incomingMessages.push(message);;
 			}
-			catch (std::exception ex) {
-				std::cout << "handle_receive: Error parsing incoming message:" << ex.what() << std::endl;
-			}
 			catch (...) {
 				std::cout << "handle_receive: Unknown error while parsing incoming message" << std::endl;
 			}
@@ -125,8 +122,8 @@ namespace NetworkLib {
 	{
 		try {
 			send(message, clients.at(clientID));
-		}
-		catch (std::out_of_range) {
+		} catch (...) {
+			std::cout << "sendToClient: Unknown error while sending message to client " << clientID << std::endl;
 		}
 	};
 
@@ -144,7 +141,7 @@ namespace NetworkLib {
 	uint32_t Server::getClientIdByIndex(size_t index)
 	{
 		auto it = clients.begin();
-		for (int i = 0; i < index; i++)
+		for (size_t i = 0; i < index; i++)
 			++it;
 		return it->first;
 	};
