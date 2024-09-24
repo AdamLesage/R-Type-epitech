@@ -7,8 +7,11 @@
 
 #include "Mediator.hpp"
 
-Mediator::Mediator()
+Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkLib::NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine)
 {
+    this->_gameEngine = gameEngine;
+    this->_networkEngine = networkEngine;
+    this->_renderingEngine = renderingEngine;
 }
 
 Mediator::~Mediator()

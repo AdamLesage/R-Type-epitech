@@ -8,11 +8,14 @@
 #ifndef GAMEENGINE_HPP_
 #define GAMEENGINE_HPP_
 
+#include "IMediator.hpp"
+
 class GameEngine {
     public:
-        GameEngine();
-        ~GameEngine();
+        GameEngine() {};
+        ~GameEngine() {};
 
+        void notify(std::string sender, std::string event) {};
     protected:
     private:
 };

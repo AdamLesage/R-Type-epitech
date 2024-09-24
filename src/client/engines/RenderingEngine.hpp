@@ -8,11 +8,14 @@
 #ifndef RENDERINGENGINE_HPP_
 #define RENDERINGENGINE_HPP_
 
-class RenderingEngine {
-    public:
-        RenderingEngine();
-        ~RenderingEngine();
+#include "IMediator.hpp"
 
+class RenderingEngine : public IMediator {
+    public:
+        RenderingEngine() {};
+        ~RenderingEngine() {};
+
+        void notify(std::string sender, std::string event) override {};
     protected:
     private:
 };

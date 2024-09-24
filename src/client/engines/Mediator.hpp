@@ -17,7 +17,7 @@
 
 class Mediator : public IMediator {
     public:
-        Mediator();
+        Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkLib::NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine);
         ~Mediator();
 
         void notify(std::string sender, std::string event) override;

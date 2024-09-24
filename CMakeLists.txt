@@ -44,6 +44,13 @@ set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_
 # Source files for the Server
 set(SRC_SERVER
     src/network/server/main.cpp
+    src/shared/entities/Entity.cpp
+    src/shared/entities/Entity.hpp
+    src/server/registry/Registry.cpp
+    src/server/registry/Registry.hpp
+    src/server/sparse_array/SparseArray.hpp
+    src/server/systems/Systems.cpp
+    src/server/systems/Systems.hpp
 )
 
 add_executable(r-type_server ${SRC_SERVER})

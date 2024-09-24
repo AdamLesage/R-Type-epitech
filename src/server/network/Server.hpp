@@ -8,8 +8,8 @@
 #ifndef Server_HPP_
 #define Server_HPP_
 
-#include "../utils/Constants.hpp"
-#include "../utils/LockedQueue.hpp"
+#include "../../shared/network/Constants.hpp"
+#include "../../shared/network/LockedQueue.hpp"
 #include "IServer.hpp"
 #include <boost/asio.hpp>
 #include <array>
@@ -65,4 +65,5 @@ namespace NetworkLib {
 		Server(Server&);
 	};
 }
+
 #endif
