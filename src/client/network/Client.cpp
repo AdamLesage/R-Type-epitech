@@ -1,5 +1,4 @@
 #include "Client.hpp"
-#include "../utils/Log.hpp"
 
 namespace NetworkLib {
 	Client::Client(std::string host, unsigned short server_port, unsigned short local_port) :
@@ -26,15 +25,11 @@ namespace NetworkLib {
 
 	void Client::handle_receive(const std::error_code& error, std::size_t bytes_transferred)
 	{
-		if (!error)
-		{
+		if (!error) {
 			std::string message(recv_buffer.data(), recv_buffer.data() + bytes_transferred);
 			incomingMessages.push(message);
-			statistics.RegisterReceivedMessage(bytes_transferred);
-		}
-		else
-		{
-			Log::Error("Client::handle_receive:", error);
+		} else {
+			std::cout << ("Client::handle_receive: " + error.message()) << std::endl;
 		}
 
 		start_receive();
@@ -43,7 +38,6 @@ namespace NetworkLib {
 	void Client::send(const std::string& message)
 	{
 		socket.send_to(boost::asio::buffer(message), server_endpoint);
-		statistics.RegisterSentMessage(message.size());
 	}
 
 	bool Client::hasMessage()
@@ -66,10 +60,10 @@ namespace NetworkLib {
 				io_service.run();
 			}
 			catch (const std::exception& e) {
-				Log::Warning("Client: network exception: ", e.what());
+				std::cout << ("Client: network exception: " + std::string(e.what())) << std::endl;
 			}
 			catch (...) {
-				Log::Error("Unknown exception in client network thread");
+				std::cout << ("Unknown exception in client network thread") << std::endl;
 			}
 		}
 	}

@@ -26,10 +26,8 @@ endif()
 
 # Source files for the Client
 set(SRC_CLIENT
-    src/network/client/Client.cpp
-    src/network/client/main.cpp
-    src/network/utils/Factory.cpp
-    src/network/utils/Statistics.cpp
+    src/client/main.cpp
+    src/client/network/Client.cpp
 )
 
 add_executable(r-type_client ${SRC_CLIENT})
@@ -43,7 +41,7 @@ set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_
 
 # Source files for the Server
 set(SRC_SERVER
-    src/network/server/main.cpp
+    src/server/main.cpp
     src/shared/entities/Entity.cpp
     src/shared/entities/Entity.hpp
     src/server/registry/Registry.cpp

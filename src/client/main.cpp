@@ -5,14 +5,13 @@
 ** client
 */
 
-#include "../utils/Factory.hpp"
 #include <iostream>
+#include <memory>
+#include "network/Client.hpp"
 
 int main()
 {
-    NetworkLib::Factory factory;
-
-    std::unique_ptr<NetworkLib::IClient> client = factory.CreateClient("127.0.0.0", 50000, 50010);
+    std::unique_ptr<NetworkLib::IClient> client = std::make_unique<NetworkLib::Client>("127.0.0.0", 50000, 50010);
 
     while (1) {
         if (client->hasMessage()) {

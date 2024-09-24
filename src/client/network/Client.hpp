@@ -8,13 +8,13 @@
 #ifndef CLIENT_HPP_
 #define CLIENT_HPP_
 
-#include "../utils/Constants.hpp"
-#include "../utils/Statistics.hpp"
-#include "../utils/LockedQueue.hpp"
+#include "../../shared/network/Constants.hpp"
+#include "../../shared/network/LockedQueue.hpp"
 #include <boost/asio.hpp>
 #include <array>
 #include <thread>
 #include "IClient.hpp"
+#include <iostream>
 
 namespace NetworkLib {
 	class Client : public IClient {
@@ -43,9 +43,6 @@ namespace NetworkLib {
 		void run_service();
 
 		Client(Client&); // block default copy constructor
-
-		// Statistics
-		Statistics statistics;
 	};
 }
 
