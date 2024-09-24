@@ -13,6 +13,10 @@
     #include "../../shared/components/Drawable.hpp"
     #include "../../shared/components/Position.hpp"
     #include "../../shared/components/Velocity.hpp"
+    #include "../../shared/components/Type.hpp"
+    #include "../../shared/components/Health.hpp"
+    #include "../../shared/components/Damage.hpp"
+    #include "../../shared/components/ShootingSpeed.hpp"
     #include <iostream>
 
 class Systems {
@@ -55,6 +59,13 @@ class Systems {
          * @param reg The registry containing the components.
          */
         void collision_system(Registry &reg, sf::RenderWindow &window);
+
+        /**
+         * @brief Update the position of all entities based on their velocity.
+         *
+         * @param reg The registry containing the components.
+         */
+        void shoot_system(Registry &reg, float deltaTime);
 };
 
 #endif /* !SYSTEMS_HPP_ */

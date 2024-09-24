@@ -29,11 +29,18 @@ int main()
     reg.add_component<Drawable_s>(movable, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
     reg.get_components<Drawable_s>()[movable]->shape.setFillColor(sf::Color::Blue);
     reg.add_component<Controllable_s>(movable, Controllable_s{});
+    reg.add_component<Type_s>(movable, Type_s{PLAYER});
+    reg.add_component<Health_s>(movable, Health_s{size_t(100), true});
+    reg.add_component<ShootingSpeed_s>(movable, ShootingSpeed_s{0.5f});
 
     entity_t static_entity = reg.spawn_entity();
     reg.add_component<Position_s>(static_entity, Position_s{100.f, 300.f});
     reg.add_component<Drawable_s>(static_entity, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
     reg.get_components<Drawable_s>()[static_entity]->shape.setFillColor(sf::Color::Red);
+    reg.add_component<Type_s>(static_entity, Type_s{ENEMY});
+    reg.add_component<Health_s>(static_entity, Health_s{size_t(25), true});
+
+    sf::Clock clock;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -42,9 +49,12 @@ int main()
                 window.close();
         }
 
+        float deltaTime = clock.restart().asSeconds();
+
         sys.control_system(reg);
         sys.position_system(reg);
         sys.collision_system(reg, window);
+        sys.shoot_system(reg, deltaTime);
 
         window.clear();
         sys.draw_system(reg, window);
