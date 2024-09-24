@@ -24,13 +24,28 @@ if (SFML_FOUND)
 endif()
 
 
+# Source files for the Client
+set(SRC_CLIENT
+    src/network/client/Client.cpp
+    src/network/client/main.cpp
+    src/network/utils/Factory.cpp
+    src/network/utils/Statistics.cpp
+)
+
+add_executable(r-type_client ${SRC_CLIENT})
+
+# Linkage for SFML and Boost libraries
+target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+
+# Output directory for the client
+set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 
 # Source files for the Server
 set(SRC_SERVER
     src/server/main.cpp
 )
 
-# Source files for the Client
 add_executable(r-type_server ${SRC_SERVER})
 
 # Linkage for SFML and Boost libraries
@@ -43,6 +58,7 @@ set_target_properties(r-type_server PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_
 add_custom_target(custom_clean
     COMMAND ${CMAKE_COMMAND} -E remove -f *.o
     COMMAND ${CMAKE_COMMAND} -E remove -f r-type_server
+    COMMAND ${CMAKE_COMMAND} -E remove -f r-type_client
 )
 
 # Commands for the tests
