@@ -17,7 +17,9 @@
     #include "../../shared/components/Health.hpp"
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
+    #include "../../shared/components/Pattern.hpp"
     #include <iostream>
+    #include <cmath>
 
 class Systems {
     public:
@@ -69,6 +71,14 @@ class Systems {
          * @param shootRequest The request to shoot.
          */
         void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest);
+    
+        /**
+         * @brief Update the position for a wave patten
+         *
+         * @param reg The registry containing the components.
+         * @param totalTime The count since the start.
+         */
+        void wave_pattern_system(Registry &reg, float totalTime);
 };
 
 #endif /* !SYSTEMS_HPP_ */
