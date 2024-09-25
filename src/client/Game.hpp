@@ -1,32 +1,26 @@
-/*
-** EPITECH PROJECT, 2024
-** R-Type-epitech
-** File description:
-** Game
-*/
-
-#ifndef GAME_HPP_
-#define GAME_HPP_
+#ifndef GAME_HPP
+#define GAME_HPP
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
 
-class Game
-{
+class Game {
 public:
-    Game(std::shared_ptr<sf::RenderWindow> window);
-    
-    Game();
-    
+    explicit Game(std::shared_ptr<sf::RenderWindow> window);
+
     ~Game();
 
     void displayGame();
 
 private:
     std::shared_ptr<sf::RenderWindow> window;
+    sf::Font font;
+    sf::Text gameInProgressText;
+    int currentFrame;
+    float frameDuration;
+    bool animationComplete;
+    void handleEvents();
+    bool loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite);
 };
 
-#endif /* !GAME_HPP_ */
+#endif // GAME_HPP
