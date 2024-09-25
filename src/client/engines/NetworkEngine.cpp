@@ -20,3 +20,9 @@ void NetworkEngine::doSomething()
     std::cout << "NetworkEngine" << std::endl;
     this->_mediator->notify("NetworkEngine", "doSomething");
 }
+
+void NetworkEngine::run()
+{
+    std::cout << "NetworkEngine" << std::endl;
+    this->_mediator->notify("NetworkEngine", "run");
+}

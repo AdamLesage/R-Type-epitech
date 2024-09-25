@@ -15,6 +15,10 @@ class RenderingEngine : public AEngine {
         RenderingEngine();
         ~RenderingEngine();
 
+        /**
+         * @brief Run current instance of the engine.
+         */
+        void run() override;
     protected:
     private:
 };
