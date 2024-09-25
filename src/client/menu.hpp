@@ -12,6 +12,7 @@
 #include <SFML/Audio.hpp>
 #include <memory>
 #include "Settings.hpp"
+#include "Game.hpp"
 
 class Menu
 {
@@ -34,6 +35,7 @@ private:
     sf::Sound selectSound;
     std::shared_ptr<sf::RenderWindow> window;
     Settings settings;
+    Game games;
 };
 
 #endif /* !MENU_HPP_ */

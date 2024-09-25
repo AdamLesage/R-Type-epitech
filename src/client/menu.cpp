@@ -9,6 +9,8 @@
 
 Menu::Menu(float width, float height)
 {
+    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
+
     if (!font.loadFromFile("asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
@@ -35,9 +37,13 @@ Menu::Menu(float width, float height)
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
+
     settings = Settings(window);
+    games = Game(window);
+
     selectedOption = 0;
 }
+
 
 void Menu::draw(std::shared_ptr<sf::RenderWindow> window)
 {
@@ -76,6 +82,9 @@ int Menu::getSelectedOption() const
 void Menu::displayMenu()
 {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
+
+    games = Game(window);  // Pass the shared window to the Game instance
+
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -97,6 +106,7 @@ void Menu::displayMenu()
                     switch (getSelectedOption()) {
                     case 0:
                         std::cout << "Play" << std::endl;
+                        games.displayGame();  // Use the same window to display the game
                         break;
                     case 1:
                         settings.displaySettings();
