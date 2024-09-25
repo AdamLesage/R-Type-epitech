@@ -2,19 +2,20 @@
 ** EPITECH PROJECT, 2024
 ** R-Type-epitech
 ** File description:
-** RenderingEngine
+** PhysicEngine
 */
 
-#ifndef RENDERINGENGINE_HPP_
-#define RENDERINGENGINE_HPP_
+#ifndef PHYSICENGINE_HPP_
+#define PHYSICENGINE_HPP_
 
-#include "AEngine.hpp"
+#include "../AEngine.hpp"
+#include "../Mediator/IMediator.hpp"
 
 namespace RType {
-    class RenderingEngine : public AEngine {
+    class PhysicEngine : public AEngine {
         public:
-            RenderingEngine();
-            ~RenderingEngine();
+            PhysicEngine();
+            ~PhysicEngine();
 
             /**
              * @brief Run current instance of the engine.
@@ -25,4 +26,4 @@ namespace RType {
     };
 }
 
-#endif /* !RENDERINGENGINE_HPP_ */
+#endif /* !PHYSICENGINE_HPP_ */

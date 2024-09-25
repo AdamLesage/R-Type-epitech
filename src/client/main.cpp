@@ -7,48 +7,50 @@
 
 #include <iostream>
 #include <memory>
-#include "network/Client.hpp"
-#include "engines/NetworkEngine.hpp"
-#include "engines/RenderingEngine.hpp"
-#include "engines/GameEngine.hpp"
-#include "engines/PhysicEngine.hpp"
-#include "engines/AudioEngine.hpp"
-#include "engines/Mediator.hpp"
+#include <stdexcept>
+
+#include "NetworkEngine/Client.hpp"
+#include "NetworkEngine/NetworkEngine.hpp"
+#include "RenderEngine/RenderingEngine.hpp"
+#include "GameEngine/GameEngine.hpp"
+#include "PhysicEngine/PhysicEngine.hpp"
+#include "AudioEngine/AudioEngine.hpp"
+#include "Mediator/Mediator.hpp"
 #include "DLloader.hpp"
+
+template <typename EngineType>
+std::shared_ptr<EngineType> loadEngine(DLLoader &loader, const std::string &entryPoint) {
+    return std::shared_ptr<EngineType>(loader.getInstance<EngineType>(entryPoint));
+}
 
 int main()
 {
     std::unique_ptr<NetworkLib::IClient> client = std::make_unique<NetworkLib::Client>("127.0.0.0", 50000, 50010);
 
     try {
-        std::shared_ptr<RType::NetworkEngine> networkEngine;
-        std::shared_ptr<RType::RenderingEngine> renderingEngine;
-        std::shared_ptr<RType::GameEngine> gameEngine;
-        std::shared_ptr<RType::PhysicEngine> physicEngine;
-        std::shared_ptr<RType::AudioEngine> audioEngine;
+        // Initialize loaders for each engine
         DLLoader networkEngineLoader("./lib/libNetworkEngine.so");
         DLLoader renderingEngineLoader("./lib/libRenderingEngine.so");
         DLLoader gameEngineLoader("./lib/libGameEngine.so");
         DLLoader physicEngineLoader("./lib/libPhysicEngine.so");
         DLLoader audioEngineLoader("./lib/libAudioEngine.so");
 
-        networkEngine.reset(networkEngineLoader.getInstance<RType::NetworkEngine>("entryPointNetworkEngine"));
-        renderingEngine.reset(renderingEngineLoader.getInstance<RType::RenderingEngine>("entryPointRenderingEngine"));
-        gameEngine.reset(gameEngineLoader.getInstance<RType::GameEngine>("entryPointGameEngine"));
-        physicEngine.reset(physicEngineLoader.getInstance<RType::PhysicEngine>("entryPointPhysicEngine"));
-        audioEngine.reset(audioEngineLoader.getInstance<RType::AudioEngine>("entryPointAudioEngine"));
+        // Load all engines dynamically
+        auto networkEngine = loadEngine<RType::NetworkEngine>(networkEngineLoader, "entryPointNetworkEngine");
+        auto renderingEngine = loadEngine<RType::RenderingEngine>(renderingEngineLoader, "entryPointRenderingEngine");
+        auto gameEngine = loadEngine<RType::GameEngine>(gameEngineLoader, "entryPointGameEngine");
+        auto physicEngine = loadEngine<RType::PhysicEngine>(physicEngineLoader, "entryPointPhysicEngine");
+        auto audioEngine = loadEngine<RType::AudioEngine>(audioEngineLoader, "entryPointAudioEngine");
 
+        // Use unique_ptr for mediator to ensure memory management
         RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine);
 
+        // // Start the game engine
         gameEngine->run();
     } catch (const RType::DLError &e) {
         std::cerr << e.what() << std::endl;
         return (84);
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
-        return (84);
     }
-
     return (0);
 }
 

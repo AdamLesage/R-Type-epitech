@@ -8,8 +8,8 @@
 #ifndef AUDIOENGINE_HPP_
 #define AUDIOENGINE_HPP_
 
-#include "AEngine.hpp"
-#include "IMediator.hpp"
+#include "../AEngine.hpp"
+#include "../Mediator/IMediator.hpp"
 
 namespace RType {
     class AudioEngine : public AEngine {

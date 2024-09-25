@@ -28,27 +28,27 @@ endif()
 # Create shared libs
 
 add_library(NetworkEngine SHARED
-    src/client/engines/NetworkEngine.cpp
+    src/client/NetworkEngine/NetworkEngine.cpp
 )
 
 add_library(GameEngine SHARED
-    src/client/engines/GameEngine.cpp
+    src/client/GameEngine/GameEngine.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
 )
 
 add_library(PhysicEngine SHARED
-    src/client/engines/PhysicEngine.cpp
+    src/client/PhysicEngine/PhysicEngine.cpp
 )
 
 add_library(AudioEngine SHARED
-    src/client/engines/AudioEngine.cpp
+    src/client/AudioEngine/AudioEngine.cpp
 )
 
 target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
 
 add_library(RenderingEngine SHARED
-    src/client/engines/RenderingEngine.cpp
+    src/client/RenderEngine/RenderingEngine.cpp
 )
 
 
@@ -56,11 +56,11 @@ add_library(RenderingEngine SHARED
 # Source files for the Client
 set(SRC_CLIENT
     src/client/main.cpp
-    src/client/network/Client.cpp
-    src/client/engines/GameEngine.cpp
-    src/client/engines/NetworkEngine.cpp
-    src/client/engines/RenderingEngine.cpp
-    src/client/engines/Mediator.cpp
+    src/client/NetworkEngine/Client.cpp
+    src/client/GameEngine/GameEngine.cpp
+    src/client/NetworkEngine/NetworkEngine.cpp
+    src/client/RenderEngine/RenderingEngine.cpp
+    src/client/Mediator/Mediator.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
 )

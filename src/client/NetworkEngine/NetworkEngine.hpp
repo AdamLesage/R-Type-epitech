@@ -8,8 +8,8 @@
 #ifndef NETWORKENGINE_HPP_
 #define NETWORKENGINE_HPP_
 
-#include "AEngine.hpp"
-#include "IMediator.hpp"
+#include "../AEngine.hpp"
+#include "../Mediator/IMediator.hpp"
 
 namespace RType {
     class NetworkEngine : public AEngine {

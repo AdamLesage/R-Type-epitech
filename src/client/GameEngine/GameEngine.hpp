@@ -8,7 +8,8 @@
 #ifndef GAMEENGINE_HPP_
 #define GAMEENGINE_HPP_
 
-#include "AEngine.hpp"
+#include "../AEngine.hpp"
+#include "../Mediator/IMediator.hpp"
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/systems/Systems.hpp"

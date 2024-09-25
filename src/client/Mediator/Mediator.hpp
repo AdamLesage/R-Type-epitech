@@ -11,9 +11,9 @@
 #include <string>
 #include <memory>
 #include "IMediator.hpp"
-#include "GameEngine.hpp"
-#include "NetworkEngine.hpp"
-#include "RenderingEngine.hpp"
+#include "../GameEngine/GameEngine.hpp"
+#include "../NetworkEngine/NetworkEngine.hpp"
+#include "../RenderEngine/RenderingEngine.hpp"
 
 namespace RType {
     class Mediator : public IMediator {
