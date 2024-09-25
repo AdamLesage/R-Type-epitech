@@ -91,19 +91,16 @@ void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
     for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
         auto &pos1 = positions[i];
         auto &draw1 = drawables[i];
-
         if (pos1 && draw1) {
             sf::FloatRect bounds = draw1->shape.getGlobalBounds();
-
             if (bounds.left < 0 || bounds.left + bounds.width > windowSize.x ||
                 bounds.top < 0 || bounds.top + bounds.height > windowSize.y) {
-                std::cerr << "Collision detected between entity " << i << " and the window border" << std::endl;
+                reg.kill_entity(i);
+                std::cerr << "Projectile " << i << " deleted (out of window)" << std::endl;
             }
-
             for (size_t j = i + 1; j < positions.size() && j < drawables.size(); ++j) {
                 auto &pos2 = positions[j];
                 auto &draw2 = drawables[j];
-
                 if (pos2 && draw2) {
                     if (draw1->shape.getGlobalBounds().intersects(draw2->shape.getGlobalBounds())) {
                         std::cerr << "Collision detected between entity " << i << " and entity " << j << std::endl;
@@ -111,5 +108,34 @@ void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
                 }
             }
         }
+    }
+}
+
+void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest)
+{
+    auto &positions = reg.get_components<Position_s>();
+    auto &types = reg.get_components<Type_s>();
+    auto &shootingSpeeds = reg.get_components<ShootingSpeed_s>();
+    static std::unordered_map<entity_t, float> shootCooldown;
+
+    shootCooldown[playerId] += deltaTime;
+
+    auto &pos = positions[playerId];
+    auto &type = types[playerId];
+    auto &shootingSpeed = shootingSpeeds[playerId];
+
+    if (type && type->type == EntityType::PLAYER && shootRequest && shootCooldown[playerId] >= shootingSpeed->shooting_speed) {
+        shootCooldown[playerId] = 0.0f;
+
+        float projectileX = pos->x + 10;
+        float projectileY = pos->y;
+
+        entity_t projectile = reg.spawn_entity();
+        reg.add_component<Position_s>(projectile, Position_s{projectileX, projectileY});
+        reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
+        reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
+        reg.add_component<Damage_s>(projectile, Damage_s{10});
+
+        // send_projectile_to_clients(type, projectileId, projectileX, projectileY);
     }
 }

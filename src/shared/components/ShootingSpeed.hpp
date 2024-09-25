@@ -18,7 +18,7 @@
          * @brief ShootingSpeed component, add a shooting speed to an entity
          *
          */
-        size_t shooting_speed; //shooting speed of an entity
+        float shooting_speed; //shooting speed of an entity
     } ShootingSpeed;
 
 #endif /* !SHOOTINGSPEED_HPP_ */
