@@ -35,7 +35,7 @@ Menu::Menu(float width, float height)
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-
+    settings = Settings(window);
     selectedOption = 0;
 }
 
@@ -99,7 +99,7 @@ void Menu::displayMenu()
                         std::cout << "Play" << std::endl;
                         break;
                     case 1:
-                        std::cout << "Settings" << std::endl;
+                        settings.displaySettings();
                         break;
                     case 2:
                         std::cout << "Quit" << std::endl;
