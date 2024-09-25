@@ -5,7 +5,7 @@
 ** menu
 */
 
-#include "menu.hpp"
+#include "Menu.hpp"
 
 Menu::Menu(float width, float height)
 {
