@@ -2,26 +2,10 @@
 # Compile the project with install dependencies on your OS, Cmake, move binaries to the root directory and delete build/ directory
 
 # Remove the binaries if they exist
-if [ -f "r-type_server" ]; then
-    rm r-type_server
-fi
-
-if [ -f "r-type_client" ]; then
-    rm r-type_client
-fi
+rm -f r-type_server r-type_client
 
 # Remove the shared libraries if they exist
-if [ -f "lib/libNetworkEngine.so" ]; then
-    rm lib/libNetworkEngine.so
-fi
-
-if [ -f "lib/libRenderingEngine.so" ]; then
-    rm lib/libRenderingEngine.so
-fi
-
-if [ -f "lib/libGameLogic.so" ]; then
-    rm lib/libGameLogic.so
-fi
+rm -f lib/libNetworkEngine.so lib/libRenderingEngine.so lib/libGameEngine.so lib/libPhysicEngine.so libAudioEngine.so
 
 
 # Check if the build directory exists
@@ -42,26 +26,12 @@ cmake ..
 # Compile the project with make
 make
 
-# Move the binaries to the root directory if files exist
-if [ -f "r-type_server" ]; then
-    mv r-type_server ..
-fi
-
-if [ -f "r-type_client" ]; then
-    mv r-type_client ..
-fi
-
-if [ -f "libNetworkEngine.so" ]; then
-    mv libNetworkEngine.so ..
-fi
-
-if [ -f "libGameEngine.so" ]; then
-    mv libGameEngine.so ..
-fi
-
-if [ -f "libRenderingEngine.so" ]; then
-    mv libRenderingEngine.so ..
-fi
+# Move the binaries and shared libraries to the root directory if they exist
+for file in r-type_server r-type_client libNetworkEngine.so libGameEngine.so libRenderingEngine.so libPhysicEngine.so libAudioEngine.so; do
+    if [ -f "$file" ]; then
+        mv "$file" ..
+    fi
+done
 
 # Move back to the root directory
 cd ..
@@ -70,17 +40,12 @@ cd ..
 rm -rf build
 
 # Move shared libraries to the lib directory
-if [ -f "libNetworkEngine.so" ]; then
-    mv libNetworkEngine.so lib/
-fi
-
-if [ -f "libGameEngine.so" ]; then
-    mv libGameEngine.so lib/
-fi
-
-if [ -f "libRenderingEngine.so" ]; then
-    mv libRenderingEngine.so lib/
-fi
+# Move shared libraries to the lib directory
+for file in libNetworkEngine.so libGameEngine.so libRenderingEngine.so libPhysicEngine.so libAudioEngine.so; do
+    if [ -f "$file" ]; then
+        mv "$file" lib/
+    fi
+done
 
 # Print a message to the user
 echo "Project compiled successfully"

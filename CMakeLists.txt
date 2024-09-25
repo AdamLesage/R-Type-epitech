@@ -31,18 +31,18 @@ add_library(NetworkEngine SHARED
     src/client/engines/NetworkEngine.cpp
 )
 
-set_target_properties(NetworkEngine PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
 add_library(GameEngine SHARED
     src/client/engines/GameEngine.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
 )
 
-set_target_properties(GameEngine PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+add_library(PhysicEngine SHARED
+    src/client/engines/PhysicEngine.cpp
+)
+
+add_library(AudioEngine SHARED
+    src/client/engines/AudioEngine.cpp
 )
 
 target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
@@ -51,9 +51,7 @@ add_library(RenderingEngine SHARED
     src/client/engines/RenderingEngine.cpp
 )
 
-set_target_properties(RenderingEngine PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+
 
 # Source files for the Client
 set(SRC_CLIENT

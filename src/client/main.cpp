@@ -11,6 +11,8 @@
 #include "engines/NetworkEngine.hpp"
 #include "engines/RenderingEngine.hpp"
 #include "engines/GameEngine.hpp"
+#include "engines/PhysicEngine.hpp"
+#include "engines/AudioEngine.hpp"
 #include "engines/Mediator.hpp"
 #include "DLloader.hpp"
 
@@ -22,13 +24,19 @@ int main()
         std::shared_ptr<RType::NetworkEngine> networkEngine;
         std::shared_ptr<RType::RenderingEngine> renderingEngine;
         std::shared_ptr<RType::GameEngine> gameEngine;
+        std::shared_ptr<RType::PhysicEngine> physicEngine;
+        std::shared_ptr<RType::AudioEngine> audioEngine;
         DLLoader networkEngineLoader("./lib/libNetworkEngine.so");
         DLLoader renderingEngineLoader("./lib/libRenderingEngine.so");
         DLLoader gameEngineLoader("./lib/libGameEngine.so");
+        DLLoader physicEngineLoader("./lib/libPhysicEngine.so");
+        DLLoader audioEngineLoader("./lib/libAudioEngine.so");
 
         networkEngine.reset(networkEngineLoader.getInstance<RType::NetworkEngine>("entryPointNetworkEngine"));
         renderingEngine.reset(renderingEngineLoader.getInstance<RType::RenderingEngine>("entryPointRenderingEngine"));
         gameEngine.reset(gameEngineLoader.getInstance<RType::GameEngine>("entryPointGameEngine"));
+        physicEngine.reset(physicEngineLoader.getInstance<RType::PhysicEngine>("entryPointPhysicEngine"));
+        audioEngine.reset(audioEngineLoader.getInstance<RType::AudioEngine>("entryPointAudioEngine"));
 
         RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine);
 
