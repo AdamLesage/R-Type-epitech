@@ -20,6 +20,14 @@ Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<Netwo
 
 Mediator::~Mediator()
 {
+    this->_gameEngine->setMediator(nullptr);
+    this->_networkEngine->setMediator(nullptr);
+    this->_renderingEngine->setMediator(nullptr);
+
+    this->_gameEngine = nullptr;
+    this->_networkEngine = nullptr;
+    this->_renderingEngine = nullptr;
+
 }
 
 void Mediator::notifyGameEngine(std::string sender, std::string event)

@@ -16,6 +16,10 @@ class NetworkEngine : public AEngine {
         NetworkEngine();
         ~NetworkEngine();
 
+        /**
+         * @brief Run current instance of the engine.
+         */
+        void run() override;
         void doSomething();
     protected:
     private:

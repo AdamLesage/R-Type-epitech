@@ -22,6 +22,11 @@ class IEngine {
          * @param mediator The mediator to set.
          */
         virtual void setMediator(std::shared_ptr<IMediator> mediator) = 0;
+
+        /**
+         * @brief Run current instance of the engine.
+         */
+        virtual void run() = 0;
     protected:
     private:
 };

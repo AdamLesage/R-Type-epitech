@@ -32,6 +32,8 @@ set(SRC_CLIENT
     src/client/engines/NetworkEngine.cpp
     src/client/engines/RenderingEngine.cpp
     src/client/engines/Mediator.cpp
+    src/shared/registry/Registry.cpp
+    src/shared/systems/Systems.cpp
 )
 
 add_executable(r-type_client ${SRC_CLIENT})
@@ -49,12 +51,8 @@ set(SRC_SERVER
     src/server/GameLogique/GameLogique.cpp
     src/server/network/Server.cpp
     src/shared/entities/Entity.cpp
-    src/shared/entities/Entity.hpp
     src/server/registry/Registry.cpp
-    src/server/registry/Registry.hpp
-    src/server/sparse_array/SparseArray.hpp
     src/server/systems/Systems.cpp
-    src/server/systems/Systems.hpp
 )
 
 add_executable(r-type_server ${SRC_SERVER})

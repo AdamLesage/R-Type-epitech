@@ -10,7 +10,7 @@
 
 #include "IEngine.hpp"
 
-class IMediator;
+class Mediator;
 class AEngine : public IEngine {
     public:
         AEngine(std::shared_ptr<IMediator> mediator = nullptr) : _mediator(mediator) {}
@@ -22,6 +22,11 @@ class AEngine : public IEngine {
          * @param mediator The mediator to set.
          */
         void setMediator(std::shared_ptr<IMediator> mediator) override { _mediator = mediator; }
+
+        /**
+         * @brief Run current instance of the engine.
+         */
+        void run() override {}
     protected:
         std::shared_ptr<IMediator> _mediator;
     private:

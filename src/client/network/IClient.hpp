@@ -16,8 +16,26 @@ namespace NetworkLib
 	{
 	public:
 		virtual ~IClient() {};
+
+		/**
+		 * @brief Check if the client has a message
+		 * 
+		 * @return true if the client has a message
+		*/
 		virtual bool hasMessage() = 0;
+
+		/**
+		 * @brief Send a message to the server
+		 * 
+		 * @param message the message to send
+		*/
 		virtual void send(const std::string& message) = 0;
+
+		/**
+		 * @brief Get the message from the server
+		 * 
+		 * @return the message from the server
+		*/
 		virtual std::string popMessage() = 0;
 	};
 }
