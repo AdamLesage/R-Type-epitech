@@ -136,6 +136,6 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
         reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
         reg.add_component<Damage_s>(projectile, Damage_s{10});
 
-        // send_projectile_to_clients(projectileX, projectileY);
+        // send_projectile_to_clients(type, projectileId, projectileX, projectileY);
     }
 }
