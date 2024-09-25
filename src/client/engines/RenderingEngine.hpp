@@ -10,17 +10,19 @@
 
 #include "AEngine.hpp"
 
-class RenderingEngine : public AEngine {
-    public:
-        RenderingEngine();
-        ~RenderingEngine();
+namespace RType {
+    class RenderingEngine : public AEngine {
+        public:
+            RenderingEngine();
+            ~RenderingEngine();
 
-        /**
-         * @brief Run current instance of the engine.
-         */
-        void run() override;
-    protected:
-    private:
-};
+            /**
+             * @brief Run current instance of the engine.
+             */
+            void run() override;
+        protected:
+        private:
+    };
+}
 
 #endif /* !RENDERINGENGINE_HPP_ */

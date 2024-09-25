@@ -11,18 +11,20 @@
 #include "AEngine.hpp"
 #include "IMediator.hpp"
 
-class NetworkEngine : public AEngine {
-    public:
-        NetworkEngine();
-        ~NetworkEngine();
+namespace RType {
+    class NetworkEngine : public AEngine {
+        public:
+            NetworkEngine();
+            ~NetworkEngine();
 
-        /**
-         * @brief Run current instance of the engine.
-         */
-        void run() override;
-        void doSomething();
-    protected:
-    private:
-};
+            /**
+             * @brief Run current instance of the engine.
+             */
+            void run() override;
+            void doSomething();
+        protected:
+        private:
+    };
+}
 
 #endif /* !NETWORKENGINE_HPP_ */

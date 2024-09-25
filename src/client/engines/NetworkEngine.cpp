@@ -7,22 +7,27 @@
 
 #include "NetworkEngine.hpp"
 
-NetworkEngine::NetworkEngine()
+RType::NetworkEngine::NetworkEngine()
 {
 }
 
-NetworkEngine::~NetworkEngine()
+RType::NetworkEngine::~NetworkEngine()
 {
 }
 
-void NetworkEngine::doSomething()
+void RType::NetworkEngine::doSomething()
 {
     std::cout << "NetworkEngine" << std::endl;
-    this->_mediator->notify("NetworkEngine", "doSomething");
+    // this->_mediator->notify("NetworkEngine", "doSomething");
 }
 
-void NetworkEngine::run()
+void RType::NetworkEngine::run()
 {
     std::cout << "NetworkEngine" << std::endl;
     this->_mediator->notify("NetworkEngine", "run");
+}
+
+extern "C" RType::NetworkEngine *entryPointNetworkEngine()
+{
+    return (new RType::NetworkEngine());
 }

@@ -11,24 +11,26 @@
 #include <memory>
 #include <iostream>
 
-class IMediator;
-class IEngine {
-    public:
-        virtual ~IEngine() = default;
+namespace RType {
+    class IMediator;
+    class IEngine {
+        public:
+            virtual ~IEngine() = default;
 
-        /**
-         * @brief Set the mediator of the engine.
-         *
-         * @param mediator The mediator to set.
-         */
-        virtual void setMediator(std::shared_ptr<IMediator> mediator) = 0;
+            /**
+             * @brief Set the mediator of the engine.
+             *
+             * @param mediator The mediator to set.
+             */
+            virtual void setMediator(std::shared_ptr<IMediator> mediator) = 0;
 
-        /**
-         * @brief Run current instance of the engine.
-         */
-        virtual void run() = 0;
-    protected:
-    private:
-};
+            /**
+             * @brief Run current instance of the engine.
+             */
+            virtual void run() = 0;
+        protected:
+        private:
+    };
+}
 
 #endif /* !IENGINE_HPP_ */

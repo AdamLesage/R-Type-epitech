@@ -7,14 +7,19 @@
 
 #include "RenderingEngine.hpp"
 
-RenderingEngine::RenderingEngine()
+RType::RenderingEngine::RenderingEngine()
 {
 }
 
-RenderingEngine::~RenderingEngine()
+RType::RenderingEngine::~RenderingEngine()
 {
 }
 
-void RenderingEngine::run()
+void RType::RenderingEngine::run()
 {
+}
+
+extern "C" RType::RenderingEngine *entryPointRenderingEngine()
+{
+    return (new RType::RenderingEngine());
 }

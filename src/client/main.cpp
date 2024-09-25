@@ -12,17 +12,34 @@
 #include "engines/RenderingEngine.hpp"
 #include "engines/GameEngine.hpp"
 #include "engines/Mediator.hpp"
+#include "DLloader.hpp"
 
 int main()
 {
     std::unique_ptr<NetworkLib::IClient> client = std::make_unique<NetworkLib::Client>("127.0.0.0", 50000, 50010);
 
-    std::shared_ptr<NetworkEngine> networkEngine = std::make_shared<NetworkEngine>();
-    std::shared_ptr<RenderingEngine> renderingEngine = std::make_shared<RenderingEngine>();
-    std::shared_ptr<GameEngine> gameEngine = std::make_shared<GameEngine>();
-    Mediator *mediator = new Mediator(gameEngine, networkEngine, renderingEngine);
+    try {
+        std::shared_ptr<RType::NetworkEngine> networkEngine;
+        std::shared_ptr<RType::RenderingEngine> renderingEngine;
+        std::shared_ptr<RType::GameEngine> gameEngine;
+        DLLoader networkEngineLoader("./lib/libNetworkEngine.so");
+        DLLoader renderingEngineLoader("./lib/libRenderingEngine.so");
+        DLLoader gameEngineLoader("./lib/libGameEngine.so");
 
-    gameEngine->run();
+        networkEngine.reset(networkEngineLoader.getInstance<RType::NetworkEngine>("entryPointNetworkEngine"));
+        renderingEngine.reset(renderingEngineLoader.getInstance<RType::RenderingEngine>("entryPointRenderingEngine"));
+        gameEngine.reset(gameEngineLoader.getInstance<RType::GameEngine>("entryPointGameEngine"));
+
+        RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine);
+
+        gameEngine->run();
+    } catch (const RType::DLError &e) {
+        std::cerr << e.what() << std::endl;
+        return (84);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return (84);
+    }
 
     return (0);
 }
