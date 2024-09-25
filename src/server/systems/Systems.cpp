@@ -111,35 +111,31 @@ void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
     }
 }
 
-void Systems::shoot_system(Registry &reg, float deltaTime)
+void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest)
 {
     auto &positions = reg.get_components<Position_s>();
-    auto &controllables = reg.get_components<Controllable_s>();
     auto &types = reg.get_components<Type_s>();
     auto &shootingSpeeds = reg.get_components<ShootingSpeed_s>();
-    static std::vector<float> shootCooldown(positions.size(), 0.0f);
+    static std::unordered_map<entity_t, float> shootCooldown;
 
-    for (size_t i = 0; i < positions.size() && i < controllables.size(); ++i) {
-        auto &pos = positions[i];
-        auto &type = types[i];
-        auto &shootingSpeed = shootingSpeeds[i];
+    shootCooldown[playerId] += deltaTime;
 
-         if (type && type->type == EntityType::PLAYER) {
-            shootCooldown[i] += deltaTime;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootCooldown[i] >= shootingSpeed->shooting_speed) {
-                shootCooldown[i] = 0.0f;
-                sf::FloatRect bounds = reg.get_components<Drawable_s>()[i]->shape.getGlobalBounds();
-                float projectileX = (pos->x + bounds.width) + 10;
-                float projectileY = pos->y + bounds.height / 2;
+    auto &pos = positions[playerId];
+    auto &type = types[playerId];
+    auto &shootingSpeed = shootingSpeeds[playerId];
 
-                entity_t projectile = reg.spawn_entity();
-                reg.add_component<Position_s>(projectile, Position_s{projectileX, projectileY});
-                reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
-                reg.add_component<Drawable_s>(projectile, Drawable_s{sf::RectangleShape(sf::Vector2f(10.f, 10.f))});
-                reg.get_components<Drawable_s>()[projectile]->shape.setFillColor(sf::Color::Yellow);
-                reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
-                reg.add_component<Damage_s>(projectile, Damage_s{10});
-            }
-        }
+    if (type && type->type == EntityType::PLAYER && shootRequest && shootCooldown[playerId] >= shootingSpeed->shooting_speed) {
+        shootCooldown[playerId] = 0.0f;
+
+        float projectileX = pos->x + 10;
+        float projectileY = pos->y;
+
+        entity_t projectile = reg.spawn_entity();
+        reg.add_component<Position_s>(projectile, Position_s{projectileX, projectileY});
+        reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
+        reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
+        reg.add_component<Damage_s>(projectile, Damage_s{10});
+
+        // send_projectile_to_clients(projectileX, projectileY);
     }
 }

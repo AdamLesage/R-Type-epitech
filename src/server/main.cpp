@@ -54,7 +54,6 @@ int main()
         sys.control_system(reg);
         sys.position_system(reg);
         sys.collision_system(reg, window);
-        sys.shoot_system(reg, deltaTime);
 
         window.clear();
         sys.draw_system(reg, window);
