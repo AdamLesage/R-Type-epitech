@@ -1,0 +1,50 @@
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech
+** File description:
+** GameLogique
+*/
+
+#ifndef GAMELOGIQUE_HPP_
+#define GAMELOGIQUE_HPP_
+
+#include "../registry/Registry.hpp"
+#include "../systems/Systems.hpp"
+#include "../network/Server.hpp"
+#include "../../shared/components/Tag.hpp"
+#include "../../shared/components/Position.hpp"
+#include "../../shared/components/Velocity.hpp"
+#include <memory>
+
+class GameLogique {
+    public:
+        /**
+         * @brief manage the game logique with client input
+         *
+         * @param port the port which the server is connected
+         * @param frequency the frequency of the game
+         */
+        GameLogique(size_t port, int frequency = 200);
+        ~GameLogique();
+        /**
+         * @brief update entity every 1 / frequency second
+         */
+        void runGame();
+    protected:
+    private:
+        Registry reg;
+        Systems sys;
+        std::shared_ptr<NetworkLib::Server> network;
+        std::thread receiverThread;
+        int frequency;
+        bool running;
+        /**
+         * @brief listen to the server socket to manage client input
+        */
+        void handleRecieve();
+        /**
+         * @brief lunch a game with connected player
+        */
+        void startGame();
+};
+#endif /* !GAMELOGIQUE_HPP_ */

@@ -46,6 +46,7 @@ set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_
 # Source files for the Server
 set(SRC_SERVER
     src/server/main_server.cpp # temp main waiting for the real one because current main should be client main
+    src/server/GameLogique/GameLogique.cpp
     src/server/network/Server.cpp
     src/shared/entities/Entity.cpp
     src/shared/entities/Entity.hpp

@@ -26,7 +26,7 @@ namespace NetworkLib {
 	{
 		socket.async_receive_from(
 			boost::asio::buffer(recv_buffer),
-			remote_endpoint,
+			_remote_endpoint,
 			[this](std::error_code ec, std::size_t bytes_recvd){ this->handle_receive(ec, bytes_recvd); });
 	}
 
@@ -37,7 +37,7 @@ namespace NetworkLib {
 				handler(id);
 	}
 
-	void Server::handle_remote_error(const std::error_code error_code, const boost::asio::ip::udp::endpoint remote_endpoint)
+	void Server::handle_remote_error(const boost::asio::ip::udp::endpoint remote_endpoint)
 	{
 		bool found = false;
 		int32_t id;
@@ -60,7 +60,7 @@ namespace NetworkLib {
 		{
 			try {
 				auto message = std::pair<std::string, uint32_t>(std::string(recv_buffer.data(),
-					recv_buffer.data() + bytes_transferred), get_or_create_client_id(remote_endpoint));
+					recv_buffer.data() + bytes_transferred), get_or_create_client_id(_remote_endpoint));
 				if (!message.first.empty())
 					incomingMessages.push(message);;
 			}
@@ -70,8 +70,8 @@ namespace NetworkLib {
 		}
 		else
 		{
-			std::cout << "handle_receive: error: " << error.message() << " while receiving from address " << remote_endpoint;
-			handle_remote_error(error, remote_endpoint);
+			std::cout << "handle_receive: error: " << error.message() << " while receiving from address " << _remote_endpoint;
+			handle_remote_error(_remote_endpoint);
 		}
 
 		start_receive();
