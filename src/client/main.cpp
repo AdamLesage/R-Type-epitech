@@ -20,14 +20,17 @@ int main()
     std::shared_ptr<NetworkEngine> networkEngine = std::make_shared<NetworkEngine>();
     std::shared_ptr<RenderingEngine> renderingEngine = std::make_shared<RenderingEngine>();
     std::shared_ptr<GameEngine> gameEngine = std::make_shared<GameEngine>();
-    std::shared_ptr<Mediator> mediator = std::make_shared<Mediator>(gameEngine, networkEngine, renderingEngine);
+    Mediator *mediator = new Mediator(gameEngine, networkEngine, renderingEngine);
 
-    while (1) {
-        if (client->hasMessage()) {
-            std::cout << client->popMessage() << std::endl;
-        }
-        client->send("test\n");
-        networkEngine->doSomething();
-        sleep(1);
-    }
+    gameEngine->run();
+
+    return (0);
 }
+
+    // while (1) {
+    //     if (client->hasMessage()) {
+    //         std::cout << client->popMessage() << std::endl;
+    //     }
+    //     networkEngine->doSomething();
+    //     sleep(1);
+    // }

@@ -22,9 +22,26 @@ namespace NetworkLib {
 		Client(std::string host, unsigned short server_port, unsigned short local_port = 0);
 		~Client();
 
+		/**
+		 * @brief Send a message to the server
+		 * 
+		 * @param message the message to send
+		*/
 		void send(const std::string& message) override;
-		bool hasMessage() override;;
-		std::string popMessage() override;;
+
+		/**
+		 * @brief Check if the client has a message
+		 * 
+		 * @return true if the client has a message
+		*/
+		bool hasMessage() override;
+
+		/**
+		 * @brief Get the message from the server and remove it from the queue
+		 * 
+		 * @return the message from the server
+		*/
+		std::string popMessage() override;
 
 	private:
 		// Network send/receive stuff

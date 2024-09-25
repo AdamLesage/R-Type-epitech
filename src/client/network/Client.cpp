@@ -5,10 +5,24 @@ namespace NetworkLib {
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)),
 		service_thread(&Client::run_service, this)
 	{
-		boost::asio::ip::udp::resolver resolver(io_service);
-		boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, std::to_string(server_port));
-		server_endpoint = *resolver.resolve(query);
-		Client::send("");
+		try {
+			boost::asio::ip::udp::resolver resolver(io_service);
+			boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, std::to_string(server_port));
+			boost::asio::ip::udp::resolver::iterator it = resolver.resolve(query);
+
+			if (it == boost::asio::ip::udp::resolver::iterator()) {
+				throw std::runtime_error("Unable to resolve the server address.");
+			}
+
+			server_endpoint = *it;
+
+			// Sending an empty message to test the connection
+			Client::send("");
+			std::cout << "Client connected to " << host << ":" << server_port << std::endl;
+		}
+		catch (const std::exception& e) {
+			std::cerr << "Failed to connect to the server: " << e.what() << std::endl;
+		}
 	}
 
 	Client::~Client()

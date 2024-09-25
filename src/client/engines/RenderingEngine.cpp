@@ -14,3 +14,7 @@ RenderingEngine::RenderingEngine()
 RenderingEngine::~RenderingEngine()
 {
 }
+
+void RenderingEngine::run()
+{
+}
