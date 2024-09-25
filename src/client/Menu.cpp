@@ -83,7 +83,7 @@ void Menu::displayMenu()
 {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
 
-    games = Game(window);  // Pass the shared window to the Game instance
+    games = Game(window);
 
     while (window->isOpen()) {
         sf::Event event;
@@ -106,7 +106,7 @@ void Menu::displayMenu()
                     switch (getSelectedOption()) {
                     case 0:
                         std::cout << "Play" << std::endl;
-                        games.displayGame();  // Use the same window to display the game
+                        games.displayGame();
                         break;
                     case 1:
                         settings.displaySettings();
