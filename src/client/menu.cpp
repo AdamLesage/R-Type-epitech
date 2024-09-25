@@ -7,7 +7,6 @@
 
 #include "menu.hpp"
 
-
 Menu::Menu(float width, float height)
 {
     if (!font.loadFromFile("asset/r-type.ttf")) {
@@ -40,12 +39,12 @@ Menu::Menu(float width, float height)
     selectedOption = 0;
 }
 
-void Menu::draw(sf::RenderWindow &window)
+void Menu::draw(std::shared_ptr<sf::RenderWindow> window)
 {
-    window.draw(logoSprite);
+    window->draw(logoSprite);
 
     for (int i = 0; i < 3; ++i) {
-        window.draw(menuOptions[i]);
+        window->draw(menuOptions[i]);
     }
 }
 
@@ -74,30 +73,28 @@ int Menu::getSelectedOption() const
     return selectedOption;
 }
 
-void displayMenu()
+void Menu::displayMenu()
 {
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "R-Type Menu");
-    Menu menu(1920, 1080);
-
-    while (window.isOpen()) {
+    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
+    while (window->isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                window.close();
+                window->close();
             }
 
             if (event.type == sf::Event::KeyPressed) {
                 switch (event.key.code) {
                 case sf::Keyboard::Up:
-                    menu.moveUp();
+                    moveUp();
                     break;
 
                 case sf::Keyboard::Down:
-                    menu.moveDown();
+                    moveDown();
                     break;
 
                 case sf::Keyboard::Enter:
-                    switch (menu.getSelectedOption()) {
+                    switch (getSelectedOption()) {
                     case 0:
                         std::cout << "Play" << std::endl;
                         break;
@@ -106,7 +103,7 @@ void displayMenu()
                         break;
                     case 2:
                         std::cout << "Quit" << std::endl;
-                        window.close();
+                        window->close();
                         break;
                     }
                     break;
@@ -117,14 +114,15 @@ void displayMenu()
             }
         }
 
-        window.clear();
-        menu.draw(window);
-        window.display();
+        window->clear();
+        draw(window);
+        window->display();
     }
 }
 
-// int main()
-// {
-//     displayMenu();
-//     return 0;
-// }
+int main()
+{
+    Menu menu(1920, 1080);
+    menu.displayMenu();
+    return 0;
+}

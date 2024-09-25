@@ -10,16 +10,18 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <memory>
 
 class Menu
 {
 public:
     Menu(float width, float height);
     ~Menu() = default;
-    void draw(sf::RenderWindow &window);
+    void draw(std::shared_ptr<sf::RenderWindow> window);
     void moveUp();
     void moveDown();
     int getSelectedOption() const;
+    void displayMenu();
 
 private:
     int selectedOption;
@@ -29,6 +31,7 @@ private:
     sf::Sprite logoSprite;
     sf::SoundBuffer selectBuffer;
     sf::Sound selectSound;
+    std::shared_ptr<sf::RenderWindow> window;
 };
 
 #endif /* !MENU_HPP_ */
