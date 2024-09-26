@@ -9,7 +9,6 @@
 #include <memory>
 #include <stdexcept>
 
-#include "NetworkEngine/Client.hpp"
 #include "NetworkEngine/NetworkEngine.hpp"
 #include "RenderEngine/RenderingEngine.hpp"
 #include "GameEngine/GameEngine.hpp"
@@ -25,8 +24,6 @@ std::shared_ptr<EngineType> loadEngine(DLLoader &loader, const std::string &entr
 
 int main()
 {
-    std::unique_ptr<NetworkLib::IClient> client = std::make_unique<NetworkLib::Client>("127.0.0.0", 50000, 50010);
-
     try {
         // Initialize loaders for each engine
         DLLoader networkEngineLoader("./lib/libNetworkEngine.so");
@@ -58,6 +55,5 @@ int main()
     //     if (client->hasMessage()) {
     //         std::cout << client->popMessage() << std::endl;
     //     }
-    //     networkEngine->doSomething();
     //     sleep(1);
     // }

@@ -27,14 +27,16 @@ RType::Mediator::~Mediator()
     this->_gameEngine = nullptr;
     this->_networkEngine = nullptr;
     this->_renderingEngine = nullptr;
-
 }
 
 void RType::Mediator::notifyGameEngine(std::string sender, std::string event)
 {
-    (void)event;
     if (sender != "GameEngine")
         return;
+    if (event == "updateData") {
+        std::cout << "Received event from GameEngine" << std::endl;
+        this->_networkEngine->updateData();
+    }
 }
 
 void RType::Mediator::notifyNetworkEngine(std::string sender, std::string event)
@@ -43,8 +45,6 @@ void RType::Mediator::notifyNetworkEngine(std::string sender, std::string event)
     if (sender != "NetworkEngine")
         return;
 
-    if (event == "doSomething")
-        std::cout << "Received event from NetworkEngine" << std::endl;
     // if (event == "newConnection") // example of event
     //     this->_gameEngine->createPlayer();
 }
