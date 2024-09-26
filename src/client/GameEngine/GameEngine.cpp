@@ -7,7 +7,7 @@
 
 #include "GameEngine.hpp"
 
-GameEngine::GameEngine()
+RType::GameEngine::GameEngine()
 {
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
@@ -16,11 +16,11 @@ GameEngine::GameEngine()
     _window.create(sf::VideoMode(1280, 720), "R-TYPE");
 }
 
-GameEngine::~GameEngine()
+RType::GameEngine::~GameEngine()
 {
 }
 
-void GameEngine::run()
+void RType::GameEngine::run()
 {
     entity_t movable = _registry.spawn_entity();
     _registry.add_component<Position_s>(movable, Position_s{100.f, 100.f});
@@ -50,4 +50,9 @@ void GameEngine::run()
         _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         _window.display();
     }
+}
+
+extern "C" RType::GameEngine *entryPointGameEngine()
+{
+    return (new RType::GameEngine());
 }

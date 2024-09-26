@@ -11,6 +11,8 @@ include(FetchContent)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
 
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+
 # Download and configure Boost
 find_package(Boost 1.70 REQUIRED)
 if (Boost_FOUND)
@@ -23,15 +25,42 @@ if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
 endif()
 
+# Create shared libs
+
+add_library(NetworkEngine SHARED
+    src/client/NetworkEngine/NetworkEngine.cpp
+)
+
+add_library(GameEngine SHARED
+    src/client/GameEngine/GameEngine.cpp
+    src/shared/registry/Registry.cpp
+    src/shared/systems/Systems.cpp
+)
+
+add_library(PhysicEngine SHARED
+    src/client/PhysicEngine/PhysicEngine.cpp
+)
+
+add_library(AudioEngine SHARED
+    src/client/AudioEngine/AudioEngine.cpp
+)
+
+target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+
+add_library(RenderingEngine SHARED
+    src/client/RenderEngine/RenderingEngine.cpp
+)
+
+
 
 # Source files for the Client
 set(SRC_CLIENT
     src/client/main.cpp
-    src/client/network/Client.cpp
-    src/client/engines/GameEngine.cpp
-    src/client/engines/NetworkEngine.cpp
-    src/client/engines/RenderingEngine.cpp
-    src/client/engines/Mediator.cpp
+    src/client/NetworkEngine/Client.cpp
+    src/client/GameEngine/GameEngine.cpp
+    src/client/NetworkEngine/NetworkEngine.cpp
+    src/client/RenderEngine/RenderingEngine.cpp
+    src/client/Mediator/Mediator.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
 )
