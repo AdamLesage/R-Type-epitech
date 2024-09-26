@@ -5,7 +5,7 @@
 ** menu
 */
 
-#include "menu.hpp"
+#include "Menu.hpp"
 
 Menu::Menu(float width, float height)
 {
@@ -38,7 +38,6 @@ Menu::Menu(float width, float height)
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
 
-    settings = Settings(window);
     games = Game(window);
 
     selectedOption = 0;
@@ -84,6 +83,7 @@ void Menu::displayMenu()
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
 
     games = Game(window);
+    settings = Settings(window);
 
     while (window->isOpen()) {
         sf::Event event;
