@@ -69,6 +69,13 @@ class Systems {
          * @param shootRequest The request to shoot.
          */
         void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest);
+
+        /**
+         * @brief Update the health of all entities based on the damages / regeneration / healing they receive.
+         *
+         * @param reg The registry containing the components.
+         */
+        void health_system(Registry &reg, float deltaTime);
 };
 
 #endif /* !SYSTEMS_HPP_ */

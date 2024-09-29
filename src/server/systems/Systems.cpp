@@ -139,3 +139,19 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
         // send_projectile_to_clients(type, projectileId, projectileX, projectileY);
     }
 }
+
+void Systems::health_system(Registry &reg, float deltaTime)
+{
+    auto &healths = reg.get_components<Health_s>();
+
+    for (size_t i = 0; i < healths.size(); ++i) {
+        auto &health = healths[i];
+
+        // 5hp / seconds (to put in a config file and handle with the difficulty)
+        health->health += static_cast<int>(5 * deltaTime);
+        if (health->health > health->maxHealth) {
+            health->health = health->maxHealth;
+        }
+        //send health updates to clients
+    }
+}
