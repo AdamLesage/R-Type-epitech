@@ -54,6 +54,7 @@ class GameLogique {
          * @param position_y the y position of the ennemy
          * 
         */
-        void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
+        void spawnEnnemy(char type, float position_x, float position_y);
+        void handleClientInput(std::pair<std::string, uint32_t> message);
 };
 #endif /* !GAMELOGIQUE_HPP_ */

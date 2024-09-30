@@ -27,8 +27,8 @@ namespace NetworkLib {
 		bool hasMessages() override;
 		std::pair<std::string, uint32_t> popMessage() override;
 
-		void sendToClient(const std::string& message, uint32_t clientID) override;
-		void sendToAll(const std::string& message);
+		void sendToClient(const char *message, size_t size, uint32_t clientID) override;
+		void sendToAll(const char *message, size_t size);
 
 		size_t getClientCount() override;
 		uint32_t getClientIdByIndex(size_t index) override;
@@ -52,7 +52,7 @@ namespace NetworkLib {
 		int32_t get_or_create_client_id(boost::asio::ip::udp::endpoint endpoint);
 		void on_client_disconnected(int32_t id);
 
-		void send(const std::string& message, boost::asio::ip::udp::endpoint target);
+		void send(const char *message, size_t size, boost::asio::ip::udp::endpoint target);
 
 		// Incoming messages queue
 		LockedQueue<std::pair<std::string, uint32_t>> incomingMessages;

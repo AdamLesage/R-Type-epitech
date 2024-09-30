@@ -77,9 +77,24 @@ namespace NetworkLib {
 		start_receive();
 	}
 
-	void Server::send(const std::string& message, boost::asio::ip::udp::endpoint target_endpoint)
+	void Server::send(const char *message, size_t size, boost::asio::ip::udp::endpoint target_endpoint)
 	{
-		this->socket.send_to(boost::asio::buffer(message), target_endpoint);
+		this->socket.send_to(boost::asio::buffer(message, size), target_endpoint);
+	}
+
+	void Server::sendToClient(const char *message, size_t size, uint32_t clientID)
+	{
+		try {
+			send(message, size, clients.at(clientID));
+		} catch (...) {
+			std::cout << "sendToClient: Unknown error while sending message to client " << clientID << std::endl;
+		}
+	};
+
+	void Server::sendToAll(const char *message, size_t size)
+	{
+		for (auto client : clients)
+			send(message, size, client.second);
 	}
 
 	void Server::run_service()
@@ -118,20 +133,6 @@ namespace NetworkLib {
 		}
 	};
 
-	void Server::sendToClient(const std::string& message, uint32_t clientID)
-	{
-		try {
-			send(message, clients.at(clientID));
-		} catch (...) {
-			std::cout << "sendToClient: Unknown error while sending message to client " << clientID << std::endl;
-		}
-	};
-
-	void Server::sendToAll(const std::string& message)
-	{
-		for (auto client : clients)
-			send(message, client.second);
-	}
 
 	size_t Server::getClientCount()
 	{

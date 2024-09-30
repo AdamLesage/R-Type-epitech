@@ -7,7 +7,7 @@
 
 #include "Systems.hpp"
 
-void Systems::position_system(Registry &reg)
+void Systems::position_system(Registry &reg, std::shared_ptr<NetworkLib::Server> network)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &velocities = reg.get_components<Velocity_s>();
@@ -17,8 +17,17 @@ void Systems::position_system(Registry &reg)
         auto &vel = velocities[i];
 
         if (pos && vel) {
+            char data[13];
             pos->x += vel->x;
             pos->y += vel->y;
+            vel->x = 0;
+            vel->y = 0;
+            std::cout << "entity: " << i << " pos: " << pos->x << ";" << pos->y << std::endl;
+            data[0] = 0x30;
+            memcpy(&data[1], &i, sizeof(int));
+            memcpy(&data, &pos->x, sizeof(int));
+            memcpy(&data, &pos->y, sizeof(int));
+            network->sendToAll(data, 13);
         }
     }
 }
@@ -143,10 +152,14 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
 void Systems::wave_pattern_system(Registry &reg, float totalTime) {
     auto &patterns =  reg.get_components<Wave_pattern>();
     auto &positions =  reg.get_components<Position>();
+    auto &velocitys =  reg.get_components<Velocity>();
+
     for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
         auto &pattern = patterns[i];
         auto &position = positions[i];
-        if (pattern && position) {
+        auto &velocity = velocitys[i];
+        if (pattern && position && velocity) {
+            velocity->x = -1;
             position->y += (pattern->amplitude * std::sin(pattern->frequency * totalTime));
         }
     }
