@@ -79,7 +79,7 @@ void Menu::displayMenu()
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
 
     games = Game(window);
-    // settings = Settings(window);
+    settings = Settings(window);
 
     while (window->isOpen()) {
         sf::Event event;
@@ -105,7 +105,7 @@ void Menu::displayMenu()
                         games.displayGame();
                         break;
                     case 1:
-                        // settings.displaySettings();
+                        settings.displaySettings();
                         break;
                     case 2:
                         std::cout << "Quit" << std::endl;
@@ -126,10 +126,10 @@ void Menu::displayMenu()
     }
 }
 
-int main()
-{
-    std::cout << "Starting Menu" << std::endl;
-    Menu menu(1920, 1080);
-    menu.displayMenu();
-    return 0;
-}
+// int main()
+// {
+//     std::cout << "Starting Menu" << std::endl;
+//     Menu menu(1920, 1080);
+//     menu.displayMenu();
+//     return 0;
+// }
