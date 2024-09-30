@@ -10,20 +10,12 @@
 #include <sstream>
 #include <iomanip>
 
-Game::Game(std::shared_ptr<sf::RenderWindow> window) : window(std::move(window)), currentFrame(1), frameDuration(0.05f), animationComplete(false)
+Game::Game(std::shared_ptr<sf::RenderWindow> window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
+    this->window = window;
     if (!font.loadFromFile("asset/r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
-
-    gameInProgressText.setFont(font);
-    gameInProgressText.setString("Game in Progress");
-    gameInProgressText.setCharacterSize(60);
-    gameInProgressText.setFillColor(sf::Color::White);
-
-    sf::FloatRect textRect = gameInProgressText.getLocalBounds();
-    gameInProgressText.setOrigin(textRect.width / 2, textRect.height / 2);
-    gameInProgressText.setPosition(window->getSize().x / 2, window->getSize().y / 2);
 }
 
 Game::~Game()
@@ -35,6 +27,13 @@ void Game::displayGame()
     sf::Sprite sprite;
     sf::Texture texture;
     sf::Clock clock;
+    gameInProgressText.setFont(font);
+    gameInProgressText.setString("Game in Progress");
+    gameInProgressText.setCharacterSize(60);
+    gameInProgressText.setFillColor(sf::Color::White);
+    sf::FloatRect textRect = gameInProgressText.getLocalBounds();
+    gameInProgressText.setOrigin(textRect.width / 2, textRect.height / 2);
+    gameInProgressText.setPosition(window->getSize().x / 2, window->getSize().y / 2);
 
     if (!window) {
         std::cerr << "Error: Window not initialized!" << std::endl;

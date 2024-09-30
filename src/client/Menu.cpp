@@ -23,13 +23,11 @@ Menu::Menu(float width, float height)
 
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(width / 2 - logoTexture.getSize().x / 2, 50));
-
     if (!selectBuffer.loadFromFile("asset/selectsound.wav")) {
         std::cerr << "Error loading select sound" << std::endl;
     } else {
         selectSound.setBuffer(selectBuffer);
     }
-
     std::string optionsText[] = {"1. Play", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
         menuOptions[i].setFont(font);
@@ -37,9 +35,7 @@ Menu::Menu(float width, float height)
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-
     games = Game(window);
-
     selectedOption = 0;
 }
 
@@ -83,7 +79,7 @@ void Menu::displayMenu()
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
 
     games = Game(window);
-    settings = Settings(window);
+    // settings = Settings(window);
 
     while (window->isOpen()) {
         sf::Event event;
@@ -109,7 +105,7 @@ void Menu::displayMenu()
                         games.displayGame();
                         break;
                     case 1:
-                        settings.displaySettings();
+                        // settings.displaySettings();
                         break;
                     case 2:
                         std::cout << "Quit" << std::endl;
@@ -132,6 +128,7 @@ void Menu::displayMenu()
 
 int main()
 {
+    std::cout << "Starting Menu" << std::endl;
     Menu menu(1920, 1080);
     menu.displayMenu();
     return 0;

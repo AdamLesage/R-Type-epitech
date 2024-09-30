@@ -34,7 +34,7 @@ private:
     sf::SoundBuffer selectBuffer;
     sf::Sound selectSound;
     std::shared_ptr<sf::RenderWindow> window;
-    Settings settings;
+    // Settings settings;
     Game games;
 };
 

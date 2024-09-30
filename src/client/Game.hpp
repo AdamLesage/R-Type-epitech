@@ -6,16 +6,23 @@
 
 class Game {
 public:
+    Game() {
+        window = nullptr;
+        currentFrame = 1;
+        frameDuration = 0.05f;
+        animationComplete = false;
+    }
     explicit Game(std::shared_ptr<sf::RenderWindow> window);
 
     ~Game();
 
     void displayGame();
 
+    sf::Text gameInProgressText;
+
 private:
     std::shared_ptr<sf::RenderWindow> window;
     sf::Font font;
-    sf::Text gameInProgressText;
     int currentFrame;
     float frameDuration;
     bool animationComplete;
