@@ -29,6 +29,7 @@ endif()
 
 add_library(NetworkEngine SHARED
     src/client/NetworkEngine/NetworkEngine.cpp
+    src/client/NetworkEngine/Client.cpp
 )
 
 add_library(GameEngine SHARED
