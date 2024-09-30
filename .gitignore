@@ -43,3 +43,6 @@ r-type_client
 
 # Vscode
 .vscode/
+
+# Dynamic libraries
+*.so
