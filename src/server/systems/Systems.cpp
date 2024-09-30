@@ -7,7 +7,7 @@
 
 #include "Systems.hpp"
 
-void Systems::position_system(Registry &reg, std::shared_ptr<NetworkLib::Server> network)
+void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &velocities = reg.get_components<Velocity_s>();
@@ -17,17 +17,14 @@ void Systems::position_system(Registry &reg, std::shared_ptr<NetworkLib::Server>
         auto &vel = velocities[i];
 
         if (pos && vel) {
-            char data[13];
             pos->x += vel->x;
             pos->y += vel->y;
-            vel->x = 0;
-            vel->y = 0;
-            std::cout << "entity: " << i << " pos: " << pos->x << ";" << pos->y << std::endl;
-            data[0] = 0x30;
-            memcpy(&data[1], &i, sizeof(int));
-            memcpy(&data, &pos->x, sizeof(int));
-            memcpy(&data, &pos->y, sizeof(int));
-            network->sendToAll(data, 13);
+            if (vel->x != 0 || vel->y != 0) {
+                vel->x = 0;
+                vel->y = 0;
+                std::cout << "entity: " << i << " pos: " << pos->x << ";" << pos->y << std::endl;
+                networkSender->sendPositionUpdate(i, pos->x, pos->y);
+            }
         }
     }
 }

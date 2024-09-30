@@ -10,6 +10,7 @@
 GameLogique::GameLogique(size_t port, int _frequency)
 {
     this->network = std::make_shared<NetworkLib::Server>(port);
+    this->_networkSender = std::make_unique<NetworkSender>(this->network);
     this->receiverThread = std::thread(&GameLogique::handleRecieve, this);
     this->running = false;
     this->frequency = _frequency;
@@ -36,12 +37,7 @@ void GameLogique::startGame() {
             this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
             this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
             this->reg.add_component<Tag>(entity, Tag{"player"});
-            std::array<char, 13> data{};
-            data[0] = 0x01;
-            std::memcpy(&data[1], &entity, sizeof(entity));
-            std::memcpy(&data[5], &xPos, sizeof(float));
-            std::memcpy(&data[9], &yPos, sizeof(float));
-            this->network->sendToAll(data.data(), data.size());
+            this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
         }
         this->running = true;
     }
@@ -50,7 +46,6 @@ void GameLogique::startGame() {
 void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
 {
     size_t entity = this->reg.spawn_entity();
-    char data[13];
 
     switch (type)
     {
@@ -69,11 +64,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
         this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
         break;
     }
-    data[0] = type;
-    std::memcpy(&data[1], &entity, sizeof(entity));
-    std::memcpy(&data[5], &position_x, sizeof(float));
-    std::memcpy(&data[9], &position_y, sizeof(float));
-    this->network->sendToAll(data, 13);
+    this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
 }
 
 void GameLogique::runGame() {
@@ -84,7 +75,7 @@ void GameLogique::runGame() {
             if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > 1 / frequency) {
                 clock = std::clock();
                 sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC);
-                sys.position_system(reg, this->network);     
+                sys.position_system(reg, this->_networkSender);     
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 2) {
                 this->spawnEnnemy(0x03, 1000, 500);
@@ -101,13 +92,13 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
         return;
     }
 
-    int id = 0;
+    size_t id = 0;
     char input = 0;
-    memcpy(&id, &(message.first[1]), sizeof(int));
+    memcpy(&id, &(message.first[1]), sizeof(size_t));
     input = message.first[5];
 
     auto &velocities = reg.get_components<Velocity_s>();
-    if (velocities.size() <= id || velocities[id] == nullptr) {
+    if (velocities.size() <= id) {
         std::cerr << "Invalid entity ID: " << id << std::endl;
         return;
     }

@@ -18,7 +18,7 @@
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
     #include "../../shared/components/Pattern.hpp"
-    #include "../network/Server.hpp"
+    #include "../GameLogique/NetworkSender.hpp"
     #include <iostream>
     #include <cmath>
 
@@ -29,7 +29,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void position_system(Registry &reg, std::shared_ptr<NetworkLib::Server> network);
+        void position_system(Registry &reg, std::unique_ptr<NetworkSender> &network);
 
         /**
          * @brief Update entity's velocity based on user input.

@@ -14,6 +14,7 @@
 #include "../../shared/components/Tag.hpp"
 #include "../../shared/components/Position.hpp"
 #include "../../shared/components/Velocity.hpp"
+#include "./NetworkSender.hpp"
 #include <memory>
 
 class GameLogique {
@@ -35,6 +36,7 @@ class GameLogique {
         Registry reg;
         Systems sys;
         std::shared_ptr<NetworkLib::Server> network;
+        std::unique_ptr<NetworkSender> _networkSender;
         std::thread receiverThread;
         int frequency;
         bool running;
