@@ -34,7 +34,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param window The window to get the input from.
          */
-        void control_system(Registry &reg);
+        void control_system(Registry &reg, bool up, bool down, bool left, bool right);
 
         /**
          * @brief Draw all entities with a position and a drawable component.

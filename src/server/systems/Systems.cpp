@@ -23,7 +23,7 @@ void Systems::position_system(Registry &reg)
     }
 }
 
-void Systems::control_system(Registry &reg)
+void Systems::control_system(Registry &reg, bool up, bool down, bool left, bool right)
 {
     auto &velocities = reg.get_components<Velocity_s>();
     auto &controllables = reg.get_components<Controllable_s>();
@@ -36,16 +36,16 @@ void Systems::control_system(Registry &reg)
             vel->x = 0;
             vel->y = 0;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            if (up) {
                 vel->y = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            if (down) {
                 vel->y = 1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (left) {
                 vel->x = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (right) {
                 vel->x = 1.0f;
             }
         }
