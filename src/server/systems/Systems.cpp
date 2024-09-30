@@ -141,7 +141,7 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
 }
 
 void Systems::wave_pattern_system(Registry &reg, float totalTime) {
-    auto &patterns =  reg.get_components<Pattern>();
+    auto &patterns =  reg.get_components<Wave_pattern>();
     auto &positions =  reg.get_components<Position>();
     for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
         auto &pattern = patterns[i];
