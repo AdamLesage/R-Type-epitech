@@ -82,7 +82,10 @@ void NetworkSender::sendCreateBonus(char type ,size_t id, float pos_x, float pos
 
 void NetworkSender::sendDeleteEntity(size_t id)
 {
-
+    std::array<char, 5> data{};
+    data[0] = 0x29;
+    std::memcpy(&data[1], &id, sizeof(id));
+    this->_network->sendToAll(data.data(), data.size());    
 }
 
 void NetworkSender::sendPositionUpdate(size_t id, float pos_x, float pos_y)
