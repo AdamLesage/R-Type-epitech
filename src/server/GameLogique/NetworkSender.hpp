@@ -68,11 +68,12 @@ class NetworkSender {
     /**
      * @brief Sends the creation of a bonus or power-up to all clients.
      * 
+     * @param type The type or class of the created Bonus.
      * @param id The unique identifier of the created bonus.
      * @param pos_x The x-coordinate of the bonus's position.
      * @param pos_y The y-coordinate of the bonus's position.
      */
-    void sendCreateBonus(size_t id, float pos_x, float pos_y);
+    void sendCreateBonus(char type, size_t id, float pos_x, float pos_y);
 
     /**
      * @brief Sends a delete command for an entity to all clients.

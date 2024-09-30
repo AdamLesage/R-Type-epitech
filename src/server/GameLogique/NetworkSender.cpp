@@ -70,9 +70,14 @@ void NetworkSender::sendCreateReward(size_t id, float pos_x, float pos_y)
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendCreateBonus(size_t id, float pos_x, float pos_y)
+void NetworkSender::sendCreateBonus(char type ,size_t id, float pos_x, float pos_y)
 {
-
+    std::array<char, 13> data{};
+    data[0] = type;
+    std::memcpy(&data[1], &id, sizeof(id));
+    std::memcpy(&data[5], &pos_x, sizeof(float));
+    std::memcpy(&data[9], &pos_y, sizeof(float));
+    this->_network->sendToAll(data.data(), data.size());
 }
 
 void NetworkSender::sendDeleteEntity(size_t id)
