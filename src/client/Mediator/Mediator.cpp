@@ -50,8 +50,7 @@ void RType::Mediator::notifyNetworkEngine(std::string sender, std::string event)
     if (sender != "NetworkEngine")
         return;
 
-    // if (event == "newConnection") // example of event
-    //     this->_gameEngine->createPlayer();
+    this->_gameEngine->handleServerData(event);
 }
 
 void RType::Mediator::notifyRenderingEngine(std::string sender, std::string event)

@@ -34,6 +34,7 @@ add_library(NetworkEngine SHARED
 
 add_library(GameEngine SHARED
     src/client/GameEngine/GameEngine.cpp
+    src/client/GameEngine/ProtocolParsing.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
 )
@@ -46,7 +47,7 @@ add_library(AudioEngine SHARED
     src/client/AudioEngine/AudioEngine.cpp
 )
 
-target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
 
 add_library(RenderingEngine SHARED
     src/client/RenderEngine/RenderingEngine.cpp
@@ -59,6 +60,7 @@ set(SRC_CLIENT
     src/client/main.cpp
     src/client/NetworkEngine/Client.cpp
     src/client/GameEngine/GameEngine.cpp
+    src/client/GameEngine/ProtocolParsing.cpp
     src/client/NetworkEngine/NetworkEngine.cpp
     src/client/RenderEngine/RenderingEngine.cpp
     src/client/Mediator/Mediator.cpp
@@ -69,7 +71,7 @@ set(SRC_CLIENT
 add_executable(r-type_client ${SRC_CLIENT})
 
 # Linkage for SFML and Boost libraries
-target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
 
 # Output directory for the client
 set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})

@@ -9,6 +9,7 @@
 
 RType::GameEngine::GameEngine()
 {
+    _protocolParsing = std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg");
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
     _registry.register_component<Drawable_s>();
@@ -56,6 +57,12 @@ void RType::GameEngine::run()
 void RType::GameEngine::send(const std::string &message)
 {
     _mediator->notify("GameEngine", message);
+}
+
+
+void RType::GameEngine::handleServerData(std::string &message)
+{
+    // Parse the message and update the registry and the systems
 }
 
 extern "C" RType::GameEngine *entryPointGameEngine()
