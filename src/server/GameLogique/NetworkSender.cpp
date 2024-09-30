@@ -109,6 +109,10 @@ void NetworkSender::sendHealthUpdate(size_t id, size_t hp)
 
 void NetworkSender::sendProjectilColision(size_t id_projectil, size_t id_entity)
 {
-
+    std::array<char, 9> data{};
+    data[0] = 0x35;
+    std::memcpy(&data[1], &id_projectil, sizeof(id_projectil));
+    std::memcpy(&data[5], &id_entity, sizeof(id_entity));
+    this->_network->sendToAll(data.data(), data.size());
 }
 
