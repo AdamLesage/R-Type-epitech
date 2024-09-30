@@ -95,11 +95,16 @@ void NetworkSender::sendPositionUpdate(size_t id, float pos_x, float pos_y)
     std::memcpy(&data[1], &id, sizeof(id));
     std::memcpy(&data[5], &pos_x, sizeof(float));
     std::memcpy(&data[9], &pos_y, sizeof(float));
-    this->_network->sendToAll(data.data(), data.size());  
+    this->_network->sendToAll(data.data(), data.size());
 }
 
 void NetworkSender::sendHealthUpdate(size_t id, size_t hp)
 {
+    std::array<char, 9> data{};
+    data[0] = 0x30;
+    std::memcpy(&data[1], &id, sizeof(id));
+    std::memcpy(&data[5], &hp, sizeof(hp));
+    this->_network->sendToAll(data.data(), data.size());
 }
 
 void NetworkSender::sendProjectilColision(size_t id_projectil, size_t id_entity)
