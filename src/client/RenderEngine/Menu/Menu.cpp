@@ -7,23 +7,23 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(float width, float height)
+RType::Menu::Menu()
 {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
 
-    if (!font.loadFromFile("asset/r-type.ttf")) {
+    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
 
-    if (!logoTexture.loadFromFile("asset/rtypelogo.png")) {
+    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
 
     logoSprite.setTexture(logoTexture);
-    logoSprite.setPosition(sf::Vector2f(width / 2 - logoTexture.getSize().x / 2, 50));
-    if (!selectBuffer.loadFromFile("asset/selectsound.wav")) {
+    logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
+    if (!selectBuffer.loadFromFile("src/client/asset/selectsound.wav")) {
         std::cerr << "Error loading select sound" << std::endl;
     } else {
         selectSound.setBuffer(selectBuffer);
@@ -35,12 +35,12 @@ Menu::Menu(float width, float height)
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-    games = Game(window);
+     games = std::make_shared<Game>(window);
     selectedOption = 0;
 }
 
 
-void Menu::draw(std::shared_ptr<sf::RenderWindow> window)
+void RType::Menu::draw()
 {
     window->draw(logoSprite);
 
@@ -49,7 +49,7 @@ void Menu::draw(std::shared_ptr<sf::RenderWindow> window)
     }
 }
 
-void Menu::moveUp()
+void RType::Menu::moveUp()
 {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
@@ -59,7 +59,7 @@ void Menu::moveUp()
     }
 }
 
-void Menu::moveDown()
+void RType::Menu::moveDown()
 {
     if (selectedOption + 1 < 3) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
@@ -69,18 +69,18 @@ void Menu::moveDown()
     }
 }
 
-int Menu::getSelectedOption() const
+int RType::Menu::getSelectedOption() const
 {
     return selectedOption;
 }
 
-void Menu::displayMenu()
+void RType::Menu::displayMenu()
 {
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
 
-    games = Game(window);
+    games = std::make_shared<Game>(window);
     settings = Settings(window);
-
+    window->setFramerateLimit(60);
+    window->clear();
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -102,10 +102,10 @@ void Menu::displayMenu()
                     switch (getSelectedOption()) {
                     case 0:
                         std::cout << "Play" << std::endl;
-                        games.displayGame();
+                         games->displayGame();
                         break;
                     case 1:
-                        settings.displaySettings();
+                         settings.displaySettings();
                         break;
                     case 2:
                         std::cout << "Quit" << std::endl;
@@ -121,7 +121,7 @@ void Menu::displayMenu()
         }
 
         window->clear();
-        draw(window);
+        draw();
         window->display();
     }
 }

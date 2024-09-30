@@ -11,14 +11,14 @@ Settings::Settings()
 {
 }
 
-Settings::Settings(std::shared_ptr<sf::RenderWindow> window)
+Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 {
-    this->window = window;
-    if (!font.loadFromFile("asset/r-type.ttf")) {
+    this->window = _window;
+    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
-    if (!logoTexture.loadFromFile("asset/rtypelogo.png")) {
+    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
@@ -89,9 +89,6 @@ void Settings::changeKey(std::string key)
 void Settings::display()
 {
     window->clear();
-    for (auto &button : buttons) {
-        button->displayButton(window);
-    }
     window->draw(logoSprite);
     for (int i = 0; i < 6; ++i) {
         window->draw(menuOptions[i]);
@@ -120,16 +117,15 @@ void Settings::displaySettings()
                 window->close();
 
             if (event.type == sf::Event::KeyPressed) {
-                switch (event.key.code) {
-                case sf::Keyboard::Up:
+                if(event.key.code == sf::Keyboard::Up) {
                     moveUp();
                     break;
-
-                case sf::Keyboard::Down:
+                }
+                if(event.key.code == sf::Keyboard::Down) {
                     moveDown();
                     break;
-
-                case sf::Keyboard::Enter:
+                }
+                if(event.key.code == sf::Keyboard::Enter) {
                     switch (getSelectedOption()) {
                     case 0:
                         std::cout << menuOptions[0].getString().toAnsiString() << std::endl;

@@ -16,7 +16,7 @@
 class Settings {
     public:
         Settings();
-        Settings(std::shared_ptr<sf::RenderWindow> window);
+        Settings(std::shared_ptr<sf::RenderWindow> _window);
         ~Settings();
         void displaySettings();
         void moveUp();
@@ -32,7 +32,6 @@ class Settings {
         sf::Text menuOptions[6];
         sf::Texture logoTexture;
         sf::Sprite logoSprite;
-        std::vector<std::shared_ptr<Button>> buttons;
         sf::Event event;
     private:
 };
