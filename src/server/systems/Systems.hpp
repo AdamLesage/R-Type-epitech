@@ -69,6 +69,12 @@ class Systems {
          * @param shootRequest The request to shoot.
          */
         void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest);
+
+        /**
+         * @brief Handle the save of the score of the player.
+         * @param reg
+         */
+        void score_system(Registry &reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */

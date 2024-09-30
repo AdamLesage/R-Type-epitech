@@ -139,3 +139,12 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
         // send_projectile_to_clients(type, projectileId, projectileX, projectileY);
     }
 }
+
+void score_system(Registry &reg)
+{
+    //save the score of the players in a config file (../../config/scores.cfg)
+    //get the score component of the players entities
+    //if their is 2 players, get the score of the 2 players
+    //save the score of the players in the config file
+
+}
