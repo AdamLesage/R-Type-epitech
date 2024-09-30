@@ -14,11 +14,11 @@ Settings::Settings()
 Settings::Settings(std::shared_ptr<sf::RenderWindow> window)
 {
     this->window = window;
-    if (!font.loadFromFile("asset/r-type.ttf")) {
+    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
-    if (!logoTexture.loadFromFile("asset/rtypelogo.png")) {
+    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }

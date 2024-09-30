@@ -11,19 +11,19 @@ Menu::Menu(float width, float height)
 {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
 
-    if (!font.loadFromFile("asset/r-type.ttf")) {
+    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
 
-    if (!logoTexture.loadFromFile("asset/rtypelogo.png")) {
+    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
 
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(width / 2 - logoTexture.getSize().x / 2, 50));
-    if (!selectBuffer.loadFromFile("asset/selectsound.wav")) {
+    if (!selectBuffer.loadFromFile("src/client/asset/selectsound.wav")) {
         std::cerr << "Error loading select sound" << std::endl;
     } else {
         selectSound.setBuffer(selectBuffer);
