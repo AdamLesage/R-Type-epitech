@@ -63,8 +63,10 @@ void RType::GameEngine::send(const std::string &message)
 void RType::GameEngine::handleServerData(std::string &message)
 {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
-
+    if (_protocolParsing->parseData(message.c_str()) == false) // If the parsing failed
+        return;
     
+    // Need to create entities, update entities, delete entities after parsing the message
 }
 
 extern "C" RType::GameEngine *entryPointGameEngine()

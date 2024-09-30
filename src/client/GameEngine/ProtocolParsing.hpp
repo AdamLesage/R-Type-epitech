@@ -142,14 +142,25 @@ namespace RType {
             bool parseStateChange(const char *message);
 
             /**
+             * @brief Parse the message to validate and extract information for the corresponding operation.
+             * This function is the main function to parse the message.
+             * 
+             * @param data given by the server. (binary data)
+             * @return true if the parsing is successful and the message is valid, false otherwise.
+            */
+            bool parseData(const char *message);
+
+        protected:
+        private:
+            /**
              * @brief Check if the message type is valid and if its values are valid.
              * 
              * @param messageType The message type to check.
              * @return true if the message type is valid, false otherwise.
             */
-            bool checkMessageType(const std::string &messageType, char currentHexaCode);
-        protected:
-        private:
+            bool checkMessageType(const std::string &messageType, const char *message);
+
+            // Variables
             std::string _protocolPath;
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;

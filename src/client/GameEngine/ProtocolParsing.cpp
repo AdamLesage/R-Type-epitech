@@ -42,29 +42,32 @@ RType::ProtocolParsing::~ProtocolParsing()
 {
 }
 
-bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, char currentHexaCode)
+bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, const char *message)
 {
-    if (_messageTypeMap[messageType].first != currentHexaCode)
+    if (_messageTypeMap[messageType].first != message[0])
         return false;
 
-    const char *type = _cfg.lookup(_messageTypeMap[messageType].second.c_str());
+    // Check if message is for the current parsing function such as current type (0xXX) is correct
+    if (message[0] != _messageTypeMap[messageType].first)
+        return false;
 
-    if (std::stoi(type) != strlen(type))
+    // Check if the message type is a byte
+    if (sizeof(message[0]) != 1)
         return false;
     return true;
 }
 
 bool RType::ProtocolParsing::parsePlayerCreation(const char *message)
 {
-    if (!checkMessageType("PLAYER_CREATION", message[0]))
+    if (!checkMessageType("PLAYER_CREATION", message))
         return false;
-    
+
     return true;
 }
 
 bool RType::ProtocolParsing::parseProjectileCreation(const char *message)
 {
-    if (!checkMessageType("PROJECTILE_CREATION", message[0]))
+    if (!checkMessageType("PROJECTILE_CREATION", message))
         return false;
     
     return true;
@@ -72,7 +75,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const char *message)
 
 bool RType::ProtocolParsing::parseEnemyCreation(const char *message)
 {
-    if (!checkMessageType("ENEMY_CREATION", message[0]))
+    if (!checkMessageType("ENEMY_CREATION", message))
         return false;
     
     return true;
@@ -80,7 +83,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const char *message)
 
 bool RType::ProtocolParsing::parseBonusCreation(const char *message)
 {
-    if (!checkMessageType("BONUS_CREATION", message[0]))
+    if (!checkMessageType("BONUS_CREATION", message))
         return false;
     
     return true;
@@ -88,7 +91,7 @@ bool RType::ProtocolParsing::parseBonusCreation(const char *message)
 
 bool RType::ProtocolParsing::parseWallCreation(const char *message)
 {
-    if (!checkMessageType("WALL_CREATION", message[0]))
+    if (!checkMessageType("WALL_CREATION", message))
         return false;
     
     return true;
@@ -96,7 +99,7 @@ bool RType::ProtocolParsing::parseWallCreation(const char *message)
 
 bool RType::ProtocolParsing::parseRewardCreation(const char *message)
 {
-    if (!checkMessageType("REWARD_CREATION", message[0]))
+    if (!checkMessageType("REWARD_CREATION", message))
         return false;
     
     return true;
@@ -104,7 +107,7 @@ bool RType::ProtocolParsing::parseRewardCreation(const char *message)
 
 bool RType::ProtocolParsing::parseEntityDeletion(const char *message)
 {
-    if (!checkMessageType("ENTITY_DELETION", message[0]))
+    if (!checkMessageType("ENTITY_DELETION", message))
         return false;
     
     return true;
@@ -112,7 +115,7 @@ bool RType::ProtocolParsing::parseEntityDeletion(const char *message)
 
 bool RType::ProtocolParsing::parsePositionUpdate(const char *message)
 {
-    if (!checkMessageType("POSITION_UPDATE", message[0]))
+    if (!checkMessageType("POSITION_UPDATE", message))
         return false;
     
     return true;
@@ -120,7 +123,7 @@ bool RType::ProtocolParsing::parsePositionUpdate(const char *message)
 
 bool RType::ProtocolParsing::parseHealthUpdate(const char *message)
 {
-    if (!checkMessageType("HEALTH_UPDATE", message[0]))
+    if (!checkMessageType("HEALTH_UPDATE", message))
         return false;
     
     return true;
@@ -128,7 +131,7 @@ bool RType::ProtocolParsing::parseHealthUpdate(const char *message)
 
 bool RType::ProtocolParsing::parseDirectionUpdate(const char *message)
 {
-    if (!checkMessageType("DIRECTION_UPDATE", message[0]))
+    if (!checkMessageType("DIRECTION_UPDATE", message))
         return false;
     
     return true;
@@ -136,7 +139,7 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const char *message)
 
 bool RType::ProtocolParsing::parseObjectCollection(const char *message)
 {
-    if (!checkMessageType("OBJECT_COLLECTION", message[0]))
+    if (!checkMessageType("OBJECT_COLLECTION", message))
         return false;
     
     return true;
@@ -144,7 +147,7 @@ bool RType::ProtocolParsing::parseObjectCollection(const char *message)
 
 bool RType::ProtocolParsing::parseProjectileFiring(const char *message)
 {
-    if (!checkMessageType("PROJECTILE_FIRING", message[0]))
+    if (!checkMessageType("PROJECTILE_FIRING", message))
         return false;
     
     return true;
@@ -152,7 +155,7 @@ bool RType::ProtocolParsing::parseProjectileFiring(const char *message)
 
 bool RType::ProtocolParsing::parseProjectileCollision(const char *message)
 {
-    if (!checkMessageType("PROJECTILE_COLLISION", message[0]))
+    if (!checkMessageType("PROJECTILE_COLLISION", message))
         return false;
     
     return true;
@@ -160,7 +163,7 @@ bool RType::ProtocolParsing::parseProjectileCollision(const char *message)
 
 bool RType::ProtocolParsing::parseScoreUpdate(const char *message)
 {
-    if (!checkMessageType("SCORE_UPDATE", message[0]))
+    if (!checkMessageType("SCORE_UPDATE", message))
         return false;
     
     return true;
@@ -168,8 +171,42 @@ bool RType::ProtocolParsing::parseScoreUpdate(const char *message)
 
 bool RType::ProtocolParsing::parseStateChange(const char *message)
 {
-    if (!checkMessageType("STATE_CHANGE", message[0]))
+    if (!checkMessageType("STATE_CHANGE", message))
         return false;
     
     return true;
+}
+
+bool RType::ProtocolParsing::parseData(const char *message)
+{
+    if (message == nullptr)
+        return false;
+
+    // Array of results
+    bool results[] = {
+        this->parsePlayerCreation(message),
+        this->parseProjectileCreation(message),
+        this->parseEnemyCreation(message),
+        this->parseBonusCreation(message),
+        this->parseWallCreation(message),
+        this->parseRewardCreation(message),
+        this->parseEntityDeletion(message),
+        this->parsePositionUpdate(message),
+        this->parseHealthUpdate(message),
+        this->parseDirectionUpdate(message),
+        this->parseObjectCollection(message),
+        this->parseProjectileFiring(message),
+        this->parseProjectileCollision(message),
+        this->parseScoreUpdate(message),
+        this->parseStateChange(message)
+    };
+
+    // Check if any of the results is true
+    for (bool result : results) {
+        if (result) {
+            return true;
+        }
+    }
+
+    return false;
 }
