@@ -47,6 +47,7 @@ int main()
 
         // // Start the game engine
         gameEngine->run();
+        renderingEngine->run();
     } catch (const RType::DLError &e) {
         std::cerr << e.what() << std::endl;
         return (84);
