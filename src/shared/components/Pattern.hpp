@@ -8,13 +8,13 @@
 #ifndef PATTERN_HPP_
 #define PATTERN_HPP_
 
-typedef struct Pattern_s {
+typedef struct Wave_pattern_s {
     /**
      * @brief PaternCompoent add a patern for an entity
      *
      */
     float amplitude;  // oscillation
     float frequency;   // Frequency of oscillation
-} Pattern;
+} Wave_pattern;
 
 #endif

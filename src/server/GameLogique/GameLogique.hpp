@@ -14,6 +14,8 @@
 #include "../../shared/components/Tag.hpp"
 #include "../../shared/components/Position.hpp"
 #include "../../shared/components/Velocity.hpp"
+#include "../../shared/components/Shoot.hpp"
+#include "../../shared/components/ShootingSpeed.hpp"
 #include "./NetworkSender.hpp"
 #include <memory>
 

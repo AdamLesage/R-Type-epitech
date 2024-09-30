@@ -20,6 +20,9 @@ GameLogique::GameLogique(size_t port, int _frequency)
     this->reg.register_component<Health>();
     this->reg.register_component<Damage>();
     this->reg.register_component<Wave_pattern>();
+    this->reg.register_component<Shoot>();
+    this->reg.register_component<ShootingSpeed>();
+    this->reg.register_component<Type>();
 }
 
 GameLogique::~GameLogique()
@@ -37,6 +40,9 @@ void GameLogique::startGame() {
             this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
             this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
             this->reg.add_component<Tag>(entity, Tag{"player"});
+            this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
+            this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.5f});
+            this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
             this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
         }
         this->running = true;
@@ -87,14 +93,14 @@ void GameLogique::runGame() {
 
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 {
-    if (message.first.size() == 6) {
+    if (message.first.size() != 6) {
         std::cerr << "invalide player Input:" << std::endl;
         return;
     }
 
-    size_t id = 0;
+    int id = 0;
     char input = 0;
-    memcpy(&id, &(message.first[1]), sizeof(size_t));
+    memcpy(&id, &(message.first[1]), sizeof(int));
     input = message.first[5];
 
     auto &velocities = reg.get_components<Velocity_s>();
@@ -106,7 +112,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 
     switch (input) {
         case 'x':
-            // this->sys.shoot_system(reg, id, 0.1, true);
+            this->sys.shoot_system(reg, id, this->_networkSender);
             break;
         case 'z':
             velocitie->y = -1;
@@ -131,7 +137,6 @@ void GameLogique::handleRecieve()
     {
         if (network->hasMessages()) {
             std::pair<std::string, uint32_t> message = network->popMessage();
-            std::cout << "message: " << (int)message.first[0] << std::endl;
             switch (message.first[0])
             {
             case 0x41:

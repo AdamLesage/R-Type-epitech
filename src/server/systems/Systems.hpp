@@ -18,6 +18,7 @@
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
     #include "../../shared/components/Pattern.hpp"
+    #include "../../shared/components/Shoot.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include <iostream>
     #include <cmath>
@@ -28,6 +29,7 @@ class Systems {
          * @brief Update entity's position based on its velocity.
          *
          * @param reg The registry containing the components.
+         * @param network The class for sending data to client
          */
         void position_system(Registry &reg, std::unique_ptr<NetworkSender> &network);
 
@@ -67,11 +69,10 @@ class Systems {
          * @brief Update the position of all entities based on their velocity.
          *
          * @param reg The registry containing the components.
-         * @param entity_t playedId The id of the player.
-         * @param deltaTime The time since the last update.
-         * @param shootRequest The request to shoot.
+         * @param playerId playedId The id of the player.
+         * @param network The class for sending data to client
          */
-        void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest);
+        void shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender);
     
         /**
          * @brief Update the position for a wave patten

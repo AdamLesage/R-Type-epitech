@@ -11,19 +11,23 @@ void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &net
 {
     auto &positions = reg.get_components<Position_s>();
     auto &velocities = reg.get_components<Velocity_s>();
+    auto &types = reg.get_components<Type>();
 
     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
         auto &pos = positions[i];
         auto &vel = velocities[i];
+        auto &type = types[i];
 
         if (pos && vel) {
             pos->x += vel->x;
             pos->y += vel->y;
             if (vel->x != 0 || vel->y != 0) {
-                vel->x = 0;
-                vel->y = 0;
                 std::cout << "entity: " << i << " pos: " << pos->x << ";" << pos->y << std::endl;
                 networkSender->sendPositionUpdate(i, pos->x, pos->y);
+            }
+            if (type->type == EntityType::PLAYER) {
+                vel->x = 0;
+                vel->y = 0;
             }
         }
     }
@@ -117,32 +121,36 @@ void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
     }
 }
 
-void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest)
+void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &types = reg.get_components<Type_s>();
     auto &shootingSpeeds = reg.get_components<ShootingSpeed_s>();
-    static std::unordered_map<entity_t, float> shootCooldown;
-
-    shootCooldown[playerId] += deltaTime;
+    auto &shoots = reg.get_components<Shoot>();
 
     auto &pos = positions[playerId];
     auto &type = types[playerId];
     auto &shootingSpeed = shootingSpeeds[playerId];
+    auto &shoot = shoots[playerId];
+    if (type && type->type == EntityType::PLAYER && shoot->canShoot) {
+        auto now = std::chrono::steady_clock::now();
+        std::chrono::duration<float> fs = now - shoot->shootCooldown;
+        float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
+        std::cout << elapsed_seconds;
+        
+        if (elapsed_seconds >= shootingSpeed->shooting_speed) {
+            shoot->shootCooldown = now;
+            float projectileX = pos->x + 10;
+            float projectileY = pos->y;
 
-    if (type && type->type == EntityType::PLAYER && shootRequest && shootCooldown[playerId] >= shootingSpeed->shooting_speed) {
-        shootCooldown[playerId] = 0.0f;
+            entity_t projectile = reg.spawn_entity();
+            reg.add_component<Position_s>(projectile, Position_s{projectileX, projectileY});
+            reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
+            reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
+            reg.add_component<Damage_s>(projectile, Damage_s{10});
 
-        float projectileX = pos->x + 10;
-        float projectileY = pos->y;
-
-        entity_t projectile = reg.spawn_entity();
-        reg.add_component<Position_s>(projectile, Position_s{projectileX, projectileY});
-        reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
-        reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
-        reg.add_component<Damage_s>(projectile, Damage_s{10});
-
-        // send_projectile_to_clients(type, projectileId, projectileX, projectileY);
+            networkSender->sendCreateProjectil(projectile, projectileX, projectileY, playerId);
+        }
     }
 }
 

@@ -8,6 +8,7 @@
 #ifndef SHOOT_HPP_
     #define SHOOT_HPP_
 
+    #include <chrono>
     /**
      * @struct Shoot_s
      */
@@ -17,6 +18,7 @@
          *
          */
         bool canShoot; //can the entity shoot
+        std::chrono::steady_clock::time_point shootCooldown;
     } Shoot;
 
 #endif /* !SHOOT_HPP_ */
