@@ -38,16 +38,25 @@ void NetworkSender::sendCreateEnemy(char type, size_t id, float pos_x, float pos
 
 void NetworkSender::sendCreateWall(size_t id, float pos_x, float pos_y, float size_x, float size_y)
 {
+    std::array<char, 21> data{};
+
+    data[0] = 0x025;
+    std::memcpy(&data[1], &id, sizeof(id));
+    std::memcpy(&data[5], &pos_x, sizeof(float));
+    std::memcpy(&data[9], &pos_y, sizeof(float));
+    std::memcpy(&data[13], &size_x, sizeof(float));
+    std::memcpy(&data[17], &size_y, sizeof(float));
+    this->_network->sendToAll(data.data(), data.size());
 }
 
 void NetworkSender::sendCreateProjectil(size_t id, float pos_x, float pos_y, size_t parent_id)
 {
-    std::array<char, 13> data{};
+    std::array<char, 17> data{};
     data[0] = 0x02;
     std::memcpy(&data[1], &id, sizeof(id));
     std::memcpy(&data[5], &pos_x, sizeof(float));
     std::memcpy(&data[9], &pos_y, sizeof(float));
-    std::memcpy(&data[13], &parent_id, sizeof(float));
+    std::memcpy(&data[13], &parent_id, sizeof(size_t));
     this->_network->sendToAll(data.data(), data.size());
 }
 
