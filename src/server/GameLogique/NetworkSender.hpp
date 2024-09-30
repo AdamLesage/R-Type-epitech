@@ -33,7 +33,7 @@ class NetworkSender {
      * @param pos_x The x-coordinate of the enemy's initial position.
      * @param pos_y The y-coordinate of the enemy's initial position.
      */
-    void sendCreateEnemy(size_t type, size_t id, float pos_x, float pos_y);
+    void sendCreateEnemy(char type, size_t id, float pos_x, float pos_y);
 
     /**
      * @brief Sends the creation of a wall entity to all clients.
