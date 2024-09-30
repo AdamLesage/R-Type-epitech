@@ -17,6 +17,7 @@
     #include "../../shared/components/Health.hpp"
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
+    #include "../../shared/components/Size.hpp"
     #include <iostream>
 
 class Systems {
@@ -58,7 +59,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void collision_system(Registry &reg, sf::RenderWindow &window);
+        void collision_system(Registry &reg, std::pair<size_t, size_t> MapSize);
 
         /**
          * @brief Update the position of all entities based on their velocity.

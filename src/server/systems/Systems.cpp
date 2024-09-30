@@ -81,35 +81,36 @@ void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArr
     }
 }
 
-void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
-{
-    auto &positions = reg.get_components<Position_s>();
-    auto &drawables = reg.get_components<Drawable_s>();
+// void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize)
+// {
+//     auto &positions = reg.get_components<Position_s>();
+//     auto &drawables = reg.get_components<Drawable_s>();
+//     auto &size = reg.get_components<Size_s>();
+//     auto &types = reg.get_components<Type_s>();
 
-    sf::Vector2u windowSize = window.getSize();
-
-    for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
-        auto &pos1 = positions[i];
-        auto &draw1 = drawables[i];
-        if (pos1 && draw1) {
-            sf::FloatRect bounds = draw1->shape.getGlobalBounds();
-            if (bounds.left < 0 || bounds.left + bounds.width > windowSize.x ||
-                bounds.top < 0 || bounds.top + bounds.height > windowSize.y) {
-                reg.kill_entity(i);
-                std::cerr << "Projectile " << i << " deleted (out of window)" << std::endl;
-            }
-            for (size_t j = i + 1; j < positions.size() && j < drawables.size(); ++j) {
-                auto &pos2 = positions[j];
-                auto &draw2 = drawables[j];
-                if (pos2 && draw2) {
-                    if (draw1->shape.getGlobalBounds().intersects(draw2->shape.getGlobalBounds())) {
-                        std::cerr << "Collision detected between entity " << i << " and entity " << j << std::endl;
-                    }
-                }
-            }
-        }
-    }
-}
+//     for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
+//         auto &entityPos = positions[i];
+//         auto &entitySize = size[i];
+//         if (entityPos && entitySize) {
+//             if (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
+//                 entityPos->y < 0 || entityPos->y + entitySize->y > MapSize.second) {
+//                 if (types && type->type == EntityType::PROJECTILE) {
+//                     reg.kill_entity(i);
+//                     std::cerr << "Projectile " << i << " deleted (out of window)" << std::endl;
+//                 }
+//             }
+//             for (size_t j = i + 1; j < positions.size() && j < drawables.size(); ++j) {
+//                 auto &pos2 = positions[j];
+//                 auto &draw2 = drawables[j];
+//                 if (pos2 && draw2) {
+//                     if (draw1->shape.getGlobalBounds().intersects(draw2->shape.getGlobalBounds())) {
+//                         std::cerr << "Collision detected between entity " << i << " and entity " << j << std::endl;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 
 void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest)
 {
