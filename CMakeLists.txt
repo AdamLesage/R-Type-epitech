@@ -11,6 +11,8 @@ include(FetchContent)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
 
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+
 # Download and configure Boost
 find_package(Boost 1.70 REQUIRED)
 if (Boost_FOUND)
@@ -23,19 +25,64 @@ if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
 endif()
 
-# Source files for the Server
-set(SRC_SERVER
-    src/server/main.cpp
-    src/shared/entities/Entity.cpp
-    src/shared/entities/Entity.hpp
-    src/server/registry/Registry.cpp
-    src/server/registry/Registry.hpp
-    src/server/sparse_array/SparseArray.hpp
-    src/server/systems/Systems.cpp
-    src/server/systems/Systems.hpp
+# Create shared libs
+
+add_library(NetworkEngine SHARED
+    src/client/NetworkEngine/NetworkEngine.cpp
 )
 
+add_library(GameEngine SHARED
+    src/client/GameEngine/GameEngine.cpp
+    src/shared/registry/Registry.cpp
+    src/shared/systems/Systems.cpp
+)
+
+add_library(PhysicEngine SHARED
+    src/client/PhysicEngine/PhysicEngine.cpp
+)
+
+add_library(AudioEngine SHARED
+    src/client/AudioEngine/AudioEngine.cpp
+)
+
+target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+
+add_library(RenderingEngine SHARED
+    src/client/RenderEngine/RenderingEngine.cpp
+)
+
+
+
 # Source files for the Client
+set(SRC_CLIENT
+    src/client/main.cpp
+    src/client/NetworkEngine/Client.cpp
+    src/client/GameEngine/GameEngine.cpp
+    src/client/NetworkEngine/NetworkEngine.cpp
+    src/client/RenderEngine/RenderingEngine.cpp
+    src/client/Mediator/Mediator.cpp
+    src/shared/registry/Registry.cpp
+    src/shared/systems/Systems.cpp
+)
+
+add_executable(r-type_client ${SRC_CLIENT})
+
+# Linkage for SFML and Boost libraries
+target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+
+# Output directory for the client
+set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+
+# Source files for the Server
+set(SRC_SERVER
+    src/server/main_server.cpp # temp main waiting for the real one because current main should be client main
+    src/server/network/Server.cpp
+    src/shared/entities/Entity.cpp
+    src/server/registry/Registry.cpp
+    src/server/systems/Systems.cpp
+)
+
 add_executable(r-type_server ${SRC_SERVER})
 
 # Linkage for SFML and Boost libraries
@@ -48,6 +95,7 @@ set_target_properties(r-type_server PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_
 add_custom_target(custom_clean
     COMMAND ${CMAKE_COMMAND} -E remove -f *.o
     COMMAND ${CMAKE_COMMAND} -E remove -f r-type_server
+    COMMAND ${CMAKE_COMMAND} -E remove -f r-type_client
 )
 
 # Commands for the tests
