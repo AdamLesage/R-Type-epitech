@@ -7,15 +7,20 @@
 
 #include "Mediator.hpp"
 
-RType::Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine)
+RType::Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine, std::shared_ptr<PhysicEngine> physicEngine, std::shared_ptr<AudioEngine> audioEngine)
+
 {
     this->_gameEngine = gameEngine;
     this->_networkEngine = networkEngine;
     this->_renderingEngine = renderingEngine;
+    this->_physicEngine = physicEngine;
+    this->_audioEngine = audioEngine;
 
     this->_gameEngine->setMediator(std::shared_ptr<IMediator>(this));
     this->_networkEngine->setMediator(std::shared_ptr<IMediator>(this));
     this->_renderingEngine->setMediator(std::shared_ptr<IMediator>(this));
+    this->_physicEngine->setMediator(std::shared_ptr<IMediator>(this));
+    this->_audioEngine->setMediator(std::shared_ptr<IMediator>(this));
 }
 
 RType::Mediator::~Mediator()
@@ -54,8 +59,20 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, std::string even
     (void)event;
     if (sender != "RenderingEngine")
         return;
+}
 
-    
+void RType::Mediator::notifyPhysicEngine(std::string sender, std::string event)
+{
+    (void)event;
+    if (sender != "PhysicEngine")
+        return;
+}
+
+void RType::Mediator::notifyAudioEngine(std::string sender, std::string event)
+{
+    (void)event;
+    if (sender != "AudioEngine")
+        return;
 }
 
 void RType::Mediator::notify(std::string sender, std::string event)
@@ -64,4 +81,6 @@ void RType::Mediator::notify(std::string sender, std::string event)
     this->notifyGameEngine(sender, event);
     this->notifyNetworkEngine(sender, event);
     this->notifyRenderingEngine(sender, event);
+    this->notifyPhysicEngine(sender, event);
+    this->notifyAudioEngine(sender, event);
 }

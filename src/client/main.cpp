@@ -22,6 +22,37 @@ std::shared_ptr<EngineType> loadEngine(DLLoader &loader, const std::string &entr
     return std::shared_ptr<EngineType>(loader.getInstance<EngineType>(entryPoint));
 }
 
+void runEngines(std::shared_ptr<RType::GameEngine> gameEngine, std::shared_ptr<RType::NetworkEngine> networkEngine, std::shared_ptr<RType::RenderingEngine> renderingEngine, std::shared_ptr<RType::PhysicEngine> physicEngine, std::shared_ptr<RType::AudioEngine> audioEngine)
+{
+    // Run each engine in a separate thread
+    std::thread gameThread([&gameEngine]() {
+        gameEngine->run();
+    });
+
+    std::thread networkThread([&networkEngine]() {
+        networkEngine->run();
+    });
+
+    std::thread renderingThread([&renderingEngine]() {
+        renderingEngine->run();
+    });
+
+    std::thread physicThread([&physicEngine]() {
+        physicEngine->run();
+    });
+
+    std::thread audioThread([&audioEngine]() {
+        audioEngine->run();
+    });
+
+    // Wait for all threads to finish
+    gameThread.join();
+    networkThread.join();
+    renderingThread.join();
+    physicThread.join();
+    audioThread.join();
+}
+
 int main()
 {
     try {
@@ -40,20 +71,13 @@ int main()
         auto audioEngine = loadEngine<RType::AudioEngine>(audioEngineLoader, "entryPointAudioEngine");
 
         // Use unique_ptr for mediator to ensure memory management
-        RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine);
+        // Cannot use shared or unique pointer because it segfaults
+        RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
-        // // Start the game engine
-        gameEngine->run();
+        runEngines(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
     } catch (const RType::DLError &e) {
         std::cerr << e.what() << std::endl;
         return (84);
     }
     return (0);
 }
-
-    // while (1) {
-    //     if (client->hasMessage()) {
-    //         std::cout << client->popMessage() << std::endl;
-    //     }
-    //     sleep(1);
-    // }
