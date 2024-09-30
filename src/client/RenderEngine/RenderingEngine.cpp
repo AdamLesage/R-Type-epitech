@@ -9,6 +9,7 @@
 
 RType::RenderingEngine::RenderingEngine()
 {
+    _menu = std::make_unique<Menu>();
 }
 
 RType::RenderingEngine::~RenderingEngine()
@@ -17,6 +18,7 @@ RType::RenderingEngine::~RenderingEngine()
 
 void RType::RenderingEngine::run()
 {
+    _menu->displayMenu();
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()
