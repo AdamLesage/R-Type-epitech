@@ -62,7 +62,12 @@ void NetworkSender::sendCreateProjectil(size_t id, float pos_x, float pos_y, siz
 
 void NetworkSender::sendCreateReward(size_t id, float pos_x, float pos_y)
 {
-
+    std::array<char, 13> data{};
+    data[0] = 0x26;
+    std::memcpy(&data[1], &id, sizeof(id));
+    std::memcpy(&data[5], &pos_x, sizeof(float));
+    std::memcpy(&data[9], &pos_y, sizeof(float));
+    this->_network->sendToAll(data.data(), data.size());
 }
 
 void NetworkSender::sendCreateBonus(size_t id, float pos_x, float pos_y)
