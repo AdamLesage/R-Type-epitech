@@ -140,11 +140,108 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
     }
 }
 
-void score_system(Registry &reg)
+bool Systems::read_scores_file(libconfig::Config &cfg, const std::string &configPath)
 {
-    //save the score of the players in a config file (../../config/scores.cfg)
-    //get the score component of the players entities
-    //if their is 2 players, get the score of the 2 players
-    //save the score of the players in the config file
+    try {
+        cfg.readFile(configPath.c_str());
+        return true;
+    } catch (const libconfig::FileIOException &fioex) {
+        std::cerr << "Error while reading file." << std::endl;
+        return false;
+    } catch (const libconfig::ParseException &ParserError) {
+        std::cerr << "Parse error at " << ParserError.getFile()
+                  << ":" << ParserError.getLine() << " - "
+                  << ParserError.getError() << std::endl;
+        return false;
+    }
+}
 
+void Systems::update_scores(libconfig::Config &cfg, const std::string &playerNames, size_t totalScore)
+{
+    libconfig::Setting &root = cfg.getRoot();
+    libconfig::Setting &lastScores = root["scores"];
+    libconfig::Setting &highScores = root["highscores"];
+
+    std::vector<std::pair<std::string, int>> lastTenScores;
+    for (int i = 0; i < lastScores.getLength(); ++i) {
+        std::string name = lastScores[i]["name"];
+        int value = lastScores[i]["value"];
+        lastTenScores.push_back({name, value});
+    }
+
+    lastTenScores.push_back({playerNames, totalScore});
+    if (lastTenScores.size() > 10) {
+        lastTenScores.erase(lastTenScores.begin());
+    }
+
+    for (int i = 0; i < lastTenScores.size(); ++i) {
+        lastScores[i].add("name", libconfig::Setting::TypeString) = lastTenScores[i].first;
+        lastScores[i].add("value", libconfig::Setting::TypeInt) = lastTenScores[i].second;
+    }
+
+    std::vector<std::pair<std::string, int>> bestScores;
+    for (int i = 0; i < highScores.getLength(); ++i) {
+        std::string name = highScores[i]["name"];
+        int value = highScores[i]["value"];
+        bestScores.push_back({name, value});
+    }
+
+    bestScores.push_back({playerNames, totalScore});
+    std::sort(bestScores.begin(), bestScores.end(),
+              [](const std::pair<std::string, int> &a, const std::pair<std::string, int> &b) {
+                  return a.second > b.second;
+              });
+    bestScores.resize(3);
+
+    for (int i = 0; i < bestScores.size(); ++i) {
+        highScores[i].add("name", libconfig::Setting::TypeString) = bestScores[i].first;
+        highScores[i].add("value", libconfig::Setting::TypeInt) = bestScores[i].second;
+    }
+}
+
+bool Systems::write_to_scores_file(libconfig::Config &cfg, const std::string &configPath)
+{
+    try {
+        cfg.writeFile(configPath.c_str());
+        std::cout << "Scores successfully written to: " << configPath << std::endl;
+        return true;
+    } catch (const libconfig::FileIOException &fioex) {
+        std::cerr << "Error while writing file: " << configPath << std::endl;
+        return false;
+    }
+}
+
+void Systems::score_system(Registry &reg)
+{
+    auto &hp = reg.get_components<Health_s>();
+    auto &controllable = reg.get_components<Controllable_s>();
+
+    for (size_t i = 0; i < hp.size() && i < controllable.size(); ++i) {
+        if (hp[i] && controllable[i] && hp[i]->health > 0) {
+            return;
+        }
+    }
+
+    std::string configPath = "../../config/scores.cfg";
+    libconfig::Config cfg;
+
+    if (!read_scores_file(cfg, configPath))
+        return;
+
+    auto &scores = reg.get_components<Score_s>();
+    auto &names = reg.get_components<PlayerName_s>();
+    size_t totalScore = 0;
+    std::string playerNames = "";
+
+    for (size_t i = 0; i < scores.size(); ++i) {
+        if (scores[i]) {
+            totalScore += scores[i]->score;
+        }
+        if (names[i]) {
+            if (!playerNames.empty()) playerNames += " & ";
+            playerNames += names[i]->player_name;
+        }
+    }
+    update_scores(cfg, playerNames, totalScore);
+    write_to_scores_file(cfg, configPath);
 }
