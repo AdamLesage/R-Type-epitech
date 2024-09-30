@@ -24,6 +24,13 @@ namespace RType {
              * @brief Run current instance of the engine.
              */
             void run() override;
+
+            /**
+             * @brief Send a message to the network, it will call the mediator to send the message to the network engine.
+             *
+             * @param message The message to send.
+            */
+            void send(const std::string &message);
         protected:
         private:
             Registry _registry;

@@ -23,6 +23,11 @@ void RType::GameEngine::run()
 {
 }
 
+void RType::GameEngine::send(const std::string &message)
+{
+    _mediator->notify("GameEngine", message);
+}
+
 extern "C" RType::GameEngine *entryPointGameEngine()
 {
     return (new RType::GameEngine());
