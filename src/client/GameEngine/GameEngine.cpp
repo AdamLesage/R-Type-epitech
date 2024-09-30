@@ -62,7 +62,9 @@ void RType::GameEngine::send(const std::string &message)
 
 void RType::GameEngine::handleServerData(std::string &message)
 {
-    // Parse the message and update the registry and the systems
+    // To tests this function, notify mediator from NetworkEngine with a message which is binary data
+
+    
 }
 
 extern "C" RType::GameEngine *entryPointGameEngine()

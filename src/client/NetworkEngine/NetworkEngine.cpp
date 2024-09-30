@@ -26,9 +26,13 @@ void RType::NetworkEngine::updateData()
     if (_client->hasMessage() == false)
         return;
 
-    std::string message = _client->popMessage();
-    // Call the mediator to send the message to the game engine
-    this->_mediator->notify("NetworkEngine", message);
+    try {
+        std::string message = _client->popMessage();
+        // Call the mediator to send the message to the game engine
+        this->_mediator->notify("NetworkEngine", message);
+    } catch (const std::logic_error &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 extern "C" RType::NetworkEngine *entryPointNetworkEngine()
