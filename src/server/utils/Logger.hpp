@@ -22,9 +22,24 @@ namespace RType {
             DEBUG
         };
 
+        /**
+         * @brief Construct a new Logger object
+         *
+         */
         Logger() = default;
+
+        /**
+         * @brief Destroy the Logger object
+         *
+         */
         ~Logger();
 
+        /**
+         * @brief log a message with a type
+         * @param type
+         * @param message
+         * @param ...
+         */
         void log(LogType type, const char *message, ...);
     };
 }  // namespace RType
