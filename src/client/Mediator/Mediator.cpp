@@ -7,7 +7,7 @@
 
 #include "Mediator.hpp"
 
-Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine)
+RType::Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine)
 {
     this->_gameEngine = gameEngine;
     this->_networkEngine = networkEngine;
@@ -18,7 +18,7 @@ Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<Netwo
     this->_renderingEngine->setMediator(std::shared_ptr<IMediator>(this));
 }
 
-Mediator::~Mediator()
+RType::Mediator::~Mediator()
 {
     this->_gameEngine->setMediator(nullptr);
     this->_networkEngine->setMediator(nullptr);
@@ -30,14 +30,14 @@ Mediator::~Mediator()
 
 }
 
-void Mediator::notifyGameEngine(std::string sender, std::string event)
+void RType::Mediator::notifyGameEngine(std::string sender, std::string event)
 {
     (void)event;
     if (sender != "GameEngine")
         return;
 }
 
-void Mediator::notifyNetworkEngine(std::string sender, std::string event)
+void RType::Mediator::notifyNetworkEngine(std::string sender, std::string event)
 {
     (void)event;
     if (sender != "NetworkEngine")
@@ -49,7 +49,7 @@ void Mediator::notifyNetworkEngine(std::string sender, std::string event)
     //     this->_gameEngine->createPlayer();
 }
 
-void Mediator::notifyRenderingEngine(std::string sender, std::string event)
+void RType::Mediator::notifyRenderingEngine(std::string sender, std::string event)
 {
     (void)event;
     if (sender != "RenderingEngine")
@@ -58,7 +58,7 @@ void Mediator::notifyRenderingEngine(std::string sender, std::string event)
     
 }
 
-void Mediator::notify(std::string sender, std::string event)
+void RType::Mediator::notify(std::string sender, std::string event)
 {
     std::cout << "Mediator received event from " << sender << ": " << event << std::endl;
     this->notifyGameEngine(sender, event);
