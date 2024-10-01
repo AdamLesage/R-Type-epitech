@@ -14,11 +14,13 @@
 #include "../GameEngine/GameEngine.hpp"
 #include "../NetworkEngine/NetworkEngine.hpp"
 #include "../RenderEngine/RenderingEngine.hpp"
+#include "../PhysicEngine/PhysicEngine.hpp"
+#include "../AudioEngine/AudioEngine.hpp"
 
 namespace RType {
     class Mediator : public IMediator {
         public:
-            Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine);
+            Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine, std::shared_ptr<PhysicEngine> physicEngine, std::shared_ptr<AudioEngine> audioEngine);
             ~Mediator();
 
             void notify(std::string sender, std::string event) override;
@@ -52,10 +54,28 @@ namespace RType {
              * @param event The event to notify.
             */
             void notifyRenderingEngine(std::string sender, std::string event);
+
+            /**
+             * @brief Notify the physic engine of an event.
+             * 
+             * @param sender The sender of the event.
+             * @param event The event to notify.
+            */
+            void notifyPhysicEngine(std::string sender, std::string event);
+
+            /**
+             * @brief Notify the audio engine of an event.
+             * 
+             * @param sender The sender of the event.
+             * @param event The event to notify.
+            */
+            void notifyAudioEngine(std::string sender, std::string event);
         private:
             std::shared_ptr<GameEngine> _gameEngine;
             std::shared_ptr<NetworkEngine> _networkEngine;
             std::shared_ptr<RenderingEngine> _renderingEngine;
+            std::shared_ptr<PhysicEngine> _physicEngine;
+            std::shared_ptr<AudioEngine> _audioEngine;
     };
 }
 

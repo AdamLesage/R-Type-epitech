@@ -8,21 +8,28 @@
 #include "Settings.hpp"
 #include "../config/EditConfigFile.hpp"
 
-Settings::Settings()
+Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 {
-}
-
-Settings::Settings(std::shared_ptr<sf::RenderWindow> window)
-{
-    this->window = window;
-    if (!font.loadFromFile("asset/r-type.ttf")) {
+    this->window = _window;
+    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
-    if (!logoTexture.loadFromFile("asset/rtypelogo.png")) {
+
+    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
+
+    if (!backgroundTexture.loadFromFile("src/client/asset/background/menu.jpg")) {
+        std::cerr << "Error loading background" << std::endl;
+        return;
+    }
+
+    background.setTexture(&backgroundTexture);
+    background.setPosition(sf::Vector2f(0, 0));
+    background.setSize(sf::Vector2f(1920, 1080));
+    logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
 
     std::cout << "constructor" << std::endl;
@@ -79,6 +86,8 @@ void Settings::changeKey(std::string key)
                     newKey += "ESCAPE";
                 } else {
                     std::cerr << "Unsupported key" << std::endl;
+                    keyPressed = false;
+                    continue;
                 }
                 break;
             }
@@ -89,10 +98,7 @@ void Settings::changeKey(std::string key)
 
 void Settings::display()
 {
-    window->clear();
-    for (auto &button : buttons) {
-        button->displayButton(window);
-    }
+    window->draw(background);
     window->draw(logoSprite);
     for (int i = 0; i < 6; ++i) {
         window->draw(menuOptions[i]);
@@ -117,23 +123,27 @@ void Settings::displaySettings()
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 20, 300 + i * 100));
     }
-    logoSprite.setTexture(logoTexture);
     while (window->isOpen()) {
+        window->clear();
+        display();
+        window->display();
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window->close();
 
             if (event.type == sf::Event::KeyPressed) {
-                switch (event.key.code) {
-                case sf::Keyboard::Up:
+                if(event.key.code == sf::Keyboard::Up) {
                     moveUp();
                     break;
-
-                case sf::Keyboard::Down:
+                }
+                if(event.key.code == sf::Keyboard::Down) {
                     moveDown();
                     break;
-
-                case sf::Keyboard::Enter:
+                }
+                if(event.key.code == sf::Keyboard::Escape) {
+                    return;
+                }
+                if(event.key.code == sf::Keyboard::Enter) {
                     switch (getSelectedOption()) {
                     case 0:
                         currentSetting = "settings.controls.up";

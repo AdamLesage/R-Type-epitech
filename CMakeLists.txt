@@ -29,6 +29,7 @@ endif()
 
 add_library(NetworkEngine SHARED
     src/client/NetworkEngine/NetworkEngine.cpp
+    src/client/NetworkEngine/Client.cpp
 )
 
 add_library(GameEngine SHARED
@@ -49,9 +50,15 @@ target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-netw
 
 add_library(RenderingEngine SHARED
     src/client/RenderEngine/RenderingEngine.cpp
+    src/client/RenderEngine/Menu/Menu.cpp
+    src/client/RenderEngine/Menu/Settings.cpp
+    src/client/RenderEngine/Menu/Game.cpp
+    src/shared/entities/Entity.cpp
+    src/shared/registry/Registry.cpp
+    src/shared/systems/Systems.cpp
 )
 
-
+target_link_libraries(RenderingEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
 
 # Source files for the Client
 set(SRC_CLIENT
@@ -61,6 +68,12 @@ set(SRC_CLIENT
     src/client/NetworkEngine/NetworkEngine.cpp
     src/client/RenderEngine/RenderingEngine.cpp
     src/client/Mediator/Mediator.cpp
+    src/shared/registry/Registry.cpp
+    src/shared/systems/Systems.cpp
+    src/client/RenderEngine/Menu/Menu.cpp
+    src/client/RenderEngine/Menu/Settings.cpp
+    src/client/RenderEngine/Menu/Game.cpp
+    src/shared/entities/Entity.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
 )
@@ -77,6 +90,8 @@ set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_
 # Source files for the Server
 set(SRC_SERVER
     src/server/main_server.cpp # temp main waiting for the real one because current main should be client main
+    src/server/GameLogique/GameLogique.cpp
+    src/server/GameLogique/NetworkSender.cpp
     src/server/network/Server.cpp
     src/shared/entities/Entity.cpp
     src/server/registry/Registry.cpp

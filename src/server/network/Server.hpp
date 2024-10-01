@@ -27,8 +27,8 @@ namespace NetworkLib {
 		bool hasMessages() override;
 		std::pair<std::string, uint32_t> popMessage() override;
 
-		void sendToClient(const std::string& message, uint32_t clientID) override;
-		void sendToAll(const std::string& message);
+		void sendToClient(const char *message, size_t size, uint32_t clientID) override;
+		void sendToAll(const char *message, size_t size);
 
 		size_t getClientCount() override;
 		uint32_t getClientIdByIndex(size_t index) override;
@@ -38,12 +38,12 @@ namespace NetworkLib {
 		boost::asio::io_service io_service;
 		boost::asio::ip::udp::socket socket;
 		boost::asio::ip::udp::endpoint server_endpoint;
-		boost::asio::ip::udp::endpoint remote_endpoint;
+		boost::asio::ip::udp::endpoint _remote_endpoint;
 		std::array<char, NetworkBufferSize> recv_buffer;
 		std::thread service_thread;
 
 		void start_receive();
-		void handle_remote_error(const std::error_code error_code, const boost::asio::ip::udp::endpoint remote_endpoint);
+		void handle_remote_error(const boost::asio::ip::udp::endpoint remote_endpoint);
 		void handle_receive(const std::error_code& error, std::size_t bytes_transferred);
 		void handle_send(std::string /*message*/, const std::error_code& /*error*/, std::size_t /*bytes_transferred*/)	{}
 		void run_service();
@@ -52,7 +52,7 @@ namespace NetworkLib {
 		int32_t get_or_create_client_id(boost::asio::ip::udp::endpoint endpoint);
 		void on_client_disconnected(int32_t id);
 
-		void send(const std::string& message, boost::asio::ip::udp::endpoint target);
+		void send(const char *message, size_t size, boost::asio::ip::udp::endpoint target);
 
 		// Incoming messages queue
 		LockedQueue<std::pair<std::string, uint32_t>> incomingMessages;

@@ -13,7 +13,7 @@
 Game::Game(std::shared_ptr<sf::RenderWindow> window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
     this->window = window;
-    if (!font.loadFromFile("asset/r-type.ttf")) {
+    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
 }
@@ -27,7 +27,7 @@ void Game::displayGame()
     sf::Sprite sprite;
     sf::Texture texture;
     sf::Clock clock;
-    gameInProgressText.setFont(font);
+     gameInProgressText.setFont(font);
     gameInProgressText.setString("Game in Progress");
     gameInProgressText.setCharacterSize(60);
     gameInProgressText.setFillColor(sf::Color::White);
@@ -75,7 +75,7 @@ void Game::handleEvents()
 bool Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
 {
     std::ostringstream oss;
-    oss << "asset/game_launch/Sans titre (1)_" << std::setw(3) << std::setfill('0') << currentFrame << ".jpg";
+    oss << "src/client/asset/game_launch/Sans titre (1)_" << std::setw(3) << std::setfill('0') << currentFrame << ".jpg";
     std::string filename = oss.str();
 
     if (!texture.loadFromFile(filename)) {
