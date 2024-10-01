@@ -151,7 +151,6 @@ namespace RType {
             bool parseData(const char *message);
 
         protected:
-        private:
             /**
              * @brief Check if the message type is valid and if its values are valid.
              * 
@@ -159,7 +158,7 @@ namespace RType {
              * @return true if the message type is valid, false otherwise.
             */
             bool checkMessageType(const std::string &messageType, const char *message);
-
+        private:
             // Variables
             std::string _protocolPath;
             libconfig::Config _cfg;

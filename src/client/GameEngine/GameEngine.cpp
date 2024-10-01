@@ -47,7 +47,7 @@ void RType::GameEngine::run()
         _systems.collision_system(_registry, _window);
 
         _window.clear();
-        // this->send("updateData");
+        this->send("updateData"); // Check each frame if there is new data from the server to update the game
         _systems.draw_system(_registry, _window);
         _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         _window.display();

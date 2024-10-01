@@ -44,15 +44,16 @@ RType::ProtocolParsing::~ProtocolParsing()
 
 bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, const char *message)
 {
-    if (_messageTypeMap[messageType].first != message[0])
-        return false;
-
     // Check if message is for the current parsing function such as current type (0xXX) is correct
-    if (message[0] != _messageTypeMap[messageType].first)
+    if (static_cast<uint8_t>(message[0]) != _messageTypeMap[messageType].first)
         return false;
 
     // Check if the message type is a byte
-    if (sizeof(message[0]) != 1)
+    if (sizeof(message[0]) != sizeof(uint8_t))
+        return false;
+
+    // Compare message size with the expected size in the protocol config file
+    if (strlen(message) != std::stoi(_cfg.lookup(_messageTypeMap[messageType].second)["total_size"]))
         return false;
     return true;
 }
