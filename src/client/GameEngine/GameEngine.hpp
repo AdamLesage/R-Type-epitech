@@ -35,7 +35,6 @@ namespace RType {
         private:
             Registry _registry;
             Systems _systems;
-            sf::RenderWindow _window;
     };
 }
 
