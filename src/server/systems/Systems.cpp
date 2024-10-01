@@ -24,7 +24,7 @@ void Systems::position_system(Registry &reg, RType::Logger &logger)
     }
 }
 
-void Systems::control_system(Registry &reg, RType::Logger &logger)
+void Systems::control_system(Registry &reg, bool up, bool down, bool left, bool right, RType::Logger &logger)
 {
     (void)logger;
     auto &velocities = reg.get_components<Velocity_s>();
@@ -38,16 +38,16 @@ void Systems::control_system(Registry &reg, RType::Logger &logger)
             vel->x = 0;
             vel->y = 0;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            if (up) {
                 vel->y = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            if (down) {
                 vel->y = 1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (left) {
                 vel->x = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (right) {
                 vel->x = 1.0f;
             }
         }
@@ -173,6 +173,9 @@ void Systems::health_system(Registry &reg)
 
 void Systems::death_system(Registry &reg, RType::Logger &logger)
 {
+    auto &healths = reg.get_components<Health_s>();
+    auto &types = reg.get_components<Type_s>();
+
     for (size_t i = 0; i < healths.size() && i < types.size(); ++i) {
         auto &health = healths[i];
         auto &type = types[i];
