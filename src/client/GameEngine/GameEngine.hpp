@@ -44,7 +44,6 @@ namespace RType {
         private:
             Registry _registry;
             Systems _systems;
-            sf::RenderWindow _window;
             std::unique_ptr<RType::ProtocolParsing> _protocolParsing;
     };
 }

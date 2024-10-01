@@ -83,8 +83,8 @@ bool RType::ProtocolParsing::parsePlayerCreation(const char *message)
         _registry.add_component<Tag>(entity, Tag{"player"});
         _registry.add_component<Controllable>(entity, Controllable{true, false, false, false, false});
         _registry.add_component<Scale>(entity, Scale{1});
-        _registry.add_component<Health>(entity, Health{100, true});
-        _registry.add_component<Shoot>(entity, Shoot{true});
+        _registry.add_component<Health>(entity, Health{100, 100, true, true});
+        _registry.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
         _registry.add_component<ShootingSpeed>(entity, ShootingSpeed{0.5});
         _registry.add_component<Damage>(entity, Damage{10});
         _registry.add_component<Level>(entity, Level{1});
@@ -157,7 +157,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const char *message)
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"enemy"});
         _registry.add_component<Scale>(entity, Scale{1});
-        _registry.add_component<Health>(entity, Health{100, true});
+        _registry.add_component<Health>(entity, Health{100, 100, true, true});
         _registry.add_component<Damage>(entity, Damage{10});
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
@@ -232,7 +232,7 @@ bool RType::ProtocolParsing::parseWallCreation(const char *message)
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        _registry.add_component<Health>(entity, Health{100, true}); // We can destroy the wall with a projectile
+        _registry.add_component<Health>(entity, Health{100, 100, false, false}); // We can destroy the wall with a projectile
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the wall" << std::endl;
         return false;
@@ -373,9 +373,9 @@ bool RType::ProtocolParsing::parseHealthUpdate(const char *message)
             Health &healthComponent = optionalHealthComponent.value();
             // Remove the old health component and add the new one to update the health
             _registry.remove_component<Health>(entity);
-            _registry.add_component<Health>(entity, Health{health, healthComponent.isDamageable});
+            _registry.add_component<Health>(entity, Health{health, healthComponent.maxHealth, healthComponent.isRegenerating, healthComponent.isDamageable});
         } else {
-            _registry.add_component<Health>(entity, Health{health, true});
+            _registry.add_component<Health>(entity, Health{health, 100, true, true});
         }
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found" << std::endl;

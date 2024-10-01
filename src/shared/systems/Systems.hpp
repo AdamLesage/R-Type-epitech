@@ -14,6 +14,7 @@
     #include "../components/Color.hpp"
     #include "../components/Controllable.hpp"
     #include "../components/Damage.hpp"
+    #include "../components/Direction.hpp"
     #include "../components/Drawable.hpp"
     #include "../components/Freeze.hpp"
     #include "../components/Health.hpp"
@@ -71,6 +72,13 @@ class Systems {
          * @param reg The registry containing the components.
          */
         void collision_system(Registry &reg, sf::RenderWindow &window);
+
+        /**
+         * @brief Update the direction of all entities based on their velocity.
+         *
+         * @param reg The registry containing the components.
+         */
+        void direction_system(Registry &reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */
