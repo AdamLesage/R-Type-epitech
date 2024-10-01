@@ -59,14 +59,14 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
     case 0x03:
         this->reg.add_component<Position>(entity, Position{position_x, position_y});
         this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
-        this->reg.add_component<Health>(entity, Health{100, true});
+        this->reg.add_component<Health>(entity, Health{100, true, false, true});
         this->reg.add_component<Damage>(entity, Damage{20});
         this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
         break;
     default:
         this->reg.add_component<Position>(entity, Position{position_x, position_y});
         this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
-        this->reg.add_component<Health>(entity, Health{100, true});
+        this->reg.add_component<Health>(entity, Health{100, true, false, true});
         this->reg.add_component<Damage>(entity, Damage{20});
         this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
         break;
@@ -99,7 +99,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
         return;
     }
 
-    int id = 0;
+    size_t id = 0;
     char input = 0;
     memcpy(&id, &(message.first[1]), sizeof(int));
     input = message.first[5];

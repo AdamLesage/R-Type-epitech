@@ -94,7 +94,7 @@ int main(int ac, char **av)
         networkEngine.reset(new RType::NetworkEngine(host, server_port, local_port));
 
         // Cannot use shared or unique pointer because it segfaults
-        RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
+        // RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
         runEngines(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
     } catch (const RType::DLError &e) {
