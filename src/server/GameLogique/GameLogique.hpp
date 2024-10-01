@@ -17,6 +17,7 @@
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/ShootingSpeed.hpp"
 #include "./NetworkSender.hpp"
+#include "../utils/Logger.hpp"
 #include <memory>
 
 class GameLogique {
@@ -41,6 +42,7 @@ class GameLogique {
         std::unique_ptr<NetworkSender> _networkSender;
         std::thread receiverThread;
         int frequency;
+        RType::Logger logger;
         bool running;
         /**
          * @brief listen to the server socket to manage client input
