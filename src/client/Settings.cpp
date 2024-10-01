@@ -6,6 +6,7 @@
 */
 
 #include "Settings.hpp"
+#include "../config/EditConfigFile.hpp"
 
 Settings::Settings()
 {
@@ -101,6 +102,9 @@ void Settings::display()
 
 void Settings::displaySettings()
 {
+    EditConfigFile configEditor("../config/config.cfg");
+    std::string currentSetting;
+
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
         return;
@@ -132,30 +136,40 @@ void Settings::displaySettings()
                 case sf::Keyboard::Enter:
                     switch (getSelectedOption()) {
                     case 0:
-                        std::cout << menuOptions[0].getString().toAnsiString() << std::endl;
+                        currentSetting = "settings.controls.up";
                         changeKey(menuOptions[0].getString().toAnsiString());
+                        configEditor.queueModification(currentSetting, menuOptions[0].getString().toAnsiString());
                         break;
                     case 1:
-                        std::cout << menuOptions[1].getString().toAnsiString() << std::endl;
+                        currentSetting = "settings.controls.down";
                         changeKey(menuOptions[1].getString().toAnsiString());
+                        configEditor.queueModification(currentSetting, menuOptions[1].getString().toAnsiString());
                         break;
                     case 2:
-                        std::cout << menuOptions[2].getString().toAnsiString() << std::endl;
+                        currentSetting = "settings.controls.left";
                         changeKey(menuOptions[2].getString().toAnsiString());
+                        configEditor.queueModification(currentSetting, menuOptions[2].getString().toAnsiString());
                         break;
                     case 3:
-                        std::cout << menuOptions[3].getString().toAnsiString() << std::endl;
+                        currentSetting = "settings.controls.right";
                         changeKey(menuOptions[3].getString().toAnsiString());
+                        configEditor.queueModification(currentSetting, menuOptions[3].getString().toAnsiString());
                         break;
                     case 4:
-                        std::cout << menuOptions[4].getString().toAnsiString() << std::endl;
+                        currentSetting = "settings.controls.action";
                         changeKey(menuOptions[4].getString().toAnsiString());
+                        configEditor.queueModification(currentSetting, menuOptions[4].getString().toAnsiString());
                         break;
                     case 5:
-                        std::cout << menuOptions[5].getString().toAnsiString() << std::endl;
+                        currentSetting = "settings.controls.quit";
                         changeKey(menuOptions[5].getString().toAnsiString());
+                        configEditor.queueModification(currentSetting, menuOptions[5].getString().toAnsiString());
                         break;
                     }
+                    break;
+                case sf::Keyboard::S:
+                    configEditor.saveModifications();
+                    break;
                 }
             }
         }
