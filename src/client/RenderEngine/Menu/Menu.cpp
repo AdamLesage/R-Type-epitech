@@ -41,7 +41,13 @@ RType::Menu::Menu()
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-     games = std::make_shared<Game>(window);
+    try {
+        games = std::make_shared<Game>(window);
+        settings = std::make_shared<Settings>(window);
+    } catch (const std::runtime_error &e) {
+        std::cerr << e.what() << std::endl;
+        exit(84);
+    }
     selectedOption = 0;
 }
 
@@ -84,8 +90,6 @@ int RType::Menu::getSelectedOption() const
 void RType::Menu::displayMenu()
 {
 
-    games = std::make_shared<Game>(window);
-    settings = std::make_shared<Settings>(window);
     window->setFramerateLimit(60);
     window->clear();
     while (window->isOpen()) {

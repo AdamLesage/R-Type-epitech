@@ -16,6 +16,38 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
     if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
+
+    backgroundTextures.push_back(sf::Texture());
+    backgroundTextures.push_back(sf::Texture());
+    backgroundTextures.push_back(sf::Texture());
+    if (!backgroundTextures[0].loadFromFile("src/client/asset/background/back.png")) {
+        throw std::runtime_error("Error loading backgroundTexture 1");
+    }
+
+    if (!backgroundTextures[1].loadFromFile("src/client/asset/background/planet.png")) {
+        throw std::runtime_error("Error loading backgroundTexture 2");
+    }
+
+    if (!backgroundTextures[2].loadFromFile("src/client/asset/background/stars.png")) {
+        throw std::runtime_error("Error loading backgroundTexture 3");
+    }
+
+    for (int i = 0; i < 3; ++i) {
+        backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
+        backgrounds[i].setTexture(&backgroundTextures[i]);
+        backgrounds[i].setPosition(sf::Vector2f(0, 0));
+    }
+
+    for (int i = 0; i < 5; ++i) {
+        playerTextures.push_back(sf::Texture());
+        if (!playerTextures[i].loadFromFile("src/client/asset/player/player_" + std::to_string(i + 1) + ".png")) {
+            throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
+        }
+    }
+    player.setSize(sf::Vector2f(50, 50));
+    player.setFillColor(sf::Color::Blue);
+    player.setPosition(sf::Vector2f(100, 100));
+    
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
     _registry.register_component<Drawable_s>();
@@ -28,7 +60,7 @@ RType::Game::~Game()
 
 void RType::Game::play()
 {
-        entity_t movable = _registry.spawn_entity();
+    entity_t movable = _registry.spawn_entity();
     _registry.add_component<Position_s>(movable, Position_s{100.f, 100.f});
     _registry.add_component<Velocity_s>(movable, Velocity_s{0.f, 0.f});
     _registry.add_component<Drawable_s>(movable, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
@@ -52,6 +84,9 @@ void RType::Game::play()
         _systems.collision_system(_registry, *window.get());
 
         window->clear();
+        for (int i = 0; i < 3; ++i) {
+            window->draw(backgrounds[i]);
+        }
         _systems.draw_system(_registry, *window.get());
         _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         window->display();
@@ -94,7 +129,6 @@ void RType::Game::displayGame()
         } else {
             window->draw(sprite);
         }
-
         window->display();
     }
 }

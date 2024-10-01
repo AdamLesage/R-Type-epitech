@@ -34,6 +34,10 @@ namespace RType {
         bool loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite);
         Registry _registry;
         Systems _systems;
+        std::vector<sf::RectangleShape> backgrounds;
+        std::vector<sf::Texture> backgroundTextures;
+        sf::RectangleShape player;
+        std::vector<sf::Texture> playerTextures;
     };
 }
 
