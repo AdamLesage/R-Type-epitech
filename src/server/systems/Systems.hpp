@@ -21,6 +21,7 @@
     #include "../../shared/components/StraightPattern.hpp"
     #include "../../shared/components/PlayerFollowingPattern.hpp"
     #include "../../shared/components/ShootPlayerPattern.hpp"
+    #include "../../shared/components/ShootStraightPattern.hpp"
     #include "../../shared/components/Shoot.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
@@ -114,6 +115,14 @@ class Systems {
         void player_following_pattern_system(Registry &reg);
         /**
          * @brief Fire an projectill every x seconds
+         *
+         * @param reg The registry containing the components.
+         * @param network The class for sending data to client
+         * 
+         */
+        void shoot_straight_pattern_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender);
+        /**
+         * @brief Fire an projectill every x seconds to the player
          *
          * @param reg The registry containing the components.
          * @param network The class for sending data to client

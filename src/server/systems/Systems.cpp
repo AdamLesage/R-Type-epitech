@@ -258,7 +258,6 @@ void Systems::player_following_pattern_system(Registry &reg)
 {
     auto &patterns =  reg.get_components<PlayerFollowingPattern>();
     auto &velocitys =  reg.get_components<Velocity>();
-    auto &types = reg.get_components<Type_s>();
     auto &positions = reg.get_components<Position>();
 
     for (size_t i = 0; i < patterns.size(); ++i) {
@@ -280,11 +279,38 @@ void Systems::player_following_pattern_system(Registry &reg)
     }
 }
 
+void Systems::shoot_straight_pattern_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender)
+{
+    auto &patterns =  reg.get_components<ShootStraightPattern>();
+    auto &positions =  reg.get_components<Position>();
+    auto &velocitys =  reg.get_components<Velocity>();
+
+    for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
+        auto &pattern = patterns[i];
+        auto &position = positions[i];
+        auto &velocity = velocitys[i];
+        if (pattern && position && velocity) {
+            auto now = std::chrono::steady_clock::now();
+            std::chrono::duration<float> fs = now - pattern->lastShotTime;
+            float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
+            
+            if (elapsed_seconds >= pattern->shootCooldown) {
+                pattern->lastShotTime = now;
+                entity_t projectile = reg.spawn_entity();
+                reg.add_component<Position_s>(projectile, Position_s{position->x, position->y});
+                reg.add_component<Velocity_s>(projectile, Velocity_s{-1 * pattern->projectileSpeed, 0});
+                reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
+                reg.add_component<Damage_s>(projectile, Damage_s{10});
+                networkSender->sendCreateProjectil(projectile, position->x, position->y, i);
+            }
+        }
+    }
+}
+
 void Systems::shoot_player_pattern_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender)
 {
     auto &patterns =  reg.get_components<ShootPlayerPattern>();
     auto &velocitys =  reg.get_components<Velocity>();
-    auto &types = reg.get_components<Type_s>();
     auto &positions = reg.get_components<Position>();
 
     for (size_t i = 0; i < patterns.size(); ++i) {

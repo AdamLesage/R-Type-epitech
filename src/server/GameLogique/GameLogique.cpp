@@ -26,6 +26,7 @@ GameLogique::GameLogique(size_t port, int _frequency)
     this->reg.register_component<StraightLinePattern>();
     this->reg.register_component<PlayerFollowingPattern>();
     this->reg.register_component<ShootPlayerPattern>();
+    this->reg.register_component<ShootStraightPattern>();
 }
 
 GameLogique::~GameLogique()
@@ -80,12 +81,18 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
         this->reg.add_component<Damage>(entity, Damage{20});
         this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{0.5f});
         break;
+    case 0x06:
+        this->reg.add_component<Position>(entity, Position{position_x, position_y});
+        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+        this->reg.add_component<Health>(entity, Health{100, true});
+        this->reg.add_component<Damage>(entity, Damage{20});
+        this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2, 2, std::chrono::steady_clock::now()});
     default:
         this->reg.add_component<Position>(entity, Position{position_x, position_y});
         this->reg.add_component<Velocity>(entity, Velocity{0, 0});
         this->reg.add_component<Health>(entity, Health{100, true});
         this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{0.5f});
+        this->reg.add_component<StraightLinePattern>(entity, {0.5f});
         break;
     }
     this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
@@ -102,10 +109,11 @@ void GameLogique::runGame() {
                 sys.Straight_line_pattern_system(this->reg);
                 sys.player_following_pattern_system(this->reg);
                 sys.shoot_player_pattern_system(this->reg, this->_networkSender);
+                sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
                 sys.position_system(reg, this->_networkSender, logger);
             }
-            if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 30) {
-                this->spawnEnnemy(0x03, 1000, 500);
+            if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
+                this->spawnEnnemy(0x06, 1000, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
         }
