@@ -140,18 +140,29 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
     }
 }
 
-void Systems::health_system(Registry &reg, float deltaTime)
+void Systems::health_system(Registry &reg)
 {
     auto &healths = reg.get_components<Health_s>();
+    auto &types = reg.get_components<Type_s>();
 
-    for (size_t i = 0; i < healths.size(); ++i) {
-        auto &health = healths[i];
+    static auto lastUpdate = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(now - lastUpdate).count();
 
-        // 5hp / seconds (to put in a config file and handle with the difficulty)
-        health->health += static_cast<int>(5 * deltaTime);
-        if (health->health > health->maxHealth) {
-            health->health = health->maxHealth;
+    size_t regenerationRate = 5; //load from config
+
+    if (elapsedTime >= 1) {
+        lastUpdate = now;
+
+        for (size_t i = 0; i < healths.size() && i < types.size(); ++i) {
+            auto &health = healths[i];
+            auto &type = types[i];
+            if (health && type && type->type == EntityType::PLAYER) {
+                health->health += regenerationRate;
+                if (health->health > health->maxHealth) {
+                    health->health = health->maxHealth;
+                }
+            }
         }
-        //send health updates to clients
     }
 }

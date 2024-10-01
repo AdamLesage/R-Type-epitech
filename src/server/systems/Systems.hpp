@@ -18,6 +18,7 @@
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
     #include <iostream>
+    #include <chrono>
 
 class Systems {
     public:
@@ -75,7 +76,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void health_system(Registry &reg, float deltaTime);
+        void health_system(Registry &reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */
