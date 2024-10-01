@@ -96,6 +96,7 @@ set(SRC_SERVER
     src/shared/entities/Entity.cpp
     src/server/registry/Registry.cpp
     src/server/systems/Systems.cpp
+    src/server/utils/Logger.cpp
 )
 
 add_executable(r-type_server ${SRC_SERVER})

@@ -17,7 +17,8 @@
     #include "../../shared/components/Health.hpp"
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
-    #include "../../shared/components/Pattern.hpp"
+    #include "../../shared/components/Wave_Pattern.hpp"
+    #include "../../shared/components/StraightPattern.hpp"
     #include "../../shared/components/Shoot.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
@@ -127,6 +128,13 @@ class Systems {
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
             size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger);
+
+        /**
+         * @brief Update the movement for a straight ligne pattern
+         *
+         * @param reg The registry containing the components.
+         */
+        void Straight_line_pattern_system(Registry &reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */

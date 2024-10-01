@@ -178,23 +178,6 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
     }
 }
 
-void Systems::wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger) {
-    auto &patterns =  reg.get_components<Wave_pattern>();
-    auto &positions =  reg.get_components<Position>();
-    auto &velocitys =  reg.get_components<Velocity>();
-
-    for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
-        auto &pattern = patterns[i];
-        auto &position = positions[i];
-        auto &velocity = velocitys[i];
-        if (pattern && position && velocity) {
-            velocity->x = -1;
-            position->y += (pattern->amplitude * std::sin(pattern->frequency * totalTime));
-        }
-        // logger.log(RType::Logger::LogType::INFO, "Player %d shot a projectile", playerId);
-    }
-}
-
 void Systems::health_system(Registry &reg)
 {
     auto &healths = reg.get_components<Health_s>();
@@ -235,6 +218,39 @@ void Systems::death_system(Registry &reg, RType::Logger &logger)
             reg.kill_entity(i);
             logger.log(RType::Logger::LogType::INFO, "Entity %d died", i);
             // send_death to client
+        }
+    }
+}
+
+void Systems::wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger) {
+    auto &patterns =  reg.get_components<Wave_pattern>();
+    auto &positions =  reg.get_components<Position>();
+    auto &velocitys =  reg.get_components<Velocity>();
+
+    for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
+        auto &pattern = patterns[i];
+        auto &position = positions[i];
+        auto &velocity = velocitys[i];
+        if (pattern && position && velocity) {
+            velocity->x = -1;
+            position->y += (pattern->amplitude * std::sin(pattern->frequency * totalTime));
+        }
+        // logger.log(RType::Logger::LogType::INFO, "Player %d shot a projectile", playerId);
+    }
+}
+
+void Systems::Straight_line_pattern_system(Registry &reg)
+{
+    auto &patterns =  reg.get_components<StraightLinePattern>();
+    auto &positions =  reg.get_components<Position>();
+    auto &velocitys =  reg.get_components<Velocity>();
+
+    for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
+        auto &pattern = patterns[i];
+        auto &position = positions[i];
+        auto &velocity = velocitys[i];
+        if (pattern && position && velocity) {
+            velocity->x = -1;
         }
     }
 }
