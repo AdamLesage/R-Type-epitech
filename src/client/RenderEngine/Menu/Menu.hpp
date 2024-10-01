@@ -35,7 +35,9 @@ namespace RType {
         sf::SoundBuffer selectBuffer;
         sf::Sound selectSound;
         std::shared_ptr<sf::RenderWindow> window;
-        Settings settings;
+        sf::RectangleShape background;
+        sf::Texture backgroundTexture;
+        std::shared_ptr<Settings> settings;
         std::shared_ptr<Game> games;
     };
 }

@@ -20,10 +20,16 @@ RType::Menu::Menu()
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
-
+    if (!backgroundTexture.loadFromFile("src/client/asset/background/menu.jpg")) {
+        std::cerr << "Error loading background" << std::endl;
+        return;
+    }
+    background.setTexture(&backgroundTexture);
+    background.setPosition(sf::Vector2f(0, 0));
+    background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
-    if (!selectBuffer.loadFromFile("src/client/asset/selectsound.wav")) {
+    if (!selectBuffer.loadFromFile("src/client/asset/Sounds/selectsound.wav")) {
         std::cerr << "Error loading select sound" << std::endl;
     } else {
         selectSound.setBuffer(selectBuffer);
@@ -42,6 +48,7 @@ RType::Menu::Menu()
 
 void RType::Menu::draw()
 {
+    window->draw(background);
     window->draw(logoSprite);
 
     for (int i = 0; i < 3; ++i) {
@@ -78,7 +85,7 @@ void RType::Menu::displayMenu()
 {
 
     games = std::make_shared<Game>(window);
-    settings = Settings(window);
+    settings = std::make_shared<Settings>(window);
     window->setFramerateLimit(60);
     window->clear();
     while (window->isOpen()) {
@@ -105,7 +112,7 @@ void RType::Menu::displayMenu()
                          games->displayGame();
                         break;
                     case 1:
-                         settings.displaySettings();
+                         settings->displaySettings();
                         break;
                     case 2:
                         std::cout << "Quit" << std::endl;

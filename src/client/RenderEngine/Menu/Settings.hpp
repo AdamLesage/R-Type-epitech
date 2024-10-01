@@ -33,6 +33,8 @@ class Settings {
         sf::Texture logoTexture;
         sf::Sprite logoSprite;
         sf::Event event;
+        sf::RectangleShape background;
+        sf::Texture backgroundTexture;
     private:
 };
 
