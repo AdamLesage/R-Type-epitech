@@ -23,6 +23,7 @@
     #include "../utils/Logger.hpp"
     #include <iostream>
     #include <cmath>
+    #include <chrono>
 
 class Systems {
     public:
@@ -60,14 +61,14 @@ class Systems {
         void logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities, RType::Logger &logger);
 
         /**
-         * @brief Update the position of all entities based on their velocity.
+         * @briefHandle the collisions between entities.
          *
          * @param reg The registry containing the components.
          */
         void collision_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger);
 
         /**
-         * @brief Update the position of all entities based on their velocity.
+         * @brief Handles the shoot for the entities.
          *
          * @param reg The registry containing the components.
          * @param playerId playedId The id of the player.
@@ -83,7 +84,14 @@ class Systems {
          */
         void wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger);
         /**
-         * @brief Update the position of all entities based on their velocity.
+         * @brief Update the health of all entities based on the damages / regeneration / healing they receive.
+         *
+         * @param reg The registry containing the components.
+         */
+        void health_system(Registry &reg);
+
+        /**
+         * @brief Handle the death of entities
          *
          * @param reg The registry containing the components.
          */
