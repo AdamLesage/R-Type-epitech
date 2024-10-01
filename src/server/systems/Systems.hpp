@@ -20,6 +20,7 @@
     #include "../../shared/components/Pattern.hpp"
     #include "../../shared/components/Shoot.hpp"
     #include "../GameLogique/NetworkSender.hpp"
+    #include "../utils/Logger.hpp"
     #include <iostream>
     #include <cmath>
 
@@ -31,7 +32,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param network The class for sending data to client
          */
-        void position_system(Registry &reg, std::unique_ptr<NetworkSender> &network);
+        void position_system(Registry &reg, std::unique_ptr<NetworkSender> &network, RType::Logger &logger);
 
         /**
          * @brief Update entity's velocity based on user input.
@@ -39,7 +40,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param window The window to get the input from.
          */
-        void control_system(Registry &reg);
+        void control_system(Registry &reg, RType::Logger &logger);
 
         /**
          * @brief Draw all entities with a position and a drawable component.
@@ -47,7 +48,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param window The window to draw the entities on.
          */
-        void draw_system(Registry &reg, sf::RenderWindow &window);
+        void draw_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger);
 
         /**
          * @brief Log the position and velocity of all entities.
@@ -56,14 +57,14 @@ class Systems {
          * @param positions The sparse array containing the positions.
          * @param velocities The sparse array containing the velocities.
          */
-        void logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities);
+        void logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities, RType::Logger &logger);
 
         /**
          * @brief Update the position of all entities based on their velocity.
          *
          * @param reg The registry containing the components.
          */
-        void collision_system(Registry &reg, sf::RenderWindow &window);
+        void collision_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger);
 
         /**
          * @brief Update the position of all entities based on their velocity.
@@ -72,7 +73,7 @@ class Systems {
          * @param playerId playedId The id of the player.
          * @param network The class for sending data to client
          */
-        void shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender);
+        void shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger);
     
         /**
          * @brief Update the position for a wave patten
@@ -80,7 +81,13 @@ class Systems {
          * @param reg The registry containing the components.
          * @param totalTime The count since the start.
          */
-        void wave_pattern_system(Registry &reg, float totalTime);
+        void wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger);
+        /**
+         * @brief Update the position of all entities based on their velocity.
+         *
+         * @param reg The registry containing the components.
+         */
+        void death_system(Registry &reg, RType::Logger &logger);
 };
 
 #endif /* !SYSTEMS_HPP_ */

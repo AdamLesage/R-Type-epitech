@@ -7,8 +7,9 @@
 
 #include "Systems.hpp"
 
-void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender)
+void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger)
 {
+    (void)logger;
     auto &positions = reg.get_components<Position_s>();
     auto &velocities = reg.get_components<Velocity_s>();
     auto &types = reg.get_components<Type>();
@@ -33,8 +34,9 @@ void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &net
     }
 }
 
-void Systems::control_system(Registry &reg)
+void Systems::control_system(Registry &reg, RType::Logger &logger)
 {
+    (void)logger;
     auto &velocities = reg.get_components<Velocity_s>();
     auto &controllables = reg.get_components<Controllable_s>();
 
@@ -62,8 +64,9 @@ void Systems::control_system(Registry &reg)
     }
 }
 
-void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
+void Systems::draw_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger)
 {
+    (void)logger;
     auto &positions = reg.get_components<Position_s>();
     auto &drawables = reg.get_components<Drawable_s>();
 
@@ -78,7 +81,7 @@ void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
     }
 }
 
-void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities)
+void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities, RType::Logger &logger)
 {
     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
         auto const& pos = positions[i];
@@ -91,7 +94,7 @@ void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArr
     }
 }
 
-void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
+void Systems::collision_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &drawables = reg.get_components<Drawable_s>();
@@ -121,7 +124,7 @@ void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
     }
 }
 
-void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender)
+void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &types = reg.get_components<Type_s>();
@@ -154,7 +157,7 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
     }
 }
 
-void Systems::wave_pattern_system(Registry &reg, float totalTime) {
+void Systems::wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger) {
     auto &patterns =  reg.get_components<Wave_pattern>();
     auto &positions =  reg.get_components<Position>();
     auto &velocitys =  reg.get_components<Velocity>();
@@ -166,6 +169,24 @@ void Systems::wave_pattern_system(Registry &reg, float totalTime) {
         if (pattern && position && velocity) {
             velocity->x = -1;
             position->y += (pattern->amplitude * std::sin(pattern->frequency * totalTime));
+        }
+        // logger.log(RType::Logger::LogType::INFO, "Player %d shot a projectile", playerId);
+    }
+}
+
+void Systems::death_system(Registry &reg, RType::Logger &logger)
+{
+    auto &healths = reg.get_components<Health_s>();
+    auto &types = reg.get_components<Type_s>();
+
+    for (size_t i = 0; i < healths.size() && i < types.size(); ++i) {
+        auto &health = healths[i];
+        auto &type = types[i];
+
+        if (health && type && health->health <= 0) {
+            reg.kill_entity(i);
+            logger.log(RType::Logger::LogType::INFO, "Entity %d died", i);
+            // send_death to client
         }
     }
 }
