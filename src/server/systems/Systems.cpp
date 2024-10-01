@@ -173,6 +173,9 @@ void Systems::health_system(Registry &reg)
 
 void Systems::death_system(Registry &reg, RType::Logger &logger)
 {
+    auto &healths = reg.get_components<Health_s>();
+    auto &types = reg.get_components<Type_s>();
+
     for (size_t i = 0; i < healths.size() && i < types.size(); ++i) {
         auto &health = healths[i];
         auto &type = types[i];
