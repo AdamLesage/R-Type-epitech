@@ -13,6 +13,7 @@
     #include "../../shared/components/Drawable.hpp"
     #include "../../shared/components/Position.hpp"
     #include "../../shared/components/Velocity.hpp"
+    #include "../../shared/components/Direction.hpp"
     #include <iostream>
 
 class Systems {
@@ -55,6 +56,13 @@ class Systems {
          * @param reg The registry containing the components.
          */
         void collision_system(Registry &reg, sf::RenderWindow &window);
+
+        /**
+         * @brief Update the direction of all entities based on their velocity.
+         *
+         * @param reg The registry containing the components.
+         */
+        void direction_system(Registry &reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */
