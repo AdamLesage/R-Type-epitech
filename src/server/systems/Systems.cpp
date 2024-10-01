@@ -85,7 +85,7 @@ void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArr
 }
 
 void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_s *entityPos,
-    Size_s *entitySize, Type_s *entityType, std::pair<size_t, size_t> MapSize)
+    Size_s *entitySize, Type_s *entityType, std::pair<size_t, size_t> MapSize, RType::Logger &logger)
 {
     if (entityType->type == EntityType::PROJECTILE &&
         (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
@@ -96,7 +96,21 @@ void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_
     }
 }
 
-void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize)
+void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Position_s *entityPos1, Size_s *entitySize1,
+    size_t entityId2, Position_s *entityPos2, Size_s *entitySize2, RType::Logger &logger)
+{
+    bool collisionX = entityPos1->x < entityPos2->x + entitySize2->x &&
+                      entityPos1->x + entitySize1->x > entityPos2->x;
+    bool collisionY = entityPos1->y < entityPos2->y + entitySize2->y &&
+                      entityPos1->y + entitySize1->y > entityPos2->y;
+
+    if (collisionX && collisionY) {
+        logger.log(RType::Logger::LogType::INFO, "Entity %d collided with entity %d", entityId1, entityId2);
+        // send_collision_to_clients(entityId1, entityId2);
+    }
+}
+
+void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, RType::Logger &logger)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &sizes = reg.get_components<Size_s>();
@@ -107,14 +121,14 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize)
         auto &entitySize = sizes[i];
         auto &entityType = types[i];
         if (entityPos && entitySize, entityType) {
-            check_borders_collisions(reg, i, &(*entityPos), &(*entitySize), &(*entityType), MapSize);
+            check_borders_collisions(reg, i, &(*entityPos), &(*entitySize), &(*entityType), MapSize, logger);
 
             for (size_t j = i + 1; j < positions.size() && j < sizes.size(); ++j) {
                 auto &entityPos2 = positions[j];
                 auto &entitySize2 = sizes[j];
 
                 if (entityPos2 && entitySize2) {
-                    check_entities_collisions(reg, i, &(*entityPos), &(*entitySize), j, &(*entityPos2), &(*entitySize2));
+                    check_entities_collisions(reg, i, &(*entityPos), &(*entitySize), j, &(*entityPos2), &(*entitySize2), logger);
                 }
             }
         }

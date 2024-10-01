@@ -100,7 +100,7 @@ class Systems {
          * @return void
          */
         void check_borders_collisions(Registry &reg, size_t entityId, Position_s *position, Size_s *size,
-            Type_s *type, std::pair<size_t, size_t> MapSize);
+            Type_s *type, std::pair<size_t, size_t> MapSize, RType::Logger &logger);
 
 
         /**
@@ -115,7 +115,7 @@ class Systems {
          * @param size2 The size of the second entity.
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
-            size_t entityId2, Position_s *position2, Size_s *size2);
+            size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger);
 };
 
 #endif /* !SYSTEMS_HPP_ */
