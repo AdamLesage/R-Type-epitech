@@ -42,8 +42,7 @@ namespace NetworkLib {
 		if (!error) {
 			std::string message(recv_buffer.data(), recv_buffer.data() + bytes_transferred);
 			incomingMessages.push(message);
-			std::cout << "Received message: " << message << std::endl;
-			// this->_mediator->notify("NetworkEngine", "updateData" + message);
+			this->_mediator->notify("NetworkEngine", "updateData" + message);
 		} else {
 			std::cout << ("Client::handle_receive: " + error.message()) << std::endl;
 		}

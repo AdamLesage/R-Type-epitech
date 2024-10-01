@@ -97,7 +97,7 @@ set(SRC_SERVER
     src/server/network/Server.cpp
     src/shared/entities/Entity.cpp
     src/shared/registry/Registry.cpp
-    src/shared/systems/Systems.cpp
+    src/server/systems/Systems.cpp
     src/server/utils/Logger.cpp
 )
 

@@ -8,7 +8,7 @@
 #ifndef GAMELOGIQUE_HPP_
 #define GAMELOGIQUE_HPP_
 
-#include "../registry/Registry.hpp"
+#include "../../shared/registry/Registry.hpp"
 #include "../systems/Systems.hpp"
 #include "../network/Server.hpp"
 #include "../../shared/components/Tag.hpp"
