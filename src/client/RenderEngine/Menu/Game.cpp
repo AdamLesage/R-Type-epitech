@@ -88,7 +88,7 @@ void RType::Game::play()
             window->draw(backgrounds[i]);
         }
         _systems.draw_system(_registry, *window.get());
-        _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
+        // _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         window->display();
     }
 }
