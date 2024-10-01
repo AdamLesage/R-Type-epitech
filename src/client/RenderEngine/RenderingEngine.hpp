@@ -10,6 +10,7 @@
 
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
+#include "Menu/Menu.hpp"
 
 namespace RType {
     class RenderingEngine : public AEngine {
@@ -23,6 +24,7 @@ namespace RType {
             void run() override;
         protected:
         private:
+            std::unique_ptr<Menu> _menu;
     };
 }
 
