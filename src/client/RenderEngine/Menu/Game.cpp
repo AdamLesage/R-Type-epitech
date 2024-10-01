@@ -32,22 +32,24 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
         throw std::runtime_error("Error loading backgroundTexture 3");
     }
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; i++) {
         backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
         backgrounds[i].setTexture(&backgroundTextures[i]);
         backgrounds[i].setPosition(sf::Vector2f(0, 0));
     }
-
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; i++) {
+        players.push_back(sf::RectangleShape(sf::Vector2f(131.5, 58.f)));
         playerTextures.push_back(sf::Texture());
+    }
+    for (int i = 0; i < 5; i++) {
         if (!playerTextures[i].loadFromFile("src/client/asset/player/player_" + std::to_string(i + 1) + ".png")) {
             throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
         }
+        players[i].setTexture(&playerTextures[i]);
+        players[i].setPosition(sf::Vector2f(125.f + (125.f * i), 125.f));
+        players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
     }
-    player.setSize(sf::Vector2f(50, 50));
-    player.setFillColor(sf::Color::Blue);
-    player.setPosition(sf::Vector2f(100, 100));
-    
+    settings = std::make_shared<Settings>(window);
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
     _registry.register_component<Drawable_s>();
@@ -63,20 +65,36 @@ void RType::Game::play()
     entity_t movable = _registry.spawn_entity();
     _registry.add_component<Position_s>(movable, Position_s{100.f, 100.f});
     _registry.add_component<Velocity_s>(movable, Velocity_s{0.f, 0.f});
-    _registry.add_component<Drawable_s>(movable, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[movable]->shape.setFillColor(sf::Color::Blue);
+    _registry.add_component<Drawable_s>(movable, Drawable_s{players[1]});
     _registry.add_component<Controllable_s>(movable, Controllable_s{});
 
     entity_t static_entity = _registry.spawn_entity();
     _registry.add_component<Position_s>(static_entity, Position_s{100.f, 300.f});
     _registry.add_component<Drawable_s>(static_entity, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
     _registry.get_components<Drawable_s>()[static_entity]->shape.setFillColor(sf::Color::Red);
+    entity_t static_entity2 = _registry.spawn_entity();
+    _registry.add_component<Position_s>(static_entity2, Position_s{300.f, 300.f});
+    _registry.add_component<Drawable_s>(static_entity2, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
+    _registry.get_components<Drawable_s>()[static_entity2]->shape.setFillColor(sf::Color::Blue);
+    entity_t static_entity3 = _registry.spawn_entity();
+    _registry.add_component<Position_s>(static_entity3, Position_s{600.f, 300.f});
+    _registry.add_component<Drawable_s>(static_entity3, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
+    _registry.get_components<Drawable_s>()[static_entity3]->shape.setFillColor(sf::Color::Green);
+    entity_t static_entity4 = _registry.spawn_entity();
+    _registry.add_component<Position_s>(static_entity4, Position_s{900.f, 300.f});
+    _registry.add_component<Drawable_s>(static_entity4, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
+    _registry.get_components<Drawable_s>()[static_entity4]->shape.setFillColor(sf::Color::Yellow);
 
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window->close();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Escape) {
+                    settings->displaySettings();
+                }
+            }
         }
 
         _systems.control_system(_registry);
@@ -84,11 +102,16 @@ void RType::Game::play()
         _systems.collision_system(_registry, *window.get());
 
         window->clear();
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; i++) {
             window->draw(backgrounds[i]);
         }
         _systems.draw_system(_registry, *window.get());
         _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
+        window->draw(players[0]);
+        window->draw(players[1]);
+        window->draw(players[2]);
+        window->draw(players[3]);
+        window->draw(players[4]);
         window->display();
     }
 }
