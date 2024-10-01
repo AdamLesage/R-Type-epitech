@@ -7,10 +7,6 @@
 
 #include "Settings.hpp"
 
-Settings::Settings()
-{
-}
-
 Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 {
     this->window = _window;
@@ -28,7 +24,7 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
         std::cerr << "Error loading background" << std::endl;
         return;
     }
-    
+
     background.setTexture(&backgroundTexture);
     background.setPosition(sf::Vector2f(0, 0));
     background.setSize(sf::Vector2f(1920, 1080));
