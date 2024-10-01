@@ -20,7 +20,7 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         }
         playerSprites[i].setTexture(playerTextures[i]);
         playerSprites[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
-        playerSprites[i].setScale(0.40f, 0.40f);
+        playerSprites[i].setScale(0.7, 0.7);
     }
 
     float totalHeight = window->getSize().y;
