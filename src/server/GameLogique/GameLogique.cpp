@@ -23,6 +23,7 @@ GameLogique::GameLogique(size_t port, int _frequency)
     this->reg.register_component<Shoot>();
     this->reg.register_component<ShootingSpeed>();
     this->reg.register_component<Type>();
+    this->reg.register_component<StraightLinePattern>();
 }
 
 GameLogique::~GameLogique()
@@ -80,8 +81,8 @@ void GameLogique::runGame() {
         if (this->running) {
             if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > 1 / frequency) {
                 clock = std::clock();
-                sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC);
-                sys.position_system(reg, this->_networkSender);     
+                sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC, logger);
+                sys.position_system(reg, this->_networkSender, logger);     
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 2) {
                 this->spawnEnnemy(0x03, 1000, 500);
@@ -112,7 +113,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 
     switch (input) {
         case 'x':
-            this->sys.shoot_system(reg, id, this->_networkSender);
+            this->sys.shoot_system(reg, id, this->_networkSender, logger);
             break;
         case 'z':
             velocitie->y = -1;

@@ -113,3 +113,19 @@ void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
         }
     }
 }
+
+void Systems::direction_system(Registry &reg)
+{
+    auto &velocities = reg.get_components<Velocity_s>();
+    auto &directions = reg.get_components<Direction_s>();
+
+    for (size_t i = 0; i < velocities.size() && i < directions.size(); ++i) {
+        auto &vel = velocities[i];
+        auto &dir = directions[i];
+
+        if (vel && dir) {
+            vel->x = dir->x;
+            vel->y = dir->y;
+        }
+    }
+}

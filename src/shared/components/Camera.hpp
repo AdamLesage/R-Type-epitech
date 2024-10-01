@@ -17,7 +17,8 @@
          * @brief Camera component, add a camera to an entity
          *
          */
-        sf::View camera; //camera of an entity
+        // sf::View camera; //camera of an entity
+        // TODO: Add camera component, because sf::View is undefined in shared
     } Camera;
 
 #endif /* !CAMERA_HPP_ */

@@ -19,13 +19,20 @@ RType::NetworkEngine::~NetworkEngine()
 
 void RType::NetworkEngine::run()
 {
-    std::cout << "NetworkEngine" << std::endl;
-    this->_mediator->notify("NetworkEngine", "run");
 }
 
 void RType::NetworkEngine::updateData()
 {
-    std::cout << "NetworkEngine updateData" << std::endl;
+    if (_client->hasMessage() == false)
+        return;
+
+    try {
+        std::string message = _client->popMessage();
+        // Call the mediator to send the message to the game engine
+        this->_mediator->notify("NetworkEngine", message);
+    } catch (const std::logic_error &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 extern "C" RType::NetworkEngine *entryPointNetworkEngine()
