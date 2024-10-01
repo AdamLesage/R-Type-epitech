@@ -1,9 +1,9 @@
 #include "Client.hpp"
 
 namespace NetworkLib {
-	Client::Client(std::string host, unsigned short server_port, unsigned short local_port) :
+	Client::Client(std::string host, unsigned short server_port, unsigned short local_port, std::shared_ptr<RType::IMediator> mediator) :
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)),
-		service_thread(&Client::run_service, this)
+		service_thread(&Client::run_service, this), _mediator(mediator)
 	{
 		try {
 			boost::asio::ip::udp::resolver resolver(io_service);
@@ -42,6 +42,8 @@ namespace NetworkLib {
 		if (!error) {
 			std::string message(recv_buffer.data(), recv_buffer.data() + bytes_transferred);
 			incomingMessages.push(message);
+			std::cout << "Received message: " << message << std::endl;
+			// this->_mediator->notify("NetworkEngine", "updateData" + message);
 		} else {
 			std::cout << ("Client::handle_receive: " + error.message()) << std::endl;
 		}

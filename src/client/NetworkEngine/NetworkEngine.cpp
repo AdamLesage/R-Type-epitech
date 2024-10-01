@@ -9,7 +9,7 @@
 
 RType::NetworkEngine::NetworkEngine()
 {
-    _client = std::make_unique<NetworkLib::Client>("127.0.0.0", 50000, 50010);
+    _client = std::make_unique<NetworkLib::Client>("127.0.0.0", 50000, 50010, this->_mediator);
 }
 
 RType::NetworkEngine::~NetworkEngine()
