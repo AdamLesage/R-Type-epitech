@@ -34,7 +34,7 @@ RType::Menu::Menu()
     } else {
         selectSound.setBuffer(selectBuffer);
     }
-    std::string optionsText[] = {"1. Play", "2. Settings", "3. Quit"};
+    std::string optionsText[] = {"1. Lobby", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
@@ -42,8 +42,9 @@ RType::Menu::Menu()
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
     try {
-        games = std::make_shared<Game>(window);
+        // games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
+        lobby = std::make_shared<Lobby>(window);
     } catch (const std::runtime_error &e) {
         std::cerr << e.what() << std::endl;
         exit(84);
@@ -112,8 +113,9 @@ void RType::Menu::displayMenu()
                 case sf::Keyboard::Enter:
                     switch (getSelectedOption()) {
                     case 0:
-                        std::cout << "Play" << std::endl;
-                         games->displayGame();
+                        std::cout << "Lobby" << std::endl;
+                        //  games->displayGame();
+                        lobby->displayLobby();
                         break;
                     case 1:
                          settings->displaySettings();
