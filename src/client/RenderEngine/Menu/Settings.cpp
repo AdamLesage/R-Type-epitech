@@ -6,7 +6,7 @@
 */
 
 #include "Settings.hpp"
-#include "../config/EditConfigFile.hpp"
+#include "../../../config/EditConfigFile.hpp"
 
 Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 {
@@ -177,9 +177,10 @@ void Settings::displaySettings()
                         break;
                     }
                     break;
-                case sf::Keyboard::S:
-                    configEditor.saveModifications();
-                    break;
+                    if(event.key.code == sf::Keyboard::S) {
+                        configEditor.saveModifications();
+                        return;
+                    }
                 }
             }
         }
