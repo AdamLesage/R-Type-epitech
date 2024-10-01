@@ -18,12 +18,40 @@ namespace RType {
     class Menu
     {
     public:
+
+        /**
+         * @brief Construct a new Menu object.
+         *
+         * @param _window The window to display the menu on.
+         */
         Menu();
+
+        /**
+         * @brief Destroy the Menu object.
+         */
         ~Menu() = default;
+
+        /**
+         * @brief Draws the menu.
+         */
         void draw();
+        /**
+         * @brief Moves the selection up.
+         */
         void moveUp();
+        /**
+         * @brief Moves the selection down.
+         */
         void moveDown();
+        /**
+         * @brief Get the selected option.
+         *
+         * @return int The selected option.
+         */
         int getSelectedOption() const;
+        /**
+         * @brief Displays the menu.
+         */
         void displayMenu();
 
     private:
