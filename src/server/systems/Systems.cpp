@@ -81,36 +81,42 @@ void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArr
     }
 }
 
-// void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize)
-// {
-//     auto &positions = reg.get_components<Position_s>();
-//     auto &drawables = reg.get_components<Drawable_s>();
-//     auto &size = reg.get_components<Size_s>();
-//     auto &types = reg.get_components<Type_s>();
+void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_s *entityPos,
+    Size_s *entitySize, Type_s *entityType, std::pair<size_t, size_t> MapSize)
+{
+    if (entityType->type == EntityType::PROJECTILE &&
+        (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
+        entityPos->y < 0 || entityPos->y + entitySize->y > MapSize.second)) {
+        reg.kill_entity(entityId);
+        std::cerr << "Projectile " << entityId << " deleted (out of window)" << std::endl;
+        //send to clients
+    }
+}
 
-//     for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
-//         auto &entityPos = positions[i];
-//         auto &entitySize = size[i];
-//         if (entityPos && entitySize) {
-//             if (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
-//                 entityPos->y < 0 || entityPos->y + entitySize->y > MapSize.second) {
-//                 if (types && type->type == EntityType::PROJECTILE) {
-//                     reg.kill_entity(i);
-//                     std::cerr << "Projectile " << i << " deleted (out of window)" << std::endl;
-//                 }
-//             }
-//             for (size_t j = i + 1; j < positions.size() && j < drawables.size(); ++j) {
-//                 auto &pos2 = positions[j];
-//                 auto &draw2 = drawables[j];
-//                 if (pos2 && draw2) {
-//                     if (draw1->shape.getGlobalBounds().intersects(draw2->shape.getGlobalBounds())) {
-//                         std::cerr << "Collision detected between entity " << i << " and entity " << j << std::endl;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
+void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize)
+{
+    auto &positions = reg.get_components<Position_s>();
+    auto &sizes = reg.get_components<Size_s>();
+    auto &types = reg.get_components<Type_s>();
+
+    for (size_t i = 0; i < positions.size() && i < sizes.size(); i++) {
+        auto &entityPos = positions[i];
+        auto &entitySize = sizes[i];
+        auto &entityType = types[i];
+        if (entityPos && entitySize, entityType) {
+            check_borders_collisions(reg, i, &(*entityPos), &(*entitySize), &(*entityType), MapSize);
+
+            for (size_t j = i + 1; j < positions.size() && j < sizes.size(); ++j) {
+                auto &entityPos2 = positions[j];
+                auto &entitySize2 = sizes[j];
+
+                if (entityPos2 && entitySize2) {
+                    check_entities_collisions(reg, i, &(*entityPos), &(*entitySize), j, &(*entityPos2), &(*entitySize2));
+                }
+            }
+        }
+    }
+}
 
 void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest)
 {

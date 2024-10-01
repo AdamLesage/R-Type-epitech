@@ -70,6 +70,36 @@ class Systems {
          * @param shootRequest The request to shoot.
          */
         void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest);
+
+    private:
+        /**
+         * @brief Check if an entity is colliding with the borders of the map.
+         *
+         * @param reg The registry containing the components.
+         * @param entityId The id of the entity to check.
+         * @param position The position of the entity.
+         * @param size The size of the entity.
+         * @param type The type of the entity.
+         * @param MapSize The size of the map.
+         * @return void
+         */
+        void check_borders_collisions(Registry &reg, size_t entityId, Position_s *position, Size_s *size,
+            Type_s *type, std::pair<size_t, size_t> MapSize);
+
+
+        /**
+         * @brief Check if 2 entities are colliding.
+         *
+         * @param reg The registry containing the components.
+         * @param entityId1 The id of the first entity.
+         * @param position1 The position of the first entity.
+         * @param size1 The size of the first entity.
+         * @param entityId2 The id of the second entity.
+         * @param position2 The position of the second entity.
+         * @param size2 The size of the second entity.
+         */
+        void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
+            size_t entityId2, Position_s *position2, Size_s *size2);
 };
 
 #endif /* !SYSTEMS_HPP_ */
