@@ -15,12 +15,6 @@
 #include "Button.hpp"
 class Settings {
     public:
-
-        /**
-         * @brief Default constructor.
-         */
-        Settings();
-
         /**
          * @brief Construct a new Settings object.
          *
