@@ -49,8 +49,10 @@ void RType::Mediator::notifyNetworkEngine(std::string sender, std::string event)
     if (sender != "NetworkEngine")
         return;
 
-    // Network engine will only call mediator to update the game engine data
-    this->_gameEngine->handleServerData(event);
+    if (event.rfind("updateData", 0) == 0) {
+        event = event.substr(9); // Remove "updateData"
+        this->_gameEngine->handleServerData(event);
+    }
 }
 
 void RType::Mediator::notifyRenderingEngine(std::string sender, std::string event)
