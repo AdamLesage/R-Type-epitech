@@ -13,6 +13,7 @@
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/systems/Systems.hpp"
+#include "ProtocolParsing.hpp"
 
 namespace RType {
     class GameEngine : public AEngine {
@@ -31,10 +32,19 @@ namespace RType {
              * @param message The message to send.
             */
             void send(const std::string &message);
+
+            /**
+             * @brief Handle the server data, received from the Mediator notified by the NetworkEngine.
+             *  It will update the registry and the systems. Such as create entities, update entities, delete entities, etc.
+             * 
+             * @param message The message received from the server. Need to be parsed.
+            */
+            void handleServerData(std::string &message);
         protected:
         private:
             Registry _registry;
             Systems _systems;
+            std::unique_ptr<RType::ProtocolParsing> _protocolParsing;
     };
 }
 
