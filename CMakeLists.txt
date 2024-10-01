@@ -76,12 +76,13 @@ set(SRC_CLIENT
     src/shared/entities/Entity.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
+    src/config/EditConfigFile.cpp
 )
 
 add_executable(r-type_client ${SRC_CLIENT})
 
 # Linkage for SFML and Boost libraries
-target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++${Boost_LIBRARIES})
 
 # Output directory for the client
 set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
