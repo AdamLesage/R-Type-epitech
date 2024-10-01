@@ -34,7 +34,7 @@ void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &net
     }
 }
 
-void Systems::control_system(Registry &reg, RType::Logger &logger)
+void Systems::control_system(Registry &reg, bool up, bool down, bool left, bool right, RType::Logger &logger)
 {
     (void)logger;
     auto &velocities = reg.get_components<Velocity_s>();
@@ -48,16 +48,16 @@ void Systems::control_system(Registry &reg, RType::Logger &logger)
             vel->x = 0;
             vel->y = 0;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            if (up) {
                 vel->y = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            if (down) {
                 vel->y = 1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (left) {
                 vel->x = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (right) {
                 vel->x = 1.0f;
             }
         }
@@ -94,30 +94,51 @@ void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArr
     }
 }
 
-void Systems::collision_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger)
+void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_s *entityPos,
+    Size_s *entitySize, Type_s *entityType, std::pair<size_t, size_t> MapSize, RType::Logger &logger)
+{
+    if (entityType->type == EntityType::PROJECTILE &&
+        (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
+        entityPos->y < 0 || entityPos->y + entitySize->y > MapSize.second)) {
+        reg.kill_entity(entityId);
+        std::cerr << "Projectile " << entityId << " deleted (out of window)" << std::endl;
+        //send to clients
+    }
+}
+
+void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Position_s *entityPos1, Size_s *entitySize1,
+    size_t entityId2, Position_s *entityPos2, Size_s *entitySize2, RType::Logger &logger)
+{
+    bool collisionX = entityPos1->x < entityPos2->x + entitySize2->x &&
+                      entityPos1->x + entitySize1->x > entityPos2->x;
+    bool collisionY = entityPos1->y < entityPos2->y + entitySize2->y &&
+                      entityPos1->y + entitySize1->y > entityPos2->y;
+
+    if (collisionX && collisionY) {
+        logger.log(RType::Logger::LogType::INFO, "Entity %d collided with entity %d", entityId1, entityId2);
+        // send_collision_to_clients(entityId1, entityId2);
+    }
+}
+
+void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, RType::Logger &logger)
 {
     auto &positions = reg.get_components<Position_s>();
-    auto &drawables = reg.get_components<Drawable_s>();
+    auto &sizes = reg.get_components<Size_s>();
+    auto &types = reg.get_components<Type_s>();
 
-    sf::Vector2u windowSize = window.getSize();
+    for (size_t i = 0; i < positions.size() && i < sizes.size(); i++) {
+        auto &entityPos = positions[i];
+        auto &entitySize = sizes[i];
+        auto &entityType = types[i];
+        if (entityPos && entitySize, entityType) {
+            check_borders_collisions(reg, i, &(*entityPos), &(*entitySize), &(*entityType), MapSize, logger);
 
-    for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
-        auto &pos1 = positions[i];
-        auto &draw1 = drawables[i];
-        if (pos1 && draw1) {
-            sf::FloatRect bounds = draw1->shape.getGlobalBounds();
-            if (bounds.left < 0 || bounds.left + bounds.width > windowSize.x ||
-                bounds.top < 0 || bounds.top + bounds.height > windowSize.y) {
-                reg.kill_entity(i);
-                std::cerr << "Projectile " << i << " deleted (out of window)" << std::endl;
-            }
-            for (size_t j = i + 1; j < positions.size() && j < drawables.size(); ++j) {
-                auto &pos2 = positions[j];
-                auto &draw2 = drawables[j];
-                if (pos2 && draw2) {
-                    if (draw1->shape.getGlobalBounds().intersects(draw2->shape.getGlobalBounds())) {
-                        std::cerr << "Collision detected between entity " << i << " and entity " << j << std::endl;
-                    }
+            for (size_t j = i + 1; j < positions.size() && j < sizes.size(); ++j) {
+                auto &entityPos2 = positions[j];
+                auto &entitySize2 = sizes[j];
+
+                if (entityPos2 && entitySize2) {
+                    check_entities_collisions(reg, i, &(*entityPos), &(*entitySize), j, &(*entityPos2), &(*entitySize2), logger);
                 }
             }
         }
@@ -203,6 +224,9 @@ void Systems::health_system(Registry &reg)
 
 void Systems::death_system(Registry &reg, RType::Logger &logger)
 {
+    auto &healths = reg.get_components<Health_s>();
+    auto &types = reg.get_components<Type_s>();
+
     for (size_t i = 0; i < healths.size() && i < types.size(); ++i) {
         auto &health = healths[i];
         auto &type = types[i];
