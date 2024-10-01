@@ -160,7 +160,6 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = now - shoot->shootCooldown;
         float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
-        std::cout << elapsed_seconds;
         
         if (elapsed_seconds >= shootingSpeed->shooting_speed) {
             shoot->shootCooldown = now;
@@ -268,23 +267,9 @@ void Systems::player_following_pattern_system(Registry &reg)
         auto &position = positions[i];
         
         if (pattern && velocity && position) {
-            float min_target_distance = 1000000;
-            float target_x = 0;
-            float target_y = 0;
-            for (size_t j = 0; j < positions.size(); ++j) {
-                auto &target_position = positions[j];
-                auto &target_type = types[j];
-                if (target_position && target_type && target_type->type == EntityType::PLAYER) {
-                    float target_distance = abs(target_position->x - position->x) + abs(target_position->y - position->y);
-                    if (target_distance < min_target_distance) {
-                        min_target_distance = target_distance;
-                        target_x = target_position->x;
-                        target_y = target_position->y;
-                    }
-                }
-            }
-            velocity->x = target_x - position->x;
-            velocity->y = target_y - position->y;
+            std::array<float, 2> target_pos = this->find_closest_player(reg, &(*position));
+            velocity->x = target_pos[0] - position->x;
+            velocity->y = target_pos[1] - position->y;
             float magnitude = std::sqrt((velocity->x * velocity->x) + (velocity->y * velocity->y));
 
             if (magnitude > 0) {
@@ -293,4 +278,66 @@ void Systems::player_following_pattern_system(Registry &reg)
             }
         }
     }
+}
+
+void Systems::shoot_player_pattern_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender)
+{
+    auto &patterns =  reg.get_components<ShootPlayerPattern>();
+    auto &velocitys =  reg.get_components<Velocity>();
+    auto &types = reg.get_components<Type_s>();
+    auto &positions = reg.get_components<Position>();
+
+    for (size_t i = 0; i < patterns.size(); ++i) {
+        auto &pattern = patterns[i];
+        auto &velocity = velocitys[i];
+        auto &position = positions[i];
+
+        if (pattern && velocity && position) {
+            auto now = std::chrono::steady_clock::now();
+            std::chrono::duration<float> fs = now - pattern->lastShotTime;
+            float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
+            
+            if (elapsed_seconds >= pattern->shootCooldown) {
+                pattern->lastShotTime = now;
+
+                std::array<float, 2> target_pos = this->find_closest_player(reg, &(*position));
+                std::array<float, 2> projectile_velocity = {target_pos[0] - position->x, target_pos[1] - position->y};
+                float magnitude = std::sqrt((projectile_velocity[0] * projectile_velocity[0]) + (projectile_velocity[1] * projectile_velocity[1]));
+                if (magnitude > 0) {
+                    projectile_velocity[0] = (projectile_velocity[0] / magnitude) * pattern->projectileSpeed;
+                    projectile_velocity[1] = (projectile_velocity[1] / magnitude) * pattern->projectileSpeed;
+                }
+
+                entity_t projectile = reg.spawn_entity();
+                reg.add_component<Position_s>(projectile, Position_s{position->x, position->y});
+                reg.add_component<Velocity_s>(projectile, Velocity_s{projectile_velocity[0], projectile_velocity[1]});
+                reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
+                reg.add_component<Damage_s>(projectile, Damage_s{10});
+                networkSender->sendCreateProjectil(projectile, position->x, position->y, i);
+            }
+        }
+    }
+}
+
+std::array<float, 2> Systems::find_closest_player(Registry &reg, Position *position_entity)
+{
+    float min_target_distance = 1000000;
+    float target_x = 0;
+    float target_y = 0;
+    auto &positions = reg.get_components<Position>();
+    auto &types = reg.get_components<Type>();
+
+    for (size_t j = 0; j < positions.size(); ++j) {
+        auto &target_position = positions[j];
+        auto &target_type = types[j];
+        if (target_position && target_type && target_type->type == EntityType::PLAYER) {
+            float target_distance = abs(target_position->x - position_entity->x) + abs(target_position->y - position_entity->y);
+            if (target_distance < min_target_distance) {
+                min_target_distance = target_distance;
+                target_x = target_position->x;
+                target_y = target_position->y;
+            }
+        }
+    }
+    return (std::array<float, 2>({target_x, target_y}));
 }

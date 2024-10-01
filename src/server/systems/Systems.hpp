@@ -20,6 +20,7 @@
     #include "../../shared/components/Wave_Pattern.hpp"
     #include "../../shared/components/StraightPattern.hpp"
     #include "../../shared/components/PlayerFollowingPattern.hpp"
+    #include "../../shared/components/ShootPlayerPattern.hpp"
     #include "../../shared/components/Shoot.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
@@ -111,6 +112,14 @@ class Systems {
          * @param reg The registry containing the components.
          */
         void player_following_pattern_system(Registry &reg);
+        /**
+         * @brief Fire an projectill every x seconds
+         *
+         * @param reg The registry containing the components.
+         * @param network The class for sending data to client
+         * 
+         */
+        void shoot_player_pattern_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender);
 
     private:
         /**
@@ -141,6 +150,15 @@ class Systems {
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
             size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger);
+
+        /**
+         * @brief find the pos of the closest player
+         * 
+         * @param reg The registry containing the components.
+         * @param position_entity the position of the entity
+         * @return return the pos of the closest player
+         */
+        std::array<float, 2> find_closest_player(Registry &reg, Position *position_entity);
 };
 
 #endif /* !SYSTEMS_HPP_ */
