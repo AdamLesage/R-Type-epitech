@@ -16,7 +16,7 @@ namespace NetworkLib {
 		public:
 			virtual ~IServer() {};
 			virtual bool hasMessages() = 0;
-			virtual void sendToClient(const std::string& message, uint32_t clientID) = 0;
+			virtual void sendToClient(const char *message, size_t size, uint32_t clientID) = 0;
 			virtual std::pair<std::string, uint32_t> popMessage() = 0;
 			virtual size_t getClientCount() = 0;
 			virtual uint32_t getClientIdByIndex(size_t) = 0;
