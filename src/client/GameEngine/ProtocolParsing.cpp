@@ -63,6 +63,14 @@ bool RType::ProtocolParsing::parsePlayerCreation(const char *message)
     if (!checkMessageType("PLAYER_CREATION", message))
         return false;
 
+    unsigned int playerId;
+    float posX;
+    float posY;
+
+    std::memcpy(&playerId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+
     return true;
 }
 
@@ -70,7 +78,17 @@ bool RType::ProtocolParsing::parseProjectileCreation(const char *message)
 {
     if (!checkMessageType("PROJECTILE_CREATION", message))
         return false;
-    
+
+    unsigned int projectileId;
+    float posX;
+    float posY;
+    unsigned int parentId;
+
+    std::memcpy(&projectileId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+    std::memcpy(&parentId, &message[13], sizeof(unsigned int));
+
     return true;
 }
 
@@ -78,7 +96,15 @@ bool RType::ProtocolParsing::parseEnemyCreation(const char *message)
 {
     if (!checkMessageType("ENEMY_CREATION", message))
         return false;
-    
+
+    unsigned int enemyId;
+    float posX;
+    float posY;
+
+    std::memcpy(&enemyId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+
     return true;
 }
 
@@ -86,7 +112,15 @@ bool RType::ProtocolParsing::parseBonusCreation(const char *message)
 {
     if (!checkMessageType("BONUS_CREATION", message))
         return false;
-    
+
+    unsigned int bonusId;
+    float posX;
+    float posY;
+
+    std::memcpy(&bonusId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+
     return true;
 }
 
@@ -94,7 +128,19 @@ bool RType::ProtocolParsing::parseWallCreation(const char *message)
 {
     if (!checkMessageType("WALL_CREATION", message))
         return false;
-    
+
+    unsigned int wallId;
+    float posX;
+    float posY;
+    float width;
+    float height;
+
+    std::memcpy(&wallId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+    std::memcpy(&width, &message[13], sizeof(float));
+    std::memcpy(&height, &message[17], sizeof(float));
+
     return true;
 }
 
@@ -102,7 +148,19 @@ bool RType::ProtocolParsing::parseRewardCreation(const char *message)
 {
     if (!checkMessageType("REWARD_CREATION", message))
         return false;
-    
+
+    unsigned int rewardId;
+    float posX;
+    float posY;
+    float width;
+    float height;
+
+    std::memcpy(&rewardId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+    std::memcpy(&width, &message[13], sizeof(float));
+    std::memcpy(&height, &message[17], sizeof(float));
+
     return true;
 }
 
@@ -110,7 +168,11 @@ bool RType::ProtocolParsing::parseEntityDeletion(const char *message)
 {
     if (!checkMessageType("ENTITY_DELETION", message))
         return false;
-    
+
+    unsigned int entityId;
+
+    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+
     return true;
 }
 
@@ -118,7 +180,15 @@ bool RType::ProtocolParsing::parsePositionUpdate(const char *message)
 {
     if (!checkMessageType("POSITION_UPDATE", message))
         return false;
-    
+
+    unsigned int entityId;
+    float posX;
+    float posY;
+
+    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+
     return true;
 }
 
@@ -126,7 +196,13 @@ bool RType::ProtocolParsing::parseHealthUpdate(const char *message)
 {
     if (!checkMessageType("HEALTH_UPDATE", message))
         return false;
-    
+
+    unsigned int entityId;
+    unsigned int health;
+
+    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+    std::memcpy(&health, &message[5], sizeof(unsigned int));
+
     return true;
 }
 
@@ -134,7 +210,15 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const char *message)
 {
     if (!checkMessageType("DIRECTION_UPDATE", message))
         return false;
-    
+
+    unsigned int entityId;
+    float directionX;
+    float directionY;
+
+    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+    std::memcpy(&directionX, &message[5], sizeof(float));
+    std::memcpy(&directionY, &message[9], sizeof(float));
+
     return true;
 }
 
@@ -142,7 +226,13 @@ bool RType::ProtocolParsing::parseObjectCollection(const char *message)
 {
     if (!checkMessageType("OBJECT_COLLECTION", message))
         return false;
-    
+
+    unsigned int playerId;
+    unsigned int objectId;
+
+    std::memcpy(&playerId, &message[1], sizeof(unsigned int));
+    std::memcpy(&objectId, &message[5], sizeof(unsigned int));
+
     return true;
 }
 
@@ -150,7 +240,15 @@ bool RType::ProtocolParsing::parseProjectileFiring(const char *message)
 {
     if (!checkMessageType("PROJECTILE_FIRING", message))
         return false;
-    
+
+    unsigned int shooterId;
+    float posX;
+    float posY;
+
+    std::memcpy(&shooterId, &message[1], sizeof(unsigned int));
+    std::memcpy(&posX, &message[5], sizeof(float));
+    std::memcpy(&posY, &message[9], sizeof(float));
+
     return true;
 }
 
@@ -158,7 +256,13 @@ bool RType::ProtocolParsing::parseProjectileCollision(const char *message)
 {
     if (!checkMessageType("PROJECTILE_COLLISION", message))
         return false;
-    
+
+    unsigned int projectileId;
+    unsigned int entityId;
+
+    std::memcpy(&projectileId, &message[1], sizeof(unsigned int));
+    std::memcpy(&entityId, &message[5], sizeof(unsigned int));
+
     return true;
 }
 
@@ -166,7 +270,13 @@ bool RType::ProtocolParsing::parseScoreUpdate(const char *message)
 {
     if (!checkMessageType("SCORE_UPDATE", message))
         return false;
-    
+
+    unsigned int playerId;
+    float score;
+
+    std::memcpy(&playerId, &message[1], sizeof(unsigned int));
+    std::memcpy(&score, &message[5], sizeof(float));
+
     return true;
 }
 
@@ -174,7 +284,13 @@ bool RType::ProtocolParsing::parseStateChange(const char *message)
 {
     if (!checkMessageType("STATE_CHANGE", message))
         return false;
-    
+
+    unsigned int entityId;
+    char state; // 1 byte state
+
+    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+    std::memcpy(&state, &message[5], sizeof(char));
+
     return true;
 }
 
