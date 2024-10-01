@@ -19,6 +19,7 @@
     #include "../../shared/components/ShootingSpeed.hpp"
     #include "../../shared/components/Wave_Pattern.hpp"
     #include "../../shared/components/StraightPattern.hpp"
+    #include "../../shared/components/PlayerFollowingPattern.hpp"
     #include "../../shared/components/Shoot.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
@@ -98,6 +99,18 @@ class Systems {
          * @param reg The registry containing the components.
          */
         void death_system(Registry &reg, RType::Logger &logger);
+        /**
+         * @brief Update the movement for a straight ligne pattern
+         *
+         * @param reg The registry containing the components.
+         */
+        void Straight_line_pattern_system(Registry &reg);
+        /**
+         * @brief Update the movement based on the closest player
+         *
+         * @param reg The registry containing the components.
+         */
+        void player_following_pattern_system(Registry &reg);
 
     private:
         /**
@@ -128,13 +141,6 @@ class Systems {
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
             size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger);
-
-        /**
-         * @brief Update the movement for a straight ligne pattern
-         *
-         * @param reg The registry containing the components.
-         */
-        void Straight_line_pattern_system(Registry &reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */

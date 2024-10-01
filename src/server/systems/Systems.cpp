@@ -250,7 +250,47 @@ void Systems::Straight_line_pattern_system(Registry &reg)
         auto &position = positions[i];
         auto &velocity = velocitys[i];
         if (pattern && position && velocity) {
-            velocity->x = -1;
+            velocity->x = pattern->speed;
+        }
+    }
+}
+
+void Systems::player_following_pattern_system(Registry &reg)
+{
+    auto &patterns =  reg.get_components<PlayerFollowingPattern>();
+    auto &velocitys =  reg.get_components<Velocity>();
+    auto &types = reg.get_components<Type_s>();
+    auto &positions = reg.get_components<Position>();
+
+    for (size_t i = 0; i < patterns.size(); ++i) {
+        auto &pattern = patterns[i];
+        auto &velocity = velocitys[i];
+        auto &position = positions[i];
+        
+        if (pattern && velocity && position) {
+            float min_target_distance = 1000000;
+            float target_x = 0;
+            float target_y = 0;
+            for (size_t j = 0; j < positions.size(); ++j) {
+                auto &target_position = positions[j];
+                auto &target_type = types[j];
+                if (target_position && target_type && target_type->type == EntityType::PLAYER) {
+                    float target_distance = abs(target_position->x - position->x) + abs(target_position->y - position->y);
+                    if (target_distance < min_target_distance) {
+                        min_target_distance = target_distance;
+                        target_x = target_position->x;
+                        target_y = target_position->y;
+                    }
+                }
+            }
+            velocity->x = target_x - position->x;
+            velocity->y = target_y - position->y;
+            float magnitude = std::sqrt((velocity->x * velocity->x) + (velocity->y * velocity->y));
+
+            if (magnitude > 0) {
+                velocity->x = (velocity->x / magnitude) * pattern->speed;
+                velocity->y = (velocity->y / magnitude) * pattern->speed;
+            }
         }
     }
 }
