@@ -7,7 +7,8 @@
 
 #include "ProtocolParsing.hpp"
 
-RType::ProtocolParsing::ProtocolParsing(std::string protocolPath)
+RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry &registry)
+    : _registry(registry)
 {
     try {
         _protocolPath = protocolPath;

@@ -9,10 +9,27 @@
     #define SYSTEMS_HPP_
 
     #include "../registry/Registry.hpp"
-    #include "../../shared/components/Controllable.hpp"
-    #include "../../shared/components/Drawable.hpp"
-    #include "../../shared/components/Position.hpp"
-    #include "../../shared/components/Velocity.hpp"
+    #include "../components/Camera.hpp"
+    #include "../components/Charging.hpp"
+    #include "../components/Color.hpp"
+    #include "../components/Control.hpp"
+    #include "../components/Controllable.hpp"
+    #include "../components/Damage.hpp"
+    #include "../components/Drawable.hpp"
+    #include "../components/Freeze.hpp"
+    #include "../components/Health.hpp"
+    #include "../components/Level.hpp"
+    #include "../components/Position.hpp"
+    #include "../components/Revivable.hpp"
+    #include "../components/Rotation.hpp"
+    #include "../components/Scale.hpp"
+    #include "../components/Shoot.hpp"
+    #include "../components/ShootingSpeed.hpp"
+    #include "../components/Sound.hpp"
+    #include "../components/Sprite.hpp"
+    #include "../components/Tag.hpp"
+    #include "../components/Type.hpp"
+    #include "../components/Velocity.hpp"
     #include <iostream>
 
 class Systems {

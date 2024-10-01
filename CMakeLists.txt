@@ -83,7 +83,7 @@ set(SRC_SERVER
     src/server/network/Server.cpp
     src/shared/entities/Entity.cpp
     src/server/registry/Registry.cpp
-    src/server/systems/Systems.cpp
+    src/shared/systems/Systems.cpp
 )
 
 add_executable(r-type_server ${SRC_SERVER})

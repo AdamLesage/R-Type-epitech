@@ -14,12 +14,13 @@
 #include <map>
 #include <utility>
 #include <cstring>
+#include "../../shared/registry/Registry.hpp"
 
 
 namespace RType {
     class ProtocolParsing {
         public:
-            ProtocolParsing(std::string protocolPath);
+            ProtocolParsing(std::string protocolPath, Registry &registry);
             ~ProtocolParsing();
             
             /**
@@ -164,6 +165,7 @@ namespace RType {
             std::string _protocolPath;
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
+            Registry _registry; // Will be used to update the game engine data
     };
 }
 
