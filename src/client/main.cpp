@@ -17,6 +17,22 @@
 #include "Mediator/Mediator.hpp"
 #include "DLloader.hpp"
 
+void errorHandling(int ac, char **av)
+{
+    if (ac != 3) {
+        std::cerr << "Usage: " << av[0] << " <host> <port>" << std::endl;
+        exit(84);
+    }
+    if (std::stoi(av[2]) < 1024 || std::stoi(av[2]) > 65535) {
+        std::cerr << "Port must be between 1024 and 65535" << std::endl;
+        exit(84);
+    }
+    if (std::string(av[1]).size() < 7) {
+        std::cerr << "Host must be at least 7 characters long" << std::endl;
+        exit(84);
+    }
+}
+
 template <typename EngineType>
 std::shared_ptr<EngineType> loadEngine(DLLoader &loader, const std::string &entryPoint) {
     return std::shared_ptr<EngineType>(loader.getInstance<EngineType>(entryPoint));
@@ -53,8 +69,13 @@ void runEngines(std::shared_ptr<RType::GameEngine> gameEngine, std::shared_ptr<R
     audioThread.join();
 }
 
-int main()
+int main(int ac, char **av)
 {
+    errorHandling(ac, av);
+
+    std::string host = av[1];
+    unsigned short server_port = static_cast<unsigned short>(std::stoi(av[2]));
+    unsigned short local_port = 0;
     try {
         // Initialize loaders for each engine
         DLLoader networkEngineLoader("./lib/libNetworkEngine.so");
@@ -70,7 +91,8 @@ int main()
         auto physicEngine = loadEngine<RType::PhysicEngine>(physicEngineLoader, "entryPointPhysicEngine");
         auto audioEngine = loadEngine<RType::AudioEngine>(audioEngineLoader, "entryPointAudioEngine");
 
-        // Use unique_ptr for mediator to ensure memory management
+        networkEngine.reset(new RType::NetworkEngine(host, server_port, local_port));
+
         // Cannot use shared or unique pointer because it segfaults
         RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 

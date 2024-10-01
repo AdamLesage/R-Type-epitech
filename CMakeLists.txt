@@ -131,3 +131,46 @@ add_custom_target(run_epitest
     COMMAND sudo docker build -t epitest:latest .
     COMMAND sudo docker run -it epitest:latest
 )
+
+# Activer les tests
+enable_testing()
+
+# Recherche récursive des fichiers de tests depuis le dossier tests/
+file(GLOB_RECURSE TEST_SOURCES tests/*.cpp src/*.cpp)
+file(GLOB_RECURSE MAIN_SOURCES main.cpp main_server.cpp)
+list(REMOVE_ITEM TEST_SOURCES ${MAIN_SOURCES})
+
+# Inclure les headers nécessaires si besoin
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+# Options de compilation et d'édition de liens pour la couverture de code
+set(COVERAGE_LINK_FLAGS "--coverage")
+
+# Créer un exécutable à partir des fichiers de test
+add_executable(tests_client ${TEST_SOURCES})
+
+# Appliquer les options de compilation et d'édition de liens
+target_compile_options(tests_client PRIVATE ${COVERAGE_COMPILE_FLAGS})
+target_link_libraries(tests_client PRIVATE criterion sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} config++)
+
+# Ajouter une commande pour exécuter les tests
+add_test(NAME run_tests_client COMMAND tests_client)
+
+# Optionnel : une cible pour exécuter tous les tests avec plus de détails en cas d'échec
+add_custom_target(check
+    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure --verbose
+    DEPENDS tests_client
+)
+
+# Cible pour la couverture de code avec gcovr
+add_custom_target(coverage_report
+    COMMAND ${CMAKE_MAKE_PROGRAM} check
+    COMMAND gcovr --exclude tests/ --branches --output coverage_report.txt --print-summary
+    COMMAND gcovr --exclude tests/ --branches --html --html-details --output coverage_report.html
+    DEPENDS tests_client
+)
+
+# Nettoyage des fichiers de couverture
+add_custom_target(coverage_clean
+    COMMAND find . -name "*.gcda" -o -name "*.gcno" -delete
+)
