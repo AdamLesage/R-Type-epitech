@@ -184,3 +184,35 @@ This document describes the protocol used to communicate between the server and 
 - **New State:** 4 bytes.
 
 ---
+
+# Client-to-Server Protocol: Player Input and Start Game
+
+This protocol defines how the client communicates player input and game start requests to the server.
+
+## 1. Player Input
+This message is used by the client to send the player's inputs, such as movement or actions (e.g., firing a weapon).
+
+| Byte Offset | Field Name  | Size (in bytes) | Description                                                  |
+|-------------|--------------|-----------------|--------------------------------------------------------------|
+| 0           | Message Type | 1               | **0x40** (Player Input)                                       |
+| 1           | Player ID    | 4               | Unique ID of the player sending the input (e.g., 0x00000100). |
+| 5           | Input Flags  | 1               | Flags representing the input: movement, actions, etc.         |
+
+### Example:
+| **0x40** | **0x00000100** | **0x01** | **0x00000FA0** | **0x42C80000** | **0x42960000** |
+- **0x40:** Type (Player Input).
+- **0x00000100:** Player ID (e.g., player with ID 1).
+- **0x01:** Input flags (ascii number).
+
+## 2. Start Game
+This message is sent from the client to the server when the player is ready to start a new game.
+
+| Byte Offset | Field Name   | Size (in bytes) | Description                                                   |
+|-------------|--------------|-----------------|---------------------------------------------------------------|
+| 0           | Message Type | 1               | **0x41** (Start Game)                                          |
+| 1           | Player ID    | 4               | Unique ID of the player requesting to start the game.          |
+
+### Example:
+| **0x41** | **0x00000100** | **0x01** | **0x00000FA0** |
+- **0x41:** Type (Start Game).
+- **0x00000100:** Player ID.

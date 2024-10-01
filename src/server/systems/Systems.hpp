@@ -8,7 +8,7 @@
 #ifndef SYSTEMS_HPP_
     #define SYSTEMS_HPP_
 
-    #include "../registry/Registry.hpp"
+    #include "../../shared/registry/Registry.hpp"
     #include "../../shared/components/Controllable.hpp"
     #include "../../shared/components/Drawable.hpp"
     #include "../../shared/components/Position.hpp"
@@ -19,6 +19,11 @@
     #include "../../shared/components/ShootingSpeed.hpp"
     #include "../../shared/components/Score.hpp"
     #include "../../shared/components/PlayerName.hpp"
+    #include "../../shared/components/Wave_Pattern.hpp"
+    #include "../../shared/components/StraightPattern.hpp"
+    #include "../../shared/components/Shoot.hpp"
+    #include "../../shared/components/Direction.hpp"
+    #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
     #include <iostream>
     #include <algorithm>
@@ -26,6 +31,7 @@
     #include <libconfig.h++>
     #include "../utils/Logger.hpp"
     #include <iostream>
+    #include <cmath>
     #include <chrono>
 
 class Systems {
@@ -34,8 +40,9 @@ class Systems {
          * @brief Update entity's position based on its velocity.
          *
          * @param reg The registry containing the components.
+         * @param network The class for sending data to client
          */
-        void position_system(Registry &reg, RType::Logger &logger);
+        void position_system(Registry &reg, std::unique_ptr<NetworkSender> &network, RType::Logger &logger);
 
         /**
          * @brief Update entity's velocity based on user input.
@@ -73,17 +80,25 @@ class Systems {
          * @brief Handles the shoot for the entities.
          *
          * @param reg The registry containing the components.
-         * @param entity_t playedId The id of the player.
-         * @param deltaTime The time since the last update.
-         * @param shootRequest The request to shoot.
+         * @param playerId playedId The id of the player.
+         * @param network The class for sending data to client
+         * @param logger The logger to log the events
          */
-        void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest, RType::Logger &logger);
+        void shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger);
 
         /**
          * @brief Handle the save of the score of the player.
          * @param reg
          */
         void score_system(Registry &reg);
+
+        /**
+         * @brief Update the position for a wave patten
+         *
+         * @param reg The registry containing the components.
+         * @param totalTime The count since the start.
+         */
+        void wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger);
 
         /**
          * @brief Update the health of all entities based on the damages / regeneration / healing they receive.
@@ -156,6 +171,13 @@ class Systems {
          * @return false An error occurred while writing the file
          */
         bool write_to_scores_file(libconfig::Config &cfg, const std::string &configPath);
+
+        /**
+         * @brief Update the movement for a straight ligne pattern
+         *
+         * @param reg The registry containing the components.
+         */
+        void Straight_line_pattern_system(Registry &reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */
