@@ -7,8 +7,9 @@
 
 #include "Systems.hpp"
 
-void Systems::position_system(Registry &reg)
+void Systems::position_system(Registry &reg, RType::Logger &logger)
 {
+    (void)logger;
     auto &positions = reg.get_components<Position_s>();
     auto &velocities = reg.get_components<Velocity_s>();
 
@@ -23,8 +24,9 @@ void Systems::position_system(Registry &reg)
     }
 }
 
-void Systems::control_system(Registry &reg)
+void Systems::control_system(Registry &reg, bool up, bool down, bool left, bool right, RType::Logger &logger)
 {
+    (void)logger;
     auto &velocities = reg.get_components<Velocity_s>();
     auto &controllables = reg.get_components<Controllable_s>();
 
@@ -36,24 +38,25 @@ void Systems::control_system(Registry &reg)
             vel->x = 0;
             vel->y = 0;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            if (up) {
                 vel->y = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            if (down) {
                 vel->y = 1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (left) {
                 vel->x = -1.0f;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (right) {
                 vel->x = 1.0f;
             }
         }
     }
 }
 
-void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
+void Systems::draw_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger)
 {
+    (void)logger;
     auto &positions = reg.get_components<Position_s>();
     auto &drawables = reg.get_components<Drawable_s>();
 
@@ -68,7 +71,7 @@ void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
     }
 }
 
-void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities)
+void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities, RType::Logger &logger)
 {
     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
         auto const& pos = positions[i];
@@ -118,7 +121,7 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize)
     }
 }
 
-void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest)
+void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest, RType::Logger &logger)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &types = reg.get_components<Type_s>();
@@ -143,6 +146,51 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, float deltaTime, bo
         reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
         reg.add_component<Damage_s>(projectile, Damage_s{10});
 
+        logger.log(RType::Logger::LogType::INFO, "Player %d shot a projectile", playerId);
         // send_projectile_to_clients(type, projectileId, projectileX, projectileY);
+    }
+}
+
+void Systems::health_system(Registry &reg)
+{
+    auto &healths = reg.get_components<Health_s>();
+    auto &types = reg.get_components<Type_s>();
+
+    static auto lastUpdate = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(now - lastUpdate).count();
+
+    size_t regenerationRate = 5; //load from config
+
+    if (elapsedTime >= 1) {
+        lastUpdate = now;
+
+        for (size_t i = 0; i < healths.size() && i < types.size(); ++i) {
+            auto &health = healths[i];
+            auto &type = types[i];
+            if (health && type && type->type == EntityType::PLAYER) {
+                health->health += regenerationRate;
+                if (health->health > health->maxHealth) {
+                    health->health = health->maxHealth;
+                }
+            }
+        }
+    }
+}
+
+void Systems::death_system(Registry &reg, RType::Logger &logger)
+{
+    auto &healths = reg.get_components<Health_s>();
+    auto &types = reg.get_components<Type_s>();
+
+    for (size_t i = 0; i < healths.size() && i < types.size(); ++i) {
+        auto &health = healths[i];
+        auto &type = types[i];
+
+        if (health && type && health->health <= 0) {
+            reg.kill_entity(i);
+            logger.log(RType::Logger::LogType::INFO, "Entity %d died", i);
+            // send_death to client
+        }
     }
 }

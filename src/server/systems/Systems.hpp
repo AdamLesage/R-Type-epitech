@@ -18,7 +18,9 @@
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
     #include "../../shared/components/Size.hpp"
+    #include "../utils/Logger.hpp"
     #include <iostream>
+    #include <chrono>
 
 class Systems {
     public:
@@ -27,7 +29,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void position_system(Registry &reg);
+        void position_system(Registry &reg, RType::Logger &logger);
 
         /**
          * @brief Update entity's velocity based on user input.
@@ -35,7 +37,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param window The window to get the input from.
          */
-        void control_system(Registry &reg);
+        void control_system(Registry &reg, bool up, bool down, bool left, bool right, RType::Logger &logger);
 
         /**
          * @brief Draw all entities with a position and a drawable component.
@@ -43,7 +45,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param window The window to draw the entities on.
          */
-        void draw_system(Registry &reg, sf::RenderWindow &window);
+        void draw_system(Registry &reg, sf::RenderWindow &window, RType::Logger &logger);
 
         /**
          * @brief Log the position and velocity of all entities.
@@ -52,24 +54,38 @@ class Systems {
          * @param positions The sparse array containing the positions.
          * @param velocities The sparse array containing the velocities.
          */
-        void logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities);
+        void logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities, RType::Logger &logger);
 
         /**
-         * @brief Update the position of all entities based on their velocity.
+         * @briefHandle the collisions between entities.
          *
          * @param reg The registry containing the components.
          */
-        void collision_system(Registry &reg, std::pair<size_t, size_t> MapSize);
+        void collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, RType::Logger &logger);
 
         /**
-         * @brief Update the position of all entities based on their velocity.
+         * @brief Handles the shoot for the entities.
          *
          * @param reg The registry containing the components.
          * @param entity_t playedId The id of the player.
          * @param deltaTime The time since the last update.
          * @param shootRequest The request to shoot.
          */
-        void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest);
+        void shoot_system(Registry &reg, entity_t playerId, float deltaTime, bool shootRequest, RType::Logger &logger);
+  
+        /**
+         * @brief Update the health of all entities based on the damages / regeneration / healing they receive.
+         *
+         * @param reg The registry containing the components.
+         */
+        void health_system(Registry &reg);
+
+        /**
+         * @brief Handle the death of entities
+         *
+         * @param reg The registry containing the components.
+         */
+        void death_system(Registry &reg, RType::Logger &logger);
 
     private:
         /**
