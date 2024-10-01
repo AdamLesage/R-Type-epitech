@@ -59,6 +59,12 @@ class GameLogique {
          * 
         */
         void spawnEnnemy(char type, float position_x, float position_y);
+        /**
+         * @brief handle the Inpute of the client
+         * 
+         * @param message the message send by the client 
+         * 
+        */
         void handleClientInput(std::pair<std::string, uint32_t> message);
 };
 #endif /* !GAMELOGIQUE_HPP_ */
