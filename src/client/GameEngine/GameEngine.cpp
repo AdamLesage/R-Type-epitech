@@ -46,10 +46,16 @@ void RType::GameEngine::run()
         _systems.collision_system(_registry, _window);
 
         _window.clear();
+        // this->send("updateData");
         _systems.draw_system(_registry, _window);
         _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         _window.display();
     }
+}
+
+void RType::GameEngine::send(const std::string &message)
+{
+    _mediator->notify("GameEngine", message);
 }
 
 extern "C" RType::GameEngine *entryPointGameEngine()
