@@ -82,7 +82,7 @@ set(SRC_SERVER
     src/server/main_server.cpp # temp main waiting for the real one because current main should be client main
     src/server/network/Server.cpp
     src/shared/entities/Entity.cpp
-    src/server/registry/Registry.cpp
+    src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
 )
 

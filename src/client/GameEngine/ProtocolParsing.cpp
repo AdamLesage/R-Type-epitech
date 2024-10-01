@@ -54,7 +54,7 @@ bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, co
         return false;
 
     // Compare message size with the expected size in the protocol config file
-    if (strlen(message) != std::stoi(_cfg.lookup(_messageTypeMap[messageType].second)["total_size"]))
+    if (static_cast<int>(strlen(message)) != std::stoi(_cfg.lookup(_messageTypeMap[messageType].second)["total_size"]))
         return false;
     return true;
 }
@@ -68,9 +68,32 @@ bool RType::ProtocolParsing::parsePlayerCreation(const char *message)
     float posX;
     float posY;
 
-    std::memcpy(&playerId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
+    try {
+        std::memcpy(&playerId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the player creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"player"});
+        _registry.add_component<Controllable>(entity, Controllable{true, false, false, false, false});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Health>(entity, Health{100, true});
+        _registry.add_component<Shoot>(entity, Shoot{true});
+        _registry.add_component<ShootingSpeed>(entity, ShootingSpeed{0.5});
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Level>(entity, Level{1});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while creating the player" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -85,10 +108,28 @@ bool RType::ProtocolParsing::parseProjectileCreation(const char *message)
     float posY;
     unsigned int parentId;
 
-    std::memcpy(&projectileId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
-    std::memcpy(&parentId, &message[13], sizeof(unsigned int));
+    try {
+        std::memcpy(&projectileId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+        std::memcpy(&parentId, &message[13], sizeof(unsigned int));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the projectile creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"projectile"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while creating the projectile" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -102,9 +143,29 @@ bool RType::ProtocolParsing::parseEnemyCreation(const char *message)
     float posX;
     float posY;
 
-    std::memcpy(&enemyId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
+    try {
+        std::memcpy(&enemyId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the enemy creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"enemy"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Health>(entity, Health{100, true});
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Level>(entity, Level{1});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while creating the enemy" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -118,9 +179,26 @@ bool RType::ProtocolParsing::parseBonusCreation(const char *message)
     float posX;
     float posY;
 
-    std::memcpy(&bonusId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
+    try {
+        std::memcpy(&bonusId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -136,11 +214,29 @@ bool RType::ProtocolParsing::parseWallCreation(const char *message)
     float width;
     float height;
 
-    std::memcpy(&wallId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
-    std::memcpy(&width, &message[13], sizeof(float));
-    std::memcpy(&height, &message[17], sizeof(float));
+    try {
+        std::memcpy(&wallId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+        std::memcpy(&width, &message[13], sizeof(float));
+        std::memcpy(&height, &message[17], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the wall creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"wall"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Health>(entity, Health{100, true}); // We can destroy the wall with a projectile
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while creating the wall" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -156,11 +252,28 @@ bool RType::ProtocolParsing::parseRewardCreation(const char *message)
     float width;
     float height;
 
-    std::memcpy(&rewardId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
-    std::memcpy(&width, &message[13], sizeof(float));
-    std::memcpy(&height, &message[17], sizeof(float));
+    try {
+        std::memcpy(&rewardId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+        std::memcpy(&width, &message[13], sizeof(float));
+        std::memcpy(&height, &message[17], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the reward creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"reward"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while creating the reward" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -172,7 +285,23 @@ bool RType::ProtocolParsing::parseEntityDeletion(const char *message)
 
     unsigned int entityId;
 
-    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+    try {
+        std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the entity deletion message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.entity_from_index(entityId);
+        _registry.kill_entity(entity);
+    } catch (const std::out_of_range &e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while deleting the entity" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -186,9 +315,35 @@ bool RType::ProtocolParsing::parsePositionUpdate(const char *message)
     float posX;
     float posY;
 
-    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
+    try {
+        std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the position update message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.entity_from_index(entityId);
+
+        // Check if the entity has a position component
+        auto optionalPositionComponent = _registry.get_components<Position>()[entity];
+        if (optionalPositionComponent.has_value() == false) { // If the entity doesn't have a position component, add it
+            _registry.add_component<Position>(entity, Position{posX, posY});
+            return true;
+        }
+
+        // Remove the old position component and add the new one to update the position
+        _registry.remove_component<Position>(entity);
+        _registry.add_component<Position>(entity, Position{posX, posY});
+    } catch (const std::out_of_range &e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while updating the position" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -201,8 +356,34 @@ bool RType::ProtocolParsing::parseHealthUpdate(const char *message)
     unsigned int entityId;
     unsigned int health;
 
-    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
-    std::memcpy(&health, &message[5], sizeof(unsigned int));
+    try {
+        std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+        std::memcpy(&health, &message[5], sizeof(unsigned int));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the health update message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.entity_from_index(entityId);
+        auto optionalHealthComponent = _registry.get_components<Health>()[entity];
+
+        // Check if the entity has a health component
+        if (optionalHealthComponent.has_value()) {
+            Health &healthComponent = optionalHealthComponent.value();
+            // Remove the old health component and add the new one to update the health
+            _registry.remove_component<Health>(entity);
+            _registry.add_component<Health>(entity, Health{health, healthComponent.isDamageable});
+        } else {
+            _registry.add_component<Health>(entity, Health{health, true});
+        }
+    } catch (const std::out_of_range &e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while updating the health" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -216,9 +397,14 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const char *message)
     float directionX;
     float directionY;
 
-    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
-    std::memcpy(&directionX, &message[5], sizeof(float));
-    std::memcpy(&directionY, &message[9], sizeof(float));
+    try {
+        std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+        std::memcpy(&directionX, &message[5], sizeof(float));
+        std::memcpy(&directionY, &message[9], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the direction update message" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -231,8 +417,15 @@ bool RType::ProtocolParsing::parseObjectCollection(const char *message)
     unsigned int playerId;
     unsigned int objectId;
 
-    std::memcpy(&playerId, &message[1], sizeof(unsigned int));
-    std::memcpy(&objectId, &message[5], sizeof(unsigned int));
+    try {
+        std::memcpy(&playerId, &message[1], sizeof(unsigned int));
+        std::memcpy(&objectId, &message[5], sizeof(unsigned int));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the object collection message" << std::endl;
+        return false;
+    }
+
+    // Need to implement a way to know if the object is collected by the player
 
     return true;
 }
@@ -246,9 +439,16 @@ bool RType::ProtocolParsing::parseProjectileFiring(const char *message)
     float posX;
     float posY;
 
-    std::memcpy(&shooterId, &message[1], sizeof(unsigned int));
-    std::memcpy(&posX, &message[5], sizeof(float));
-    std::memcpy(&posY, &message[9], sizeof(float));
+    try {
+        std::memcpy(&shooterId, &message[1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[5], sizeof(float));
+        std::memcpy(&posY, &message[9], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the projectile firing message" << std::endl;
+        return false;
+    }
+
+    // Need to implement a mediator notification to the RenderEngine to create an animation for the projectile firing
 
     return true;
 }
@@ -261,8 +461,15 @@ bool RType::ProtocolParsing::parseProjectileCollision(const char *message)
     unsigned int projectileId;
     unsigned int entityId;
 
-    std::memcpy(&projectileId, &message[1], sizeof(unsigned int));
-    std::memcpy(&entityId, &message[5], sizeof(unsigned int));
+    try {
+        std::memcpy(&projectileId, &message[1], sizeof(unsigned int));
+        std::memcpy(&entityId, &message[5], sizeof(unsigned int));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the projectile collision message" << std::endl;
+        return false;
+    }
+
+    // Need to implement the method to remove health point and destroy the projectile
 
     return true;
 }
@@ -275,8 +482,15 @@ bool RType::ProtocolParsing::parseScoreUpdate(const char *message)
     unsigned int playerId;
     float score;
 
-    std::memcpy(&playerId, &message[1], sizeof(unsigned int));
-    std::memcpy(&score, &message[5], sizeof(float));
+    try {
+        std::memcpy(&playerId, &message[1], sizeof(unsigned int));
+        std::memcpy(&score, &message[5], sizeof(float));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the score update message" << std::endl;
+        return false;
+    }
+
+    // Need to implement the method to update the player score
 
     return true;
 }
@@ -289,8 +503,15 @@ bool RType::ProtocolParsing::parseStateChange(const char *message)
     unsigned int entityId;
     char state; // 1 byte state
 
-    std::memcpy(&entityId, &message[1], sizeof(unsigned int));
-    std::memcpy(&state, &message[5], sizeof(char));
+    try {
+        std::memcpy(&entityId, &message[1], sizeof(unsigned int));
+        std::memcpy(&state, &message[5], sizeof(char));
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while parsing the state change message" << std::endl;
+        return false;
+    }
+
+    // Need to create a component state to update the entity state
 
     return true;
 }

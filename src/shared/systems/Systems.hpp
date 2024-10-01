@@ -12,7 +12,6 @@
     #include "../components/Camera.hpp"
     #include "../components/Charging.hpp"
     #include "../components/Color.hpp"
-    #include "../components/Control.hpp"
     #include "../components/Controllable.hpp"
     #include "../components/Damage.hpp"
     #include "../components/Drawable.hpp"

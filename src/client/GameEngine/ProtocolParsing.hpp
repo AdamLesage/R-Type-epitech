@@ -15,6 +15,8 @@
 #include <utility>
 #include <cstring>
 #include "../../shared/registry/Registry.hpp"
+#include "../../shared/entities/Entity.hpp"
+#include "../../shared/systems/Systems.hpp"
 
 
 namespace RType {

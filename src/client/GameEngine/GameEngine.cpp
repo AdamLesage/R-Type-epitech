@@ -13,7 +13,6 @@ RType::GameEngine::GameEngine()
     _registry.register_component<Camera_s>();
     _registry.register_component<Charging_s>();
     _registry.register_component<Color_s>();
-    _registry.register_component<Control_s>();
     _registry.register_component<Controllable_s>();
     _registry.register_component<Damage_s>();
     _registry.register_component<Drawable_s>();
