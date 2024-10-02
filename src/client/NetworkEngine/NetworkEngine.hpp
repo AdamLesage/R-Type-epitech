@@ -11,6 +11,7 @@
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
 #include "Client.hpp"
+#include "targetver.h"
 
 namespace RType {
     class NetworkEngine : public AEngine {
