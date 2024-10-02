@@ -8,7 +8,6 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
-#include <mutex>
 
 #include "NetworkEngine/NetworkEngine.hpp"
 #include "RenderEngine/RenderingEngine.hpp"
@@ -109,7 +108,8 @@ int main(int ac, char **av)
         // Cannot use shared or unique pointer because it segfaults
         RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
-        runEngines(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
+        gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
+        gameEngine->run();
     } catch (const RType::DLError &e) {
         std::cerr << e.what() << std::endl;
         return (84);

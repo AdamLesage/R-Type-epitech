@@ -38,8 +38,63 @@ RType::GameEngine::~GameEngine()
 {
 }
 
+
+void RType::GameEngine::setEngines(std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine, std::shared_ptr<PhysicEngine> physicEngine, std::shared_ptr<AudioEngine> audioEngine)
+{
+    _networkEngine = networkEngine;
+    _renderingEngine = renderingEngine;
+    _physicEngine = physicEngine;
+    _audioEngine = audioEngine;
+}
+
 void RType::GameEngine::run()
 {
+    auto& networkEngine = _networkEngine;
+    auto& renderingEngine = _renderingEngine;
+    auto& physicEngine = _physicEngine;
+    auto& audioEngine = _audioEngine;
+
+    std::thread networkThread([&]() {
+        std::lock_guard<std::mutex> lock(_mutex);
+        try {
+            networkEngine->run();
+        } catch (const std::exception& e) {
+            std::cerr << "Error running network engine: " << e.what() << std::endl;
+        }
+    });
+
+    std::thread renderingThread([&]() {
+        std::lock_guard<std::mutex> lock(_mutex);
+        try {
+            renderingEngine->run();
+        } catch (const std::exception& e) {
+            std::cerr << "Error running render engine: " << e.what() << std::endl;
+        }
+    });
+
+    std::thread physicThread([&]() {
+        std::lock_guard<std::mutex> lock(_mutex);
+        try {
+            physicEngine->run();
+        } catch (const std::exception& e) {
+            std::cerr << "Error running render engine: " << e.what() << std::endl;
+        }
+    });
+
+    std::thread audioThread([&]() {
+        std::lock_guard<std::mutex> lock(_mutex);
+        try {
+            audioEngine->run();
+        } catch (const std::exception& e) {
+            std::cerr << "Error running audio engine: " << e.what() << std::endl;
+        }
+    });
+
+    // Wait for all threads to finish
+    networkThread.join();
+    renderingThread.join();
+    physicThread.join();
+    audioThread.join();
 }
 
 void RType::GameEngine::send(const std::string &message)
