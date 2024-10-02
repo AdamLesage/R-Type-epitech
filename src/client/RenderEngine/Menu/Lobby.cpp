@@ -43,11 +43,12 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
     if (!backgroundTexture.loadFromFile("src/client/asset/background/menu.jpg")) {
         throw std::runtime_error("Error loading background texture");
     }
-    background.setTexture(backgroundTexture);
-
     if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
         throw std::runtime_error("Error loading logo texture");
     }
+    background.setTexture(&backgroundTexture);
+    background.setPosition(0, 0);
+    background.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(window->getSize().x / 2.0f - logoTexture.getSize().x / 2.0f, 50);
     if (!selectBuffer.loadFromFile("src/client/asset/Sounds/selectsound.wav")) {

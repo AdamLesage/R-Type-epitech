@@ -64,7 +64,7 @@ namespace RType
         sf::Sound backgroundMusic;
         sf::SoundBuffer backgroundBuffer;
         sf::Texture backgroundTexture;
-        sf::Sprite background;
+        sf::RectangleShape background;
         sf::Texture logoTexture;
         sf::Sprite logoSprite;
         sf::Text menuOptions[3]; // Play, Settings, Quit
