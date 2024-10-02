@@ -48,6 +48,7 @@ namespace RType {
         sf::Font font;
         int currentFrame;
         float frameDuration;
+        sf::Clock BackgroundClock;
         bool animationComplete;
         /**
          * @brief Handles the events of the game.

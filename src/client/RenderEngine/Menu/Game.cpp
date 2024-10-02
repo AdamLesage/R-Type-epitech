@@ -24,11 +24,11 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
         throw std::runtime_error("Error loading backgroundTexture 1");
     }
 
-    if (!backgroundTextures[1].loadFromFile("src/client/asset/background/planet.png")) {
+    if (!backgroundTextures[1].loadFromFile("src/client/asset/background/stars.png")) {
         throw std::runtime_error("Error loading backgroundTexture 2");
     }
 
-    if (!backgroundTextures[2].loadFromFile("src/client/asset/background/stars.png")) {
+    if (!backgroundTextures[2].loadFromFile("src/client/asset/background/planet.png")) {
         throw std::runtime_error("Error loading backgroundTexture 3");
     }
 
@@ -37,6 +37,10 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
         backgrounds[i].setTexture(&backgroundTextures[i]);
         backgrounds[i].setPosition(sf::Vector2f(0, 0));
     }
+    backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
+    backgrounds[3].setTexture(&backgroundTextures[1]);
+    backgrounds[3].setPosition(sf::Vector2f(1920, 0));
+    backgrounds[1].setFillColor(sf::Color(255, 255, 255, 128)); // Set half transparency
     for (int i = 0; i < 5; i++) {
         players.push_back(sf::RectangleShape(sf::Vector2f(131.5, 58.f)));
         playerTextures.push_back(sf::Texture());
@@ -54,6 +58,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
     _registry.register_component<Velocity_s>();
     _registry.register_component<Drawable_s>();
     _registry.register_component<Controllable_s>();
+    BackgroundClock.restart();
 }
 
 RType::Game::~Game()
@@ -102,16 +107,23 @@ void RType::Game::play()
         _systems.collision_system(_registry, *window.get());
 
         window->clear();
-        for (int i = 0; i < 3; i++) {
+        if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
+            backgrounds[1].move(-2.f, 0.f);
+            backgrounds[3].move(-2.f, 0.f);
+            backgrounds[2].move(-1.f, 0.f);
+            BackgroundClock.restart();
+        }
+        if (backgrounds[1].getPosition().x < -1920)
+            backgrounds[1].setPosition(1920, 0);
+        if (backgrounds[2].getPosition().x < -1920)
+            backgrounds[2].setPosition(1920, 0);
+        if (backgrounds[3].getPosition().x < -1920)
+            backgrounds[3].setPosition(1920, 0);
+        for (int i = 0; i < 4; i++) {
             window->draw(backgrounds[i]);
         }
         _systems.draw_system(_registry, *window.get());
         _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
-        window->draw(players[0]);
-        window->draw(players[1]);
-        window->draw(players[2]);
-        window->draw(players[3]);
-        window->draw(players[4]);
         window->display();
     }
 }
