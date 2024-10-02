@@ -34,16 +34,14 @@ jobs:
     - name: Set up for Linux
       if: runner.os == 'Linux'
       run: |
-        chmod +x start_project.sh
-        ./start_project.sh
+        make
       timeout-minutes: 1
     # Windows os
     - name: Set up for Windows
       if: runner.os == 'Windows'
       run: |
         git config --global core.autocrlf false
-        chmod +x start_project.sh
-        ./start_project.sh
+        make
       timeout-minutes: 1
 
   push_to_mirror:
