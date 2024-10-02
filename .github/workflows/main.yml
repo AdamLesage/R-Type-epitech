@@ -1,52 +1,45 @@
 name: Github Actions Zappy
+
 on:
   pull_request:
     branches-ignore:
       - "ga-ignore-*"
 
 jobs:
-  build_cross_platform:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+  setup_dependencies:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install Dependencies on Linux
-      if: runner.os == 'Linux'
-      run: sudo apt-get update && sudo apt-get install -y build-essential
-    - name: Install Dependencies on Windows
-      if: runner.os == 'Windows'
-      run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+    - name: Install VCPKG and dependencies
+      run: |
+        git clone https://github.com/microsoft/vcpkg.git
+        ./vcpkg/bootstrap-vcpkg.sh
+        ./vcpkg/vcpkg install sfml boost libconfig
 
-  check_compilation:
-    needs:
-      - build_cross_platform
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+  build_project:
+    needs: setup_dependencies
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    # Linux os
-    - name: Set up for Linux
-      if: runner.os == 'Linux'
+    - name: Build the project
       run: |
-        make
-      timeout-minutes: 1
-    # Windows os
-    - name: Set up for Windows
-      if: runner.os == 'Windows'
+        cmake -Bbuild -S. -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake --build build
+    - name: Check if executables exist
       run: |
-        git config --global core.autocrlf false
-        make
-      timeout-minutes: 1
+        if [ ! -f build/my_project_executable ]; then
+          echo "Executable not found!"
+          exit 1
+        fi
+        if [ ! -f build/my_project_server_executable ]; then
+          echo "Server executable not found!"
+          exit 1
+        fi
 
   push_to_mirror:
-    needs:
-      - check_compilation
+    needs: build_project
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
