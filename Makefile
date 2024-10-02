@@ -31,7 +31,7 @@ re: fclean all
 release:
 	@echo "$(RUNNING) Starting project build (release mode)"
 	@mkdir -p release/build
-	@cd release/build && cmake .. && make
+	@cd release/build && cmake -DCMAKE_TOOLCHAIN_FILE=$(VCPKG_ROOT)/scripts/buildsystems/vcpkg.cmake .. && make
 	@cp release/build/r-type_server release/build/r-type_client ./
 	@cp release/build/libNetworkEngine.so release/build/libGameEngine.so release/build/libRenderingEngine.so release/build/libPhysicEngine.so release/build/libAudioEngine.so lib/
 	@echo "$(SUCCESS) Project compiled successfully (release mode)"
