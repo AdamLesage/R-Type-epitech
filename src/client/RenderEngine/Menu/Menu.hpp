@@ -23,7 +23,7 @@ namespace RType {
          *
          * @param _window The window to display the menu on.
          */
-        Menu();
+        Menu(std::shared_ptr<sf::RenderWindow> wdw);
 
         /**
          * @brief Destroy the Menu object.
@@ -51,7 +51,7 @@ namespace RType {
         /**
          * @brief Displays the menu.
          */
-        void displayMenu();
+        int displayMenu();
 
     private:
         int selectedOption;

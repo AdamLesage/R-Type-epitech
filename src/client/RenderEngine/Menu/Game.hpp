@@ -6,6 +6,7 @@
 #include "../../../shared/entities/Entity.hpp"
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
+#include "Settings.hpp"
 
 namespace RType {
     class Game {
@@ -47,6 +48,7 @@ namespace RType {
         sf::Font font;
         int currentFrame;
         float frameDuration;
+        sf::Clock BackgroundClock;
         bool animationComplete;
         /**
          * @brief Handles the events of the game.
@@ -66,9 +68,10 @@ namespace RType {
         bool loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite);
         Registry _registry;
         Systems _systems;
+        std::shared_ptr<Settings> settings;
         std::vector<sf::RectangleShape> backgrounds;
         std::vector<sf::Texture> backgroundTextures;
-        sf::RectangleShape player;
+        std::vector<sf::RectangleShape> players;
         std::vector<sf::Texture> playerTextures;
     };
 }

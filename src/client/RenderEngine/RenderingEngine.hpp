@@ -11,6 +11,8 @@
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
 #include "Menu/Menu.hpp"
+#include "Menu/Game.hpp"
+#include "Menu/Settings.hpp"
 
 namespace RType {
     class RenderingEngine : public AEngine {
@@ -25,6 +27,9 @@ namespace RType {
         protected:
         private:
             std::unique_ptr<Menu> _menu;
+            std::shared_ptr<sf::RenderWindow> window;
+            std::shared_ptr<Game> games;
+            std::shared_ptr<Settings> settings;
     };
 }
 

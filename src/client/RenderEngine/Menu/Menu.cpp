@@ -7,10 +7,9 @@
 
 #include "Menu.hpp"
 
-RType::Menu::Menu()
+RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw)
 {
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
-
+    window = wndw;
     if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
@@ -88,55 +87,41 @@ int RType::Menu::getSelectedOption() const
     return selectedOption;
 }
 
-void RType::Menu::displayMenu()
+int RType::Menu::displayMenu()
 {
-
-    window->setFramerateLimit(60);
-    window->clear();
-    while (window->isOpen()) {
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window->close();
-            }
-
-            if (event.type == sf::Event::KeyPressed) {
-                switch (event.key.code) {
-                case sf::Keyboard::Up:
-                    moveUp();
-                    break;
-
-                case sf::Keyboard::Down:
-                    moveDown();
-                    break;
-
-                case sf::Keyboard::Enter:
-                    switch (getSelectedOption()) {
-                    case 0:
-                        std::cout << "Lobby" << std::endl;
-                        //  games->displayGame();
-                        lobby->displayLobby();
-                        break;
-                    case 1:
-                         settings->displaySettings();
-                        break;
-                    case 2:
-                        std::cout << "Quit" << std::endl;
-                        window->close();
-                        break;
-                    }
-                    break;
-
-                default:
-                    break;
-                }
-            }
+    sf::Event event;
+    while (window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window->close();
         }
 
-        window->clear();
-        draw();
-        window->display();
+        if (event.type == sf::Event::KeyPressed) {
+            switch (event.key.code) {
+            case sf::Keyboard::Up:
+                moveUp();
+                break;
+
+            case sf::Keyboard::Down:
+                moveDown();
+                break;
+
+            case sf::Keyboard::Enter:
+                switch (getSelectedOption()) {
+                case 0:
+                    return (1);
+                case 1:
+                    return (2);
+                case 2:
+                    return (3);
+                }
+                break;
+            default:
+                break;
+            }
+        }
     }
+    draw();
+    return (0);
 }
 
 // int main()
