@@ -78,7 +78,7 @@ class Systems {
          * @param network The class for sending data to client
          */
         void shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger);
-    
+
         /**
          * @brief Update the position for a wave patten
          *
