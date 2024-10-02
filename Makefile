@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-.PHONY: all clean fclean re tests_run
+.PHONY: all clean fclean re tests_run release
 
 # Colors
 GREEN = \033[1;32m
@@ -18,20 +18,27 @@ RUNNING = [$(YELLOW)~$(RESET)]
 SUCCESS = [$(GREEN)✔$(RESET)]
 FAILURE = [$(RED)✘$(RESET)]
 
-# Targets
 all:
 	@echo "$(RUNNING) Starting project build"
 	@mkdir -p build
 	@cd build && cmake .. && make
-	@cp build/r-type_server build/r-type_client .
+	@cp build/r-type_server build/r-type_client ./
 	@cp build/libNetworkEngine.so build/libGameEngine.so build/libRenderingEngine.so build/libPhysicEngine.so build/libAudioEngine.so lib/
 	@echo "$(SUCCESS) Project compiled successfully"
 
-rebuild: fclean all
+re: fclean all
+
+release:
+	@echo "$(RUNNING) Starting project build (release mode)"
+	@mkdir -p release/build
+	@cd release/build && cmake .. && make
+	@cp release/build/r-type_server release/build/r-type_client ./
+	@cp release/build/libNetworkEngine.so release/build/libGameEngine.so release/build/libRenderingEngine.so release/build/libPhysicEngine.so release/build/libAudioEngine.so lib/
+	@echo "$(SUCCESS) Project compiled successfully (release mode)"
 
 clean:
 	@echo "$(RUNNING) Cleaning build directory"
-	@rm -rf build
+	@rm -rf build release/build
 	@echo "$(SUCCESS) Cleaned successfully"
 
 fclean: clean
