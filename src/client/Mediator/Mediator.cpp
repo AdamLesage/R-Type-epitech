@@ -16,11 +16,11 @@ RType::Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_pt
     this->_physicEngine = physicEngine;
     this->_audioEngine = audioEngine;
 
-    this->_gameEngine->setMediator(std::shared_ptr<IMediator>(this));
-    this->_networkEngine->setMediator(std::shared_ptr<IMediator>(this));
-    this->_renderingEngine->setMediator(std::shared_ptr<IMediator>(this));
-    this->_physicEngine->setMediator(std::shared_ptr<IMediator>(this));
-    this->_audioEngine->setMediator(std::shared_ptr<IMediator>(this));
+    // this->_gameEngine->setMediator(std::shared_ptr<IMediator>(this));
+    // this->_networkEngine->setMediator(std::shared_ptr<IMediator>(this));
+    // this->_renderingEngine->setMediator(std::shared_ptr<IMediator>(this));
+    // this->_physicEngine->setMediator(std::shared_ptr<IMediator>(this));
+    // this->_audioEngine->setMediator(std::shared_ptr<IMediator>(this));
 }
 
 RType::Mediator::~Mediator()
