@@ -36,6 +36,8 @@ namespace RType {
             */
             void setMediator(std::shared_ptr<IMediator> mediator) override ;
 
+            void setParams(std::string host, unsigned short server_port, unsigned short local_port);
+
         protected:
             std::unique_ptr<NetworkLib::IClient> _client;
         private:

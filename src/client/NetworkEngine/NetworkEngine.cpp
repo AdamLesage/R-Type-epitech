@@ -23,6 +23,9 @@ RType::NetworkEngine::~NetworkEngine()
 
 void RType::NetworkEngine::run()
 {
+    while (true) {
+        this->updateData();
+    }
 }
 
 void RType::NetworkEngine::updateData()
@@ -42,6 +45,11 @@ void RType::NetworkEngine::updateData()
 void RType::NetworkEngine::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
+}
+
+void RType::NetworkEngine::setParams(std::string host, unsigned short server_port, unsigned short local_port)
+{
+    _client = std::make_unique<NetworkLib::Client>(host, server_port, local_port);
 }
 
 extern "C" RType::NetworkEngine *entryPointNetworkEngine()

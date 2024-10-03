@@ -56,10 +56,11 @@ add_library(AudioEngine SHARED
 )
 
 target_link_libraries(GameEngine
-    NetworkEngine
-    PhysicEngine
-    AudioEngine
-    RenderingEngine
+    -lconfig++
+    ${Boost_LIBRARIES}
+)
+
+target_link_libraries(NetworkEngine
     -lconfig++
     ${Boost_LIBRARIES}
 )
