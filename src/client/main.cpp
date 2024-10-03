@@ -124,7 +124,7 @@ int main(int ac, char **av)
         // // Handle the case where not all engines are loaded
         RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
-        // runEngines(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
+        runEngines(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
     } catch (const RType::DLError &e) {
         std::cerr << e.what() << std::endl;

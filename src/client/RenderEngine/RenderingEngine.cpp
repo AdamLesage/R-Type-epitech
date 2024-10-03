@@ -21,6 +21,11 @@ void RType::RenderingEngine::run()
     _menu->displayMenu();
 }
 
+void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
+}
+
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()
 {
     return (new RType::RenderingEngine());

@@ -22,6 +22,13 @@ namespace RType {
              * @brief Run current instance of the engine.
              */
             void run() override;
+
+            /**
+             * @brief Set the mediator of the engine.
+             * 
+             * @param mediator The mediator to set.
+            */
+            void setMediator(std::shared_ptr<IMediator> mediator) override;
         protected:
         private:
             std::unique_ptr<Menu> _menu;

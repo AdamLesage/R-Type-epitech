@@ -40,6 +40,13 @@ namespace RType {
              * @param message The message received from the server. Need to be parsed.
             */
             void handleServerData(std::string &message);
+
+            /**
+             * @brief Set the mediator of the engine.
+             * 
+             * @param mediator The mediator to set.
+            */
+            void setMediator(std::shared_ptr<IMediator> mediator) override;
         protected:
         private:
             Registry _registry;

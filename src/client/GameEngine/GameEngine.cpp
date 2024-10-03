@@ -54,6 +54,11 @@ void RType::GameEngine::handleServerData(std::string &message)
     _protocolParsing->parseData(message.c_str());
 }
 
+void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
+}
+
 extern "C" RType::GameEngine *entryPointGameEngine()
 {
     return (new RType::GameEngine());
