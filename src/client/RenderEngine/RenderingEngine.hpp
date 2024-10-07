@@ -10,10 +10,10 @@
 
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
-#include "RenderMediator.hpp"
 #include "Menu/Menu.hpp"
 
 namespace RType {
+    class RenderMediator;
     class RenderingEngine : public AEngine {
         public:
             RenderingEngine();

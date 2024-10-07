@@ -75,6 +75,7 @@ add_library(RenderingEngine SHARED
     src/shared/systems/Systems.cpp
     src/client/AEngine.cpp
     src/client/RenderEngine/RenderMediator.cpp
+    src/client/Mediator/Mediator.cpp
 )
 
 target_link_libraries(RenderingEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})

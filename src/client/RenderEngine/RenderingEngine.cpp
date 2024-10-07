@@ -12,7 +12,7 @@ RType::RenderingEngine::RenderingEngine()
     std::cout << "Rendering Engine created" << std::endl;
     _menu = std::make_shared<Menu>();
     std::cout << "Menu created" << std::endl;
-    _renderMediator = std::make_shared<RenderMediator>(_menu, nullptr);
+    _renderMediator = std::make_shared<RenderMediator>(_menu, this);
     std::cout << "RenderMediator created" << std::endl;
 }
 

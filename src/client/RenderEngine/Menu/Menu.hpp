@@ -60,7 +60,7 @@ namespace RType {
          *
          * @param mediator The mediator to set.
          */
-        void setMediator(std::shared_ptr<RenderMediator> mediator);
+        void setMediator(RType::RenderMediator *mediator);
 
     private:
         int selectedOption;
@@ -75,7 +75,7 @@ namespace RType {
         sf::Texture backgroundTexture;
         std::shared_ptr<Settings> settings;
         std::shared_ptr<Game> games;
-        std::shared_ptr<RenderMediator> _mediator;
+        RType::RenderMediator *_renderMediator;
     };
 }
 
