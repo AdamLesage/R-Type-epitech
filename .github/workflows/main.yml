@@ -46,6 +46,7 @@ jobs:
           fetch-depth: 0
       - name: Setup Release Mode
         run: |
+          sudo apt-get update && sudo apt-get install -y expect
           mkdir -p ~/workflow/R-Type-epitech
           cp -r . ~/workflow/R-Type-epitech
           cp release/linux_installer.sh ~/workflow/linux_installer.sh
@@ -62,7 +63,7 @@ jobs:
         run: |
           ls ~/workflow/R-Type-epitech/r-type_client
           ls ~/workflow/R-Type-epitech/r-type_server
-        timeout-minutes: 5
+        timeout-minutes: 15
 
   create_linux_release:
     needs:
