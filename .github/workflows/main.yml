@@ -1,9 +1,10 @@
 name: Github Actions R-Type
 
 on:
-  release:
-    types: [published, prereleased]
   pull_request:
+    branches:
+      - main
+  push:
     branches:
       - main
 
@@ -88,7 +89,7 @@ jobs:
         timeout-minutes: 15
 
   create_linux_release:
-    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
