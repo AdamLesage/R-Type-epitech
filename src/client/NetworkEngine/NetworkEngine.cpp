@@ -23,7 +23,8 @@ RType::NetworkEngine::~NetworkEngine()
 
 void RType::NetworkEngine::run()
 {
-    while (true) {
+    while (1) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Add a small delay to avoid blocking the loop
         this->updateData();
     }
 }

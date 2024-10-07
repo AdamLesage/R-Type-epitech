@@ -10,6 +10,7 @@
 
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
+#include "RenderMediator.hpp"
 #include "Menu/Menu.hpp"
 
 namespace RType {
@@ -32,6 +33,7 @@ namespace RType {
         protected:
         private:
             std::unique_ptr<Menu> _menu;
+            std::unique_ptr<RenderMediator> _renderMediator;
     };
 }
 

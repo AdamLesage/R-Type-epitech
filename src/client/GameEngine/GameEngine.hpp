@@ -10,10 +10,15 @@
 
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
+#include "../NetworkEngine/NetworkEngine.hpp"
+#include "../RenderEngine/RenderingEngine.hpp"
+#include "../PhysicEngine/PhysicEngine.hpp"
+#include "../AudioEngine/AudioEngine.hpp"
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/systems/Systems.hpp"
 #include "ProtocolParsing.hpp"
+#include <mutex>
 
 namespace RType {
     class GameEngine : public AEngine {
@@ -42,6 +47,16 @@ namespace RType {
             void handleServerData(std::string &message);
 
             /**
+             * @brief Set the engines for the game engine.
+             * 
+             * @param networkEngine The network engine.
+             * @param renderingEngine The rendering engine.
+             * @param physicEngine The physic engine.
+             * @param audioEngine The audio engine.
+            */
+            void setEngines(std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine, std::shared_ptr<PhysicEngine> physicEngine, std::shared_ptr<AudioEngine> audioEngine);
+
+            /**
              * @brief Set the mediator of the engine.
              * 
              * @param mediator The mediator to set.
@@ -52,6 +67,11 @@ namespace RType {
             Registry _registry;
             Systems _systems;
             std::unique_ptr<RType::ProtocolParsing> _protocolParsing;
+            std::shared_ptr<NetworkEngine> _networkEngine;
+            std::shared_ptr<RenderingEngine> _renderingEngine;
+            std::shared_ptr<PhysicEngine> _physicEngine;
+            std::shared_ptr<AudioEngine> _audioEngine;
+            std::mutex _mutex;
     };
 }
 

@@ -10,6 +10,7 @@
 RType::RenderingEngine::RenderingEngine()
 {
     _menu = std::make_unique<Menu>();
+    _renderMediator = std::make_unique<RenderMediator>(_menu, std::shared_ptr<RenderingEngine>(this));
 }
 
 RType::RenderingEngine::~RenderingEngine()

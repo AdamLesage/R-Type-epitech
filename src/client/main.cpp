@@ -17,6 +17,13 @@
 #include "Mediator/Mediator.hpp"
 #include "DLloader.hpp"
 
+// Mutex to protect the access to the mediator, they need to be global to be accessible by all threads
+std::mutex gameMutex;
+std::mutex networkMutex;
+std::mutex renderingMutex;
+std::mutex physicMutex;
+std::mutex audioMutex;
+
 void errorHandling(int ac, char **av)
 {
     if (ac != 3) {
@@ -42,22 +49,27 @@ void runEngines(std::shared_ptr<RType::GameEngine> gameEngine, std::shared_ptr<R
 {
     // Run each engine in a separate thread
     std::thread gameThread([&gameEngine]() {
+        std::lock_guard<std::mutex> lock(gameMutex); // Lock the mutex
         gameEngine->run();
     });
 
     std::thread networkThread([&networkEngine]() {
+        std::lock_guard<std::mutex> lock(networkMutex); // Lock the mutex
         networkEngine->run();
     });
 
     std::thread renderingThread([&renderingEngine]() {
+        std::lock_guard<std::mutex> lock(renderingMutex); // Lock the mutex
         renderingEngine->run();
     });
 
     std::thread physicThread([&physicEngine]() {
+        std::lock_guard<std::mutex> lock(physicMutex); // Lock the mutex
         physicEngine->run();
     });
 
     std::thread audioThread([&audioEngine]() {
+        std::lock_guard<std::mutex> lock(audioMutex); // Lock the mutex
         audioEngine->run();
     });
 
@@ -125,8 +137,8 @@ int main(int ac, char **av)
         // // Handle the case where not all engines are loaded
         RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
-        runEngines(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
-
+        gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
+        gameEngine->run();
     } catch (const RType::DLError &e) {
         std::cerr << e.what() << std::endl;
         return (84);
