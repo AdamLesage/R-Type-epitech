@@ -58,6 +58,7 @@ jobs:
           chmod +x linux_installer.sh
           echo "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
           expect -c '
+          spawn ./linux_installer.sh
           set timeout 300
             expect {
             "Do you want to continue? (y/n)" {
