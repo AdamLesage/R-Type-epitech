@@ -9,8 +9,9 @@
 
 RType::RenderingEngine::RenderingEngine()
 {
+    std::cout << "Rendering Engine created" << std::endl;
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
-    _menu = std::make_unique<Menu>(window);
+    _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
     try {
         games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
@@ -19,7 +20,6 @@ RType::RenderingEngine::RenderingEngine()
         std::cerr << e.what() << std::endl;
         exit(84);
     }
-    // _renderMediator = std::make_unique<RenderMediator>(_menu, std::shared_ptr<RenderingEngine>(this));
 }
 
 RType::RenderingEngine::~RenderingEngine()
@@ -33,7 +33,6 @@ void RType::RenderingEngine::run()
     while (window->isOpen()) {
         int scene = _menu->displayMenu();
         if (scene == 1) {
-            std::cout << "Starting Lobby" << std::endl;
             lobby->displayLobby();
         } else if (scene == 2) {
             settings->displaySettings();
@@ -49,6 +48,8 @@ void RType::RenderingEngine::run()
 void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
+    this->lobby->setMediator(mediator);
+    this->_menu->setMediator(mediator);
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()
