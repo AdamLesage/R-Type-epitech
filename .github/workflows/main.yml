@@ -24,22 +24,25 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Build with make
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update && sudo apt-get install -y expect
-          echo "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
-          sudo apt install libboost-all-dev
-          make
-          if [[ ! -f r-type_client || ! -f r-type_server ]]; then
-            echo "Build failed: Binaries not found!"
-            exit 1
-          fi
-        timeout-minutes: 10
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Install Dependencies and Build with make
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y expect
+        echo "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
+        sudo apt install -y libboost-all-dev
+        sudo apt install -y libsfml-dev
+        sudo apt install -y libconfig++-dev
+        make
+        if [[ ! -f r-type_client || ! -f r-type_server ]]; then
+          echo "Build failed: Binaries not found!"
+          exit 1
+        fi
+      timeout-minutes: 15
 
   release_mode_test:
     runs-on: ubuntu-latest
