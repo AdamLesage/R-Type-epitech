@@ -43,14 +43,14 @@ RType::ProtocolParsing::~ProtocolParsing()
 {
 }
 
-bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, const std::string &message)
+bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, const std::string &message, int &index)
 {
     // Check if message is for the current parsing function such as current type (0xXX) is correct
-    if (static_cast<uint8_t>(message[0]) != _messageTypeMap[messageType].first)
+    if (static_cast<uint8_t>(message[index]) != _messageTypeMap[messageType].first)
         return false;
 
     // Check if the message type is a byte
-    if (sizeof(message[0]) != sizeof(uint8_t))
+    if (sizeof(message[index]) != sizeof(uint8_t))
         return false;
 
     // Compare message size with the expected size in the protocol config file
@@ -67,7 +67,7 @@ bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, co
     }
     try {
         int totalSize = element.lookup("total_size");
-        if (static_cast<int>(message.length()) != totalSize) {
+        if (static_cast<int>(message.length()) - index < totalSize) {
             return false;
         }
     } catch (const std::invalid_argument& e) {
@@ -80,9 +80,9 @@ bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, co
     return true;
 }
 
-bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message)
+bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message, int &index)
 {
-    if (!checkMessageType("PLAYER_CREATION", message))
+    if (!checkMessageType("PLAYER_CREATION", message, index))
         return false;
 
     unsigned int playerId;
@@ -90,12 +90,10 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message)
     float posY;
 
     try {
-        std::memcpy(&playerId, &message[1], sizeof(unsigned int));
-        std::cout << "player Id" << playerId << std::endl;
-        std::memcpy(&posX, &message[5], sizeof(float));
-        std::cout << "posX: " << posX << std::endl;
-        std::memcpy(&posY, &message[9], sizeof(float));
-        std::cout << "posY: " << posY << std::endl;
+        std::cout << index << std::endl;
+        std::memcpy(&playerId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while parsing the player creation message" << std::endl;
         return false;
@@ -114,6 +112,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message)
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
         return false;
@@ -122,9 +121,9 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message)
+bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message, int &index)
 {
-    if (!checkMessageType("PROJECTILE_CREATION", message))
+    if (!checkMessageType("PROJECTILE_CREATION", message, index))
         return false;
 
     unsigned int projectileId;
@@ -158,9 +157,9 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message)
+bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message, int &index)
 {
-    if (!checkMessageType("ENEMY_CREATION", message))
+    if (!checkMessageType("ENEMY_CREATION", message, index))
         return false;
 
     unsigned int enemyId;
@@ -168,9 +167,9 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message)
     float posY;
 
     try {
-        std::memcpy(&enemyId, &message[1], sizeof(unsigned int));
-        std::memcpy(&posX, &message[5], sizeof(float));
-        std::memcpy(&posY, &message[9], sizeof(float));
+        std::memcpy(&enemyId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while parsing the enemy creation message" << std::endl;
         return false;
@@ -186,6 +185,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message)
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
         return false;
@@ -194,9 +194,9 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseBonusCreation(const std::string &message)
+bool RType::ProtocolParsing::parseBonusCreation(const std::string &message, int &index)
 {
-    if (!checkMessageType("BONUS_CREATION", message))
+    if (!checkMessageType("BONUS_CREATION", message, index))
         return false;
 
     unsigned int bonusId;
@@ -227,9 +227,9 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseWallCreation(const std::string &message)
+bool RType::ProtocolParsing::parseWallCreation(const std::string &message, int &index)
 {
-    if (!checkMessageType("WALL_CREATION", message))
+    if (!checkMessageType("WALL_CREATION", message, index))
         return false;
 
     unsigned int wallId;
@@ -265,9 +265,9 @@ bool RType::ProtocolParsing::parseWallCreation(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseRewardCreation(const std::string &message)
+bool RType::ProtocolParsing::parseRewardCreation(const std::string &message, int &index)
 {
-    if (!checkMessageType("REWARD_CREATION", message))
+    if (!checkMessageType("REWARD_CREATION", message, index))
         return false;
 
     unsigned int rewardId;
@@ -302,9 +302,9 @@ bool RType::ProtocolParsing::parseRewardCreation(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseEntityDeletion(const std::string &message)
+bool RType::ProtocolParsing::parseEntityDeletion(const std::string &message, int &index)
 {
-    if (!checkMessageType("ENTITY_DELETION", message))
+    if (!checkMessageType("ENTITY_DELETION", message, index))
         return false;
 
     unsigned int entityId;
@@ -330,9 +330,9 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message)
+bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message, int &index)
 {
-    if (!checkMessageType("POSITION_UPDATE", message))
+    if (!checkMessageType("POSITION_UPDATE", message, index))
         return false;
 
     unsigned int entityId;
@@ -340,20 +340,19 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message)
     float posY;
 
     try {
-        std::memcpy(&entityId, &message[1], sizeof(unsigned int));
-        std::memcpy(&posX, &message[5], sizeof(float));
-        std::memcpy(&posY, &message[9], sizeof(float));
+        std::memcpy(&entityId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while parsing the position update message" << std::endl;
         return false;
     }
 
     try {
-        std::cout << " id entitiy: " << entityId << std::endl;
         entity_t entity = _registry.entity_from_index(entityId);
 
         // Check if the entity has a position component
-        std::cout << "entity: " << entity << std::endl;
+        index += 12;
         auto optionalPositionComponent = _registry.get_components<Position>()[entity];
         if (optionalPositionComponent.has_value() == false) { // If the entity doesn't have a position component, add it
             _registry.add_component<Position>(entity, Position{posX, posY});
@@ -374,9 +373,9 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseHealthUpdate(const std::string &message)
+bool RType::ProtocolParsing::parseHealthUpdate(const std::string &message, int &index)
 {
-    if (!checkMessageType("HEALTH_UPDATE", message))
+    if (!checkMessageType("HEALTH_UPDATE", message, index))
         return false;
 
     unsigned int entityId;
@@ -414,9 +413,9 @@ bool RType::ProtocolParsing::parseHealthUpdate(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseDirectionUpdate(const std::string &message)
+bool RType::ProtocolParsing::parseDirectionUpdate(const std::string &message, int &index)
 {
-    if (!checkMessageType("DIRECTION_UPDATE", message))
+    if (!checkMessageType("DIRECTION_UPDATE", message, index))
         return false;
 
     unsigned int entityId;
@@ -435,9 +434,9 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseObjectCollection(const std::string &message)
+bool RType::ProtocolParsing::parseObjectCollection(const std::string &message, int &index)
 {
-    if (!checkMessageType("OBJECT_COLLECTION", message))
+    if (!checkMessageType("OBJECT_COLLECTION", message, index))
         return false;
 
     unsigned int playerId;
@@ -456,9 +455,9 @@ bool RType::ProtocolParsing::parseObjectCollection(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseProjectileFiring(const std::string &message)
+bool RType::ProtocolParsing::parseProjectileFiring(const std::string &message, int &index)
 {
-    if (!checkMessageType("PROJECTILE_FIRING", message))
+    if (!checkMessageType("PROJECTILE_FIRING", message, index))
         return false;
 
     unsigned int shooterId;
@@ -479,9 +478,9 @@ bool RType::ProtocolParsing::parseProjectileFiring(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseProjectileCollision(const std::string &message)
+bool RType::ProtocolParsing::parseProjectileCollision(const std::string &message, int &index)
 {
-    if (!checkMessageType("PROJECTILE_COLLISION", message))
+    if (!checkMessageType("PROJECTILE_COLLISION", message, index))
         return false;
 
     unsigned int projectileId;
@@ -500,9 +499,9 @@ bool RType::ProtocolParsing::parseProjectileCollision(const std::string &message
     return true;
 }
 
-bool RType::ProtocolParsing::parseScoreUpdate(const std::string &message)
+bool RType::ProtocolParsing::parseScoreUpdate(const std::string &message, int &index)
 {
-    if (!checkMessageType("SCORE_UPDATE", message))
+    if (!checkMessageType("SCORE_UPDATE", message, index))
         return false;
 
     unsigned int playerId;
@@ -521,9 +520,9 @@ bool RType::ProtocolParsing::parseScoreUpdate(const std::string &message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseStateChange(const std::string &message)
+bool RType::ProtocolParsing::parseStateChange(const std::string &message, int &index)
 {
-    if (!checkMessageType("STATE_CHANGE", message))
+    if (!checkMessageType("STATE_CHANGE", message, index))
         return false;
 
     unsigned int entityId;
@@ -547,25 +546,25 @@ bool RType::ProtocolParsing::parseData(const std::string &message)
     if (message.empty())
         return false;
 
-    // Array of results
-    bool results[] = {
-        this->parsePlayerCreation(message),
-        this->parseProjectileCreation(message),
-        this->parseEnemyCreation(message),
-        this->parseBonusCreation(message),
-        this->parseWallCreation(message),
-        this->parseRewardCreation(message),
-        this->parseEntityDeletion(message),
-        this->parsePositionUpdate(message),
-        this->parseHealthUpdate(message),
-        this->parseDirectionUpdate(message),
-        this->parseObjectCollection(message),
-        this->parseProjectileFiring(message),
-        this->parseProjectileCollision(message),
-        this->parseScoreUpdate(message),
-        this->parseStateChange(message)
-    };
-
+    int index = 0;
+    while (index < (int)message.size()) {
+        this->parsePlayerCreation(message, index);
+        this->parseProjectileCreation(message, index);
+        this->parseEnemyCreation(message, index);
+        this->parseBonusCreation(message, index);
+        this->parseWallCreation(message, index);
+        this->parseRewardCreation(message, index);
+        this->parseEntityDeletion(message, index);
+        this->parsePositionUpdate(message, index);
+        this->parseHealthUpdate(message, index);
+        this->parseDirectionUpdate(message, index);
+        this->parseObjectCollection(message, index);
+        this->parseProjectileFiring(message, index);
+        this->parseProjectileCollision(message, index);
+        this->parseScoreUpdate(message, index);
+        this->parseStateChange(message, index);
+        index += 1;
+    }
     auto &positions = this->_registry.get_components<Position>();
     auto &tags = this->_registry.get_components<Tag>();
     for (size_t i = 0; i < positions.size(); ++i) {
@@ -573,14 +572,7 @@ bool RType::ProtocolParsing::parseData(const std::string &message)
         auto &tag = tags[i];
 
         if (pos && tag) {
-            std::cout << "entity: " << i << "pos X: " << pos->x << " pos Y: " << pos->y << std::endl;
-        }
-    }
-    std::cout << std::endl << std::endl;
-    // Check if any of the results is true
-    for (bool result : results) {
-        if (result) {
-            return true;
+            std::cout << "entity: " << i << " pos X: " << pos->x << " pos Y: " << pos->y << std::endl;
         }
     }
 

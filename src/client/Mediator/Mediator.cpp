@@ -58,9 +58,16 @@ void RType::Mediator::notifyNetworkEngine(std::string sender, const std::string 
 
 void RType::Mediator::notifyRenderingEngine(std::string sender, const std::string &event)
 {
-    (void)event;
     if (sender != "RenderingEngine")
         return;
+    if (event == "play") { // Start the game
+        char data[5];
+        data[0] = 0x41;
+        int player_id = 1;
+        std::memcpy(&data[1], &player_id, sizeof(int));
+        std::string data_str(data, sizeof(data));
+        this->_networkEngine->_client->send(data_str);
+    }
 }
 
 void RType::Mediator::notifyPhysicEngine(std::string sender, const std::string &event)

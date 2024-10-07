@@ -70,11 +70,10 @@ add_library(RenderingEngine SHARED
     src/client/RenderEngine/Menu/Menu.cpp
     src/client/RenderEngine/Menu/Settings.cpp
     src/client/RenderEngine/Menu/Game.cpp
-    src/shared/entities/Entity.cpp
+    src/client/RenderEngine/Menu/Lobby.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
     src/client/AEngine.cpp
-    src/client/RenderEngine/RenderMediator.cpp
 )
 
 target_link_libraries(RenderingEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})

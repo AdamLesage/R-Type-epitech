@@ -30,3 +30,4 @@ namespace RType {
 }
 
 #endif /* !RENDERMEDIATOR_HPP_ */
+

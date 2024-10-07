@@ -11,7 +11,6 @@
 #include "IEngine.hpp"
 
 namespace RType {
-    class Mediator;
     class AEngine : public IEngine {
         public:
             AEngine(std::shared_ptr<IMediator> mediator);
@@ -29,8 +28,9 @@ namespace RType {
              * @brief Run current instance of the engine.
              */
             void run() override;
+
+            std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
         protected:
-            std::shared_ptr<IMediator> _mediator;
         private:
     };
 }

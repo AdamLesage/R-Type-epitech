@@ -11,10 +11,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <memory>
-#include "Settings.hpp"
-#include "Game.hpp"
+#include "Lobby.hpp"
 
 namespace RType {
+    class IMediator;
     class Menu
     {
     public:
@@ -24,7 +24,8 @@ namespace RType {
          *
          * @param _window The window to display the menu on.
          */
-        Menu();
+        Menu(std::shared_ptr<sf::RenderWindow> wdw, std::shared_ptr<RType::IMediator> _mediator);
+
 
         /**
          * @brief Destroy the Menu object.
@@ -52,8 +53,16 @@ namespace RType {
         /**
          * @brief Displays the menu.
          */
-        void displayMenu();
+        int displayMenu();
 
+        /**
+         * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+         *
+         * @param mediator The mediator to set.
+         */
+        void setMediator(std::shared_ptr<RType::IMediator> mediator);
+
+        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
     private:
         int selectedOption;
         sf::Font font;
@@ -66,7 +75,9 @@ namespace RType {
         sf::RectangleShape background;
         sf::Texture backgroundTexture;
         std::shared_ptr<Settings> settings;
-        std::shared_ptr<Game> games;
+        std::shared_ptr<Lobby> lobby;
+        // std::shared_ptr<Game> games;
+
     };
 }
 
