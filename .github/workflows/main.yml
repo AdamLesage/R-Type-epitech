@@ -60,9 +60,14 @@ jobs:
           expect -c '
           spawn ./linux_installer.sh
           expect "Do you want to continue? (y/n)"
-          send "y\r"
+          send "y\n"
+          expect "Do you want to continue? (y/n)"
+          send "y\n"
+          expect "Do you want to continue? (y/n)"
+          send "y\n"
           expect eof
           '
+          sleep 600
       - name: Verify Binaries in Release Mode
         run: |
           ls ~/workflow/R-Type-epitech/r-type_client
