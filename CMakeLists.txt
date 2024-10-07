@@ -70,6 +70,7 @@ add_library(RenderingEngine SHARED
     src/client/RenderEngine/Menu/Menu.cpp
     src/client/RenderEngine/Menu/Settings.cpp
     src/client/RenderEngine/Menu/Game.cpp
+    src/client/RenderEngine/Menu/Lobby.cpp
     src/shared/entities/Entity.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
@@ -86,6 +87,10 @@ set(SRC_CLIENT
     src/client/Mediator/Mediator.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
+    src/client/RenderEngine/Menu/Menu.cpp
+    src/client/RenderEngine/Menu/Settings.cpp
+    src/client/RenderEngine/Menu/Game.cpp
+    src/client/RenderEngine/Menu/Lobby.cpp
     src/shared/entities/Entity.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp

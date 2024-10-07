@@ -9,9 +9,8 @@
 #include "Menu/Menu.hpp"
 #include "RenderingEngine.hpp"
 
-RType::RenderMediator::RenderMediator(std::shared_ptr<Menu> &menu, RType::IEngine *renderingEngine)
+RType::RenderMediator::RenderMediator(std::shared_ptr<Menu> &menu, RType::AEngine *renderingEngine)
 {
-    std::cout << "RenderMediator constructor" << std::endl;
     _menu = menu;
     _renderingEngine = renderingEngine;
 
@@ -24,9 +23,8 @@ RType::RenderMediator::~RenderMediator()
 
 void RType::RenderMediator::notify(std::string sender, std::string event)
 {
-    (void)sender;
-    (void)event;
+    std::cout << "Notified by " << sender << " with event " << event << std::endl;
     if (sender == "Menu" && event == "play") {
-        std::cout << "Play received from menu" << std::endl;
+        this->_renderingEngine->_mediator->notify("RenderingEngine", "play");
     }
 }

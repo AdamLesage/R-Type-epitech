@@ -11,8 +11,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <memory>
-#include "Settings.hpp"
-#include "Game.hpp"
+#include "Lobby.hpp"
 #include "../RenderMediator.hpp"
 
 namespace RType {
@@ -25,7 +24,7 @@ namespace RType {
          *
          * @param _window The window to display the menu on.
          */
-        Menu();
+        Menu(std::shared_ptr<sf::RenderWindow> wdw);
 
         /**
          * @brief Destroy the Menu object.
@@ -53,7 +52,7 @@ namespace RType {
         /**
          * @brief Displays the menu.
          */
-        void displayMenu();
+        int displayMenu();
 
         /**
          * @brief Sets the mediator, it will be used to communicate with the rendering engine.
@@ -74,7 +73,8 @@ namespace RType {
         sf::RectangleShape background;
         sf::Texture backgroundTexture;
         std::shared_ptr<Settings> settings;
-        std::shared_ptr<Game> games;
+        std::shared_ptr<Lobby> lobby;
+        // std::shared_ptr<Game> games;
         RType::RenderMediator *_renderMediator;
     };
 }

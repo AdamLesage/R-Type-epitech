@@ -18,14 +18,14 @@ namespace RType {
 
     class RenderMediator {
         public:
-            RenderMediator(std::shared_ptr<Menu> &menu, RType::IEngine *renderingEngine);
+            RenderMediator(std::shared_ptr<Menu> &menu, RType::AEngine *renderingEngine);
             ~RenderMediator();
 
             void notify(std::string sender, std::string event);
         protected:
         private:
             std::shared_ptr<Menu> _menu;
-            RType::IEngine *_renderingEngine;
+            RType::AEngine *_renderingEngine;
     };
 }
 
