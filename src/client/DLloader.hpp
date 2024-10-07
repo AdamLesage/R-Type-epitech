@@ -15,11 +15,14 @@
 
 class DLLoader {
     public:
+        DLLoader() {
+            this->handle = nullptr;
+        }
         DLLoader(std::string nameLib) {
             this->handle = dlopen(nameLib.c_str(), RTLD_NOW);
-            std::cout << nameLib << std::endl;
-            if (!handle) {
-                throw RType::DLError("Error loading lib", "src/DLloader.hpp/DLloader");
+            if (handle == nullptr) {
+                std::cout << "Error loading lib " << nameLib << std::endl;
+                throw RType::DLError("Error loading lib " + nameLib, "src/DLloader.hpp/DLloader");
             }
         }
         ~DLLoader() {
@@ -35,6 +38,9 @@ class DLLoader {
         template <typename T>
         T *getInstance(std::string Name) const // load the class in the library
         {
+            if (!handle) {
+                return nullptr;
+            }
             char *error = NULL;
             T *(*entryPoint)();
 

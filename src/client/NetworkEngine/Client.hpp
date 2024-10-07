@@ -55,8 +55,22 @@ namespace NetworkLib {
 		// Queues for messages
 		LockedQueue<std::string> incomingMessages;
 
+		/**
+		 * @brief Start the receive process
+		*/
 		void start_receive();
+
+		/**
+		 * @brief Handle the receive process
+		 * 
+		 * @param error the error code
+		 * @param bytes_transferred the number of bytes transferred
+		*/
 		void handle_receive(const std::error_code& error, std::size_t bytes_transferred);
+
+		/**
+		 * @brief Run the service thread
+		*/
 		void run_service();
 
 		Client(Client&); // block default copy constructor
