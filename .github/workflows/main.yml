@@ -58,16 +58,26 @@ jobs:
           chmod +x linux_installer.sh
           echo "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
           expect -c '
-          spawn ./linux_installer.sh
-          expect "Do you want to continue? (y/n)"
-          send "y\n"
-          expect "Do you want to continue? (y/n)"
-          send "y\n"
-          expect "Do you want to continue? (y/n)"
-          send "y\n"
+          set timeout 300  # Timeout plus large pour s'assurer que chaque étape a assez de temps
+            expect {
+            "Do you want to continue? (y/n)" {
+              send "y\r"
+              exp_continue
+            }
+            "You may be asked for your password to proceed with the installation." {
+              exp_continue
+            }
+            "Do you want to continue? (y/n)" {
+              send "y\r"
+              exp_continue
+            }
+            "Do you want to continue? (y/n)" {
+              send "y\r"
+              exp_continue
+            }
+          }
           expect eof
           '
-          sleep 600
       - name: Verify Binaries in Release Mode
         run: |
           ls ~/workflow/R-Type-epitech/r-type_client
