@@ -1,6 +1,8 @@
-name: Github Actions Zappy
+name: Github Actions R-Type
 
 on:
+  release:
+    types: [published]
   pull_request:
     branches-ignore:
       - "ga-ignore-*"
