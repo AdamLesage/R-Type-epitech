@@ -400,8 +400,10 @@ main () {
     message "$INFO" "Building R-Type project..."
     cd R-Type-epitech
     make release
-    sudo ln -s "$(pwd)/r-type_client" ../r-type_client
-    sudo ln -s "$(pwd)/r-type_server" ../r-type_server
+    sudo ln "$(pwd)/r-type_client" ../r-type_client
+    sudo ln "$(pwd)/r-type_server" ../r-type_server
+    # cp -r assets ../
+    cp -r lib ../
     cd ..
     message "$SUCCESS" "Installation completed successfully."
 }
