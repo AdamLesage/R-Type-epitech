@@ -40,12 +40,6 @@ namespace NetworkLib
 		*/
 		virtual std::string popMessage() = 0;
 
-		/**
-		 * @brief Set the mediator
-		 * 
-		 * @param mediator the mediator
-		*/
-		virtual void setMediator(std::shared_ptr<RType::IMediator> mediator) = 0;
 	};
 }
 

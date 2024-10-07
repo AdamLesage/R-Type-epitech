@@ -17,7 +17,11 @@ RType::AudioEngine::~AudioEngine()
 
 void RType::AudioEngine::run()
 {
-    std::cout << "AudioEngine is running" << std::endl;
+}
+
+void RType::AudioEngine::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
 }
 
 extern "C" RType::AudioEngine *entryPointAudioEngine()
