@@ -82,7 +82,7 @@ is_package_installed() {
 
 get_linux_distribution() {
     message "$INFO" "This script will install the required packages for the RType project."
-    message "$INFO" "Do you want to continue ? (y/n)"
+    message "$INFO" "Do you want to continue? (y/n)"
     read -r answer
 
     if [ "$answer" != "y" ]; then
@@ -237,7 +237,7 @@ install_make_cmake() {
     fi
 
     message "$INFO" "Installing Make and CMake..."
-    message "$INFO" "Do you want to continue ? (y/n)"
+    message "$INFO" "Do you want to continue? (y/n)"
     read -r answer
 
     if [ "$answer" != "y" ]; then

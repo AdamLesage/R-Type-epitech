@@ -1,4 +1,5 @@
-name: Github Actions R-Type
+name: Github Actions Zappy
+
 on:
   pull_request:
     branches-ignore:
@@ -9,15 +10,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
     steps:
-    - uses: actions/checkout@v2
-    - name: Install Dependencies on Linux
-      if: runner.os == 'Linux'
-      run: sudo apt-get update && sudo apt-get install -y build-essential
-    - name: Install Dependencies on Windows
-      if: runner.os == 'Windows'
-      run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+      - uses: actions/checkout@v2
+      - name: Install Dependencies on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y build-essential
 
   check_compilation:
     needs:
@@ -25,30 +23,72 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    # Linux os
-    - name: Set up for Linux
-      if: runner.os == 'Linux'
-      run: |
-        chmod +x start_project.sh
-        ./start_project.sh
-      timeout-minutes: 1
-    # Windows os
-    - name: Set up for Windows
-      if: runner.os == 'Windows'
-      run: |
-        git config --global core.autocrlf false
-        chmod +x start_project.sh
-        ./start_project.sh
-      timeout-minutes: 1
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Build with make
+        if: runner.os == 'Linux'
+        run: |
+          make
+          if [[ ! -f r-type_client || ! -f r-type_server ]]; then
+            echo "Build failed: Binaries not found!"
+            exit 1
+          fi
+        timeout-minutes: 5
+
+  release_mode_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Release Mode
+        run: |
+          mkdir -p ~/workflow/R-Type-epitech
+          cp -r . ~/workflow/R-Type-epitech
+          cp release/linux_installer.sh ~/workflow/linux_installer.sh
+          cd ~/workflow
+          chmod +x linux_installer.sh
+          echo "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
+          expect -c '
+          spawn ./linux_installer.sh
+          expect "Do you want to continue? (y/n)"
+          send "y\r"
+          expect eof
+          '
+      - name: Verify Binaries in Release Mode
+        run: |
+          ls ~/workflow/R-Type-epitech/r-type_client
+          ls ~/workflow/R-Type-epitech/r-type_server
+        timeout-minutes: 5
+
+  create_linux_release:
+    needs:
+      - release_mode_test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Create Linux Archive
+        run: |
+          mkdir -p release_archive
+          cp -r R-Type-epitech release_archive/R-Type-epitech
+          cp R-Type-epitech/release/linux_installer.sh release_archive/linux_installer.sh
+          tar -czvf r-type_linux_release.tar.gz -C release_archive .
+      - name: Upload Release to GitHub
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./r-type_linux_release.tar.gz
+          asset_name: r-type_linux_release.tar.gz
+          asset_content_type: application/gzip
 
   push_to_mirror:
     needs:
-      - check_compilation
+      - create_linux_release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
