@@ -122,7 +122,18 @@ void RType::Game::play()
         for (int i = 0; i < 4; i++) {
             window->draw(backgrounds[i]);
         }
-        _systems.draw_system(_registry, *window.get());
+        auto &positions = _registry.get_components<Position_s>();
+        auto &drawables = _registry.get_components<Drawable_s>();
+
+        for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
+            auto &pos = positions[i];
+            auto &draw = drawables[i];
+
+            if (pos && draw) {
+                draw->shape.setPosition(pos->x, pos->y);
+                window->draw(draw->shape);
+            }
+        }
         _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         window->display();
     }

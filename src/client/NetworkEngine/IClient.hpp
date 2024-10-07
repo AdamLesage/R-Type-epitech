@@ -9,6 +9,8 @@
 #define ICLIENT_HPP_
 
 #include <string>
+#include <memory>
+#include "../Mediator/IMediator.hpp"
 
 namespace NetworkLib
 {
@@ -37,6 +39,7 @@ namespace NetworkLib
 		 * @return the message from the server
 		*/
 		virtual std::string popMessage() = 0;
+
 	};
 }
 

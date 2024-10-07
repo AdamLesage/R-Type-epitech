@@ -19,6 +19,7 @@ RType::RenderingEngine::RenderingEngine()
         std::cerr << e.what() << std::endl;
         exit(84);
     }
+    // _renderMediator = std::make_unique<RenderMediator>(_menu, std::shared_ptr<RenderingEngine>(this));
 }
 
 RType::RenderingEngine::~RenderingEngine()
@@ -43,6 +44,11 @@ void RType::RenderingEngine::run()
         }
         window->display();
     }
+}
+
+void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()

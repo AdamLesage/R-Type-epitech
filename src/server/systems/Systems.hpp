@@ -8,7 +8,7 @@
 #ifndef SYSTEMS_HPP_
     #define SYSTEMS_HPP_
 
-    #include "../registry/Registry.hpp"
+    #include "../../shared/registry/Registry.hpp"
     #include "../../shared/components/Controllable.hpp"
     #include "../../shared/components/Drawable.hpp"
     #include "../../shared/components/Position.hpp"
@@ -20,6 +20,7 @@
     #include "../../shared/components/Wave_Pattern.hpp"
     #include "../../shared/components/StraightPattern.hpp"
     #include "../../shared/components/Shoot.hpp"
+    #include "../../shared/components/Direction.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
     #include "../utils/Logger.hpp"
