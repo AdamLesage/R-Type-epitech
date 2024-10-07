@@ -33,12 +33,20 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw)
     } else {
         selectSound.setBuffer(selectBuffer);
     }
-    std::string optionsText[] = {"1. Play", "2. Settings", "3. Quit"};
+    std::string optionsText[] = {"1. Lobby", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
+    }
+    try {
+        // games = std::make_shared<Game>(window);
+        settings = std::make_shared<Settings>(window);
+        lobby = std::make_shared<Lobby>(window);
+    } catch (const std::runtime_error &e) {
+        std::cerr << e.what() << std::endl;
+        exit(84);
     }
     selectedOption = 0;
 }

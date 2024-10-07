@@ -11,8 +11,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <memory>
-#include "Settings.hpp"
-#include "Game.hpp"
+#include "Lobby.hpp"
 
 namespace RType {
     class Menu
@@ -65,6 +64,9 @@ namespace RType {
         std::shared_ptr<sf::RenderWindow> window;
         sf::RectangleShape background;
         sf::Texture backgroundTexture;
+        std::shared_ptr<Settings> settings;
+        std::shared_ptr<Lobby> lobby;
+        // std::shared_ptr<Game> games;
     };
 }
 

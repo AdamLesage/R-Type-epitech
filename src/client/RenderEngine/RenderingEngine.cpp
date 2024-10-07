@@ -14,6 +14,7 @@ RType::RenderingEngine::RenderingEngine()
     try {
         games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
+        lobby = std::make_shared<Lobby>(window);
     } catch (const std::runtime_error &e) {
         std::cerr << e.what() << std::endl;
         exit(84);
@@ -32,11 +33,14 @@ void RType::RenderingEngine::run()
     while (window->isOpen()) {
         int scene = _menu->displayMenu();
         if (scene == 1) {
-            games->displayGame();
+            std::cout << "Starting Lobby" << std::endl;
+            lobby->displayLobby();
         } else if (scene == 2) {
             settings->displaySettings();
         } else if (scene == 3) {
             window->close();
+        } else if (scene == 4) {
+            games->displayGame();
         }
         window->display();
     }
