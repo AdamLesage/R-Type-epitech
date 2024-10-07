@@ -47,6 +47,8 @@ void RType::GameEngine::setEngines(std::shared_ptr<NetworkEngine> networkEngine,
     _audioEngine = audioEngine;
 }
 
+
+
 void RType::GameEngine::run()
 {
     auto& networkEngine = _networkEngine;
@@ -55,7 +57,6 @@ void RType::GameEngine::run()
     auto& audioEngine = _audioEngine;
 
     std::thread networkThread([&]() {
-        std::lock_guard<std::mutex> lock(_mutex);
         try {
             networkEngine->run();
         } catch (const std::exception& e) {
@@ -64,27 +65,31 @@ void RType::GameEngine::run()
     });
 
     std::thread renderingThread([&]() {
-        std::lock_guard<std::mutex> lock(_mutex);
         try {
+            _mutex.lock();
             renderingEngine->run();
+            _mutex.unlock();
+            std::cout << "Rendering engine is running" << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
     });
 
     std::thread physicThread([&]() {
-        std::lock_guard<std::mutex> lock(_mutex);
         try {
+            _mutex.lock();
             physicEngine->run();
+            _mutex.unlock();
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
     });
 
     std::thread audioThread([&]() {
-        std::lock_guard<std::mutex> lock(_mutex);
         try {
+            _mutex.lock();
             audioEngine->run();
+            _mutex.unlock();
         } catch (const std::exception& e) {
             std::cerr << "Error running audio engine: " << e.what() << std::endl;
         }
@@ -107,6 +112,11 @@ void RType::GameEngine::handleServerData(std::string &message)
 {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
     _protocolParsing->parseData(message.c_str());
+}
+
+void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
 }
 
 extern "C" RType::GameEngine *entryPointGameEngine()

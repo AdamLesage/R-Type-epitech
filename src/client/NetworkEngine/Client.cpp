@@ -1,10 +1,11 @@
 #include "Client.hpp"
 
 namespace NetworkLib {
-	Client::Client(std::string host, unsigned short server_port, unsigned short local_port, std::shared_ptr<RType::IMediator> mediator) :
+	Client::Client(std::string host, unsigned short server_port, unsigned short local_port) :
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)),
-		service_thread(&Client::run_service, this), _mediator(mediator)
+		service_thread(&Client::run_service, this)
 	{
+		std::cout << "Is in Client constructor" << std::endl;
 		try {
 			boost::asio::ip::udp::resolver resolver(io_service);
 			boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, std::to_string(server_port));
@@ -42,7 +43,6 @@ namespace NetworkLib {
 		if (!error) {
 			std::string message(recv_buffer.data(), recv_buffer.data() + bytes_transferred);
 			incomingMessages.push(message);
-			this->_mediator->notify("NetworkEngine", "updateData" + message);
 		} else {
 			std::cout << ("Client::handle_receive: " + error.message()) << std::endl;
 		}

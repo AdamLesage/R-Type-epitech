@@ -55,6 +55,13 @@ namespace RType {
              * @param audioEngine The audio engine.
             */
             void setEngines(std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine, std::shared_ptr<PhysicEngine> physicEngine, std::shared_ptr<AudioEngine> audioEngine);
+
+            /**
+             * @brief Set the mediator of the engine.
+             * 
+             * @param mediator The mediator to set.
+            */
+            void setMediator(std::shared_ptr<IMediator> mediator) override;
         protected:
         private:
             Registry _registry;

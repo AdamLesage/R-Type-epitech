@@ -15,12 +15,11 @@
 #include <thread>
 #include "IClient.hpp"
 #include <iostream>
-#include "../Mediator/IMediator.hpp"
 
 namespace NetworkLib {
 	class Client : public IClient {
 	public:
-		Client(std::string host, unsigned short server_port, unsigned short local_port = 0, std::shared_ptr<RType::IMediator> mediator = nullptr);
+		Client(std::string host, unsigned short server_port, unsigned short local_port = 0);
 		~Client();
 
 		/**
@@ -44,13 +43,6 @@ namespace NetworkLib {
 		*/
 		std::string popMessage() override;
 
-		/**
-		 * @brief Set the mediator
-		 * 
-		 * @param mediator the mediator
-		*/
-		void setMediator(std::shared_ptr<RType::IMediator> mediator) { _mediator = mediator; }
-
 	private:
 		// Network send/receive stuff
 		boost::asio::io_service io_service;
@@ -62,7 +54,6 @@ namespace NetworkLib {
 
 		// Queues for messages
 		LockedQueue<std::string> incomingMessages;
-		std::shared_ptr<RType::IMediator> _mediator;
 
 		/**
 		 * @brief Start the receive process

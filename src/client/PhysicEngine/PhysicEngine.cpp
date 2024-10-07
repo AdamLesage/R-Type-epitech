@@ -17,7 +17,11 @@ RType::PhysicEngine::~PhysicEngine()
 
 void RType::PhysicEngine::run()
 {
-    std::cout << "PhysicEngine is running" << std::endl;
+}
+
+void RType::PhysicEngine::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
 }
 
 extern "C" RType::PhysicEngine *entryPointPhysicEngine()
