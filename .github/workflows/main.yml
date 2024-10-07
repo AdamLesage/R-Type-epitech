@@ -31,12 +31,15 @@ jobs:
       - name: Build with make
         if: runner.os == 'Linux'
         run: |
+          sudo apt-get update && sudo apt-get install -y expect
+          echo "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
+          sudo apt install libboost-all-dev
           make
           if [[ ! -f r-type_client || ! -f r-type_server ]]; then
             echo "Build failed: Binaries not found!"
             exit 1
           fi
-        timeout-minutes: 5
+        timeout-minutes: 10
 
   release_mode_test:
     runs-on: ubuntu-latest
