@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-# Utilisation explicite du toolchain VCPKG
+# Explicitly use the VCPKG toolchain
 if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
         CACHE STRING "")
@@ -13,7 +13,7 @@ project(r-type)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
 
-# Forcer Boost à être trouvé via vcpkg
+# Force Boost to be found via vcpkg
 find_package(Boost 1.70 REQUIRED COMPONENTS system asio)
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
@@ -22,7 +22,7 @@ else()
     message(FATAL_ERROR "Boost not found!")
 endif()
 
-# Trouver et configurer SFML
+# Find and configure SFML
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 if (SFML_FOUND)
     include_directories(${SFML_INCLUDE_DIR})
@@ -31,29 +31,39 @@ else()
     message(FATAL_ERROR "SFML not found!")
 endif()
 
-# Ajout des sources et création des bibliothèques et exécutables
+# Find and configure libconfig++
+find_package(libconfig CONFIG REQUIRED)
+
+if (libconfig_FOUND)
+    message(STATUS "libconfig++ found: ${libconfig_INCLUDE_DIRS}")
+    include_directories(${libconfig_INCLUDE_DIRS})
+else()
+    message(FATAL_ERROR "libconfig++ not found!")
+endif()
+
+# Add sources and create libraries and executables
 file(GLOB_RECURSE SRC_CLIENT "../src/client/*.cpp" "../src/shared/*.cpp")
 file(GLOB_RECURSE SRC_SERVER "../src/server/*.cpp" "../src/shared/*.cpp")
 
-# Créer les bibliothèques partagées
+# Create shared libraries
 add_library(NetworkEngine SHARED ${SRC_CLIENT})
 add_library(GameEngine SHARED ${SRC_CLIENT})
 add_library(PhysicEngine SHARED ${SRC_CLIENT})
 add_library(AudioEngine SHARED ${SRC_CLIENT})
 add_library(RenderingEngine SHARED ${SRC_CLIENT})
 
-# Lier les bibliothèques et les dépendances
-target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
-target_link_libraries(RenderingEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+# Link libraries and dependencies
+target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::config++)
+target_link_libraries(RenderingEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::config++)
 
-# Créer l'exécutable client
+# Create the client executable
 add_executable(r-type_client ${SRC_CLIENT})
 
-# Lier SFML et Boost au client
-target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
+# Link SFML, Boost, and libconfig to the client
+target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::config++)
 
-# Créer l'exécutable serveur
+# Create the server executable
 add_executable(r-type_server ${SRC_SERVER})
 
-# Lier SFML et Boost au serveur
-target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+# Link SFML, Boost, and libconfig to the server
+target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::config++)

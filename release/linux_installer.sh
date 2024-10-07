@@ -63,7 +63,7 @@ progress_bar() {
 is_package_installed() {
     case "$install_package_manager" in
         "apt")
-            dpkg -l | grep -q "$1"
+            dpkg -l | grep -q "$1"  > /dev/null 2>&1
         ;;
         "dnf")
             dnf list installed "$1" > /dev/null 2>&1
@@ -100,7 +100,7 @@ get_linux_distribution() {
     distribution=$ID
 
     case "$distribution" in
-        "debian" | "ubuntu" | "devuan" | "kali")
+        "debian" | "ubuntu" | "devuan")
             message "$INFO" "Detected distribution: $distribution, use of apt package manager."
             install_package_manager="apt"
         ;;
@@ -214,7 +214,7 @@ install_make_cmake() {
     is_package_installed() {
         case "$install_package_manager" in
             "apt")
-                dpkg -l | grep -q "$1"
+                dpkg -l | grep -q "$1"  > /dev/null 2>&1
             ;;
             "dnf")
                 dnf list installed "$1" > /dev/null 2>&1
@@ -309,7 +309,7 @@ install_package_manager() {
     message "$INFO" "Downloading vcpkg via git clone..."
     mkdir -p "$VCPKG_ROOT"
 
-    git clone https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"
+    git clone https://github.com/microsoft/vcpkg.git "$VCPKG_ROOT"  > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         message "$ERROR" "Failed to clone vcpkg repository."
         exit 84
@@ -344,41 +344,42 @@ install_dependencies() {
 
     case "$install_package_manager" in
         "apt")
-            sudo apt update
-            sudo apt install -y build-essential libasound2-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+            sudo apt update > /dev/null 2>&1
+            sudo apt upgrade -y > /dev/null 2>&1
+            sudo apt install -y build-essential libasound2-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev > /dev/null 2>&1
         ;;
         "dnf")
-            sudo dnf groupinstall "Development Tools" "Development Libraries"
-            sudo dnf install -y alsa-lib-devel libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel
+            sudo dnf groupinstall "Development Tools" "Development Libraries" > /dev/null 2>&1
+            sudo dnf install -y alsa-lib-devel libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel > /dev/null 2>&1
         ;;
         "pacman")
-            sudo pacman -Syu --needed base-devel alsa-lib libx11 libxrandr libxinerama libxcursor libxi
+            sudo pacman -Syu --needed base-devel alsa-lib libx11 libxrandr libxinerama libxcursor libxi > /dev/null 2>&1
         ;;
     esac
 
     message "$INFO" "Installing dependencies (SFML, Boost, libconfig) with vcpkg..."
 
-    "$VCPKG_ROOT/vcpkg" install alsa
+    "$VCPKG_ROOT/vcpkg" install alsa > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         message "$ERROR" "Failed to install ALSA."
         return 84
     fi
 
-    "$VCPKG_ROOT/vcpkg" install sfml
+    "$VCPKG_ROOT/vcpkg" install sfml > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         message "$ERROR" "Failed to install SFML."
         return 84
     fi
 
     message "$INFO" "Installing Boost..."
-    "$VCPKG_ROOT/vcpkg" install boost-asio
+    "$VCPKG_ROOT/vcpkg" install boost-asio > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         message "$ERROR" "Failed to install Boost."
         return 84
     fi
 
     message "$INFO" "Installing libconfig..."
-    "$VCPKG_ROOT/vcpkg" install libconfig
+    "$VCPKG_ROOT/vcpkg" install libconfig > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         message "$ERROR" "Failed to install libconfig."
         return 84
@@ -396,10 +397,11 @@ main () {
     install_package_manager
     source ~/.bashrc
     install_dependencies
+    message "$INFO" "Building R-Type project..."
     cd R-Type-epitech
     make release
-    sudo ln -S r-type_client ../r-type_client
-    sudo ln -S r-type_server ../r-type_server
+    sudo ln -s "$(pwd)/r-type_client" ../r-type_client
+    sudo ln -s "$(pwd)/r-type_server" ../r-type_server
     cd ..
     message "$SUCCESS" "Installation completed successfully."
 }
