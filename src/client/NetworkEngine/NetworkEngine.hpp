@@ -39,8 +39,8 @@ namespace RType {
 
             void setParams(std::string host, unsigned short server_port, unsigned short local_port);
 
+            std::unique_ptr<NetworkLib::IClient> _client; // Public attribute to be able to access it from Mediator.
         protected:
-            std::unique_ptr<NetworkLib::IClient> _client;
         private:
     };
 }
