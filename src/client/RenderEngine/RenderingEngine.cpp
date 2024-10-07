@@ -9,8 +9,11 @@
 
 RType::RenderingEngine::RenderingEngine()
 {
-    _menu = std::make_unique<Menu>();
-    _renderMediator = std::make_unique<RenderMediator>(_menu, std::shared_ptr<RenderingEngine>(this));
+    std::cout << "Rendering Engine created" << std::endl;
+    _menu = std::make_shared<Menu>();
+    std::cout << "Menu created" << std::endl;
+    _renderMediator = std::make_shared<RenderMediator>(_menu, nullptr);
+    std::cout << "RenderMediator created" << std::endl;
 }
 
 RType::RenderingEngine::~RenderingEngine()

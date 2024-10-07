@@ -9,22 +9,22 @@
 #define RENDERMEDIATOR_HPP_
 
 #include "../Mediator/IMediator.hpp"
-#include "Menu/Menu.hpp"
+#include "../IEngine.hpp"
 #include <memory>
 
 namespace RType {
-    class Menu;
     class RenderingEngine;
+    class Menu;
 
     class RenderMediator : public IMediator {
         public:
-            RenderMediator(std::unique_ptr<Menu> &menu, std::shared_ptr<RenderingEngine> renderingEngine);
+            RenderMediator(std::shared_ptr<Menu> &menu, std::shared_ptr<RenderingEngine> renderingEngine);
             ~RenderMediator();
 
             void notify(std::string sender, std::string event) override;
         protected:
         private:
-            std::unique_ptr<Menu> _menu;
+            std::shared_ptr<Menu> _menu;
             std::shared_ptr<RenderingEngine> _renderingEngine;
     };
 }

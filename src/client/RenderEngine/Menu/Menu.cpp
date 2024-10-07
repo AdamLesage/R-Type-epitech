@@ -113,7 +113,8 @@ void RType::Menu::displayMenu()
                     switch (getSelectedOption()) {
                     case 0:
                         std::cout << "Play" << std::endl;
-                         games->displayGame();
+                        this->_mediator->notify("Menu", "Play");
+                        games->displayGame();
                         break;
                     case 1:
                          settings->displaySettings();
@@ -137,10 +138,7 @@ void RType::Menu::displayMenu()
     }
 }
 
-// int main()
-// {
-//     std::cout << "Starting Menu" << std::endl;
-//     Menu menu(1920, 1080);
-//     menu.displayMenu();
-//     return 0;
-// }
+void RType::Menu::setMediator(std::shared_ptr<RenderMediator> mediator)
+{
+    _mediator = mediator;
+}

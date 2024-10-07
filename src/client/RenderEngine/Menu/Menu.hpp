@@ -13,6 +13,7 @@
 #include <memory>
 #include "Settings.hpp"
 #include "Game.hpp"
+#include "../RenderMediator.hpp"
 
 namespace RType {
     class Menu
@@ -54,6 +55,13 @@ namespace RType {
          */
         void displayMenu();
 
+        /**
+         * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+         *
+         * @param mediator The mediator to set.
+         */
+        void setMediator(std::shared_ptr<RenderMediator> mediator);
+
     private:
         int selectedOption;
         sf::Font font;
@@ -67,6 +75,7 @@ namespace RType {
         sf::Texture backgroundTexture;
         std::shared_ptr<Settings> settings;
         std::shared_ptr<Game> games;
+        std::shared_ptr<RenderMediator> _mediator;
     };
 }
 

@@ -32,8 +32,8 @@ namespace RType {
             void setMediator(std::shared_ptr<IMediator> mediator) override;
         protected:
         private:
-            std::unique_ptr<Menu> _menu;
-            std::unique_ptr<RenderMediator> _renderMediator;
+            std::shared_ptr<Menu> _menu;
+            std::shared_ptr<RenderMediator> _renderMediator;
     };
 }
 

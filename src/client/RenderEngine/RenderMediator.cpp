@@ -6,11 +6,15 @@
 */
 
 #include "RenderMediator.hpp"
+#include "Menu/Menu.hpp"
 
-RType::RenderMediator::RenderMediator(std::unique_ptr<Menu> &menu, std::shared_ptr<RenderingEngine> renderingEngine)
+RType::RenderMediator::RenderMediator(std::shared_ptr<Menu> &menu, std::shared_ptr<RenderingEngine> renderingEngine)
 {
-    _menu = std::move(menu);
-    _renderingEngine = renderingEngine;
+    std::cout << "RenderMediator constructor" << std::endl;
+    // _menu = std::move(menu);
+    // _renderingEngine = renderingEngine;
+
+    // _menu->setMediator(std::shared_ptr<RenderMediator>(this));
 }
 
 RType::RenderMediator::~RenderMediator()
