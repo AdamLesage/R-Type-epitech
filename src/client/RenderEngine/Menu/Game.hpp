@@ -73,6 +73,11 @@ namespace RType {
         std::vector<sf::Texture> backgroundTextures;
         std::vector<sf::RectangleShape> players;
         std::vector<sf::Texture> playerTextures;
+        std::unordered_map<std::string, sf::Texture> Textures;
+        /**
+         * @brief map that will stock the textures, It will allow us to not load a texture every time we find a new entity but just when we find one that is not in our map
+         */
+
     };
 }
 
