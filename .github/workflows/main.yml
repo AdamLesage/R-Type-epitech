@@ -96,8 +96,9 @@ jobs:
       - name: Create Linux Archive
         run: |
           mkdir -p release_archive
-          cp -r R-Type-epitech release_archive/R-Type-epitech
-          cp R-Type-epitech/release/linux_installer.sh release_archive/linux_installer.sh
+          mkdir -p release_archive/R-Type-epitech
+          cp -r * release_archive/R-Type-epitech
+          cp release_archive/R-Type-epitech/release/linux_installer.sh release_archive/linux_installer.sh
           tar -czvf r-type_linux_release.tar.gz -C release_archive .
       - name: Upload Release to GitHub
         uses: actions/upload-release-asset@v1
