@@ -18,8 +18,7 @@ RType::RenderingEngine::RenderingEngine()
         std::cerr << e.what() << std::endl;
         exit(84);
     }
-    _menu = std::make_unique<Menu>();
-    _renderMediator = std::make_unique<RenderMediator>(_menu, std::shared_ptr<RenderingEngine>(this));
+    // _renderMediator = std::make_unique<RenderMediator>(_menu, std::shared_ptr<RenderingEngine>(this));
 }
 
 RType::RenderingEngine::~RenderingEngine()
