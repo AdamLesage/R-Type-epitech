@@ -95,9 +95,8 @@ jobs:
           fetch-depth: 0
       - name: Create Linux Archive
         run: |
-          mkdir -p release_archive
           mkdir -p release_archive/R-Type-epitech
-          cp -r * release_archive/R-Type-epitech
+          rsync -av --exclude='release_archive' . release_archive/R-Type-epitech
           cp release_archive/R-Type-epitech/release/linux_installer.sh release_archive/linux_installer.sh
           tar -czvf r-type_linux_release.tar.gz -C release_archive .
       - name: Upload Release to GitHub
