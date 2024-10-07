@@ -12,6 +12,7 @@
 #include <SFML/Audio.hpp>
 #include <memory>
 #include "Lobby.hpp"
+#include "../RenderMediator.hpp"
 
 namespace RType {
     class Menu
@@ -53,6 +54,13 @@ namespace RType {
          */
         int displayMenu();
 
+        /**
+         * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+         *
+         * @param mediator The mediator to set.
+         */
+        void setMediator(RType::RenderMediator *mediator);
+
     private:
         int selectedOption;
         sf::Font font;
@@ -67,6 +75,7 @@ namespace RType {
         std::shared_ptr<Settings> settings;
         std::shared_ptr<Lobby> lobby;
         // std::shared_ptr<Game> games;
+        RType::RenderMediator *_renderMediator;
     };
 }
 

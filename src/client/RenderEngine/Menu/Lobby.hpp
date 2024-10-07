@@ -16,13 +16,12 @@
 #include "../../../shared/entities/Entity.hpp"
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
+#include "../RenderMediator.hpp"
 #include "Game.hpp"
 #include "Settings.hpp"
 
 namespace RType
-{
-
-    class Lobby
+{    class Lobby
     {
     public:
         /**
@@ -56,6 +55,12 @@ namespace RType
          */
         void displayLobby();
 
+        /**
+         * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+         *
+         * @param mediator The mediator to set.
+         */
+        void setMediator(RType::RenderMediator *mediator);
     protected:
         int selectedOption;
         std::shared_ptr<sf::RenderWindow> window;
@@ -77,6 +82,7 @@ namespace RType
         Systems _systems;
         std::shared_ptr<Game> games;
         std::shared_ptr<Settings> settings;
+        RType::RenderMediator *_renderMediator;
 
 
     private:

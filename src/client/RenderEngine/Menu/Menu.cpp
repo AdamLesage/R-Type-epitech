@@ -44,6 +44,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw)
         // games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
         lobby = std::make_shared<Lobby>(window);
+        lobby->setMediator(_renderMediator);
     } catch (const std::runtime_error &e) {
         std::cerr << e.what() << std::endl;
         exit(84);
@@ -124,10 +125,7 @@ int RType::Menu::displayMenu()
     return (0);
 }
 
-// int main()
-// {
-//     std::cout << "Starting Menu" << std::endl;
-//     Menu menu(1920, 1080);
-//     menu.displayMenu();
-//     return 0;
-// }
+void RType::Menu::setMediator(RType::RenderMediator *mediator)
+{
+    _renderMediator = mediator;
+}

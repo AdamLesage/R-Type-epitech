@@ -147,7 +147,8 @@ void RType::Lobby::displayLobby()
                 case sf::Keyboard::Return:
                     switch (getSelectedOption())
                     {
-                    case 0:
+                    case 0: // Start game
+                        this->_renderMediator->notify("Lobby", "play");
                         games->displayGame();
                         break;
                     case 1:
@@ -181,4 +182,9 @@ void RType::Lobby::displayLobby()
 
         window->display();
     }
+}
+
+void RType::Lobby::setMediator(RType::RenderMediator *mediator)
+{
+    _renderMediator = mediator;
 }

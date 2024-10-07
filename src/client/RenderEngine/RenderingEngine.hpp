@@ -10,13 +10,13 @@
 
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
-#include "RenderMediator.hpp"
 #include "Menu/Menu.hpp"
 #include "Menu/Game.hpp"
 #include "Menu/Settings.hpp"
 #include "Menu/Lobby.hpp"
 
 namespace RType {
+    class RenderMediator;
     class RenderingEngine : public AEngine {
         public:
             RenderingEngine();
@@ -35,12 +35,12 @@ namespace RType {
             void setMediator(std::shared_ptr<IMediator> mediator) override;
         protected:
         private:
-            std::unique_ptr<Menu> _menu;
+            std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;
             std::shared_ptr<Game> games;
             std::shared_ptr<Settings> settings;
             std::shared_ptr<Lobby> lobby;
-            std::unique_ptr<RenderMediator> _renderMediator;
+            std::shared_ptr<RenderMediator> _renderMediator;
     };
 }
 

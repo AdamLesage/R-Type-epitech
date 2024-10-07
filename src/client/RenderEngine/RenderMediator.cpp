@@ -6,11 +6,15 @@
 */
 
 #include "RenderMediator.hpp"
+#include "Menu/Menu.hpp"
+#include "RenderingEngine.hpp"
 
-RType::RenderMediator::RenderMediator(std::unique_ptr<Menu> &menu, std::shared_ptr<RenderingEngine> renderingEngine)
+RType::RenderMediator::RenderMediator(std::shared_ptr<Menu> &menu, RType::AEngine *renderingEngine)
 {
-    _menu = std::move(menu);
+    _menu = menu;
     _renderingEngine = renderingEngine;
+
+    _menu->setMediator(this);
 }
 
 RType::RenderMediator::~RenderMediator()
@@ -19,6 +23,8 @@ RType::RenderMediator::~RenderMediator()
 
 void RType::RenderMediator::notify(std::string sender, std::string event)
 {
-    (void)sender;
-    (void)event;
+    std::cout << "Notified by " << sender << " with event " << event << std::endl;
+    if (sender == "Menu" && event == "play") {
+        this->_renderingEngine->_mediator->notify("RenderingEngine", "play");
+    }
 }
