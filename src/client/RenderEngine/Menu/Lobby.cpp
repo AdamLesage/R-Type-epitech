@@ -148,7 +148,11 @@ void RType::Lobby::displayLobby()
                     switch (getSelectedOption())
                     {
                     case 0: // Start game
-                        this->_renderMediator->notify("Lobby", "play");
+                        if (_mediator != nullptr) {
+                            _mediator->notify("RenderingEngine", "play");
+                        } else {
+                            std::cerr << "Error: Mediator is null" << std::endl;
+                        }
                         games->displayGame();
                         break;
                     case 1:
@@ -184,7 +188,7 @@ void RType::Lobby::displayLobby()
     }
 }
 
-void RType::Lobby::setMediator(RType::RenderMediator *mediator)
+void RType::Lobby::setMediator(std::shared_ptr<RType::IMediator> mediator)
 {
-    _renderMediator = mediator;
+    _mediator = mediator;
 }
