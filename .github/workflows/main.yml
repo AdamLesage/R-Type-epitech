@@ -1,15 +1,14 @@
 name: Github Actions R-Type
 
 on:
+  release:
+    types: [published, prereleased]
   pull_request:
     branches:
-      - main  # Se déclenche uniquement lors d'un merge dans la branche main
-    types:
-      - closed  # Déclenche le workflow uniquement si la PR est fermée (et donc potentiellement mergée)
+      - main
 
 jobs:
   build_cross_platform:
-    if: github.event.pull_request.merged == true  # Vérifier que la PR a été mergée
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -47,8 +46,6 @@ jobs:
 
   release_mode_test:
     runs-on: ubuntu-latest
-    needs:
-      - check_compilation
     steps:
       - uses: actions/checkout@v3
         with:
@@ -91,8 +88,7 @@ jobs:
         timeout-minutes: 15
 
   create_linux_release:
-    needs:
-      - release_mode_test
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -104,36 +100,17 @@ jobs:
           rsync -av --exclude='release_archive' . release_archive/R-Type-epitech
           cp release_archive/R-Type-epitech/release/linux_installer.sh release_archive/linux_installer.sh
           tar -czvf r-type_linux_release.tar.gz -C release_archive .
-      - name: Create GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Créer une nouvelle release via l'API GitHub
-          VERSION=$(date +"%Y%m%d%H%M%S")  # Version basée sur l'horodatage
-          curl -X POST \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "tag_name": "v'"$VERSION"'",
-              "target_commitish": "main",
-              "name": "Release v'"$VERSION"'",
-              "body": "Automated release created by GitHub Actions",
-              "draft": false,
-              "prerelease": false
-            }' \
-            https://api.github.com/repos/${{ github.repository }}/releases
-
       - name: Upload Release to GitHub
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.create_github_release.outputs.upload_url }}
+          upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./r-type_linux_release.tar.gz
           asset_name: r-type_linux_release.tar.gz
           asset_content_type: application/gzip
 
   push_to_mirror:
     needs:
-      - create_linux_release
+      - release_mode_test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
