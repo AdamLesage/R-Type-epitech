@@ -34,49 +34,50 @@ RType::Mediator::~Mediator()
     this->_renderingEngine = nullptr;
 }
 
-void RType::Mediator::notifyGameEngine(std::string sender, std::string event)
+void RType::Mediator::notifyGameEngine(std::string sender, const std::string &event)
 {
     if (sender != "GameEngine")
         return;
     if (event == "updateData") {
         this->_networkEngine->updateData();
     }
+    this->_networkEngine->_client->send(event);
 }
 
-void RType::Mediator::notifyNetworkEngine(std::string sender, std::string event)
+void RType::Mediator::notifyNetworkEngine(std::string sender, const std::string &event)
 {
     (void)event;
     if (sender != "NetworkEngine")
         return;
 
-    if (event.rfind("updateData", 0) == 0) {
-        event = event.substr(9); // Remove "updateData"
+    // if (event.rfind("updateData", 0) == 0) {
+    //     event = event.substr(9); // Remove "updateData"
         this->_gameEngine->handleServerData(event);
-    }
+    // }
 }
 
-void RType::Mediator::notifyRenderingEngine(std::string sender, std::string event)
+void RType::Mediator::notifyRenderingEngine(std::string sender, const std::string &event)
 {
     (void)event;
     if (sender != "RenderingEngine")
         return;
 }
 
-void RType::Mediator::notifyPhysicEngine(std::string sender, std::string event)
+void RType::Mediator::notifyPhysicEngine(std::string sender, const std::string &event)
 {
     (void)event;
     if (sender != "PhysicEngine")
         return;
 }
 
-void RType::Mediator::notifyAudioEngine(std::string sender, std::string event)
+void RType::Mediator::notifyAudioEngine(std::string sender, const std::string &event)
 {
     (void)event;
     if (sender != "AudioEngine")
         return;
 }
 
-void RType::Mediator::notify(std::string sender, std::string event)
+void RType::Mediator::notify(std::string sender, const std::string &event)
 {
     this->notifyGameEngine(sender, event);
     this->notifyNetworkEngine(sender, event);

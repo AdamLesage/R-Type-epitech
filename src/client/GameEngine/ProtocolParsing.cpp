@@ -43,7 +43,7 @@ RType::ProtocolParsing::~ProtocolParsing()
 {
 }
 
-bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, const char *message)
+bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, const std::string &message)
 {
     // Check if message is for the current parsing function such as current type (0xXX) is correct
     if (static_cast<uint8_t>(message[0]) != _messageTypeMap[messageType].first)
@@ -54,12 +54,33 @@ bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, co
         return false;
 
     // Compare message size with the expected size in the protocol config file
-    if (static_cast<int>(strlen(message)) != std::stoi(_cfg.lookup(_messageTypeMap[messageType].second)["total_size"]))
+    if (!_cfg.exists("protocol")) {
         return false;
+    }
+    auto &protocol = _cfg.lookup("protocol");
+    if (!protocol.exists(_messageTypeMap[messageType].second)) {
+        return false;
+    }
+    auto &element = protocol.lookup(_messageTypeMap[messageType].second);
+    if (!element.exists("total_size")) {
+        return false;
+    }
+    try {
+        int totalSize = element.lookup("total_size");
+        if (static_cast<int>(message.length()) != totalSize) {
+            return false;
+        }
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Invalid argument: unable to convert total_size to integer" << std::endl;
+        return false;
+    } catch (const std::out_of_range& e) {
+        std::cerr << "Out of range: total_size value is too large" << std::endl;
+        return false;
+    }
     return true;
 }
 
-bool RType::ProtocolParsing::parsePlayerCreation(const char *message)
+bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message)
 {
     if (!checkMessageType("PLAYER_CREATION", message))
         return false;
@@ -70,8 +91,11 @@ bool RType::ProtocolParsing::parsePlayerCreation(const char *message)
 
     try {
         std::memcpy(&playerId, &message[1], sizeof(unsigned int));
+        std::cout << "player Id" << playerId << std::endl;
         std::memcpy(&posX, &message[5], sizeof(float));
+        std::cout << "posX: " << posX << std::endl;
         std::memcpy(&posY, &message[9], sizeof(float));
+        std::cout << "posY: " << posY << std::endl;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while parsing the player creation message" << std::endl;
         return false;
@@ -98,7 +122,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseProjectileCreation(const char *message)
+bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message)
 {
     if (!checkMessageType("PROJECTILE_CREATION", message))
         return false;
@@ -134,7 +158,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseEnemyCreation(const char *message)
+bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message)
 {
     if (!checkMessageType("ENEMY_CREATION", message))
         return false;
@@ -170,7 +194,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseBonusCreation(const char *message)
+bool RType::ProtocolParsing::parseBonusCreation(const std::string &message)
 {
     if (!checkMessageType("BONUS_CREATION", message))
         return false;
@@ -203,7 +227,7 @@ bool RType::ProtocolParsing::parseBonusCreation(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseWallCreation(const char *message)
+bool RType::ProtocolParsing::parseWallCreation(const std::string &message)
 {
     if (!checkMessageType("WALL_CREATION", message))
         return false;
@@ -241,7 +265,7 @@ bool RType::ProtocolParsing::parseWallCreation(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseRewardCreation(const char *message)
+bool RType::ProtocolParsing::parseRewardCreation(const std::string &message)
 {
     if (!checkMessageType("REWARD_CREATION", message))
         return false;
@@ -278,7 +302,7 @@ bool RType::ProtocolParsing::parseRewardCreation(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseEntityDeletion(const char *message)
+bool RType::ProtocolParsing::parseEntityDeletion(const std::string &message)
 {
     if (!checkMessageType("ENTITY_DELETION", message))
         return false;
@@ -306,7 +330,7 @@ bool RType::ProtocolParsing::parseEntityDeletion(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parsePositionUpdate(const char *message)
+bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message)
 {
     if (!checkMessageType("POSITION_UPDATE", message))
         return false;
@@ -325,9 +349,11 @@ bool RType::ProtocolParsing::parsePositionUpdate(const char *message)
     }
 
     try {
+        std::cout << " id entitiy: " << entityId << std::endl;
         entity_t entity = _registry.entity_from_index(entityId);
 
         // Check if the entity has a position component
+        std::cout << "entity: " << entity << std::endl;
         auto optionalPositionComponent = _registry.get_components<Position>()[entity];
         if (optionalPositionComponent.has_value() == false) { // If the entity doesn't have a position component, add it
             _registry.add_component<Position>(entity, Position{posX, posY});
@@ -348,7 +374,7 @@ bool RType::ProtocolParsing::parsePositionUpdate(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseHealthUpdate(const char *message)
+bool RType::ProtocolParsing::parseHealthUpdate(const std::string &message)
 {
     if (!checkMessageType("HEALTH_UPDATE", message))
         return false;
@@ -388,7 +414,7 @@ bool RType::ProtocolParsing::parseHealthUpdate(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseDirectionUpdate(const char *message)
+bool RType::ProtocolParsing::parseDirectionUpdate(const std::string &message)
 {
     if (!checkMessageType("DIRECTION_UPDATE", message))
         return false;
@@ -409,7 +435,7 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseObjectCollection(const char *message)
+bool RType::ProtocolParsing::parseObjectCollection(const std::string &message)
 {
     if (!checkMessageType("OBJECT_COLLECTION", message))
         return false;
@@ -430,7 +456,7 @@ bool RType::ProtocolParsing::parseObjectCollection(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseProjectileFiring(const char *message)
+bool RType::ProtocolParsing::parseProjectileFiring(const std::string &message)
 {
     if (!checkMessageType("PROJECTILE_FIRING", message))
         return false;
@@ -453,7 +479,7 @@ bool RType::ProtocolParsing::parseProjectileFiring(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseProjectileCollision(const char *message)
+bool RType::ProtocolParsing::parseProjectileCollision(const std::string &message)
 {
     if (!checkMessageType("PROJECTILE_COLLISION", message))
         return false;
@@ -474,7 +500,7 @@ bool RType::ProtocolParsing::parseProjectileCollision(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseScoreUpdate(const char *message)
+bool RType::ProtocolParsing::parseScoreUpdate(const std::string &message)
 {
     if (!checkMessageType("SCORE_UPDATE", message))
         return false;
@@ -495,7 +521,7 @@ bool RType::ProtocolParsing::parseScoreUpdate(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseStateChange(const char *message)
+bool RType::ProtocolParsing::parseStateChange(const std::string &message)
 {
     if (!checkMessageType("STATE_CHANGE", message))
         return false;
@@ -516,9 +542,9 @@ bool RType::ProtocolParsing::parseStateChange(const char *message)
     return true;
 }
 
-bool RType::ProtocolParsing::parseData(const char *message)
+bool RType::ProtocolParsing::parseData(const std::string &message)
 {
-    if (message == nullptr)
+    if (message.empty())
         return false;
 
     // Array of results
@@ -540,6 +566,17 @@ bool RType::ProtocolParsing::parseData(const char *message)
         this->parseStateChange(message)
     };
 
+    auto &positions = this->_registry.get_components<Position>();
+    auto &tags = this->_registry.get_components<Tag>();
+    for (size_t i = 0; i < positions.size(); ++i) {
+        auto &pos = positions[i];
+        auto &tag = tags[i];
+
+        if (pos && tag) {
+            std::cout << "entity: " << i << "pos X: " << pos->x << " pos Y: " << pos->y << std::endl;
+        }
+    }
+    std::cout << std::endl << std::endl;
     // Check if any of the results is true
     for (bool result : results) {
         if (result) {

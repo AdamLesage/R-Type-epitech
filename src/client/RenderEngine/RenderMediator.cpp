@@ -17,7 +17,7 @@ RType::RenderMediator::~RenderMediator()
 {
 }
 
-void RType::RenderMediator::notify(std::string sender, std::string event)
+void RType::RenderMediator::notify(std::string sender, const std::string &event)
 {
     (void)sender;
     (void)event;

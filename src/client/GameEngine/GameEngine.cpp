@@ -64,22 +64,22 @@ void RType::GameEngine::run()
         }
     });
 
-    std::thread renderingThread([&]() {
-        try {
-            _mutex.lock();
-            renderingEngine->run();
-            _mutex.unlock();
-            std::cout << "Rendering engine is running" << std::endl;
-        } catch (const std::exception& e) {
-            std::cerr << "Error running render engine: " << e.what() << std::endl;
-        }
-    });
+    // std::thread renderingThread([&]() {
+    //     try {
+    //         // _mutex.lock();
+    //         renderingEngine->run();
+    //         // _mutex.unlock();
+    //         std::cout << "Rendering engine is running" << std::endl;
+    //     } catch (const std::exception& e) {
+    //         std::cerr << "Error running render engine: " << e.what() << std::endl;
+    //     }
+    // });
 
     std::thread physicThread([&]() {
         try {
-            _mutex.lock();
+            // _mutex.lock();
             physicEngine->run();
-            _mutex.unlock();
+            // _mutex.unlock();
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
@@ -87,17 +87,25 @@ void RType::GameEngine::run()
 
     std::thread audioThread([&]() {
         try {
-            _mutex.lock();
+            // _mutex.lock();
             audioEngine->run();
-            _mutex.unlock();
+            // _mutex.unlock();
         } catch (const std::exception& e) {
             std::cerr << "Error running audio engine: " << e.what() << std::endl;
         }
     });
 
+    sleep(1);
+    char data_[5];
+    int pid = 0;
+    data_[0] = 0x41;
+    std::memcpy(&data_[1], &pid, sizeof(pid));
+    std::string message(data_, sizeof(data_));
+    this->send(message);
+
     // Wait for all threads to finish
     networkThread.join();
-    renderingThread.join();
+    // renderingThread.join();
     physicThread.join();
     audioThread.join();
 }
@@ -108,10 +116,11 @@ void RType::GameEngine::send(const std::string &message)
 }
 
 
-void RType::GameEngine::handleServerData(std::string &message)
+void RType::GameEngine::handleServerData(const std::string &message)
 {
+    std::cout << "start handle data" << std::endl;
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
-    _protocolParsing->parseData(message.c_str());
+    _protocolParsing->parseData(message);
 }
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator)

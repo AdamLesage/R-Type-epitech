@@ -35,7 +35,7 @@ void RType::NetworkEngine::updateData()
         return;
 
     try {
-        std::string message = _client->popMessage();
+        const std::string &message = _client->popMessage();
         // Call the mediator to send the message to the game engine
         this->_mediator->notify("NetworkEngine", message);
     } catch (const std::logic_error &e) {

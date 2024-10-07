@@ -39,8 +39,8 @@ namespace RType {
 
             void setParams(std::string host, unsigned short server_port, unsigned short local_port);
 
-        protected:
             std::unique_ptr<NetworkLib::IClient> _client;
+        protected:
         private:
     };
 }
