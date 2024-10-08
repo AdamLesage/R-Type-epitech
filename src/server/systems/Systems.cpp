@@ -95,19 +95,24 @@ void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArr
 }
 
 void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_s *entityPos,
-    Size_s *entitySize, Type_s *entityType, std::pair<size_t, size_t> MapSize, RType::Logger &logger)
+    Size_s *entitySize, Type_s *entityType, std::pair<size_t, size_t> MapSize, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender)
 {
     if (entityType->type == EntityType::PROJECTILE &&
         (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
         entityPos->y < 0 || entityPos->y + entitySize->y > MapSize.second)) {
         reg.kill_entity(entityId);
         std::cerr << "Projectile " << entityId << " deleted (out of window)" << std::endl;
-        //send to clients
+        networkSender->sendDeleteEntity(entityId);
+    }
+    if (entityType->type == EntityType::ENEMY && entityPos->x < 0) {
+        reg.kill_entity(entityId);
+        std::cerr << "enemy " << entityId << " deleted (out of window)" << std::endl;
+        networkSender->sendDeleteEntity(entityId);
     }
 }
 
 void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Position_s *entityPos1, Size_s *entitySize1,
-    size_t entityId2, Position_s *entityPos2, Size_s *entitySize2, RType::Logger &logger)
+    size_t entityId2, Position_s *entityPos2, Size_s *entitySize2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender)
 {
     bool collisionX = entityPos1->x < entityPos2->x + entitySize2->x &&
                       entityPos1->x + entitySize1->x > entityPos2->x;
@@ -120,7 +125,7 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
     }
 }
 
-void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, RType::Logger &logger)
+void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger)
 {
     auto &positions = reg.get_components<Position_s>();
     auto &sizes = reg.get_components<Size_s>();
@@ -131,14 +136,14 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize,
         auto &entitySize = sizes[i];
         auto &entityType = types[i];
         if (entityPos && entitySize, entityType) {
-            check_borders_collisions(reg, i, &(*entityPos), &(*entitySize), &(*entityType), MapSize, logger);
+            check_borders_collisions(reg, i, &(*entityPos), &(*entitySize), &(*entityType), MapSize, logger, networkSender);
 
             for (size_t j = i + 1; j < positions.size() && j < sizes.size(); ++j) {
                 auto &entityPos2 = positions[j];
                 auto &entitySize2 = sizes[j];
 
                 if (entityPos2 && entitySize2) {
-                    check_entities_collisions(reg, i, &(*entityPos), &(*entitySize), j, &(*entityPos2), &(*entitySize2), logger);
+                    check_entities_collisions(reg, i, &(*entityPos), &(*entitySize), j, &(*entityPos2), &(*entitySize2), logger, networkSender);
                 }
             }
         }

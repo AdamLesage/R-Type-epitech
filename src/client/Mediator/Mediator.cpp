@@ -39,7 +39,6 @@ void RType::Mediator::notifyGameEngine(std::string sender, std::string event)
     if (sender != "GameEngine")
         return;
     if (event == "updateData") {
-        std::cout << "Received event from GameEngine" << std::endl;
         this->_networkEngine->updateData();
     }
 }
@@ -50,15 +49,24 @@ void RType::Mediator::notifyNetworkEngine(std::string sender, std::string event)
     if (sender != "NetworkEngine")
         return;
 
-    // if (event == "newConnection") // example of event
-    //     this->_gameEngine->createPlayer();
+    if (event.rfind("updateData", 0) == 0) {
+        event = event.substr(9); // Remove "updateData"
+        this->_gameEngine->handleServerData(event);
+    }
 }
 
 void RType::Mediator::notifyRenderingEngine(std::string sender, std::string event)
 {
-    (void)event;
     if (sender != "RenderingEngine")
         return;
+    if (event == "play") { // Start the game
+        char data[5];
+        data[0] = 0x41;
+        int player_id = 1;
+        std::memcpy(&data[1], &player_id, sizeof(int));
+        std::string data_str(data, sizeof(data));
+        this->_networkEngine->_client->send(data_str);
+    }
 }
 
 void RType::Mediator::notifyPhysicEngine(std::string sender, std::string event)
@@ -77,7 +85,6 @@ void RType::Mediator::notifyAudioEngine(std::string sender, std::string event)
 
 void RType::Mediator::notify(std::string sender, std::string event)
 {
-    std::cout << "Mediator received event from " << sender << ": " << event << std::endl;
     this->notifyGameEngine(sender, event);
     this->notifyNetworkEngine(sender, event);
     this->notifyRenderingEngine(sender, event);

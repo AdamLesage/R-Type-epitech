@@ -11,11 +11,13 @@
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
 #include "Client.hpp"
+#include "targetver.h"
 
 namespace RType {
     class NetworkEngine : public AEngine {
         public:
             NetworkEngine();
+            NetworkEngine(std::string host, unsigned short server_port, unsigned short local_port = 50010);
             ~NetworkEngine();
 
             /**
@@ -28,8 +30,17 @@ namespace RType {
             */
             void updateData();
 
+            /**
+             * @brief Set the mediator of the engine and of the client.
+             *
+             * @param mediator The mediator to set.
+            */
+            void setMediator(std::shared_ptr<IMediator> mediator) override ;
+
+            void setParams(std::string host, unsigned short server_port, unsigned short local_port);
+
+            std::unique_ptr<NetworkLib::IClient> _client; // Public attribute to be able to access it from Mediator.
         protected:
-            std::unique_ptr<NetworkLib::IClient> _client;
         private:
     };
 }

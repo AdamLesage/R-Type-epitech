@@ -8,7 +8,7 @@
 #ifndef SYSTEMS_HPP_
     #define SYSTEMS_HPP_
 
-    #include "../registry/Registry.hpp"
+    #include "../../shared/registry/Registry.hpp"
     #include "../../shared/components/Controllable.hpp"
     #include "../../shared/components/Drawable.hpp"
     #include "../../shared/components/Position.hpp"
@@ -23,6 +23,7 @@
     #include "../../shared/components/ShootPlayerPattern.hpp"
     #include "../../shared/components/ShootStraightPattern.hpp"
     #include "../../shared/components/Shoot.hpp"
+    #include "../../shared/components/Direction.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
     #include "../utils/Logger.hpp"
@@ -70,7 +71,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, RType::Logger &logger);
+        void collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger);
 
         /**
          * @brief Handles the shoot for the entities.
@@ -143,7 +144,7 @@ class Systems {
          * @return void
          */
         void check_borders_collisions(Registry &reg, size_t entityId, Position_s *position, Size_s *size,
-            Type_s *type, std::pair<size_t, size_t> MapSize, RType::Logger &logger);
+            Type_s *type, std::pair<size_t, size_t> MapSize, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender);
 
 
         /**
@@ -158,7 +159,7 @@ class Systems {
          * @param size2 The size of the second entity.
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
-            size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger);
+            size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender);
 
         /**
          * @brief find the pos of the closest player
