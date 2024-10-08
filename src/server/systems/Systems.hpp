@@ -19,6 +19,9 @@
     #include "../../shared/components/ShootingSpeed.hpp"
     #include "../../shared/components/Wave_Pattern.hpp"
     #include "../../shared/components/StraightPattern.hpp"
+    #include "../../shared/components/PlayerFollowingPattern.hpp"
+    #include "../../shared/components/ShootPlayerPattern.hpp"
+    #include "../../shared/components/ShootStraightPattern.hpp"
     #include "../../shared/components/Shoot.hpp"
     #include "../../shared/components/Direction.hpp"
     #include "../GameLogique/NetworkSender.hpp"
@@ -68,7 +71,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, RType::Logger &logger);
+        void collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger);
 
         /**
          * @brief Handles the shoot for the entities.
@@ -99,6 +102,34 @@ class Systems {
          * @param reg The registry containing the components.
          */
         void death_system(Registry &reg, RType::Logger &logger);
+        /**
+         * @brief Update the movement for a straight ligne pattern
+         *
+         * @param reg The registry containing the components.
+         */
+        void Straight_line_pattern_system(Registry &reg);
+        /**
+         * @brief Update the movement based on the closest player
+         *
+         * @param reg The registry containing the components.
+         */
+        void player_following_pattern_system(Registry &reg);
+        /**
+         * @brief Fire an projectill every x seconds
+         *
+         * @param reg The registry containing the components.
+         * @param network The class for sending data to client
+         * 
+         */
+        void shoot_straight_pattern_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender);
+        /**
+         * @brief Fire an projectill every x seconds to the player
+         *
+         * @param reg The registry containing the components.
+         * @param network The class for sending data to client
+         * 
+         */
+        void shoot_player_pattern_system(Registry &reg, std::unique_ptr<NetworkSender> &networkSender);
 
     private:
         /**
@@ -113,7 +144,7 @@ class Systems {
          * @return void
          */
         void check_borders_collisions(Registry &reg, size_t entityId, Position_s *position, Size_s *size,
-            Type_s *type, std::pair<size_t, size_t> MapSize, RType::Logger &logger);
+            Type_s *type, std::pair<size_t, size_t> MapSize, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender);
 
 
         /**
@@ -128,14 +159,16 @@ class Systems {
          * @param size2 The size of the second entity.
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
-            size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger);
+            size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender);
 
         /**
-         * @brief Update the movement for a straight ligne pattern
-         *
+         * @brief find the pos of the closest player
+         * 
          * @param reg The registry containing the components.
+         * @param position_entity the position of the entity
+         * @return return the pos of the closest player
          */
-        void Straight_line_pattern_system(Registry &reg);
+        std::array<float, 2> find_closest_player(Registry &reg, Position *position_entity);
 };
 
 #endif /* !SYSTEMS_HPP_ */

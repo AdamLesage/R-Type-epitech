@@ -108,10 +108,10 @@ void RType::GameEngine::send(const std::string &message)
 }
 
 
-void RType::GameEngine::handleServerData(std::string &message)
+void RType::GameEngine::handleServerData(const std::string &message)
 {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
-    _protocolParsing->parseData(message.c_str());
+    _protocolParsing->parseData(message);
 }
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator)

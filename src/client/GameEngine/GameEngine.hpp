@@ -44,7 +44,7 @@ namespace RType {
              * 
              * @param message The message received from the server. Need to be parsed.
             */
-            void handleServerData(std::string &message);
+            void handleServerData(const std::string &message);
 
             /**
              * @brief Set the engines for the game engine.

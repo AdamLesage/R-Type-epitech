@@ -52,7 +52,8 @@ namespace NetworkLib {
 		int32_t get_or_create_client_id(boost::asio::ip::udp::endpoint endpoint);
 		void on_client_disconnected(int32_t id);
 
-		void send(const char *message, size_t size, boost::asio::ip::udp::endpoint target);
+		void send(std::vector<char> message, boost::asio::ip::udp::endpoint target_endpoint);
+		void send(const char *message, size_t size, boost::asio::ip::udp::endpoint target_endpoint);
 
 		// Incoming messages queue
 		LockedQueue<std::pair<std::string, uint32_t>> incomingMessages;
@@ -62,6 +63,7 @@ namespace NetworkLib {
 		int32_t nextClientID;
 		std::shared_mutex mtx;
 
+		std::vector<char> packetToSend;
 		Server(Server&);
 	};
 }

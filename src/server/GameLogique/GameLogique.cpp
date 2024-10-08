@@ -24,6 +24,10 @@ GameLogique::GameLogique(size_t port, int _frequency)
     this->reg.register_component<ShootingSpeed>();
     this->reg.register_component<Type>();
     this->reg.register_component<StraightLinePattern>();
+    this->reg.register_component<PlayerFollowingPattern>();
+    this->reg.register_component<ShootPlayerPattern>();
+    this->reg.register_component<ShootStraightPattern>();
+    this->reg.register_component<Size>();
 }
 
 GameLogique::~GameLogique()
@@ -44,6 +48,7 @@ void GameLogique::startGame() {
             this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
             this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.5f});
             this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
+            this->reg.add_component<Size>(entity, Size{100, 100});
             this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
         }
         this->running = true;
@@ -58,17 +63,48 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
     {
     case 0x03:
         this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
-        this->reg.add_component<Health>(entity, Health{100, true, false, true});
+        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
         this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
+        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{0.1f});
+        this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{2, 2, std::chrono::steady_clock::now()});
+        this->reg.add_component<Size>(entity, Size{100, 100});
+        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
         break;
-    default:
+    case 0x04:
         this->reg.add_component<Position>(entity, Position{position_x, position_y});
         this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
-        this->reg.add_component<Health>(entity, Health{100, true, false, true});
+        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
         this->reg.add_component<Damage>(entity, Damage{20});
         this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
+        this->reg.add_component<Size>(entity, Size{100, 100});
+        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+        break;
+    case 0x05:
+        this->reg.add_component<Position>(entity, Position{position_x, position_y});
+        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+        this->reg.add_component<Damage>(entity, Damage{20});
+        this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{0.5f});
+        this->reg.add_component<Size>(entity, Size{100, 100});
+        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+        break;
+    case 0x06:
+        this->reg.add_component<Position>(entity, Position{position_x, position_y});
+        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+        this->reg.add_component<Damage>(entity, Damage{20});
+        this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2, 2, std::chrono::steady_clock::now()});
+        this->reg.add_component<Size>(entity, Size{100, 100});
+        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+    default:
+        this->reg.add_component<Position>(entity, Position{position_x, position_y});
+        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+        this->reg.add_component<Damage>(entity, Damage{20});
+        this->reg.add_component<StraightLinePattern>(entity, {0.5f});
+        this->reg.add_component<Size>(entity, Size{100, 100});
+        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
         break;
     }
     this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
@@ -79,13 +115,18 @@ void GameLogique::runGame() {
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
-            if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > 1 / frequency) {
+            if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {
                 clock = std::clock();
                 sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC, logger);
-                sys.position_system(reg, this->_networkSender, logger);     
+                sys.Straight_line_pattern_system(this->reg);
+                sys.player_following_pattern_system(this->reg);
+                sys.shoot_player_pattern_system(this->reg, this->_networkSender);
+                sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
+                sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender, logger);
+                sys.position_system(reg, this->_networkSender, logger);
             }
-            if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 2) {
-                this->spawnEnnemy(0x03, 1000, 500);
+            if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
+                this->spawnEnnemy(0x04, 1000, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
         }
@@ -105,7 +146,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     input = message.first[5];
 
     auto &velocities = reg.get_components<Velocity_s>();
-    if (velocities.size() <= id) {
+    if ((int)velocities.size() <= id) {
         std::cerr << "Invalid entity ID: " << id << std::endl;
         return;
     }
