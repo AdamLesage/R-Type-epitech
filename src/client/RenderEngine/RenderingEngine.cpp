@@ -37,9 +37,6 @@ void RType::RenderingEngine::run()
             settings->displaySettings();
         } else if (scene == 3) {
             window->close();
-        } else if (scene == 4) {
-            this->setMediator(_mediator);
-            games->displayGame();
         }
         window->display();
     }

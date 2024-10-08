@@ -91,11 +91,6 @@ void RType::Game::play()
     _registry.add_component<Position_s>(static_entity4, Position_s{900.f, 300.f});
     _registry.add_component<Drawable_s>(static_entity4, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
     _registry.get_components<Drawable_s>()[static_entity4]->shape.setFillColor(sf::Color::Yellow);
-    if (_mediator == nullptr) {
-        std::cout << "Mediator is null" << std::endl;
-    } else {
-        std::cout << "Mediator is not null" << std::endl;
-    }
 
     while (window->isOpen()) {
         sf::Event event;

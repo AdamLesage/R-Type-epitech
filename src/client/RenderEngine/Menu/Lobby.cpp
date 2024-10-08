@@ -154,6 +154,7 @@ void RType::Lobby::displayLobby()
                         } else {
                             std::cerr << "Error: Mediator is null" << std::endl;
                         }
+                        games->_mediator = _mediator;
                         games->displayGame();
                         break;
                     case 1:
