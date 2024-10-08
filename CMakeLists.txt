@@ -30,6 +30,8 @@ endif()
 add_library(NetworkEngine SHARED
     src/client/NetworkEngine/NetworkEngine.cpp
     src/client/NetworkEngine/Client.cpp
+    src/client/AEngine.cpp
+    src/client/Mediator/Mediator.cpp
 )
 
 add_library(GameEngine SHARED
@@ -37,26 +39,41 @@ add_library(GameEngine SHARED
     src/client/GameEngine/ProtocolParsing.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
+    src/client/AEngine.cpp
+    src/client/Mediator/Mediator.cpp
 )
 
 add_library(PhysicEngine SHARED
     src/client/PhysicEngine/PhysicEngine.cpp
+    src/client/AEngine.cpp
+    src/client/Mediator/Mediator.cpp
 )
 
 add_library(AudioEngine SHARED
     src/client/AudioEngine/AudioEngine.cpp
+    src/client/AEngine.cpp
+    src/client/Mediator/Mediator.cpp
 )
 
-target_link_libraries(GameEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
+target_link_libraries(GameEngine
+    -lconfig++
+    ${Boost_LIBRARIES}
+)
+
+target_link_libraries(NetworkEngine
+    -lconfig++
+    ${Boost_LIBRARIES}
+)
 
 add_library(RenderingEngine SHARED
     src/client/RenderEngine/RenderingEngine.cpp
     src/client/RenderEngine/Menu/Menu.cpp
     src/client/RenderEngine/Menu/Settings.cpp
     src/client/RenderEngine/Menu/Game.cpp
-    src/shared/entities/Entity.cpp
+    src/client/RenderEngine/Menu/Lobby.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
+    src/client/AEngine.cpp
 )
 
 target_link_libraries(RenderingEngine sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
@@ -64,17 +81,9 @@ target_link_libraries(RenderingEngine sfml-system sfml-window sfml-graphics sfml
 # Source files for the Client
 set(SRC_CLIENT
     src/client/main.cpp
-    src/client/NetworkEngine/Client.cpp
-    src/client/GameEngine/GameEngine.cpp
-    src/client/GameEngine/ProtocolParsing.cpp
-    src/client/NetworkEngine/NetworkEngine.cpp
-    src/client/RenderEngine/RenderingEngine.cpp
     src/client/Mediator/Mediator.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
-    src/client/RenderEngine/Menu/Menu.cpp
-    src/client/RenderEngine/Menu/Settings.cpp
-    src/client/RenderEngine/Menu/Game.cpp
     src/shared/entities/Entity.cpp
     src/shared/registry/Registry.cpp
     src/shared/systems/Systems.cpp
@@ -83,7 +92,19 @@ set(SRC_CLIENT
 add_executable(r-type_client ${SRC_CLIENT})
 
 # Linkage for SFML and Boost libraries
-target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
+target_link_libraries(r-type_client
+    NetworkEngine
+    GameEngine
+    PhysicEngine
+    AudioEngine
+    RenderingEngine
+    sfml-system
+    sfml-window
+    sfml-graphics
+    sfml-network
+    sfml-audio
+    -lconfig++ ${Boost_LIBRARIES}
+)
 
 # Output directory for the client
 set_target_properties(r-type_client PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -104,7 +125,7 @@ set(SRC_SERVER
 add_executable(r-type_server ${SRC_SERVER})
 
 # Linkage for SFML and Boost libraries
-target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio config++ ${Boost_LIBRARIES})
 
 # Output directory for the server
 set_target_properties(r-type_server PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})

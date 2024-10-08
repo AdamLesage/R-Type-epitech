@@ -7,10 +7,9 @@
 
 #include "Menu.hpp"
 
-RType::Menu::Menu()
+RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator)
 {
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type Menu");
-
+    window = wndw;
     if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
@@ -34,7 +33,7 @@ RType::Menu::Menu()
     } else {
         selectSound.setBuffer(selectBuffer);
     }
-    std::string optionsText[] = {"1. Play", "2. Settings", "3. Quit"};
+    std::string optionsText[] = {"1. Lobby", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
@@ -42,8 +41,9 @@ RType::Menu::Menu()
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
     try {
-        games = std::make_shared<Game>(window);
+        // games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
+        lobby = std::make_shared<Lobby>(window);
     } catch (const std::runtime_error &e) {
         std::cerr << e.what() << std::endl;
         exit(84);
@@ -87,60 +87,44 @@ int RType::Menu::getSelectedOption() const
     return selectedOption;
 }
 
-void RType::Menu::displayMenu()
+int RType::Menu::displayMenu()
 {
-
-    window->setFramerateLimit(60);
-    window->clear();
-    while (window->isOpen()) {
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window->close();
-            }
-
-            if (event.type == sf::Event::KeyPressed) {
-                switch (event.key.code) {
-                case sf::Keyboard::Up:
-                    moveUp();
-                    break;
-
-                case sf::Keyboard::Down:
-                    moveDown();
-                    break;
-
-                case sf::Keyboard::Enter:
-                    switch (getSelectedOption()) {
-                    case 0:
-                        std::cout << "Play" << std::endl;
-                         games->displayGame();
-                        break;
-                    case 1:
-                         settings->displaySettings();
-                        break;
-                    case 2:
-                        std::cout << "Quit" << std::endl;
-                        window->close();
-                        break;
-                    }
-                    break;
-
-                default:
-                    break;
-                }
-            }
+    sf::Event event;
+    while (window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window->close();
         }
 
-        window->clear();
-        draw();
-        window->display();
+        if (event.type == sf::Event::KeyPressed) {
+            switch (event.key.code) {
+            case sf::Keyboard::Up:
+                moveUp();
+                break;
+
+            case sf::Keyboard::Down:
+                moveDown();
+                break;
+
+            case sf::Keyboard::Enter:
+                switch (getSelectedOption()) {
+                case 0:
+                    return (1);
+                case 1:
+                    return (2);
+                case 2:
+                    return (3);
+                }
+                break;
+            default:
+                break;
+            }
+        }
     }
+    draw();
+    return (0);
 }
 
-// int main()
-// {
-//     std::cout << "Starting Menu" << std::endl;
-//     Menu menu(1920, 1080);
-//     menu.displayMenu();
-//     return 0;
-// }
+void RType::Menu::setMediator(std::shared_ptr<RType::IMediator> mediator)
+{
+    _mediator = mediator;
+}
