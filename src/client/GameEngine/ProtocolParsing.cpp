@@ -112,6 +112,9 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message, int
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{100, 100});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Sprite>(entity, Sprite{"../asset/player/player_1.png"});
         index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
@@ -149,6 +152,9 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message,
         _registry.add_component<Damage>(entity, Damage{10});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{50, 10});
+        _registry.add_component<Direction>(entity, Direction{0, 0});
+        _registry.add_component<Sprite>(entity, Sprite{"../asset/bullet/missile_1.png"});
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the projectile" << std::endl;
         return false;
@@ -185,6 +191,9 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message, int 
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{100, 100});
+        _registry.add_component<Direction>(entity, Direction{-1, 0});
+        _registry.add_component<Sprite>(entity, Sprite{"../asset/ennemy/enemy_2.png"});
         index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
@@ -565,16 +574,16 @@ bool RType::ProtocolParsing::parseData(const std::string &message)
         this->parseStateChange(message, index);
         index += 1;
     }
-    auto &positions = this->_registry.get_components<Position>();
-    auto &tags = this->_registry.get_components<Tag>();
-    for (size_t i = 0; i < positions.size(); ++i) {
-        auto &pos = positions[i];
-        auto &tag = tags[i];
+    // auto &positions = this->_registry.get_components<Position>();
+    // auto &tags = this->_registry.get_components<Tag>();
+    // for (size_t i = 0; i < positions.size(); ++i) {
+    //     auto &pos = positions[i];
+    //     auto &tag = tags[i];
 
-        if (pos && tag) {
-            std::cout << "entity: " << i << " pos X: " << pos->x << " pos Y: " << pos->y << std::endl;
-        }
-    }
+    //     if (pos && tag) {
+    //         std::cout << "entity: " << i << " pos X: " << pos->x << " pos Y: " << pos->y << std::endl;
+    //     }
+    // }
 
     return false;
 }

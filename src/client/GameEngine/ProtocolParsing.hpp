@@ -17,6 +17,8 @@
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/systems/Systems.hpp"
+#include "../../shared/components/Size.hpp"
+#include "../../shared/components/Sprite.hpp"
 
 
 namespace RType {
@@ -167,7 +169,7 @@ namespace RType {
             std::string _protocolPath;
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
-            Registry _registry; // Will be used to update the game engine data
+            Registry &_registry; // Will be used to update the game engine data
     };
 }
 
