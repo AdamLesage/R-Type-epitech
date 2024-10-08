@@ -74,7 +74,7 @@ void RType::GameEngine::run()
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
     });
-
+    
     std::thread physicThread([&]() {
         try {
             _mutex.lock();

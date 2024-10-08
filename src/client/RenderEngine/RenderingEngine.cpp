@@ -44,6 +44,7 @@ void RType::RenderingEngine::run()
         }
         window->display();
     }
+    exit(0);
 }
 
 void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
