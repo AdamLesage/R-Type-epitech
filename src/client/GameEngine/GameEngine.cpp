@@ -59,6 +59,7 @@ void RType::GameEngine::run()
     auto& physicEngine = _physicEngine;
     auto& audioEngine = _audioEngine;
 
+    this->_renderingEngine->setCamera(_camera);
     std::thread networkThread([&]() {
         try {
             networkEngine->run();
@@ -131,8 +132,8 @@ void RType::GameEngine::updateCamera()
     auto &sizes = this->_registry.get_components<Size>();
     auto &directions = this->_registry.get_components<Direction>();
     auto &sprites = this->_registry.get_components<Sprite>();
-    Camera *tmpCamera = new Camera;
-    tmpCamera->listEntityToDisplay.reserve(sprites.size());
+    std::vector<EntityRenderInfo> entityRender;
+    entityRender.reserve(std::min({positions.size(), sizes.size(), directions.size(), sprites.size()}));
 
     for (size_t i = 0; i < positions.size() && i < sizes.size() 
         && i < directions.size() && i < sprites.size(); ++i) {
@@ -142,10 +143,10 @@ void RType::GameEngine::updateCamera()
         auto &sprite = sprites[i];
 
         if (position && size && direction && sprite) {
-            tmpCamera->listEntityToDisplay.push_back(EntityRenderInfo{size.value(), position.value(), direction.value(), sprite->spritePath}); 
+            entityRender.push_back({size.value(), position.value(), direction.value(), sprite->spritePath});
         }
     }
-    this->_camera.reset(tmpCamera);
+    this->_camera->listEntityToDisplay = std::move(entityRender);
     usleep(10000);
 }
 

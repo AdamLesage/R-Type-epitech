@@ -10,6 +10,24 @@
 RType::RenderingEngine::RenderingEngine()
 {
     std::cout << "Rendering Engine created" << std::endl;
+    // window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
+    // _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
+    // try {
+    //     games = std::make_shared<Game>(window);
+    //     settings = std::make_shared<Settings>(window);
+    //     lobby = std::make_shared<Lobby>(window);
+    // } catch (const std::runtime_error &e) {
+    //     std::cerr << e.what() << std::endl;
+    //     exit(84);
+    // }
+}
+
+RType::RenderingEngine::~RenderingEngine()
+{
+}
+
+void RType::RenderingEngine::run()
+{
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
     try {
@@ -20,14 +38,9 @@ RType::RenderingEngine::RenderingEngine()
         std::cerr << e.what() << std::endl;
         exit(84);
     }
-}
-
-RType::RenderingEngine::~RenderingEngine()
-{
-}
-
-void RType::RenderingEngine::run()
-{
+    this->lobby->setMediator(_mediator);
+    this->_menu->setMediator(_mediator);
+    this->games->setCamera(_camera);
     window->setFramerateLimit(360);
     window->clear();
     while (window->isOpen()) {
@@ -48,8 +61,14 @@ void RType::RenderingEngine::run()
 void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
-    this->lobby->setMediator(mediator);
-    this->_menu->setMediator(mediator);
+}
+
+void RType::RenderingEngine::setCamera(std::shared_ptr<Camera> camera)
+{
+    _camera = camera;
+    if (this->games != nullptr) {
+        this->games->setCamera(_camera);
+    }
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()

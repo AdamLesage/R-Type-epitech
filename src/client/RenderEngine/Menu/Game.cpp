@@ -201,3 +201,8 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
 
     return true;
 }
+
+void RType::Game::setCamera(std::shared_ptr<Camera> camera)
+{
+    this->_camera = camera;
+}
