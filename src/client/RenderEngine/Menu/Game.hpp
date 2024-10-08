@@ -7,6 +7,7 @@
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
 #include "Settings.hpp"
+#include "../../Camera.hpp"
 
 namespace RType {
     class Game {
@@ -43,6 +44,8 @@ namespace RType {
          * @brief Displays the game we are playing.
          */
         void play();
+        void set_texture();
+        sf::Vector2f convertToVector2f(const Size& size);
     private:
         std::shared_ptr<sf::RenderWindow> window;
         sf::Font font;
@@ -72,12 +75,13 @@ namespace RType {
         std::vector<sf::RectangleShape> backgrounds;
         std::vector<sf::Texture> backgroundTextures;
         std::vector<sf::RectangleShape> players;
+        std::vector<sf::RectangleShape> entity;
         std::vector<sf::Texture> playerTextures;
-        std::unordered_map<std::string, sf::Texture> Textures;
+        std::unordered_map<std::string, sf::Texture*> Textures;
         /**
          * @brief map that will stock the textures, It will allow us to not load a texture every time we find a new entity but just when we find one that is not in our map
          */
-
+        std::shared_ptr<Camera> camera;
     };
 }
 
