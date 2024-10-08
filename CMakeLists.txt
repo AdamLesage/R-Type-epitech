@@ -45,4 +45,4 @@ target_link_libraries(r-type_client sfml-system sfml-window sfml-graphics sfml-n
 add_executable(r-type_server ${SRC_SERVER})
 
 # Linkage for SFML and Boost libraries
-target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
