@@ -18,6 +18,7 @@ RType::Mediator::Mediator(std::shared_ptr<GameEngine> gameEngine, std::shared_pt
 
     this->_gameEngine->setMediator(std::shared_ptr<IMediator>(this));
     this->_networkEngine->setMediator(std::shared_ptr<IMediator>(this));
+    std::cout << "Mediator ctor set for rendering engine" << std::endl;
     this->_renderingEngine->setMediator(std::shared_ptr<IMediator>(this));
     this->_physicEngine->setMediator(std::shared_ptr<IMediator>(this));
     this->_audioEngine->setMediator(std::shared_ptr<IMediator>(this));
@@ -58,11 +59,22 @@ void RType::Mediator::notifyNetworkEngine(std::string sender, const std::string 
 
 void RType::Mediator::notifyRenderingEngine(std::string sender, const std::string &event)
 {
-    if (sender != "RenderingEngine")
+    if (sender != "RenderingEngine" && sender != "Game")
         return;
+    if (sender == "Game") {
+        std::cout << event << std::endl;
+        // char data[5];
+        // data[0] = 0x40; // Player input in protocol
+        // int player_id = 1;
+        // std::memcpy(&data[1], &player_id, sizeof(int));
+        // char input = std::stoi(event);
+        // std::memcpy(&data[5], &input, sizeof(char));
+        // this->_networkEngine->_client->send(std::string(data, sizeof(data)));
+        // return;
+    }
     if (event == "play") { // Start the game
         char data[5];
-        data[0] = 0x41;
+        data[0] = 0x41; // Start game in protocol
         int player_id = 1;
         std::memcpy(&data[1], &player_id, sizeof(int));
         std::string data_str(data, sizeof(data));

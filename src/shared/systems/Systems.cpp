@@ -23,7 +23,7 @@ void Systems::position_system(Registry &reg)
     }
 }
 
-void Systems::control_system(Registry &reg)
+int Systems::control_system(Registry &reg)
 {
     auto &velocities = reg.get_components<Velocity_s>();
     auto &controllables = reg.get_components<Controllable_s>();
@@ -36,21 +36,33 @@ void Systems::control_system(Registry &reg)
             vel->x = 0;
             vel->y = 0;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                vel->y = -1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                vel->y = 1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                vel->x = -1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                vel->x = 1.0f;
+            // Browse each key
+            for (int key = sf::Keyboard::A; key <= sf::Keyboard::KeyCount; ++key) {
+                if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key))) {
+                    switch (static_cast<sf::Keyboard::Key>(key)) {
+                        case sf::Keyboard::Up:
+                            vel->y = -1.0f;
+                            break;
+                        case sf::Keyboard::Down:
+                            vel->y = 1.0f;
+                            break;
+                        case sf::Keyboard::Left:
+                            vel->x = -1.0f;
+                            break;
+                        case sf::Keyboard::Right:
+                            vel->x = 1.0f;
+                            break;
+                        default:
+                            break;
+                    }
+                    return key;
+                }
             }
         }
     }
+    return -1;
 }
+
 
 void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
 {

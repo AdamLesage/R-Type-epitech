@@ -9,7 +9,6 @@
 
 RType::RenderingEngine::RenderingEngine()
 {
-    std::cout << "Rendering Engine created" << std::endl;
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
     try {
@@ -39,6 +38,7 @@ void RType::RenderingEngine::run()
         } else if (scene == 3) {
             window->close();
         } else if (scene == 4) {
+            this->setMediator(_mediator);
             games->displayGame();
         }
         window->display();
@@ -50,6 +50,7 @@ void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
     _mediator = mediator;
     this->lobby->setMediator(mediator);
     this->_menu->setMediator(mediator);
+    this->games->setMediator(mediator);
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()
