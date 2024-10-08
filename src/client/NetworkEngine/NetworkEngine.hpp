@@ -24,7 +24,7 @@ namespace RType {
              * @brief Run current instance of the engine.
              */
             void run() override;
-            
+
             /**
              * @brief Send a message to the game engine, it will call the mediator to send the message to the game engine.
             */

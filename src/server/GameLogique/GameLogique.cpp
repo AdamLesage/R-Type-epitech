@@ -140,7 +140,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
         return;
     }
 
-    int id = 0;
+    size_t id = 0;
     char input = 0;
     memcpy(&id, &(message.first[1]), sizeof(int));
     input = message.first[5];

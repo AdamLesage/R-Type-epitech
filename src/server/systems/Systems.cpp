@@ -83,6 +83,7 @@ void Systems::draw_system(Registry &reg, sf::RenderWindow &window, RType::Logger
 
 void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities, RType::Logger &logger)
 {
+    (void)logger;
     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
         auto const& pos = positions[i];
         auto const& vel = velocities[i];
@@ -97,6 +98,7 @@ void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArr
 void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_s *entityPos,
     Size_s *entitySize, Type_s *entityType, std::pair<size_t, size_t> MapSize, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender)
 {
+    (void)logger;
     if (entityType->type == EntityType::PROJECTILE &&
         (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
         entityPos->y < 0 || entityPos->y + entitySize->y > MapSize.second)) {
@@ -114,6 +116,7 @@ void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_
 void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Position_s *entityPos1, Size_s *entitySize1,
     size_t entityId2, Position_s *entityPos2, Size_s *entitySize2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender)
 {
+    (void)reg;
     bool collisionX = entityPos1->x < entityPos2->x + entitySize2->x &&
                       entityPos1->x + entitySize1->x > entityPos2->x;
     bool collisionY = entityPos1->y < entityPos2->y + entitySize2->y &&
@@ -152,6 +155,7 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize,
 
 void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger)
 {
+    (void)logger;
     auto &positions = reg.get_components<Position_s>();
     auto &types = reg.get_components<Type_s>();
     auto &shootingSpeeds = reg.get_components<ShootingSpeed_s>();
@@ -161,6 +165,7 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
     auto &type = types[playerId];
     auto &shootingSpeed = shootingSpeeds[playerId];
     auto &shoot = shoots[playerId];
+
     if (type && type->type == EntityType::PLAYER && shoot->canShoot) {
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = now - shoot->shootCooldown;
@@ -216,7 +221,7 @@ void Systems::update_scores(libconfig::Config &cfg, const std::string &playerNam
         lastTenScores.erase(lastTenScores.begin());
     }
 
-    for (int i = 0; i < lastTenScores.size(); ++i) {
+    for (auto i = 0u; i < lastTenScores.size(); ++i) {
         lastScores[i].add("name", libconfig::Setting::TypeString) = lastTenScores[i].first;
         lastScores[i].add("value", libconfig::Setting::TypeInt) = lastTenScores[i].second;
     }
@@ -235,7 +240,7 @@ void Systems::update_scores(libconfig::Config &cfg, const std::string &playerNam
               });
     bestScores.resize(3);
 
-    for (int i = 0; i < bestScores.size(); ++i) {
+    for (auto i = 0u; i < bestScores.size(); ++i) {
         highScores[i].add("name", libconfig::Setting::TypeString) = bestScores[i].first;
         highScores[i].add("value", libconfig::Setting::TypeInt) = bestScores[i].second;
     }
@@ -332,7 +337,9 @@ void Systems::death_system(Registry &reg, RType::Logger &logger)
     }
 }
 
-void Systems::wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger) {
+void Systems::wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger)
+{
+    (void)logger;
     auto &patterns =  reg.get_components<Wave_pattern>();
     auto &positions =  reg.get_components<Position>();
     auto &velocitys =  reg.get_components<Velocity>();

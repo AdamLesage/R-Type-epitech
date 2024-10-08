@@ -134,7 +134,7 @@ void RType::Game::play()
                 window->draw(draw->shape);
             }
         }
-        _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
+        // _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         window->display();
     }
 }
