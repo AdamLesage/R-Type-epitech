@@ -148,6 +148,7 @@ void RType::Lobby::displayLobby()
                     switch (getSelectedOption())
                     {
                     case 0: // Start game
+                    backgroundMusic.stop();
                         this->_renderMediator->notify("Lobby", "play");
                         games->displayGame();
                         break;
@@ -155,6 +156,7 @@ void RType::Lobby::displayLobby()
                         settings->displaySettings();
                         break;
                     case 2:
+                        backgroundMusic.stop();
                         window->close();
                         break;
                     }
