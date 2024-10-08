@@ -40,16 +40,39 @@ namespace RType
          * @brief Moves the selection right.
          */
         void moveRight();
+
         /**
          * @brief Moves the selection left.
          */
         void moveLeft();
+
         /**
          * @brief Get the selected option.
          *
          * @return int The selected option.
          */
         int getSelectedOption() const;
+
+        /**
+         * @brief Adjusts the volume of the background music.
+         *
+         * @param increase Whether to increase or decrease the volume.
+         */
+        void adjustVolume(bool increase);
+
+        /**
+         * @brief Handles key press events for volume adjustment.
+         *
+         * @param event The SFML event to handle.
+         */
+        void handleKeyPress(const sf::Event &event);
+
+
+        /**
+         * @brief Displays the sound of the lobby.
+         */
+        void displaySound();
+
         /**
          * @brief Displays the menu.
          */
