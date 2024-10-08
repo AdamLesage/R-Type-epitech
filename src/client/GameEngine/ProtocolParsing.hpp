@@ -31,7 +31,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parsePlayerCreation(const char *message);
+            bool parsePlayerCreation(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -39,7 +39,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseProjectileCreation(const char *message);
+            bool parseProjectileCreation(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -47,7 +47,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseEnemyCreation(const char *message);
+            bool parseEnemyCreation(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -55,7 +55,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseBonusCreation(const char *message);
+            bool parseBonusCreation(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -63,7 +63,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseWallCreation(const char *message);
+            bool parseWallCreation(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -71,7 +71,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseRewardCreation(const char *message);
+            bool parseRewardCreation(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -79,7 +79,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseEntityDeletion(const char *message);
+            bool parseEntityDeletion(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -87,7 +87,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parsePositionUpdate(const char *message);
+            bool parsePositionUpdate(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -95,7 +95,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseHealthUpdate(const char *message);
+            bool parseHealthUpdate(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -103,7 +103,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseDirectionUpdate(const char *message);
+            bool parseDirectionUpdate(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -111,7 +111,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseObjectCollection(const char *message);
+            bool parseObjectCollection(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -119,7 +119,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseProjectileFiring(const char *message);
+            bool parseProjectileFiring(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -127,7 +127,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseProjectileCollision(const char *message);
+            bool parseProjectileCollision(const std::string &message, int &index);
             
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -135,7 +135,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseScoreUpdate(const char *message);
+            bool parseScoreUpdate(const std::string &message, int &index);
 
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation and manage the corresponding request (creation, deletion, update)
@@ -143,7 +143,7 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseStateChange(const char *message);
+            bool parseStateChange(const std::string &message, int &index);
 
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation.
@@ -152,7 +152,7 @@ namespace RType {
              * @param data given by the server. (binary data)
              * @return true if the parsing is successful and the message is valid, false otherwise.
             */
-            bool parseData(const char *message);
+            bool parseData(const std::string &message);
 
         protected:
             /**
@@ -161,7 +161,7 @@ namespace RType {
              * @param messageType The message type to check.
              * @return true if the message type is valid, false otherwise.
             */
-            bool checkMessageType(const std::string &messageType, const char *message);
+            bool checkMessageType(const std::string &messageType, const std::string &message, int &index);
         private:
             // Variables
             std::string _protocolPath;
