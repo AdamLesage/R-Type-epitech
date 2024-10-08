@@ -125,7 +125,7 @@ set(SRC_SERVER
 add_executable(r-type_server ${SRC_SERVER})
 
 # Linkage for SFML and Boost libraries
-target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES})
+target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio config++ ${Boost_LIBRARIES})
 
 # Output directory for the server
 set_target_properties(r-type_server PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})

@@ -165,7 +165,7 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = now - shoot->shootCooldown;
         float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
-        
+
         if (elapsed_seconds >= shootingSpeed->shooting_speed) {
             shoot->shootCooldown = now;
             float projectileX = pos->x + 10;
@@ -180,6 +180,112 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
             networkSender->sendCreateProjectil(projectile, projectileX, projectileY, playerId);
         }
     }
+}
+
+bool Systems::read_scores_file(libconfig::Config &cfg, const std::string &configPath)
+{
+    try {
+        cfg.readFile(configPath.c_str());
+        return true;
+    } catch (const libconfig::FileIOException &fioex) {
+        std::cerr << "Error while reading file." << std::endl;
+        return false;
+    } catch (const libconfig::ParseException &ParserError) {
+        std::cerr << "Parse error at " << ParserError.getFile()
+                  << ":" << ParserError.getLine() << " - "
+                  << ParserError.getError() << std::endl;
+        return false;
+    }
+}
+
+void Systems::update_scores(libconfig::Config &cfg, const std::string &playerNames, size_t totalScore)
+{
+    libconfig::Setting &root = cfg.getRoot();
+    libconfig::Setting &lastScores = root["scores"];
+    libconfig::Setting &highScores = root["highscores"];
+
+    std::vector<std::pair<std::string, int>> lastTenScores;
+    for (int i = 0; i < lastScores.getLength(); ++i) {
+        std::string name = lastScores[i]["name"];
+        int value = lastScores[i]["value"];
+        lastTenScores.push_back({name, value});
+    }
+
+    lastTenScores.push_back({playerNames, totalScore});
+    if (lastTenScores.size() > 10) {
+        lastTenScores.erase(lastTenScores.begin());
+    }
+
+    for (int i = 0; i < lastTenScores.size(); ++i) {
+        lastScores[i].add("name", libconfig::Setting::TypeString) = lastTenScores[i].first;
+        lastScores[i].add("value", libconfig::Setting::TypeInt) = lastTenScores[i].second;
+    }
+
+    std::vector<std::pair<std::string, int>> bestScores;
+    for (int i = 0; i < highScores.getLength(); ++i) {
+        std::string name = highScores[i]["name"];
+        int value = highScores[i]["value"];
+        bestScores.push_back({name, value});
+    }
+
+    bestScores.push_back({playerNames, totalScore});
+    std::sort(bestScores.begin(), bestScores.end(),
+              [](const std::pair<std::string, int> &a, const std::pair<std::string, int> &b) {
+                  return a.second > b.second;
+              });
+    bestScores.resize(3);
+
+    for (int i = 0; i < bestScores.size(); ++i) {
+        highScores[i].add("name", libconfig::Setting::TypeString) = bestScores[i].first;
+        highScores[i].add("value", libconfig::Setting::TypeInt) = bestScores[i].second;
+    }
+}
+
+bool Systems::write_to_scores_file(libconfig::Config &cfg, const std::string &configPath)
+{
+    try {
+        cfg.writeFile(configPath.c_str());
+        std::cout << "Scores successfully written to: " << configPath << std::endl;
+        return true;
+    } catch (const libconfig::FileIOException &fioex) {
+        std::cerr << "Error while writing file: " << configPath << std::endl;
+        return false;
+    }
+}
+
+void Systems::score_system(Registry &reg)
+{
+    auto &hp = reg.get_components<Health_s>();
+    auto &controllable = reg.get_components<Controllable_s>();
+
+    for (size_t i = 0; i < hp.size() && i < controllable.size(); ++i) {
+        if (hp[i] && controllable[i] && hp[i]->health > 0) {
+            return;
+        }
+    }
+
+    std::string configPath = "../../config/scores.cfg";
+    libconfig::Config cfg;
+
+    if (!read_scores_file(cfg, configPath))
+        return;
+
+    auto &scores = reg.get_components<Score_s>();
+    auto &names = reg.get_components<Tag_s>();
+    size_t totalScore = 0;
+    std::string playerNames = "";
+
+    for (size_t i = 0; i < scores.size(); ++i) {
+        if (scores[i]) {
+            totalScore += scores[i]->score;
+        }
+        if (names[i]) {
+            if (!playerNames.empty()) playerNames += " & ";
+            playerNames += names[i]->tag;
+        }
+    }
+    update_scores(cfg, playerNames, totalScore);
+    write_to_scores_file(cfg, configPath);
 }
 
 void Systems::health_system(Registry &reg)
@@ -269,7 +375,7 @@ void Systems::player_following_pattern_system(Registry &reg)
         auto &pattern = patterns[i];
         auto &velocity = velocitys[i];
         auto &position = positions[i];
-        
+
         if (pattern && velocity && position) {
             std::array<float, 2> target_pos = this->find_closest_player(reg, &(*position));
             velocity->x = target_pos[0] - position->x;
@@ -298,7 +404,7 @@ void Systems::shoot_straight_pattern_system(Registry &reg, std::unique_ptr<Netwo
             auto now = std::chrono::steady_clock::now();
             std::chrono::duration<float> fs = now - pattern->lastShotTime;
             float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
-            
+
             if (elapsed_seconds >= pattern->shootCooldown) {
                 pattern->lastShotTime = now;
                 entity_t projectile = reg.spawn_entity();
@@ -327,7 +433,7 @@ void Systems::shoot_player_pattern_system(Registry &reg, std::unique_ptr<Network
             auto now = std::chrono::steady_clock::now();
             std::chrono::duration<float> fs = now - pattern->lastShotTime;
             float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
-            
+
             if (elapsed_seconds >= pattern->shootCooldown) {
                 pattern->lastShotTime = now;
 

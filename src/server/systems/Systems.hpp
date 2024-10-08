@@ -17,6 +17,7 @@
     #include "../../shared/components/Health.hpp"
     #include "../../shared/components/Damage.hpp"
     #include "../../shared/components/ShootingSpeed.hpp"
+    #include "../../shared/components/Score.hpp"
     #include "../../shared/components/Wave_Pattern.hpp"
     #include "../../shared/components/StraightPattern.hpp"
     #include "../../shared/components/PlayerFollowingPattern.hpp"
@@ -26,6 +27,11 @@
     #include "../../shared/components/Direction.hpp"
     #include "../GameLogique/NetworkSender.hpp"
     #include "../../shared/components/Size.hpp"
+    #include "../../shared/components/Tag.hpp"
+    #include <iostream>
+    #include <algorithm>
+    #include <fstream>
+    #include <libconfig.h++>
     #include "../utils/Logger.hpp"
     #include <iostream>
     #include <cmath>
@@ -79,9 +85,16 @@ class Systems {
          * @param reg The registry containing the components.
          * @param playerId playedId The id of the player.
          * @param network The class for sending data to client
+         * @param logger The logger to log the events
          */
         void shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger);
-    
+
+        /**
+         * @brief Handle the save of the score of the player.
+         * @param reg
+         */
+        void score_system(Registry &reg);
+
         /**
          * @brief Update the position for a wave patten
          *
@@ -89,6 +102,7 @@ class Systems {
          * @param totalTime The count since the start.
          */
         void wave_pattern_system(Registry &reg, float totalTime, RType::Logger &logger);
+
         /**
          * @brief Update the health of all entities based on the damages / regeneration / healing they receive.
          *
@@ -146,7 +160,6 @@ class Systems {
         void check_borders_collisions(Registry &reg, size_t entityId, Position_s *position, Size_s *size,
             Type_s *type, std::pair<size_t, size_t> MapSize, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender);
 
-
         /**
          * @brief Check if 2 entities are colliding.
          *
@@ -160,6 +173,35 @@ class Systems {
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
             size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender);
+
+        /**
+         * @brief Read the file that contains the scores history
+         *
+         * @param cfg The libconfig config object
+         * @param configPath The path to the file
+         * @return true The file was read successfully
+         * @return false An error occurred while reading the file
+         */
+        bool read_scores_file(libconfig::Config &cfg, const std::string &configPath);
+
+        /**
+         * @brief Handle the update of the scores history, fetch the kast 10 scores and insert the new one
+         *
+         * @param cfg The libconfig config object
+         * @param playerNames The names of the players
+         * @param totalScore The total score of the players (sum of all players)
+         */
+        void update_scores(libconfig::Config &cfg, const std::string &playerNames, size_t totalScore);
+
+        /**
+         * @brief Save the scores history to the file
+         *
+         * @param cfg The libconfig config object
+         * @param configPath The path to the file
+         * @return true The file was written successfully
+         * @return false An error occurred while writing the file
+         */
+        bool write_to_scores_file(libconfig::Config &cfg, const std::string &configPath);
 
         /**
          * @brief find the pos of the closest player
