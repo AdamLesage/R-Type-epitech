@@ -37,7 +37,7 @@ GameLogique::~GameLogique()
 
 void GameLogique::startGame() {
     if (running == false) {
-        std::cout << network->getClientCount() << std::endl;
+        // std::cout << network->getClientCount() << std::endl;
         for (size_t i = 0; i != network->getClientCount(); i++) {
             size_t entity = this->reg.spawn_entity();
             float xPos = 100.f + (100.f * i);
@@ -136,7 +136,6 @@ void GameLogique::runGame() {
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 {
     if (message.first.size() != 6) {
-        std::cerr << "invalide player Input:" << std::endl;
         return;
     }
 
@@ -153,19 +152,19 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     auto &velocitie = velocities[id];
 
     switch (input) {
-        case 'x':
+        case 'X':
             this->sys.shoot_system(reg, id, this->_networkSender, logger);
             break;
-        case 'z':
+        case 'Z':
             velocitie->y = -1;
             break;
-        case 'q':
+        case 'Q':
             velocitie->x = -1;
             break;
-        case 's':
+        case 'S':
             velocitie->y = 1;
             break;
-        case 'd':
+        case 'D':
             velocitie->x = 1;
             break;
         default:

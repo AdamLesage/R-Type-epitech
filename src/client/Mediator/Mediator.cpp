@@ -62,14 +62,14 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         return;
     if (sender == "Game") {
         std::cout << event << std::endl;
-        // char data[5];
-        // data[0] = 0x40; // Player input in protocol
-        // int player_id = 1;
-        // std::memcpy(&data[1], &player_id, sizeof(int));
-        // char input = std::stoi(event);
-        // std::memcpy(&data[5], &input, sizeof(char));
-        // this->_networkEngine->_client->send(std::string(data, sizeof(data)));
-        // return;
+        char data[6];
+        data[0] = 0x40; // Player input in protocol
+        int player_id = 1;
+        std::memcpy(&data[1], &player_id, sizeof(int));
+        char input = std::stoi(event);
+        std::memcpy(&data[5], &input, sizeof(char));
+        this->_networkEngine->_client->send(std::string(data, sizeof(data)));
+        return;
     }
     if (event == "play") { // Start the game
         char data[5];

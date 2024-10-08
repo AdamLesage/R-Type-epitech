@@ -108,8 +108,10 @@ void RType::Game::play()
         _systems.position_system(_registry);
         _systems.collision_system(_registry, *window.get());
         // std::cout << "Key pressed: " << keyPressed << std::endl;
-        if (keyPressed != -1 && _mediator != nullptr)
+        if (keyPressed != -1 && _mediator != nullptr) {
+            std::cout << "Key pressed: " << keyPressed << std::endl;
             this->_mediator->notify("Game", std::to_string(keyPressed));
+        }
 
         window->clear();
         if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
@@ -209,8 +211,5 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
 
 void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
 {
-    std::cout << "Game: Setting mediator and mediator is " << (mediator == nullptr ? "null" : "not null") << std::endl;
     _mediator = mediator;
-
-    _mediator->notify("Game", "blablabla");
 }

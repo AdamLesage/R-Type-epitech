@@ -53,15 +53,21 @@ int Systems::control_system(Registry &reg)
                             vel->x = 1.0f;
                             break;
                         default:
-                            break;
+                            // If the key is a letter or a number return the ASCII value
+                            if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z) {
+                                return static_cast<int>('A' + (key - sf::Keyboard::A));
+                            } else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9) {
+                                return static_cast<int>('0' + (key - sf::Keyboard::Num0));
+                            }
+                            return key;
                     }
-                    return key;
                 }
             }
         }
     }
     return -1;
 }
+
 
 
 void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
