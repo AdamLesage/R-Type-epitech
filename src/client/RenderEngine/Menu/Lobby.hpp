@@ -16,12 +16,13 @@
 #include "../../../shared/entities/Entity.hpp"
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
-#include "../RenderMediator.hpp"
 #include "Game.hpp"
 #include "Settings.hpp"
+#include "../../Mediator/IMediator.hpp"
 
 namespace RType
-{    class Lobby
+{
+    class Lobby
     {
     public:
         /**
@@ -83,7 +84,9 @@ namespace RType
          *
          * @param mediator The mediator to set.
          */
-        void setMediator(RType::RenderMediator *mediator);
+        void setMediator(std::shared_ptr<IMediator> mediator);
+        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
+
     protected:
         int selectedOption;
         std::shared_ptr<sf::RenderWindow> window;
@@ -105,7 +108,6 @@ namespace RType
         Systems _systems;
         std::shared_ptr<Game> games;
         std::shared_ptr<Settings> settings;
-        RType::RenderMediator *_renderMediator;
 
 
     private:

@@ -16,7 +16,6 @@
 #include "Menu/Lobby.hpp"
 
 namespace RType {
-    class RenderMediator;
     class RenderingEngine : public AEngine {
         public:
             RenderingEngine();
@@ -40,7 +39,6 @@ namespace RType {
             std::shared_ptr<Game> games;
             std::shared_ptr<Settings> settings;
             std::shared_ptr<Lobby> lobby;
-            std::shared_ptr<RenderMediator> _renderMediator;
     };
 }
 

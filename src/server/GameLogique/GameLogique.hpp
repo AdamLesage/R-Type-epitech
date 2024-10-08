@@ -69,4 +69,5 @@ class GameLogique {
         */
         void handleClientInput(std::pair<std::string, uint32_t> message);
 };
+
 #endif /* !GAMELOGIQUE_HPP_ */

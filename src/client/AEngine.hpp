@@ -11,7 +11,6 @@
 #include "IEngine.hpp"
 
 namespace RType {
-    class Mediator;
     class AEngine : public IEngine {
         public:
             AEngine(std::shared_ptr<IMediator> mediator);

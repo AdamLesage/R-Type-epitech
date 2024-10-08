@@ -30,8 +30,6 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
-
-    std::cout << "constructor" << std::endl;
 }
 
 Settings::~Settings()

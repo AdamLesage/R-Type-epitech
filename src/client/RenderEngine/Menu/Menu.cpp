@@ -7,7 +7,7 @@
 
 #include "Menu.hpp"
 
-RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw)
+RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator)
 {
     window = wndw;
     if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
@@ -44,7 +44,6 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw)
         // games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
         lobby = std::make_shared<Lobby>(window);
-        lobby->setMediator(_renderMediator);
     } catch (const std::runtime_error &e) {
         std::cerr << e.what() << std::endl;
         exit(84);
@@ -125,7 +124,7 @@ int RType::Menu::displayMenu()
     return (0);
 }
 
-void RType::Menu::setMediator(RType::RenderMediator *mediator)
+void RType::Menu::setMediator(std::shared_ptr<RType::IMediator> mediator)
 {
-    _renderMediator = mediator;
+    _mediator = mediator;
 }
