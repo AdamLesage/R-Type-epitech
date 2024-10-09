@@ -153,8 +153,13 @@ void RType::Game::set_texture()
         entity.push_back(sf::RectangleShape(convertToVector2f(camera->listEntityToDisplay[i].size)));
     }
     for (int i = 0; i < camera->listEntityToDisplay.size(); i++) {
-        if (Textures.find(camera->listEntityToDisplay[i].texturePath) != Textures.end())
+        if (Textures.find(camera->listEntityToDisplay[i].texturePath) != Textures.end()) {
             entity[i].setTexture(Textures[camera->listEntityToDisplay[i].texturePath]);
+        } else {
+            sf::Texture* texture = new sf::Texture();
+            texture->loadFromFile(camera->listEntityToDisplay[i].texturePath);
+            Textures.insert(std::make_pair(camera->listEntityToDisplay[i].texturePath, texture));
+        }
     }
 }
 
