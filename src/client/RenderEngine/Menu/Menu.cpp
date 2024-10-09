@@ -158,6 +158,35 @@ void RType::Menu::displaySound()
     window->draw(volumeText);
 }
 
+
+void RType::Menu::displaySubtitles()
+{
+    sf::Text subtitle;
+    subtitle.setFont(font);
+    subtitle.setString("Press Enter to select an option, you can also use the arrow keys to navigate");
+    subtitle.setCharacterSize(48);
+    subtitle.setFillColor(sf::Color::White);
+    subtitle.setStyle(sf::Text::Bold);
+
+    sf::FloatRect textRect = subtitle.getLocalBounds();
+    subtitle.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+    subtitle.setPosition(window->getSize().x / 2.0f, window->getSize().y - 50);
+
+    sf::Text subtitleShadow = subtitle;
+    subtitleShadow.setFillColor(sf::Color(0, 0, 130, 150));
+    subtitleShadow.setPosition(subtitle.getPosition().x + 2, subtitle.getPosition().y + 2);
+
+    sf::RectangleShape backgroundRect;
+    backgroundRect.setSize(sf::Vector2f(textRect.width + 20, textRect.height + 20));
+    backgroundRect.setFillColor(sf::Color(0, 0, 0, 150));
+    backgroundRect.setOrigin(backgroundRect.getSize().x / 2.0f, backgroundRect.getSize().y / 2.0f);
+    backgroundRect.setPosition(subtitle.getPosition());
+
+    window->draw(backgroundRect);
+    window->draw(subtitleShadow);
+    window->draw(subtitle);
+}
+
 int RType::Menu::displayMenu()
 {
     sf::Event event;
@@ -196,6 +225,7 @@ int RType::Menu::displayMenu()
     }
     draw();
     displaySound();
+    displaySubtitles();
     return (0);
 }
 
