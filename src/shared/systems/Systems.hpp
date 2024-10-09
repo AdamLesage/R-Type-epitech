@@ -47,7 +47,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param window The window to get the input from.
          */
-        int control_system(Registry &reg);
+        int control_system(Registry &reg, sf::RenderWindow &window);
 
         /**
          * @brief Draw all entities with a position and a drawable component.
@@ -57,14 +57,14 @@ class Systems {
          */
         void draw_system(Registry &reg, sf::RenderWindow &window);
 
-        /**
-         * @brief Log the position and velocity of all entities.
-         *
-         * @param reg The registry containing the components.
-         * @param positions The sparse array containing the positions.
-         * @param velocities The sparse array containing the velocities.
-         */
-        void logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities);
+        // /**
+        //  * @brief Log the position and velocity of all entities.
+        //  *
+        //  * @param reg The registry containing the components.
+        //  * @param positions The sparse array containing the positions.
+        //  * @param velocities The sparse array containing the velocities.
+        //  */
+        // void logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities);
 
         /**
          * @brief Update the position of all entities based on their velocity.

@@ -83,6 +83,8 @@ namespace RType {
         std::vector<sf::RectangleShape> players;
         std::vector<sf::Texture> playerTextures;
         std::unordered_map<std::string, sf::Texture> Textures;
+        sf::SoundBuffer game_launch_sound;
+        sf::Sound game_launch_music;
     };
 }
 

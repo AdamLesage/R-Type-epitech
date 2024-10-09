@@ -9,16 +9,6 @@
 
 RType::RenderingEngine::RenderingEngine()
 {
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
-    _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
-    try {
-        games = std::make_shared<Game>(window);
-        settings = std::make_shared<Settings>(window);
-        lobby = std::make_shared<Lobby>(window);
-    } catch (const std::runtime_error &e) {
-        std::cerr << e.what() << std::endl;
-        exit(84);
-    }
 }
 
 RType::RenderingEngine::~RenderingEngine()
@@ -27,7 +17,21 @@ RType::RenderingEngine::~RenderingEngine()
 
 void RType::RenderingEngine::run()
 {
+    std::cout << "Rendering Engine created" << std::endl;
+    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
+    _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
+    std::cout << "Menu created" << std::endl;
+    try {
+        games = std::make_shared<Game>(window);
+        settings = std::make_shared<Settings>(window);
+        lobby = std::make_shared<Lobby>(window);
+    } catch (const std::runtime_error &e) {
+        std::cerr << e.what() << std::endl;
+        exit(84);
+    }
     window->setFramerateLimit(360);
+    this->lobby->setMediator(_mediator);
+    this->_menu->setMediator(_mediator);
     window->clear();
     while (window->isOpen()) {
         int scene = _menu->displayMenu();
@@ -37,17 +41,17 @@ void RType::RenderingEngine::run()
             settings->displaySettings();
         } else if (scene == 3) {
             window->close();
+        } else if (scene == 4) {
+            games->displayGame();
         }
         window->display();
     }
+    exit(0);
 }
 
 void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
-    this->lobby->setMediator(mediator);
-    this->_menu->setMediator(mediator);
-    this->games->setMediator(mediator);
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()
