@@ -92,7 +92,7 @@ int Settings::getSelectedOption() const
 
 void Settings::changeKey(std::string key)
 {
-    std::string newKey = key.substr(0, 8);
+    std::string newKey = key.substr(0, 11);
     std::string newKey2;
     menuOptions[selectedOption].setString("PRESS A KEY");
     config_t cfg;
@@ -119,6 +119,12 @@ void Settings::changeKey(std::string key)
                     newKey2 = "ESCAPE";
                 } else if (event2.key.code == sf::Keyboard::Right) {
                     newKey2 = "Right arrow";
+                } else if (event2.key.code == sf::Keyboard::Left) {
+                    newKey2 = "Left arrow";
+                } else if (event2.key.code == sf::Keyboard::Down) {
+                    newKey2 = "Down arrow";
+                } else if (event2.key.code == sf::Keyboard::Up) {
+                    newKey2 = "Up arrow";
                 } else {
                     std::cerr << "Unsupported key" << std::endl;
                     keyPressed = false;
@@ -130,7 +136,7 @@ void Settings::changeKey(std::string key)
     }
     newKey += newKey2;
     menuOptions[selectedOption].setString(newKey);
-    newKey.substr(0, 8);
+    newKey.substr(0, 11);
     set_key_value(&cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
     if (!config_write_file(&cfg, "src/config/key.cfg")) {
         printf("Erreur lors de l'écriture du fichier\n");
@@ -155,12 +161,20 @@ void Settings::displaySettings()
         return;
     }
     selectedOption = 0;
-    std::string optionsText[] = {"UP      : Z", "DOWN    : S", "LEFT    : Q", "RIGHT   : D", "SHOOT   : SPACE", "SETTINGS: ESCAPE"};
-    for (int i = 0; i < 6; ++i) {
+    config_t cfg;
+    config_init(&cfg);
+    if (!config_read_file(&cfg, "src/config/key.cfg")) {
+        printf("Erreur lors du chargement du fichier de configuration\n");
+        config_destroy(&cfg);
+        return;
+    }
+    std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: "};
+    for (int i = 0; i < 6; i++) {
+        optionsText[i] += get_key_value(&cfg, ("Keys" + std::to_string(i + 1)).c_str());
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
         menuOptions[i].setString(optionsText[i]);
-        menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 20, 300 + i * 100));
+        menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 300 + i * 100));
     }
     while (window->isOpen()) {
         window->clear();
