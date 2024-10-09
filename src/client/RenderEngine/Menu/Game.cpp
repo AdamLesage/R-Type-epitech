@@ -151,6 +151,10 @@ sf::Vector2f RType::Game::convertToVector2f(const Size& size) {
     return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
 }
 
+sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
+    return sf::Vector2f(static_cast<float>(pos.x), static_cast<float>(pos.y));
+}
+
 void RType::Game::set_texture()
 {
     entity.clear();
@@ -160,6 +164,7 @@ void RType::Game::set_texture()
     for (int i = 0; i < camera->listEntityToDisplay.size(); i++) {
         if (Textures.find(camera->listEntityToDisplay[i].texturePath) != Textures.end()) {
             entity[i].setTexture(Textures[camera->listEntityToDisplay[i].texturePath]);
+            entity[i].setPosition(convertToVector2fb(camera->listEntityToDisplay[i].position));
         } else {
             sf::Texture* texture = new sf::Texture();
             texture->loadFromFile(camera->listEntityToDisplay[i].texturePath);

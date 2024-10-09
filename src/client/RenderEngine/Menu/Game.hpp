@@ -46,6 +46,7 @@ namespace RType {
         void play();
         void set_texture();
         sf::Vector2f convertToVector2f(const Size& size);
+        sf::Vector2f convertToVector2fb(const Position& pos);
     private:
         std::shared_ptr<sf::RenderWindow> window;
         sf::Font font;
