@@ -35,6 +35,36 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 Settings::~Settings()
 {
 }
+
+const char* Settings::get_key_value(config_t *cfg, const char *key_name) {
+    const char *value;
+
+    char path[100];
+    snprintf(path, sizeof(path), "Keys.%s.value", key_name);
+
+    if(config_lookup_string(cfg, path, &value)) {
+        return value;
+    } else {
+        printf("Clé non trouvée : %s\n", key_name);
+        return NULL;
+    }
+}
+
+int Settings::set_key_value(config_t *cfg, const char *key_name, const char *new_value) {
+    char path[100];
+    snprintf(path, sizeof(path), "Keys.%s.value", key_name);
+
+    config_setting_t *setting = config_lookup(cfg, path);
+    if (setting != NULL) {
+        config_setting_set_string(setting, new_value);
+        return 0;
+    } else {
+        printf("Clé non trouvée : %s\n", key_name);
+        return -1;
+    }
+}
+
+
 void Settings::moveUp()
 {
     if (selectedOption - 1 >= 0) {
@@ -63,7 +93,15 @@ int Settings::getSelectedOption() const
 void Settings::changeKey(std::string key)
 {
     std::string newKey = key.substr(0, 8);
+    std::string newKey2;
     menuOptions[selectedOption].setString("PRESS A KEY");
+    config_t cfg;
+    config_init(&cfg);
+    if (!config_read_file(&cfg, "src/config/key.cfg")) {
+        printf("Erreur lors du chargement du fichier de configuration\n");
+        config_destroy(&cfg);
+        return;
+    }
     display();
     sf::Event event2 = event;
     bool keyPressed = false;
@@ -72,13 +110,15 @@ void Settings::changeKey(std::string key)
             if (event2.type == sf::Event::KeyPressed) {
                 keyPressed = true;
                 if (event2.key.code >= sf::Keyboard::A && event2.key.code <= sf::Keyboard::Z) {
-                    newKey += static_cast<char>(event2.key.code + 'A');
+                    newKey2 = static_cast<char>(event2.key.code + 'A');
                 } else if (event2.key.code >= sf::Keyboard::Num1 && event2.key.code <= sf::Keyboard::Num9) {
-                    newKey += static_cast<char>(event2.key.code - sf::Keyboard::Num1 + '1');
+                    newKey2 = static_cast<char>(event2.key.code - sf::Keyboard::Num1 + '1');
                 } else if (event2.key.code == sf::Keyboard::Space) {
-                    newKey += "SPACE";
+                    newKey2 = "SPACE";
                 } else if (event2.key.code == sf::Keyboard::Escape) {
-                    newKey += "ESCAPE";
+                    newKey2 = "ESCAPE";
+                } else if (event2.key.code == sf::Keyboard::Right) {
+                    newKey2 = "Right arrow";
                 } else {
                     std::cerr << "Unsupported key" << std::endl;
                     keyPressed = false;
@@ -88,7 +128,14 @@ void Settings::changeKey(std::string key)
             }
         }
     }
+    newKey += newKey2;
     menuOptions[selectedOption].setString(newKey);
+    newKey.substr(0, 8);
+    set_key_value(&cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
+    if (!config_write_file(&cfg, "src/config/key.cfg")) {
+        printf("Erreur lors de l'écriture du fichier\n");
+    }
+    config_destroy(&cfg);
 }
 
 void Settings::display()
@@ -108,7 +155,7 @@ void Settings::displaySettings()
         return;
     }
     selectedOption = 0;
-    std::string optionsText[] = {"UP    : Z", "DOWN  : S", "LEFT  : Q", "RIGHT : D", "SHOOT : SPACE", "QUIT  : ESCAPE"};
+    std::string optionsText[] = {"UP      : Z", "DOWN    : S", "LEFT    : Q", "RIGHT   : D", "SHOOT   : SPACE", "SETTINGS: ESCAPE"};
     for (int i = 0; i < 6; ++i) {
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
