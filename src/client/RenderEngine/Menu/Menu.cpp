@@ -40,6 +40,11 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
+   if (!backgroundBuffer.loadFromFile("src/client/asset/Sounds/menu.ogg"))
+    {
+        throw std::runtime_error("Error loading select sound");
+    }
+    backgroundMusic.setBuffer(backgroundBuffer);
     try {
         // games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
@@ -49,6 +54,9 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
         exit(84);
     }
     selectedOption = 0;
+        backgroundMusic.play();
+    backgroundMusic.setLoop(true);
+
 }
 
 
@@ -87,6 +95,61 @@ int RType::Menu::getSelectedOption() const
     return selectedOption;
 }
 
+
+void RType::Menu::adjustVolume(bool increase)
+{
+    float currentVolume = backgroundMusic.getVolume();
+    if (increase)
+    {
+        currentVolume = std::min(100.0f, currentVolume + 10.0f);
+    }
+    else
+    {
+        currentVolume = std::max(0.0f, currentVolume - 10.0f);
+    }
+    backgroundMusic.setVolume(currentVolume);
+}
+
+void RType::Menu::handleKeyPress(const sf::Event &event)
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
+    {
+        adjustVolume(true);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
+    {
+        adjustVolume(false);
+    }
+}
+
+void RType::Menu::displaySound()
+{
+    float currentVolume = backgroundMusic.getVolume();
+    float maxVolume = 100.0f;
+    float volumeBarWidth = 200.0f;
+    float volumeBarHeight = 20.0f;
+    float volumePercentage = currentVolume / maxVolume;
+
+    sf::RectangleShape volumeBarBackground(sf::Vector2f(volumeBarWidth, volumeBarHeight));
+    volumeBarBackground.setFillColor(sf::Color(0, 0, 75)); 
+    volumeBarBackground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
+
+    sf::RectangleShape volumeBarForeground(sf::Vector2f(volumeBarWidth * volumePercentage, volumeBarHeight));
+    volumeBarForeground.setFillColor(sf::Color::Green);
+    volumeBarForeground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
+
+    sf::Text volumeText;
+    volumeText.setFont(font);
+    volumeText.setString("Volume:");
+    volumeText.setCharacterSize(24);
+    volumeText.setFillColor(sf::Color::White);
+    volumeText.setPosition(window->getSize().x - volumeBarWidth - 100, 20);
+
+    window->draw(volumeBarBackground);
+    window->draw(volumeBarForeground);
+    window->draw(volumeText);
+}
+
 int RType::Menu::displayMenu()
 {
     sf::Event event;
@@ -94,6 +157,7 @@ int RType::Menu::displayMenu()
         if (event.type == sf::Event::Closed) {
             window->close();
         }
+        handleKeyPress(event);
 
         if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
@@ -108,10 +172,12 @@ int RType::Menu::displayMenu()
             case sf::Keyboard::Enter:
                 switch (getSelectedOption()) {
                 case 0:
+                    backgroundMusic.stop();
                     return (1);
                 case 1:
                     return (2);
                 case 2:
+                    backgroundMusic.stop();
                     return (3);
                 }
                 break;
@@ -121,6 +187,7 @@ int RType::Menu::displayMenu()
         }
     }
     draw();
+    displaySound();
     return (0);
 }
 
