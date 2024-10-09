@@ -35,6 +35,8 @@ namespace RType {
          */
         ~Game();
 
+        void ShootSound();
+
         /**
          * @brief Displays the cinematic just before the game starts.
          */
@@ -85,6 +87,11 @@ namespace RType {
         std::unordered_map<std::string, sf::Texture> Textures;
         sf::SoundBuffer game_launch_sound;
         sf::Sound game_launch_music;
+        sf::SoundBuffer shoot_sound;
+        sf::Sound shoot_music;
+        sf::SoundBuffer shoot_sound2;
+        sf::Sound shoot_music2;
+        bool isShooting;
     };
 }
 

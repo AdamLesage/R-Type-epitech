@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <random>
 
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
@@ -38,7 +39,15 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
         throw std::runtime_error("Error loading game launch sound");
     }
     game_launch_music.setBuffer(game_launch_sound);
-
+    isShooting = false;
+    if (!shoot_sound.loadFromFile("src/client/asset/Sounds/shootsounds.wav")) {
+        throw std::runtime_error("Error loading shoot sound");
+    }
+    shoot_music.setBuffer(shoot_sound);
+    if (!shoot_sound2.loadFromFile("src/client/asset/Sounds/Piou.wav")) {
+        throw std::runtime_error("Error loading shoot sound 2");
+    }
+    shoot_music2.setBuffer(shoot_sound2);
     for (int i = 0; i < 3; i++) {
         backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
         backgrounds[i].setTexture(&backgroundTextures[i]);
@@ -70,6 +79,21 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
 
 RType::Game::~Game()
 {
+}
+
+void RType::Game::ShootSound()
+{
+    int random = rand() % 10;
+    std::cout << "Random: " << random << std::endl;
+    if (random == 9) {
+        std::cout << "Shooting 2" << std::endl;
+        shoot_music2.setVolume(200);
+        shoot_music2.play();
+    } else {
+    std::cout << "Shooting" << std::endl;
+        shoot_music2.play();
+
+    }
 }
 
 void RType::Game::play()
@@ -117,6 +141,8 @@ void RType::Game::play()
             std::cout << "Key pressed: " << keyPressed << std::endl;
             this->_mediator->notify("Game", std::to_string(keyPressed));
         }
+        if (keyPressed == 88)
+            ShootSound();
 
         window->clear();
         if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
