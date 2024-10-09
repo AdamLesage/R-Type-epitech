@@ -152,6 +152,10 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     }
     auto &velocitie = velocities[id];
 
+    libconfig::Config cfg;
+    cfg.readFile("./src/config/key.cfg");
+    std::string shootKey = cfg.lookup("Keys.Shoot.value");
+
     switch (input) {
         case 'X':
             std::cout << "shoot" << std::endl;
