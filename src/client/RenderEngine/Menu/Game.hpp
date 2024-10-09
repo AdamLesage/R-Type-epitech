@@ -61,6 +61,12 @@ namespace RType {
         sf::Vector2f convertToVector2fb(const Position& pos);
 
         /**
+         * @brief Displays the skip intro text.
+         */
+
+        void DisplaySkipIntro();
+
+        /**
          * @brief Sets the mediator, it will be used to communicate with the rendering engine.
          *
          * @param mediator The mediator to set.
@@ -69,7 +75,6 @@ namespace RType {
         std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
     private:
         std::shared_ptr<sf::RenderWindow> window;
-        sf::Font font;
         int currentFrame;
         float frameDuration;
         sf::Clock BackgroundClock;
@@ -110,6 +115,8 @@ namespace RType {
         sf::SoundBuffer shoot_sound2;
         sf::Sound shoot_music2;
         bool isShooting;
+        sf::Font font;
+
     };
 }
 

@@ -95,6 +95,18 @@ void RType::Game::ShootSound()
 
     }
 }
+void RType::Game::DisplaySkipIntro()
+{
+    std::cout << "Displaying skip intro" << std::endl;
+    sf::Text skipIntro;
+    skipIntro.setFont(font);
+    skipIntro.setString("Press Space to skip intro");
+    skipIntro.setCharacterSize(48);
+    skipIntro.setFillColor(sf::Color::White);
+    skipIntro.setStyle(sf::Text::Bold);
+    skipIntro.setPosition(1920 / 2 - 200, 1080 - 100);
+    window->draw(skipIntro);
+}
 
 void RType::Game::play()
 {
@@ -238,6 +250,8 @@ void RType::Game::displayGame()
             play();
         } else {
             window->draw(rectangleshape);
+            DisplaySkipIntro();
+
         }
         window->display();
     }
