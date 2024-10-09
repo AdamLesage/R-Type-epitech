@@ -6,6 +6,7 @@
 #include "../../../shared/entities/Entity.hpp"
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
+#include "../../Mediator/IMediator.hpp"
 #include "Settings.hpp"
 #include "../../Camera.hpp"
 
@@ -47,6 +48,14 @@ namespace RType {
         void set_texture();
         sf::Vector2f convertToVector2f(const Size& size);
         sf::Vector2f convertToVector2fb(const Position& pos);
+
+        /**
+         * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+         *
+         * @param mediator The mediator to set.
+         */
+        void setMediator(std::shared_ptr<IMediator> mediator);
+        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
     private:
         std::shared_ptr<sf::RenderWindow> window;
         sf::Font font;
