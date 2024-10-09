@@ -13,6 +13,8 @@
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
     this->window = _window;
+    std::cout << "Game created and mediator is null" << std::endl;
+    this->_mediator = nullptr;
     if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
@@ -107,9 +109,14 @@ void RType::Game::play()
             }
         }
 
-        _systems.control_system(_registry);
+        int keyPressed = _systems.control_system(_registry, *window.get());
         _systems.position_system(_registry);
         _systems.collision_system(_registry, *window.get());
+        // std::cout << "Key pressed: " << keyPressed << std::endl;
+        if (keyPressed != -1 && _mediator != nullptr) {
+            std::cout << "Key pressed: " << keyPressed << std::endl;
+            this->_mediator->notify("Game", std::to_string(keyPressed));
+        }
 
         window->clear();
         if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
@@ -215,4 +222,9 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
     }
 
     return true;
+}
+
+void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
 }

@@ -66,8 +66,6 @@ void Settings::changeKey(std::string key)
     menuOptions[selectedOption].setString("PRESS A KEY");
     display();
     sf::Event event2 = event;
-    std::cout << "event2.key.code : " << event2.key.code << std::endl;
-    std::cout << "event.key.code : " << event.key.code << std::endl;
     bool keyPressed = false;
     while (!keyPressed) {
         while (window->pollEvent(event2)) {

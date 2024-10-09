@@ -23,7 +23,6 @@ void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &net
             pos->x += vel->x;
             pos->y += vel->y;
             if (vel->x != 0 || vel->y != 0) {
-                std::cout << "entity: " << i << " pos: " << pos->x << ";" << pos->y << std::endl;
                 networkSender->sendPositionUpdate(i, pos->x, pos->y);
             }
             if (type->type == EntityType::PLAYER) {
