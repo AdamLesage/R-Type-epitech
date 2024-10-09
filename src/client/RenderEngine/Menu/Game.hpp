@@ -8,6 +8,12 @@
 #include "../../../shared/systems/Systems.hpp"
 #include "Settings.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+    #define PATH_SEPARATOR "\\"
+#else
+    #define PATH_SEPARATOR "/"
+#endif
+
 namespace RType {
     class Game {
     public:
@@ -52,7 +58,7 @@ namespace RType {
         bool animationComplete;
         /**
          * @brief Handles the events of the game.
-         * 
+         *
          * This function processes events such as closing the window.
          */
         void handleEvents();
@@ -79,7 +85,6 @@ namespace RType {
         /**
          * @brief map that will stock the textures, It will allow us to not load a texture every time we find a new entity but just when we find one that is not in our map
          */
-
     };
 }
 

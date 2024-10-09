@@ -10,16 +10,16 @@
 RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator)
 {
     window = wndw;
-    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
+    if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
 
-    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
+    if (!logoTexture.loadFromFile("assets/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
-    if (!backgroundTexture.loadFromFile("src/client/asset/background/menu.jpg")) {
+    if (!backgroundTexture.loadFromFile("assets/background/menu.jpg")) {
         std::cerr << "Error loading background" << std::endl;
         return;
     }
@@ -28,7 +28,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
-    if (!selectBuffer.loadFromFile("src/client/asset/Sounds/selectsound.wav")) {
+    if (!selectBuffer.loadFromFile("assets/Sounds/selectsound.wav")) {
         std::cerr << "Error loading select sound" << std::endl;
     } else {
         selectSound.setBuffer(selectBuffer);

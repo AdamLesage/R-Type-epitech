@@ -10,17 +10,17 @@
 Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 {
     this->window = _window;
-    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
+    if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
 
-    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
+    if (!logoTexture.loadFromFile("assets/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
 
-    if (!backgroundTexture.loadFromFile("src/client/asset/background/menu.jpg")) {
+    if (!backgroundTexture.loadFromFile("assets/background/menu.jpg")) {
         std::cerr << "Error loading background" << std::endl;
         return;
     }

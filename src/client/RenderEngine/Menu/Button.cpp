@@ -45,7 +45,7 @@ bool Button::checkClick(std::shared_ptr<sf::RenderWindow> window, sf::Event even
 
 void Button::displayButton(std::shared_ptr<sf::RenderWindow> window)
 {
-    std::string font_path("./asset/r-type.ttf");
+    std::string font_path("assets/r-type.ttf");
     sf::Font font;
     sf::Color color = this->hoverSape.getFillColor();
 

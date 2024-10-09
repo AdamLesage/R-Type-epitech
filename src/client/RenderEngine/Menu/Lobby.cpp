@@ -3,7 +3,7 @@
 RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window), selectedOption(0)
 {
     this->window = _window;
-    if (!font.loadFromFile("src/client/asset/r-type.ttf"))
+    if (!font.loadFromFile("assets/r-type.ttf"))
     {
         throw std::runtime_error("Error loading font");
     }
@@ -18,7 +18,7 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         playersNames[i].setCharacterSize(24);
         playersNames[i].setFillColor(sf::Color::White);
 
-        if (!playerTextures[i].loadFromFile("src/client/asset/player/player_" + std::to_string(i + 1) + ".png"))
+        if (!playerTextures[i].loadFromFile("assets/player/player_" + std::to_string(i + 1) + ".png"))
         {
             throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
         }
@@ -40,17 +40,17 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         playerSprites[i].setPosition((window->getSize().x / 3.0f) + 200, currentY - 10);
     }
 
-    if (!backgroundBuffer.loadFromFile("src/client/asset/Sounds/lobby.ogg"))
+    if (!backgroundBuffer.loadFromFile("assets/Sounds/lobby.ogg"))
     {
         throw std::runtime_error("Error loading background music");
     }
     backgroundMusic.setBuffer(backgroundBuffer);
 
-    if (!backgroundTexture.loadFromFile("src/client/asset/background/menu.jpg"))
+    if (!backgroundTexture.loadFromFile("assets/background/menu.jpg"))
     {
         throw std::runtime_error("Error loading background texture");
     }
-    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png"))
+    if (!logoTexture.loadFromFile("assets/rtypelogo.png"))
     {
         throw std::runtime_error("Error loading logo texture");
     }
@@ -59,7 +59,7 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
     background.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(window->getSize().x / 2.0f - logoTexture.getSize().x / 2.0f, 50);
-    if (!selectBuffer.loadFromFile("src/client/asset/Sounds/selectsound.wav"))
+    if (!selectBuffer.loadFromFile("assets/Sounds/selectsound.wav"))
     {
         throw std::runtime_error("Error loading select sound");
     }

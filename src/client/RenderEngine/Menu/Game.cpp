@@ -13,26 +13,33 @@
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
     this->window = _window;
-    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
+
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
     }
 
     backgroundTextures.push_back(sf::Texture());
     backgroundTextures.push_back(sf::Texture());
     backgroundTextures.push_back(sf::Texture());
-    if (!backgroundTextures[0].loadFromFile("src/client/asset/background/back.png")) {
+
+    std::string backgroundPath1 = std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR + "back.png";
+    if (!backgroundTextures[0].loadFromFile(backgroundPath1)) {
         throw std::runtime_error("Error loading backgroundTexture 1");
     }
 
-    if (!backgroundTextures[1].loadFromFile("src/client/asset/background/stars.png")) {
+    std::string backgroundPath2 = std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR + "stars.png";
+    if (!backgroundTextures[1].loadFromFile(backgroundPath2)) {
         throw std::runtime_error("Error loading backgroundTexture 2");
     }
 
-    if (!backgroundTextures[2].loadFromFile("src/client/asset/background/planet.png")) {
+    std::string backgroundPath3 = std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR + "planet.png";
+    if (!backgroundTextures[2].loadFromFile(backgroundPath3)) {
         throw std::runtime_error("Error loading backgroundTexture 3");
     }
 
-    if (!game_launch_sound.loadFromFile("src/client/asset/Sounds/game_launch.ogg")) {
+    std::string soundPath = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "game_launch.ogg";
+    if (!game_launch_sound.loadFromFile(soundPath)) {
         throw std::runtime_error("Error loading game launch sound");
     }
     game_launch_music.setBuffer(game_launch_sound);
@@ -46,18 +53,21 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
     backgrounds[3].setTexture(&backgroundTextures[1]);
     backgrounds[3].setPosition(sf::Vector2f(1920, 0));
     backgrounds[1].setFillColor(sf::Color(255, 255, 255, 128)); // Set half transparency
+
     for (int i = 0; i < 5; i++) {
         players.push_back(sf::RectangleShape(sf::Vector2f(131.5, 58.f)));
         playerTextures.push_back(sf::Texture());
     }
     for (int i = 0; i < 5; i++) {
-        if (!playerTextures[i].loadFromFile("src/client/asset/player/player_" + std::to_string(i + 1) + ".png")) {
+        std::string playerPath = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_" + std::to_string(i + 1) + ".png";
+        if (!playerTextures[i].loadFromFile(playerPath)) {
             throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
         }
         players[i].setTexture(&playerTextures[i]);
         players[i].setPosition(sf::Vector2f(125.f + (125.f * i), 125.f));
         players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
     }
+
     settings = std::make_shared<Settings>(window);
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
@@ -139,7 +149,6 @@ void RType::Game::play()
                 window->draw(draw->shape);
             }
         }
-        // _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         window->display();
     }
 }
@@ -194,7 +203,8 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
 {
     frameDuration = 1.0f / 12.0f;
     std::ostringstream oss;
-    oss << "src/client/asset/game_launch/Sans titre (1)_" << std::setw(3) << std::setfill('0') << currentFrame << ".jpg";
+    oss << "assets" << PATH_SEPARATOR << "game_launch" << PATH_SEPARATOR << "Sans titre (1)_"
+        << std::setw(3) << std::setfill('0') << currentFrame << ".jpg";
     std::string filename = oss.str();
 
     if (!texture.loadFromFile(filename)) {
