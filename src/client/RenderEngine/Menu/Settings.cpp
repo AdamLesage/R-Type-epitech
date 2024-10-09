@@ -31,8 +31,6 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
-
-    std::cout << "constructor" << std::endl;
 }
 
 Settings::~Settings()
@@ -69,8 +67,6 @@ void Settings::changeKey(std::string key)
     menuOptions[selectedOption].setString("PRESS A KEY");
     display();
     sf::Event event2 = event;
-    std::cout << "event2.key.code : " << event2.key.code << std::endl;
-    std::cout << "event.key.code : " << event.key.code << std::endl;
     bool keyPressed = false;
     while (!keyPressed) {
         while (window->pollEvent(event2)) {

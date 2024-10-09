@@ -6,6 +6,8 @@
 #include "../../../shared/entities/Entity.hpp"
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
+#include "../../Mediator/IMediator.hpp"
+#include "Settings.hpp"
 
 namespace RType {
     class Game {
@@ -42,11 +44,20 @@ namespace RType {
          * @brief Displays the game we are playing.
          */
         void play();
+
+        /**
+         * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+         *
+         * @param mediator The mediator to set.
+         */
+        void setMediator(std::shared_ptr<IMediator> mediator);
+        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
     private:
         std::shared_ptr<sf::RenderWindow> window;
         sf::Font font;
         int currentFrame;
         float frameDuration;
+        sf::Clock BackgroundClock;
         bool animationComplete;
         /**
          * @brief Handles the events of the game.
@@ -66,10 +77,14 @@ namespace RType {
         bool loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite);
         Registry _registry;
         Systems _systems;
+        std::shared_ptr<Settings> settings;
         std::vector<sf::RectangleShape> backgrounds;
         std::vector<sf::Texture> backgroundTextures;
-        sf::RectangleShape player;
+        std::vector<sf::RectangleShape> players;
         std::vector<sf::Texture> playerTextures;
+        std::unordered_map<std::string, sf::Texture> Textures;
+        sf::SoundBuffer game_launch_sound;
+        sf::Sound game_launch_music;
     };
 }
 

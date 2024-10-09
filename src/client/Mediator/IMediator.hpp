@@ -20,7 +20,7 @@ namespace RType {
              * @param sender The sender of the event.
              * @param event The event to notify.
              */
-            virtual void notify(std::string sender, std::string event) = 0;
+            virtual void notify(std::string sender, const std::string &event) = 0;
 
         protected:
         private:

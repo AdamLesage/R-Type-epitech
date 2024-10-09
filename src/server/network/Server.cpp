@@ -77,8 +77,14 @@ namespace NetworkLib {
 		start_receive();
 	}
 
+	void Server::send(std::vector<char> message, boost::asio::ip::udp::endpoint target_endpoint)
+	{
+		this->socket.send_to(boost::asio::buffer(message, message.size()), target_endpoint);
+	}
+
 	void Server::send(const char *message, size_t size, boost::asio::ip::udp::endpoint target_endpoint)
 	{
+
 		this->socket.send_to(boost::asio::buffer(message, size), target_endpoint);
 	}
 
@@ -93,8 +99,13 @@ namespace NetworkLib {
 
 	void Server::sendToAll(const char *message, size_t size)
 	{
-		for (auto client : clients)
-			send(message, size, client.second);
+		packetToSend.insert(packetToSend.end(), message, message + size);
+		if (packetToSend.size() < 1500) {
+		} else {
+			for (auto client : clients)
+				send(packetToSend, client.second);
+			packetToSend.clear();
+		}
 	}
 
 	void Server::run_service()

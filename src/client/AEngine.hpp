@@ -11,25 +11,26 @@
 #include "IEngine.hpp"
 
 namespace RType {
-    class Mediator;
     class AEngine : public IEngine {
         public:
-            AEngine(std::shared_ptr<IMediator> mediator = nullptr) : _mediator(mediator) {}
-            ~AEngine() {}
+            AEngine(std::shared_ptr<IMediator> mediator);
+            AEngine() = default;
+            ~AEngine();
 
             /**
              * @brief Set the mediator of the engine.
              *
              * @param mediator The mediator to set.
              */
-            void setMediator(std::shared_ptr<IMediator> mediator) override { _mediator = mediator; }
+            void setMediator(std::shared_ptr<IMediator> mediator) override;
 
             /**
              * @brief Run current instance of the engine.
              */
-            void run() override {}
+            void run() override;
+
+            std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
         protected:
-            std::shared_ptr<IMediator> _mediator;
         private:
     };
 }

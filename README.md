@@ -1,3 +1,4 @@
+
 ![Logo of the project](https://shmups.wiki/images/thumb/6/64/R-Type_Logo.png/500px-R-Type_Logo.png)
 
 # R-Type Reproduction
@@ -9,72 +10,57 @@ To see more about R-Type, you can visit the [R-Type Wikipedia page](https://fr.w
 
 ## Installing / Getting started
 
-To install the project, you can clone the repository and compile it with the CMakeLists.txt file.
+There are two ways to install and run the project, depending on whether you are developing or using the software as a regular user.
+
+### For Developers (Development Mode)
+
+To install the project in development mode, you can clone the repository and compile it with the `Makefile`:
 
 ```shell
 git clone git@github.com:AdamLesage/R-Type-epitech.git
 cd R-Type-epitech
-```
-
-This will create a directory called `R-Type-epitech` in the current directory.
-
-`cd R-Type-epitech` will move you into the directory.
-
-### Initial Configuration
-
-Need to create initial configuration, it will be a list of commands to run the project in the first time.
-
-## Developing
-
-Need to create developing section, it will be a list of commands to run the project in development mode.
-
-### Building
-
-To install the project, you can clone the repository and compile it with the CMakeLists.txt file.
-
-```shell
-mkdir build
-cd build
-cmake ..
 make
 ```
 
 This will create an executable file called `rtype` in the `build` directory.
 
-But you can also use our script to compile the project.
+### For Users (Production Mode)
 
-```shell
-chmod +x start_project.sh
-./start_project.sh
-```
+If you want to install and use the software as a regular user, simply download the latest release from the [Releases](https://github.com/AdamLesage/R-Type-epitech/releases) section on GitHub.
 
-The command `chmod +x start_project.sh` will give the execution rights to the script, and `./start_project.sh` will execute the script.
+For **Linux** users:
+1. Download the Linux installer from the release page.
+2. Make the installer executable:
+    ```shell
+    chmod +x linux_installer.sh
+    ```
+3. Run the installer:
+    ```shell
+    ./linux_installer.sh
+    ```
+
+For more details on the installation, check the documentation file: `./documentation/LINUX_INSTALL.md`.
+
+For **Windows** users, download the Windows installer and follow the instructions provided in `./documentation/WINDOWS_INSTALL.md`.
+
+## Developing
+
+This section is already mentioned above under development mode. For more details, refer to the `start_project.sh` or follow the manual build process using `make`.
 
 ### Deploying / Publishing
 
-Need to create deploying/publishing section, it will be a list of commands to deploy the project.
+The deployment process is as simple as downloading the release package for the respective platform and running the installer. Further deployment instructions may be added in the future.
 
 ## Features
 
-Need to create features section, it will be a list of features on project.
+List of features to be added.
 
 ## Contributing
 
-When you publish something open source, one of the greatest motivations is that
-anyone can just jump in and start contributing to your project.
+We welcome contributions! If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcome.
 
-These paragraphs are meant to welcome those kind souls to feel that they are
-needed. You should state something like:
-
-"If you'd like to contribute, please fork the repository and use a feature
-branch. Pull requests are warmly welcome."
-
-If there's anything else the developer needs to know (e.g. the code style
-guide), you should link it here. If there's a lot of things to take into
-consideration, it is common to separate this section to its own file called
-`CONTRIBUTING.md` (or similar). If so, you should say that it exists here.
+For more details about contributing (code style, guidelines, etc.), check the `CONTRIBUTING.md` file.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-

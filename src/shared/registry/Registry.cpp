@@ -14,6 +14,7 @@ entity_t Registry::spawn_entity()
         _dead_entities.pop();
         return reused_id;
     }
+    _entities.push_back(_next_entity_id);
     return _next_entity_id++;
 }
 
