@@ -133,6 +133,36 @@ void GameLogique::runGame() {
     }
 }
 
+std::array<char, 6> GameLogique::retrieveInputKeys()
+{
+    libconfig::Config cfg;
+    cfg.readFile("./src/config/key.cfg");
+    std::string keyStr;
+    std::array<char, 6> inputKeys;
+    const libconfig::Setting& root = cfg.getRoot();
+    const libconfig::Setting& keys = root["Keys"];
+
+    // Map to associate key names with their respective index in the array
+    std::unordered_map<std::string, int> keyMap = {
+        {"up", 0}, {"down", 1}, {"left", 2},
+        {"right", 3}, {"shoot", 4}, {"settings", 5}
+    };
+
+    for (int i = 0; i < keys.getLength(); ++i) {
+        const libconfig::Setting& key = keys[i];
+        std::string name;
+        key.lookupValue("name", name);
+        auto it = keyMap.find(name);
+        
+        // If the key name is found in the map, assign the value
+        if (it != keyMap.end()) {
+            key.lookupValue("value", keyStr);
+            inputKeys[it->second] = keyStr[0];
+        }
+    }
+    return inputKeys;
+}
+
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 {
     if (message.first.size() != 6) {
@@ -151,30 +181,18 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
         return;
     }
     auto &velocitie = velocities[id];
+    std::array<char, 6> keys = retrieveInputKeys();
 
-    libconfig::Config cfg;
-    cfg.readFile("./src/config/key.cfg");
-    std::string shootKey = cfg.lookup("Keys.Shoot.value");
-
-    switch (input) {
-        case 'X':
-            std::cout << "shoot" << std::endl;
-            this->sys.shoot_system(reg, id, this->_networkSender, logger);
-            break;
-        case 'Z':
-            velocitie->y = -1;
-            break;
-        case 'Q':
-            velocitie->x = -1;
-            break;
-        case 'S':
-            velocitie->y = 1;
-            break;
-        case 'D':
-            velocitie->x = 1;
-            break;
-        default:
-            break;
+    if (input == keys[0]) { // UP
+        velocitie->y = -1;
+    } else if (input == keys[1]) { // DOWN
+        velocitie->y = 1;
+    } else if (input == keys[2]) { // RIGHT
+        velocitie->x = 1;
+    } else if (input == keys[3]) { // LEFT
+        velocitie->x = -1;
+    } else if (input == keys[4]) { // SHOOT
+        this->sys.shoot_system(reg, id, this->_networkSender, logger);
     }
 }
 
