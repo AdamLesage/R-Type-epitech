@@ -112,7 +112,7 @@ int main(int ac, char **av)
     std::shared_ptr<DLLoader> audioEngineLoader;
 
     RType::Logger logger;
-    if (PATH_SEPARATOR == "\\") {
+    if (std::string(PATH_SEPARATOR) == "\\") {
         logger.log(RType::Logger::LogType::INFO, "Running R-Type on Windows.");
     } else {
         logger.log(RType::Logger::LogType::INFO, "Running R-Type on Unix.");
@@ -156,7 +156,7 @@ int main(int ac, char **av)
         auto audioEngine = loadEngine<RType::AudioEngine>(audioEngineLoader, "entryPointAudioEngine");
         auto renderingEngine = loadEngine<RType::RenderingEngine>(renderingEngineLoader, "entryPointRenderingEngine");
 
-        RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
+        // RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
         gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
         gameEngine->run();

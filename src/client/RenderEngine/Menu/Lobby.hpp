@@ -19,6 +19,7 @@
 #include "Game.hpp"
 #include "Settings.hpp"
 #include "../../Mediator/IMediator.hpp"
+#include "../../../shared/utils/Logger.hpp"
 
 namespace RType
 {
@@ -88,8 +89,8 @@ namespace RType
         std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
 
     protected:
-        int selectedOption;
         std::shared_ptr<sf::RenderWindow> window;
+        int selectedOption;
         sf::Font font;
         sf::Text playersNames[5];
         sf::Sound backgroundMusic;
@@ -109,8 +110,8 @@ namespace RType
         std::shared_ptr<Game> games;
         std::shared_ptr<Settings> settings;
 
-
     private:
+        Logger _logger;
     };
 
 }

@@ -135,6 +135,7 @@ void RType::Lobby::adjustVolume(bool increase)
 
 void RType::Lobby::handleKeyPress(const sf::Event &event)
 {
+    (void)event;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
     {
         adjustVolume(true);
@@ -154,7 +155,7 @@ void RType::Lobby::displaySound()
     float volumePercentage = currentVolume / maxVolume;
 
     sf::RectangleShape volumeBarBackground(sf::Vector2f(volumeBarWidth, volumeBarHeight));
-    volumeBarBackground.setFillColor(sf::Color(0, 0, 75)); 
+    volumeBarBackground.setFillColor(sf::Color(0, 0, 75));
     volumeBarBackground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
 
     sf::RectangleShape volumeBarForeground(sf::Vector2f(volumeBarWidth * volumePercentage, volumeBarHeight));

@@ -117,6 +117,7 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
     size_t entityId2, Position_s *entityPos2, Size_s *entitySize2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender)
 {
     (void)reg;
+    (void)networkSender;
     bool collisionX = entityPos1->x < entityPos2->x + entitySize2->x &&
                       entityPos1->x + entitySize1->x > entityPos2->x;
     bool collisionY = entityPos1->y < entityPos2->y + entitySize2->y &&
