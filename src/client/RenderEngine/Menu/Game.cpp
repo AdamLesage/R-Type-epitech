@@ -135,14 +135,20 @@ void RType::Game::set_texture()
             entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
         }
         for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
-            if (Textures.find(_camera->listEntityToDisplay[i].texturePath) != Textures.end()) {
-                entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].texturePath]);
+            if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath) != Textures.end()) {
+                entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
+                entity[i].setTextureRect(sf::IntRect(
+                    _camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                    _camera->listEntityToDisplay[i].sprite.rectSize[0], _camera->listEntityToDisplay[i].sprite.rectSize[1]));
                 entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
             } else {
                 sf::Texture* texture = new sf::Texture();
-                texture->loadFromFile(_camera->listEntityToDisplay[i].texturePath);
-                Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].texturePath, texture));
-                entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].texturePath]);
+                texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath);
+                Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, texture));
+                entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
+                entity[i].setTextureRect(sf::IntRect(
+                    _camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                    _camera->listEntityToDisplay[i].sprite.rectSize[0], _camera->listEntityToDisplay[i].sprite.rectSize[1]));
                 entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
             }
         }

@@ -143,7 +143,7 @@ void RType::GameEngine::updateCamera()
         auto &sprite = sprites[i];
 
         if (position && size && direction && sprite) {
-            entityRender.push_back({size.value(), position.value(), direction.value(), sprite->spritePath});
+            entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
         }
     }
     this->_camera->listEntityToDisplay = std::move(entityRender);
