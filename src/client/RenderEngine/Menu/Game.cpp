@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <random>
 
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
@@ -38,7 +39,15 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
         throw std::runtime_error("Error loading game launch sound");
     }
     game_launch_music.setBuffer(game_launch_sound);
-
+    isShooting = false;
+    if (!shoot_sound.loadFromFile("src/client/asset/Sounds/shootsounds.wav")) {
+        throw std::runtime_error("Error loading shoot sound");
+    }
+    shoot_music.setBuffer(shoot_sound);
+    if (!shoot_sound2.loadFromFile("src/client/asset/Sounds/Piou.wav")) {
+        throw std::runtime_error("Error loading shoot sound 2");
+    }
+    shoot_music2.setBuffer(shoot_sound2);
     for (int i = 0; i < 3; i++) {
         backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
         backgrounds[i].setTexture(&backgroundTextures[i]);
@@ -72,6 +81,29 @@ RType::Game::~Game()
 {
 }
 
+void RType::Game::ShootSound()
+{
+    int random = rand() % 10;
+    if (random == 9) {
+        shoot_music2.setVolume(200);
+        shoot_music2.play();
+    } else {
+        shoot_music2.play();
+
+    }
+}
+void RType::Game::DisplaySkipIntro()
+{
+    sf::Text skipIntro;
+    skipIntro.setFont(font);
+    skipIntro.setString("Press Space to skip intro");
+    skipIntro.setCharacterSize(48);
+    skipIntro.setFillColor(sf::Color::White);
+    skipIntro.setStyle(sf::Text::Bold);
+    skipIntro.setPosition(1920 / 2 - 200, 1080 - 100);
+    window->draw(skipIntro);
+}
+
 void RType::Game::play()
 {
     while (window->isOpen()) {
@@ -89,11 +121,11 @@ void RType::Game::play()
         int keyPressed = _systems.control_system(_registry, *window.get());
         _systems.position_system(_registry);
         _systems.collision_system(_registry, *window.get());
-        // std::cout << "Key pressed: " << keyPressed << std::endl;
         if (keyPressed != -1 && _mediator != nullptr) {
-            std::cout << "Key pressed: " << keyPressed << std::endl;
             this->_mediator->notify("Game", std::to_string(keyPressed));
         }
+        if (keyPressed == 88)
+            ShootSound();
 
         window->clear();
         if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
@@ -151,7 +183,7 @@ void RType::Game::set_texture()
 
 void RType::Game::displayGame()
 {
-    sf::Sprite sprite;
+    sf::RectangleShape rectangleshape;
     sf::Texture texture;
     sf::Clock clock;
 
@@ -168,7 +200,7 @@ void RType::Game::displayGame()
                 game_launch_music.play();
             }
             if (clock.getElapsedTime().asSeconds() > frameDuration) {
-                if (!loadFrameTexture(texture, sprite)) {
+                if (!loadFrameTexture(texture, rectangleshape)) {
                     return;
                 }
                 clock.restart();
@@ -180,7 +212,9 @@ void RType::Game::displayGame()
             game_launch_music.stop();
             play();
         } else {
-            window->draw(sprite);
+            window->draw(rectangleshape);
+            DisplaySkipIntro();
+
         }
         window->display();
     }
@@ -192,10 +226,15 @@ void RType::Game::handleEvents()
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             window->close();
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Space) {
+                animationComplete = true;
+            }
+        }
     }
 }
 
-bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
+bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rectangleshape)
 {
     frameDuration = 1.0f / 12.0f;
     std::ostringstream oss;
@@ -206,8 +245,8 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
         std::cerr << "Error loading " << filename << std::endl;
         return false;
     }
-
-    sprite.setTexture(texture);
+    rectangleshape.setTexture(&texture);
+    rectangleshape.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     currentFrame++;
 
     if (currentFrame > 151) {

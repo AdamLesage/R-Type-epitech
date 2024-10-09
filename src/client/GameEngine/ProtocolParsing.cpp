@@ -90,7 +90,6 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message, int
     float posY;
 
     try {
-        std::cout << index << std::endl;
         std::memcpy(&playerId, &message[index + 1], sizeof(unsigned int));
         std::memcpy(&posX, &message[index + 5], sizeof(float));
         std::memcpy(&posY, &message[index + 9], sizeof(float));
@@ -329,7 +328,7 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string &message, int
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
     } catch (const std::out_of_range &e) {
-        std::cerr << "Entity not found" << std::endl;
+        std::cerr << "Entity not found for deletion" << std::endl;
         return false;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while deleting the entity" << std::endl;
@@ -372,7 +371,8 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message, int
         _registry.remove_component<Position>(entity);
         _registry.add_component<Position>(entity, Position{posX, posY});
     } catch (const std::out_of_range &e) {
-        std::cerr << "Entity not found" << std::endl;
+        std::cout << "entityId: " << entityId << std::endl;
+        std::cerr << "Entity not found for position update" << std::endl;
         return false;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while updating the position" << std::endl;
@@ -412,7 +412,7 @@ bool RType::ProtocolParsing::parseHealthUpdate(const std::string &message, int &
             _registry.add_component<Health>(entity, Health{health, 100, true, true});
         }
     } catch (const std::out_of_range &e) {
-        std::cerr << "Entity not found" << std::endl;
+        std::cerr << "Entity not found for health update" << std::endl;
         return false;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while updating the health" << std::endl;

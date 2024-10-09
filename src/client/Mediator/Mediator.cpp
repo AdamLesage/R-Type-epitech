@@ -61,7 +61,6 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
     if (sender != "RenderingEngine" && sender != "Game")
         return;
     if (sender == "Game") {
-        std::cout << event << std::endl;
         char data[6];
         data[0] = 0x40; // Player input in protocol
         int player_id = 1;

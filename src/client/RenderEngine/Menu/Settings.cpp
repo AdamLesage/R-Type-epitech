@@ -108,7 +108,7 @@ void Settings::displaySettings()
         return;
     }
     selectedOption = 0;
-    std::string optionsText[] = {"UP    : Z", "DOWN  : S", "LEFT  : Q", "RIGHT : D", "SHOOT : SPACE", "QUIT  : ESCAPE"};
+    std::string optionsText[] = {"UP : Z", "DOWN  : S", "LEFT  : Q", "RIGHT : D", "SHOOT : SPACE", "QUIT  : ESCAPE"};
     for (int i = 0; i < 6; ++i) {
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
@@ -138,27 +138,21 @@ void Settings::displaySettings()
                 if(event.key.code == sf::Keyboard::Enter) {
                     switch (getSelectedOption()) {
                     case 0:
-                        std::cout << menuOptions[0].getString().toAnsiString() << std::endl;
                         changeKey(menuOptions[0].getString().toAnsiString());
                         break;
                     case 1:
-                        std::cout << menuOptions[1].getString().toAnsiString() << std::endl;
                         changeKey(menuOptions[1].getString().toAnsiString());
                         break;
                     case 2:
-                        std::cout << menuOptions[2].getString().toAnsiString() << std::endl;
                         changeKey(menuOptions[2].getString().toAnsiString());
                         break;
                     case 3:
-                        std::cout << menuOptions[3].getString().toAnsiString() << std::endl;
                         changeKey(menuOptions[3].getString().toAnsiString());
                         break;
                     case 4:
-                        std::cout << menuOptions[4].getString().toAnsiString() << std::endl;
                         changeKey(menuOptions[4].getString().toAnsiString());
                         break;
                     case 5:
-                        std::cout << menuOptions[5].getString().toAnsiString() << std::endl;
                         changeKey(menuOptions[5].getString().toAnsiString());
                         break;
                     }
