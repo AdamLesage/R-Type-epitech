@@ -66,8 +66,8 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
         this->reg.add_component<Velocity>(entity, Velocity{0, 0});
         this->reg.add_component<Health>(entity, Health{100, 100, false, true});
         this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{0.1f});
-        this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{2, 2, std::chrono::steady_clock::now()});
+        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
+        // this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{-2, 20, std::chrono::steady_clock::now()});
         this->reg.add_component<Size>(entity, Size{100, 100});
         this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
         break;
@@ -126,7 +126,7 @@ void GameLogique::runGame() {
                 sys.position_system(reg, this->_networkSender, logger);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
-                this->spawnEnnemy(0x04, 1000, rand() % 700 + 200);
+                this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
         }
@@ -146,16 +146,15 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     input = message.first[5];
 
     auto &velocities = reg.get_components<Velocity_s>();
-    if ((int)velocities.size() <= id) {
-        std::cerr << "Invalid entity ID: " << id << std::endl;
+    if ((int)velocities.size() <= message.second) {
+        std::cerr << "Invalid entity ID: " << message.second << std::endl;
         return;
     }
-    auto &velocitie = velocities[id];
+    auto &velocitie = velocities[message.second];
 
     switch (input) {
         case 'X':
-            std::cout << "shoot" << std::endl;
-            this->sys.shoot_system(reg, id, this->_networkSender, logger);
+            this->sys.shoot_system(reg, message.second, this->_networkSender, logger);
             break;
         case 'Z':
             velocitie->y = -1;
