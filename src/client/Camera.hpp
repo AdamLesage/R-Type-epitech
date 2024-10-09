@@ -11,14 +11,16 @@
     #include "../shared/components/Size.hpp"
     #include "../shared/components/Position.hpp"
     #include "../shared/components/Direction.hpp"
+    #include "../shared/components/Sprite.hpp"
+    #include <array>
 
     typedef struct EntityRenderInfo_s {
         Size size;
         Position position;
         Direction direction;
-        std::string texturePath;
+        Sprite sprite;
     } EntityRenderInfo;
-    
+
     /**
      * @struct Camera_s
      */

@@ -111,9 +111,9 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message, int
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        _registry.add_component<Size>(entity, Size{100, 100});
+        _registry.add_component<Size>(entity, Size{130, 90});
         _registry.add_component<Direction>(entity, Direction{1, 0});
-        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/player/player_1.png"});
+        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/player/player_1.png", {263, 116}, {0, 0}});
         index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
@@ -151,9 +151,9 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message,
         _registry.add_component<Damage>(entity, Damage{10});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        _registry.add_component<Size>(entity, Size{50, 10});
+        _registry.add_component<Size>(entity, Size{110, 80});
         _registry.add_component<Direction>(entity, Direction{0, 0});
-        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/bullet/missile_1.png"});
+        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/bullet/missile_1.png", {71, 32}, {0, 0}});
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the projectile" << std::endl;
         return false;
@@ -190,9 +190,9 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message, int 
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        _registry.add_component<Size>(entity, Size{100, 100});
+        _registry.add_component<Size>(entity, Size{70, 71});
         _registry.add_component<Direction>(entity, Direction{-1, 0});
-        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/ennemy/enemy_2.png"});
+        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/ennemy/enemy_2.png", {33, 36}, {0, 0}});
         index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
@@ -327,6 +327,7 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string &message, int
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
+        index += 4;
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found for deletion" << std::endl;
         return false;
