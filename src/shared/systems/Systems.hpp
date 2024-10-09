@@ -9,7 +9,6 @@
     #define SYSTEMS_HPP_
 
     #include "../registry/Registry.hpp"
-    #include "../components/Camera.hpp"
     #include "../components/Charging.hpp"
     #include "../components/Color.hpp"
     #include "../components/Controllable.hpp"
