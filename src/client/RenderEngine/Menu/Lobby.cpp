@@ -155,11 +155,13 @@ void RType::Lobby::displaySound()
     float volumePercentage = currentVolume / maxVolume;
 
     sf::RectangleShape volumeBarBackground(sf::Vector2f(volumeBarWidth, volumeBarHeight));
-    volumeBarBackground.setFillColor(sf::Color(0, 0, 75)); 
+    volumeBarBackground.setFillColor(sf::Color(0, 0, 75));
+    volumeBarBackground.setOutlineThickness(2);
+    volumeBarBackground.setOutlineColor(sf::Color::White);
     volumeBarBackground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
 
     sf::RectangleShape volumeBarForeground(sf::Vector2f(volumeBarWidth * volumePercentage, volumeBarHeight));
-    volumeBarForeground.setFillColor(sf::Color::Green);
+    volumeBarForeground.setFillColor(sf::Color::Blue);
     volumeBarForeground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
 
     sf::Text volumeText;
@@ -167,12 +169,20 @@ void RType::Lobby::displaySound()
     volumeText.setString("Volume:");
     volumeText.setCharacterSize(24);
     volumeText.setFillColor(sf::Color::White);
-    volumeText.setPosition(window->getSize().x - volumeBarWidth - 100, 20);
+    volumeText.setStyle(sf::Text::Bold);
+    volumeText.setPosition(window->getSize().x - volumeBarWidth - 120, 15);
+
+    sf::Text volumeTextShadow = volumeText;
+    volumeTextShadow.setFillColor(sf::Color(0, 0, 0, 150));
+    volumeTextShadow.setPosition(volumeText.getPosition().x + 2, volumeText.getPosition().y + 2);
 
     window->draw(volumeBarBackground);
     window->draw(volumeBarForeground);
+    window->draw(volumeTextShadow);
     window->draw(volumeText);
 }
+
+
 
 void RType::Lobby::displayLobby()
 {
