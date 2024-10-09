@@ -10,6 +10,7 @@
 
 #include "../../shared/network/Constants.hpp"
 #include "../../shared/network/LockedQueue.hpp"
+#include "../../shared/utils/Logger.hpp"
 #include <boost/asio.hpp>
 #include <array>
 #include <thread>
@@ -24,7 +25,7 @@ namespace NetworkLib {
 
 		/**
 		 * @brief Send a message to the server
-		 * 
+		 *
 		 * @param message the message to send
 		*/
 		void send(const std::string& message) override;
@@ -74,6 +75,8 @@ namespace NetworkLib {
 		void run_service();
 
 		Client(Client&); // block default copy constructor
+
+		RType::Logger _logger;
 	};
 }
 

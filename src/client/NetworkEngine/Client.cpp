@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech
+** File description:
+** Client
+*/
+
 #include "Client.hpp"
 
 namespace NetworkLib {
@@ -5,7 +12,6 @@ namespace NetworkLib {
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)),
 		service_thread(&Client::run_service, this)
 	{
-		std::cout << "Is in Client constructor" << std::endl;
 		try {
 			boost::asio::ip::udp::resolver resolver(io_service);
 			boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, std::to_string(server_port));
@@ -19,7 +25,8 @@ namespace NetworkLib {
 
 			// Sending an empty message to test the connection
 			Client::send("");
-			std::cout << "Client connected to " << host << ":" << server_port << std::endl;
+			std::string message = "Client connected to " + host + ":" + std::to_string(server_port);
+			_logger.log(RType::Logger::LogType::INFO, message.c_str());
 		}
 		catch (const std::exception& e) {
 			std::cerr << "Failed to connect to the server: " << e.what() << std::endl;
@@ -52,7 +59,6 @@ namespace NetworkLib {
 
 	void Client::send(const std::string& message)
 	{
-		std::cout << "send" << std::endl;
 		socket.send_to(boost::asio::buffer(message), server_endpoint);
 	}
 
@@ -63,7 +69,7 @@ namespace NetworkLib {
 
 	std::string Client::popMessage()
 	{
-		if (incomingMessages.empty()) 
+		if (incomingMessages.empty())
 			throw std::logic_error("No messages to pop");
 		return incomingMessages.pop();
 	}

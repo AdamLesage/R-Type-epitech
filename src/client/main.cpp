@@ -8,6 +8,8 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <thread>
+#include <mutex>
 
 #include "NetworkEngine/NetworkEngine.hpp"
 #include "RenderEngine/RenderingEngine.hpp"
@@ -16,14 +18,18 @@
 #include "AudioEngine/AudioEngine.hpp"
 #include "Mediator/Mediator.hpp"
 #include "DLloader.hpp"
+#include "../shared/utils/Logger.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
+    #include <windows.h>
     #define LIB_EXTENSION ".dll"
-#elif defined(__linux__)
+    #define PATH_SEPARATOR "\\"
+#else
+    #include <dlfcn.h>
     #define LIB_EXTENSION ".so"
+    #define PATH_SEPARATOR "/"
 #endif
 
-// Mutex to protect the access to the mediator, they need to be global to be accessible by all threads
 std::mutex gameMutex;
 std::mutex networkMutex;
 std::mutex renderingMutex;
@@ -51,40 +57,45 @@ std::shared_ptr<EngineType> loadEngine(std::shared_ptr<DLLoader> loader, const s
     return std::shared_ptr<EngineType>(loader->getInstance<EngineType>(entryPoint));
 }
 
-void runEngines(std::shared_ptr<RType::GameEngine> gameEngine, std::shared_ptr<RType::NetworkEngine> networkEngine, std::shared_ptr<RType::RenderingEngine> renderingEngine, std::shared_ptr<RType::PhysicEngine> physicEngine, std::shared_ptr<RType::AudioEngine> audioEngine)
+void runEngines(std::shared_ptr<RType::GameEngine> gameEngine, std::shared_ptr<RType::NetworkEngine> networkEngine,
+    std::shared_ptr<RType::RenderingEngine> renderingEngine, std::shared_ptr<RType::PhysicEngine> physicEngine,
+    std::shared_ptr<RType::AudioEngine> audioEngine)
 {
-    // Run each engine in a separate thread
     std::thread gameThread([&gameEngine]() {
-        std::lock_guard<std::mutex> lock(gameMutex); // Lock the mutex
+        std::lock_guard<std::mutex> lock(gameMutex);
         gameEngine->run();
     });
 
     std::thread networkThread([&networkEngine]() {
-        std::lock_guard<std::mutex> lock(networkMutex); // Lock the mutex
+        std::lock_guard<std::mutex> lock(networkMutex);
         networkEngine->run();
     });
 
     std::thread renderingThread([&renderingEngine]() {
-        std::lock_guard<std::mutex> lock(renderingMutex); // Lock the mutex
+        std::lock_guard<std::mutex> lock(renderingMutex);
         renderingEngine->run();
     });
 
     std::thread physicThread([&physicEngine]() {
-        std::lock_guard<std::mutex> lock(physicMutex); // Lock the mutex
+        std::lock_guard<std::mutex> lock(physicMutex);
         physicEngine->run();
     });
 
     std::thread audioThread([&audioEngine]() {
-        std::lock_guard<std::mutex> lock(audioMutex); // Lock the mutex
+        std::lock_guard<std::mutex> lock(audioMutex);
         audioEngine->run();
     });
 
-    // Wait for all threads to finish
     gameThread.join();
     networkThread.join();
     renderingThread.join();
     physicThread.join();
     audioThread.join();
+}
+
+std::string getLibraryPath(const std::string &libName)
+{
+    return std::string(".") + PATH_SEPARATOR + "lib" + PATH_SEPARATOR + libName + LIB_EXTENSION;
 }
 
 int main(int ac, char **av)
@@ -100,38 +111,44 @@ int main(int ac, char **av)
     std::shared_ptr<DLLoader> physicEngineLoader;
     std::shared_ptr<DLLoader> audioEngineLoader;
 
+    RType::Logger logger;
+    if (PATH_SEPARATOR == "\\") {
+        logger.log(RType::Logger::LogType::INFO, "Running R-Type on Windows.");
+    } else {
+        logger.log(RType::Logger::LogType::INFO, "Running R-Type on Unix.");
+    }
+
     try {
         try {
-            networkEngineLoader.reset(new DLLoader("./lib/libNetworkEngine.so"));
+            networkEngineLoader.reset(new DLLoader(getLibraryPath("libNetworkEngine")));
         } catch (const RType::DLError &e) {
             std::cerr << e.what() << std::endl;
         }
 
         try {
-            renderingEngineLoader.reset(new DLLoader("./lib/libRenderingEngine.so"));
+            renderingEngineLoader.reset(new DLLoader(getLibraryPath("libRenderingEngine")));
         } catch (const RType::DLError &e) {
             std::cerr << e.what() << std::endl;
         }
 
         try {
-            gameEngineLoader.reset(new DLLoader("./lib/libGameEngine.so"));
+            gameEngineLoader.reset(new DLLoader(getLibraryPath("libGameEngine")));
         } catch (const RType::DLError &e) {
             std::cerr << e.what() << std::endl;
         }
 
         try {
-            physicEngineLoader.reset(new DLLoader("./lib/libPhysicEngine.so"));
+            physicEngineLoader.reset(new DLLoader(getLibraryPath("libPhysicEngine")));
         } catch (const RType::DLError &e) {
             std::cerr << e.what() << std::endl;
         }
 
         try {
-            audioEngineLoader.reset(new DLLoader("./lib/libAudioEngine.so"));
+            audioEngineLoader.reset(new DLLoader(getLibraryPath("libAudioEngine")));
         } catch (const RType::DLError &e) {
             std::cerr << e.what() << std::endl;
         }
 
-        // Initialize loaders for each engine
         auto networkEngine = loadEngine<RType::NetworkEngine>(networkEngineLoader, "entryPointNetworkEngine");
         networkEngine->setParams(host, server_port, local_port);
         auto gameEngine = loadEngine<RType::GameEngine>(gameEngineLoader, "entryPointGameEngine");
@@ -139,7 +156,6 @@ int main(int ac, char **av)
         auto audioEngine = loadEngine<RType::AudioEngine>(audioEngineLoader, "entryPointAudioEngine");
         auto renderingEngine = loadEngine<RType::RenderingEngine>(renderingEngineLoader, "entryPointRenderingEngine");
 
-        // Handle the case where not all engines are loaded
         RType::Mediator *mediator = new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
 
         gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);

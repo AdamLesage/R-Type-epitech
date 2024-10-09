@@ -17,7 +17,7 @@
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/ShootingSpeed.hpp"
 #include "./NetworkSender.hpp"
-#include "../utils/Logger.hpp"
+#include "../../shared/utils/Logger.hpp"
 #include <memory>
 
 class GameLogique {

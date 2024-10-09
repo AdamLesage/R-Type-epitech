@@ -32,7 +32,7 @@
     #include <algorithm>
     #include <fstream>
     #include <libconfig.h++>
-    #include "../utils/Logger.hpp"
+    #include "../../shared/utils/Logger.hpp"
     #include <iostream>
     #include <cmath>
     #include <chrono>
