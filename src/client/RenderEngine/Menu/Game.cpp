@@ -32,6 +32,11 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
         throw std::runtime_error("Error loading backgroundTexture 3");
     }
 
+    if (!game_launch_sound.loadFromFile("src/client/asset/Sounds/game_launch.ogg")) {
+        throw std::runtime_error("Error loading game launch sound");
+    }
+    game_launch_music.setBuffer(game_launch_sound);
+
     for (int i = 0; i < 3; i++) {
         backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
         backgrounds[i].setTexture(&backgroundTextures[i]);
@@ -154,6 +159,9 @@ void RType::Game::displayGame()
         handleEvents();
 
         if (!animationComplete) {
+            if (currentFrame == 1) {
+                game_launch_music.play();
+            }
             if (clock.getElapsedTime().asSeconds() > frameDuration) {
                 if (!loadFrameTexture(texture, sprite)) {
                     return;
@@ -164,6 +172,7 @@ void RType::Game::displayGame()
 
         window->clear();
         if (animationComplete) {
+            game_launch_music.stop();
             play();
         } else {
             window->draw(sprite);
@@ -183,6 +192,7 @@ void RType::Game::handleEvents()
 
 bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
 {
+    frameDuration = 1.0f / 12.0f;
     std::ostringstream oss;
     oss << "src/client/asset/game_launch/Sans titre (1)_" << std::setw(3) << std::setfill('0') << currentFrame << ".jpg";
     std::string filename = oss.str();
