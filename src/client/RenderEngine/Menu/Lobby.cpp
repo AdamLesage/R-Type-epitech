@@ -214,7 +214,7 @@ void RType::Lobby::displayLobby()
                         games->displayGame();
                         break;
                     case 1:
-                        settings->displaySettings();
+                        settings->displaySettings(false);
                         break;
                     case 2:
                         backgroundMusic.stop();

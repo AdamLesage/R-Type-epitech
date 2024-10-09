@@ -154,7 +154,7 @@ void Settings::display()
     window->display();
 }
 
-void Settings::displaySettings()
+void Settings::displaySettings(bool ingame)
 {
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;

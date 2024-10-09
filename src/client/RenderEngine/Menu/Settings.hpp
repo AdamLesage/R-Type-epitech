@@ -32,8 +32,10 @@ class Settings {
 
         /**
          * @brief Displays the settings.
+         * 
+         * @param if the bool is true it means that we are in a game 
          */
-        void displaySettings();
+        void displaySettings(bool ingame);
 
         /**
          * @brief Moves the selection up.
