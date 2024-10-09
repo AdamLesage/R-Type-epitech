@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** R-Type-epitech
 ** File description:
-** Settings
+** Game
 */
 #include <SFML/Graphics.hpp>
 #include "Game.hpp"
@@ -136,7 +136,7 @@ void RType::Game::play()
                 window->close();
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Escape) {
-                    settings->displaySettings();
+                    settings->displaySettings(true);
                 }
             }
         }

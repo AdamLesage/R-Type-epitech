@@ -38,7 +38,7 @@ void RType::RenderingEngine::run()
         if (scene == 1) {
             lobby->displayLobby();
         } else if (scene == 2) {
-            settings->displaySettings();
+            settings->displaySettings(false);
         } else if (scene == 3) {
             window->close();
         } else if (scene == 4) {
