@@ -41,16 +41,39 @@ namespace RType
          * @brief Moves the selection right.
          */
         void moveRight();
+
         /**
          * @brief Moves the selection left.
          */
         void moveLeft();
+
         /**
          * @brief Get the selected option.
          *
          * @return int The selected option.
          */
         int getSelectedOption() const;
+
+        /**
+         * @brief Adjusts the volume of the background music.
+         *
+         * @param increase Whether to increase or decrease the volume.
+         */
+        void adjustVolume(bool increase);
+
+        /**
+         * @brief Handles key press events for volume adjustment.
+         *
+         * @param event The SFML event to handle.
+         */
+        void handleKeyPress(const sf::Event &event);
+
+
+        /**
+         * @brief Displays the sound of the lobby.
+         */
+        void displaySound();
+
         /**
          * @brief Displays the menu.
          */
@@ -62,6 +85,12 @@ namespace RType
          * @param mediator The mediator to set.
          */
         void setMediator(std::shared_ptr<IMediator> mediator);
+        /**
+         * @brief Set the camera to display
+         * 
+         * @param camera the camera to set
+         */
+        void setCamera(std::shared_ptr<Camera> camera);
         std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
 
     protected:
@@ -80,7 +109,7 @@ namespace RType
         sf::Sound selectSound;
         std::vector<sf::Texture> playerTextures;
         std::vector<sf::Sprite> playerSprites;
-
+        std::shared_ptr<Camera> _camera;
         Registry _registry;
         Systems _systems;
         std::shared_ptr<Game> games;

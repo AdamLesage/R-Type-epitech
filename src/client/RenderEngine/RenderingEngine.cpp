@@ -9,17 +9,6 @@
 
 RType::RenderingEngine::RenderingEngine()
 {
-    std::cout << "Rendering Engine created" << std::endl;
-    // window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
-    // _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
-    // try {
-    //     games = std::make_shared<Game>(window);
-    //     settings = std::make_shared<Settings>(window);
-    //     lobby = std::make_shared<Lobby>(window);
-    // } catch (const std::runtime_error &e) {
-    //     std::cerr << e.what() << std::endl;
-    //     exit(84);
-    // }
 }
 
 RType::RenderingEngine::~RenderingEngine()
@@ -28,8 +17,10 @@ RType::RenderingEngine::~RenderingEngine()
 
 void RType::RenderingEngine::run()
 {
+    std::cout << "Rendering Engine created" << std::endl;
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
+    std::cout << "Menu created" << std::endl;
     try {
         games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
@@ -40,7 +31,10 @@ void RType::RenderingEngine::run()
     }
     this->lobby->setMediator(_mediator);
     this->_menu->setMediator(_mediator);
-    this->games->setCamera(_camera);
+    if (this->_camera == nullptr) {
+        std::cout << "run camera null" << std::endl;
+    }
+    this->lobby->setCamera(_camera);
     window->setFramerateLimit(360);
     window->clear();
     while (window->isOpen()) {
@@ -56,6 +50,7 @@ void RType::RenderingEngine::run()
         }
         window->display();
     }
+    exit(0);
 }
 
 void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
@@ -63,10 +58,11 @@ void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
     _mediator = mediator;
 }
 
-void RType::RenderingEngine::setCamera(std::shared_ptr<Camera> camera)
+void RType::RenderingEngine::setCamera(std::shared_ptr<Camera> &camera)
 {
     _camera = camera;
     if (this->games != nullptr) {
+        std::cout << "Render not null, use_count: " << _camera.use_count() << std::endl;
         this->games->setCamera(_camera);
     }
 }

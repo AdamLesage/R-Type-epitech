@@ -13,6 +13,8 @@
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
     this->window = _window;
+    std::cout << "Game created and mediator is null" << std::endl;
+    this->_mediator = nullptr;
     if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
@@ -31,6 +33,11 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
     if (!backgroundTextures[2].loadFromFile("src/client/asset/background/planet.png")) {
         throw std::runtime_error("Error loading backgroundTexture 3");
     }
+
+    if (!game_launch_sound.loadFromFile("src/client/asset/Sounds/game_launch.ogg")) {
+        throw std::runtime_error("Error loading game launch sound");
+    }
+    game_launch_music.setBuffer(game_launch_sound);
 
     for (int i = 0; i < 3; i++) {
         backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
@@ -67,29 +74,6 @@ RType::Game::~Game()
 
 void RType::Game::play()
 {
-    entity_t movable = _registry.spawn_entity();
-    _registry.add_component<Position_s>(movable, Position_s{100.f, 100.f});
-    _registry.add_component<Velocity_s>(movable, Velocity_s{0.f, 0.f});
-    _registry.add_component<Drawable_s>(movable, Drawable_s{players[1]});
-    _registry.add_component<Controllable_s>(movable, Controllable_s{});
-
-    entity_t static_entity = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity, Position_s{100.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity]->shape.setFillColor(sf::Color::Red);
-    entity_t static_entity2 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity2, Position_s{300.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity2, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity2]->shape.setFillColor(sf::Color::Blue);
-    entity_t static_entity3 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity3, Position_s{600.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity3, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity3]->shape.setFillColor(sf::Color::Green);
-    entity_t static_entity4 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity4, Position_s{900.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity4, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity4]->shape.setFillColor(sf::Color::Yellow);
-
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -102,9 +86,14 @@ void RType::Game::play()
             }
         }
 
-        _systems.control_system(_registry);
+        int keyPressed = _systems.control_system(_registry, *window.get());
         _systems.position_system(_registry);
         _systems.collision_system(_registry, *window.get());
+        // std::cout << "Key pressed: " << keyPressed << std::endl;
+        if (keyPressed != -1 && _mediator != nullptr) {
+            std::cout << "Key pressed: " << keyPressed << std::endl;
+            this->_mediator->notify("Game", std::to_string(keyPressed));
+        }
 
         window->clear();
         if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
@@ -122,20 +111,41 @@ void RType::Game::play()
         for (int i = 0; i < 4; i++) {
             window->draw(backgrounds[i]);
         }
-        auto &positions = _registry.get_components<Position_s>();
-        auto &drawables = _registry.get_components<Drawable_s>();
+        this->set_texture();
+        for (int i = 0; i < entity.size(); i++) {
+            window->draw(entity[i]);
+        }
+        window->display();
+    }
+}
 
-        for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
-            auto &pos = positions[i];
-            auto &draw = drawables[i];
+sf::Vector2f RType::Game::convertToVector2f(const Size& size) {
+    return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
+}
 
-            if (pos && draw) {
-                draw->shape.setPosition(pos->x, pos->y);
-                window->draw(draw->shape);
+sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
+    return sf::Vector2f(static_cast<float>(pos.x), static_cast<float>(pos.y));
+}
+
+void RType::Game::set_texture()
+{
+    entity.clear();
+    if (_camera != nullptr) {
+        for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+            entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
+        }
+        for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+            if (Textures.find(_camera->listEntityToDisplay[i].texturePath) != Textures.end()) {
+                entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].texturePath]);
+                entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
+            } else {
+                sf::Texture* texture = new sf::Texture();
+                texture->loadFromFile(_camera->listEntityToDisplay[i].texturePath);
+                Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].texturePath, texture));
+                entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].texturePath]);
+                entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
             }
         }
-        _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
-        window->display();
     }
 }
 
@@ -154,6 +164,9 @@ void RType::Game::displayGame()
         handleEvents();
 
         if (!animationComplete) {
+            if (currentFrame == 1) {
+                game_launch_music.play();
+            }
             if (clock.getElapsedTime().asSeconds() > frameDuration) {
                 if (!loadFrameTexture(texture, sprite)) {
                     return;
@@ -164,6 +177,7 @@ void RType::Game::displayGame()
 
         window->clear();
         if (animationComplete) {
+            game_launch_music.stop();
             play();
         } else {
             window->draw(sprite);
@@ -183,6 +197,7 @@ void RType::Game::handleEvents()
 
 bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
 {
+    frameDuration = 1.0f / 12.0f;
     std::ostringstream oss;
     oss << "src/client/asset/game_launch/Sans titre (1)_" << std::setw(3) << std::setfill('0') << currentFrame << ".jpg";
     std::string filename = oss.str();
@@ -205,4 +220,12 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
 void RType::Game::setCamera(std::shared_ptr<Camera> camera)
 {
     this->_camera = camera;
+    if (_camera != nullptr) {
+        std::cout << "set camera not null, use_count: " << _camera.use_count() << std::endl;
+    }
+}
+
+void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
 }

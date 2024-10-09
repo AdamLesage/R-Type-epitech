@@ -38,7 +38,7 @@ namespace RType {
              * 
              * @param Camera the Camera to set
              */
-            void setCamera(std::shared_ptr<Camera> Camera);
+            void setCamera(std::shared_ptr<Camera> &Camera);
         protected:
         private:
             std::shared_ptr<Menu> _menu;

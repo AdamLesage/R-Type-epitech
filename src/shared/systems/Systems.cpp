@@ -23,8 +23,12 @@ void Systems::position_system(Registry &reg)
     }
 }
 
-void Systems::control_system(Registry &reg)
+int Systems::control_system(Registry &reg, sf::RenderWindow &window)
 {
+    if (window.hasFocus() == false) {
+        return -1;
+    }
+
     auto &velocities = reg.get_components<Velocity_s>();
     auto &controllables = reg.get_components<Controllable_s>();
 
@@ -36,21 +40,39 @@ void Systems::control_system(Registry &reg)
             vel->x = 0;
             vel->y = 0;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                vel->y = -1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                vel->y = 1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                vel->x = -1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                vel->x = 1.0f;
+            // Browse each key
+            for (int key = sf::Keyboard::A; key <= sf::Keyboard::KeyCount; ++key) {
+                if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key))) {
+                    switch (static_cast<sf::Keyboard::Key>(key)) {
+                        case sf::Keyboard::Up:
+                            vel->y = -1.0f;
+                            break;
+                        case sf::Keyboard::Down:
+                            vel->y = 1.0f;
+                            break;
+                        case sf::Keyboard::Left:
+                            vel->x = -1.0f;
+                            break;
+                        case sf::Keyboard::Right:
+                            vel->x = 1.0f;
+                            break;
+                        default:
+                            // If the key is a letter or a number return the ASCII value
+                            if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z) {
+                                return static_cast<int>('A' + (key - sf::Keyboard::A));
+                            } else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9) {
+                                return static_cast<int>('0' + (key - sf::Keyboard::Num0));
+                            }
+                            return key;
+                    }
+                }
             }
         }
     }
+    return -1;
 }
+
+
 
 void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
 {
@@ -68,18 +90,18 @@ void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
     }
 }
 
-void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities)
-{
-    for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
-        auto const& pos = positions[i];
-        auto const& vel = velocities[i];
-        // if (pos && vel) {
-        //     std::cerr << i << " : Position = { " << pos.value().x << " , " << pos.value().y
-        //             << " } , Velocity = { " << vel.value().x << " , " << vel.value().y
-        //             << " }" << std::endl;
-        // }
-    }
-}
+// void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities)
+// {
+//     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
+//         auto const& pos = positions[i];
+//         auto const& vel = velocities[i];
+//         // if (pos && vel) {
+//         //     std::cerr << i << " : Position = { " << pos.value().x << " , " << pos.value().y
+//         //             << " } , Velocity = { " << vel.value().x << " , " << vel.value().y
+//         //             << " }" << std::endl;
+//         // }
+//     }
+// }
 
 void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
 {

@@ -59,7 +59,6 @@ void RType::GameEngine::run()
     auto& physicEngine = _physicEngine;
     auto& audioEngine = _audioEngine;
 
-    this->_renderingEngine->setCamera(_camera);
     std::thread networkThread([&]() {
         try {
             networkEngine->run();
@@ -71,6 +70,7 @@ void RType::GameEngine::run()
     std::thread renderingThread([&]() {
         try {
             _mutex.lock();
+            renderingEngine->setCamera(_camera);
             renderingEngine->run();
             _mutex.unlock();
             std::cout << "Rendering engine is running" << std::endl;
@@ -78,7 +78,7 @@ void RType::GameEngine::run()
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
     });
-
+    
     std::thread physicThread([&]() {
         try {
             _mutex.lock();

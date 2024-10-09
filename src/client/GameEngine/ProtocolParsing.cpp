@@ -114,7 +114,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message, int
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{100, 100});
         _registry.add_component<Direction>(entity, Direction{1, 0});
-        _registry.add_component<Sprite>(entity, Sprite{"../asset/player/player_1.png"});
+        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/player/player_1.png"});
         index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
@@ -154,7 +154,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message,
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{50, 10});
         _registry.add_component<Direction>(entity, Direction{0, 0});
-        _registry.add_component<Sprite>(entity, Sprite{"../asset/bullet/missile_1.png"});
+        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/bullet/missile_1.png"});
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the projectile" << std::endl;
         return false;
@@ -193,7 +193,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message, int 
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{100, 100});
         _registry.add_component<Direction>(entity, Direction{-1, 0});
-        _registry.add_component<Sprite>(entity, Sprite{"../asset/ennemy/enemy_2.png"});
+        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/ennemy/enemy_2.png"});
         index += 12;
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
