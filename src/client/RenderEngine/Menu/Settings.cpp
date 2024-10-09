@@ -6,7 +6,7 @@
 */
 
 #include "Settings.hpp"
-#include "../../../config/EditConfigFile.hpp"
+#include "../../../shared/config/EditConfigFile.hpp"
 
 Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 {
@@ -36,6 +36,7 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
 Settings::~Settings()
 {
 }
+
 void Settings::moveUp()
 {
     if (selectedOption - 1 >= 0) {
@@ -104,7 +105,7 @@ void Settings::display()
 
 void Settings::displaySettings()
 {
-    EditConfigFile configEditor("../config/config.cfg");
+    EditConfigFile configEditor("./src/shared/config/config.cfg");
     std::string currentSetting;
 
     if (!window) {
@@ -112,7 +113,14 @@ void Settings::displaySettings()
         return;
     }
     selectedOption = 0;
-    std::string optionsText[] = {"UP    : Z", "DOWN  : S", "LEFT  : Q", "RIGHT : D", "SHOOT : SPACE", "QUIT  : ESCAPE"};
+    std::string optionsText[] = {
+        "UP    : " + configEditor.getValueString("settings.controls.up"),
+        "DOWN  : " + configEditor.getValueString("settings.controls.down"),
+        "LEFT  : " + configEditor.getValueString("settings.controls.left"),
+        "RIGHT : " + configEditor.getValueString("settings.controls.right"),
+        "SHOOT : " + configEditor.getValueString("settings.controls.shoot"),
+        "QUIT  : " + configEditor.getValueString("settings.controls.quit"),
+    };
     for (int i = 0; i < 6; ++i) {
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
@@ -141,42 +149,59 @@ void Settings::displaySettings()
                 }
                 if(event.key.code == sf::Keyboard::Enter) {
                     switch (getSelectedOption()) {
-                    case 0:
+                    case 0: {
                         currentSetting = "settings.controls.up";
-                        changeKey(menuOptions[0].getString().toAnsiString());
-                        configEditor.queueModification(currentSetting, menuOptions[0].getString().toAnsiString());
+                        std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
+                        std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
+                        changeKey(newKey);
+                        configEditor.queueModification(currentSetting, newKey);
                         break;
-                    case 1:
+                    }
+                    case 1: {
                         currentSetting = "settings.controls.down";
-                        changeKey(menuOptions[1].getString().toAnsiString());
-                        configEditor.queueModification(currentSetting, menuOptions[1].getString().toAnsiString());
+                        std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
+                        std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
+                        changeKey(newKey);
+                        configEditor.queueModification(currentSetting, newKey);
                         break;
-                    case 2:
+                    }
+                    case 2: {
                         currentSetting = "settings.controls.left";
-                        changeKey(menuOptions[2].getString().toAnsiString());
-                        configEditor.queueModification(currentSetting, menuOptions[2].getString().toAnsiString());
+                        std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
+                        std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
+                        changeKey(newKey);
+                        configEditor.queueModification(currentSetting, newKey);
                         break;
-                    case 3:
+                    }
+                    case 3: {
                         currentSetting = "settings.controls.right";
-                        changeKey(menuOptions[3].getString().toAnsiString());
-                        configEditor.queueModification(currentSetting, menuOptions[3].getString().toAnsiString());
+                        std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
+                        std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
+                        changeKey(newKey);
+                        configEditor.queueModification(currentSetting, newKey);
                         break;
-                    case 4:
-                        currentSetting = "settings.controls.action";
-                        changeKey(menuOptions[4].getString().toAnsiString());
-                        configEditor.queueModification(currentSetting, menuOptions[4].getString().toAnsiString());
+                    }
+                    case 4: {
+                        currentSetting = "settings.controls.shoot";
+                        std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
+                        std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
+                        changeKey(newKey);
+                        configEditor.queueModification(currentSetting, newKey);
                         break;
-                    case 5:
+                    }
+                    case 5: {
                         currentSetting = "settings.controls.quit";
-                        changeKey(menuOptions[5].getString().toAnsiString());
-                        configEditor.queueModification(currentSetting, menuOptions[5].getString().toAnsiString());
+                        std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
+                        std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
+                        changeKey(newKey);
+                        configEditor.queueModification(currentSetting, newKey);
                         break;
+                    }
                     }
                     break;
-                    if(event.key.code == sf::Keyboard::S) {
-                        configEditor.saveModifications();
-                        return;
-                    }
+                }
+                if(event.key.code == sf::Keyboard::S) {
+                    configEditor.saveModifications();
                 }
             }
         }
