@@ -20,6 +20,11 @@ void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &net
         auto &type = types[i];
 
         if (pos && vel) {
+            if (type->type == EntityType::PROJECTILE) {
+                if (vel->x == 0) {
+                    vel->x = 3;
+                }
+            }
             pos->x += vel->x;
             pos->y += vel->y;
             if (vel->x != 0 || vel->y != 0) {
@@ -159,11 +164,13 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
     auto &types = reg.get_components<Type_s>();
     auto &shootingSpeeds = reg.get_components<ShootingSpeed_s>();
     auto &shoots = reg.get_components<Shoot>();
+    auto &sizes = reg.get_components<Size>();
 
     auto &pos = positions[playerId];
     auto &type = types[playerId];
     auto &shootingSpeed = shootingSpeeds[playerId];
     auto &shoot = shoots[playerId];
+    auto &size = sizes[playerId];
 
     if (type && type->type == EntityType::PLAYER && shoot->canShoot) {
         auto now = std::chrono::steady_clock::now();
@@ -176,10 +183,11 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
             float projectileY = pos->y;
 
             entity_t projectile = reg.spawn_entity();
-            reg.add_component<Position_s>(projectile, Position_s{projectileX, projectileY});
+            reg.add_component<Position_s>(projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
             reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
             reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
             reg.add_component<Damage_s>(projectile, Damage_s{10});
+            reg.add_component<Size>(projectile, Size{70, 30});
 
             networkSender->sendCreateProjectil(projectile, projectileX, projectileY, playerId);
         }
@@ -401,23 +409,27 @@ void Systems::shoot_straight_pattern_system(Registry &reg, std::unique_ptr<Netwo
     auto &patterns =  reg.get_components<ShootStraightPattern>();
     auto &positions =  reg.get_components<Position>();
     auto &velocitys =  reg.get_components<Velocity>();
+    auto &sizes = reg.get_components<Size>();
 
     for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
         auto &pattern = patterns[i];
         auto &position = positions[i];
         auto &velocity = velocitys[i];
-        if (pattern && position && velocity) {
+        auto &size = sizes[i];
+    
+        if (pattern && position && velocity && size) {
             auto now = std::chrono::steady_clock::now();
             std::chrono::duration<float> fs = now - pattern->lastShotTime;
             float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
 
-            if (elapsed_seconds >= pattern->shootCooldown) {
+            if (elapsed_seconds >= pattern->shootCooldown && pattern->shootCooldown > 1) {
                 pattern->lastShotTime = now;
                 entity_t projectile = reg.spawn_entity();
-                reg.add_component<Position_s>(projectile, Position_s{position->x, position->y});
+                reg.add_component<Position_s>(projectile, Position_s{position->x, position->y + (size->y / 2) - (30 / 2)});
                 reg.add_component<Velocity_s>(projectile, Velocity_s{-1 * pattern->projectileSpeed, 0});
                 reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
                 reg.add_component<Damage_s>(projectile, Damage_s{10});
+                reg.add_component<Size>(projectile, Size{70, 30});
                 networkSender->sendCreateProjectil(projectile, position->x, position->y, i);
             }
         }
@@ -429,20 +441,22 @@ void Systems::shoot_player_pattern_system(Registry &reg, std::unique_ptr<Network
     auto &patterns =  reg.get_components<ShootPlayerPattern>();
     auto &velocitys =  reg.get_components<Velocity>();
     auto &positions = reg.get_components<Position>();
+    auto &sizes = reg.get_components<Size>();
 
     for (size_t i = 0; i < patterns.size(); ++i) {
         auto &pattern = patterns[i];
         auto &velocity = velocitys[i];
         auto &position = positions[i];
+        auto &size = sizes[i];
 
-        if (pattern && velocity && position) {
+        if (pattern && velocity && position && size) {
             auto now = std::chrono::steady_clock::now();
             std::chrono::duration<float> fs = now - pattern->lastShotTime;
             float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
 
             if (elapsed_seconds >= pattern->shootCooldown) {
                 pattern->lastShotTime = now;
-
+                
                 std::array<float, 2> target_pos = this->find_closest_player(reg, &(*position));
                 std::array<float, 2> projectile_velocity = {target_pos[0] - position->x, target_pos[1] - position->y};
                 float magnitude = std::sqrt((projectile_velocity[0] * projectile_velocity[0]) + (projectile_velocity[1] * projectile_velocity[1]));
@@ -450,12 +464,12 @@ void Systems::shoot_player_pattern_system(Registry &reg, std::unique_ptr<Network
                     projectile_velocity[0] = (projectile_velocity[0] / magnitude) * pattern->projectileSpeed;
                     projectile_velocity[1] = (projectile_velocity[1] / magnitude) * pattern->projectileSpeed;
                 }
-
                 entity_t projectile = reg.spawn_entity();
-                reg.add_component<Position_s>(projectile, Position_s{position->x, position->y});
+                reg.add_component<Position_s>(projectile, Position_s{position->x, position->y + (size->y / 2) - (30 / 2)});
                 reg.add_component<Velocity_s>(projectile, Velocity_s{projectile_velocity[0], projectile_velocity[1]});
                 reg.add_component<Type_s>(projectile, Type_s{EntityType::PROJECTILE});
                 reg.add_component<Damage_s>(projectile, Damage_s{10});
+                reg.add_component<Size>(projectile, Size{70, 30});
                 networkSender->sendCreateProjectil(projectile, position->x, position->y, i);
             }
         }

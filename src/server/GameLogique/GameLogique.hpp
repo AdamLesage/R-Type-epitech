@@ -70,6 +70,13 @@ class GameLogique {
         */
         void handleClientInput(std::pair<std::string, uint32_t> message);
 
+        /**
+         * @brief handle the Inpute of the client
+         * 
+         * @param message the message send by the client 
+         * @return std::vector<char> the array with the input key in the order: [up, down, left, right, shoot]
+        */
+        std::array<char, 6> retrieveInputKeys();
 };
 
 #endif /* !GAMELOGIQUE_HPP_ */
