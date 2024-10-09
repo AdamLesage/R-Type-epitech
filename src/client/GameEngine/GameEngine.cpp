@@ -73,7 +73,6 @@ void RType::GameEngine::run()
             renderingEngine->setCamera(_camera);
             renderingEngine->run();
             _mutex.unlock();
-            std::cout << "Rendering engine is running" << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }

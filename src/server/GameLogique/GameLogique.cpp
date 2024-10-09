@@ -115,7 +115,7 @@ void GameLogique::runGame() {
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
-            if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {
+            if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) { // If 1/frequency seconds have passed    
                 clock = std::clock();
                 sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC, logger);
                 sys.Straight_line_pattern_system(this->reg);
@@ -136,6 +136,7 @@ void GameLogique::runGame() {
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 {
     if (message.first.size() != 6) {
+        std::cout << "Invalid message size" << std::endl;
         return;
     }
 
