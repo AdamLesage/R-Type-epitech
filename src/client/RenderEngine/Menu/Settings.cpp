@@ -156,76 +156,76 @@ void Settings::display()
 
 void Settings::displaySettings(bool ingame)
 {
-    if (!window) {
-        std::cerr << "Error: window is null" << std::endl;
-        return;
-    }
-    selectedOption = 0;
-    config_t cfg;
-    config_init(&cfg);
-    if (!config_read_file(&cfg, "src/config/key.cfg")) {
-        printf("Erreur lors du chargement du fichier de configuration\n");
-        config_destroy(&cfg);
-        return;
-    }
-    std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: "};
-    for (int i = 0; i < 6; i++) {
-        optionsText[i] += get_key_value(&cfg, ("Keys" + std::to_string(i + 1)).c_str());
-        menuOptions[i].setFont(font);
-        menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
-        menuOptions[i].setString(optionsText[i]);
-        menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 300 + i * 100));
-    }
-    while (window->isOpen()) {
-        window->clear();
-        display();
-        window->display();
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window->close();
+    if (!ingame) {
+        if (!window) {
+            std::cerr << "Error: window is null" << std::endl;
+            return;
+        }
+        selectedOption = 0;
+        config_t cfg;
+        config_init(&cfg);
+        if (!config_read_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors du chargement du fichier de configuration\n");
+            config_destroy(&cfg);
+            return;
+        }
+        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: "};
+        for (int i = 0; i < 6; i++) {
+            optionsText[i] += get_key_value(&cfg, ("Keys" + std::to_string(i + 1)).c_str());
+            menuOptions[i].setFont(font);
+            menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
+            menuOptions[i].setString(optionsText[i]);
+            menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 300 + i * 100));
+        }
+        while (window->isOpen()) {
+            window->clear();
+            display();
+            window->display();
+            while (window->pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                    window->close();
 
-            if (event.type == sf::Event::KeyPressed) {
-                if(event.key.code == sf::Keyboard::Up) {
-                    moveUp();
-                    break;
-                }
-                if(event.key.code == sf::Keyboard::Down) {
-                    moveDown();
-                    break;
-                }
-                if(event.key.code == sf::Keyboard::Escape) {
-                    return;
-                }
-                if(event.key.code == sf::Keyboard::Enter) {
-                    switch (getSelectedOption()) {
-                    case 0:
-                        std::cout << menuOptions[0].getString().toAnsiString() << std::endl;
-                        changeKey(menuOptions[0].getString().toAnsiString());
+                if (event.type == sf::Event::KeyPressed) {
+                    if(event.key.code == sf::Keyboard::Up) {
+                        moveUp();
                         break;
-                    case 1:
-                        std::cout << menuOptions[1].getString().toAnsiString() << std::endl;
-                        changeKey(menuOptions[1].getString().toAnsiString());
+                    }
+                    if(event.key.code == sf::Keyboard::Down) {
+                        moveDown();
                         break;
-                    case 2:
-                        std::cout << menuOptions[2].getString().toAnsiString() << std::endl;
-                        changeKey(menuOptions[2].getString().toAnsiString());
-                        break;
-                    case 3:
-                        std::cout << menuOptions[3].getString().toAnsiString() << std::endl;
-                        changeKey(menuOptions[3].getString().toAnsiString());
-                        break;
-                    case 4:
-                        std::cout << menuOptions[4].getString().toAnsiString() << std::endl;
-                        changeKey(menuOptions[4].getString().toAnsiString());
-                        break;
-                    case 5:
-                        std::cout << menuOptions[5].getString().toAnsiString() << std::endl;
-                        changeKey(menuOptions[5].getString().toAnsiString());
-                        break;
+                    }
+                    if(event.key.code == sf::Keyboard::Escape) {
+                        return;
+                    }
+                    if(event.key.code == sf::Keyboard::Enter) {
+                        switch (getSelectedOption()) {
+                        case 0:
+                            std::cout << menuOptions[0].getString().toAnsiString() << std::endl;
+                            changeKey(menuOptions[0].getString().toAnsiString());
+                            break;
+                        case 1:
+                            std::cout << menuOptions[1].getString().toAnsiString() << std::endl;
+                            changeKey(menuOptions[1].getString().toAnsiString());
+                            break;
+                        case 2:
+                            std::cout << menuOptions[2].getString().toAnsiString() << std::endl;
+                            changeKey(menuOptions[2].getString().toAnsiString());
+                            break;
+                        case 3:
+                            std::cout << menuOptions[3].getString().toAnsiString() << std::endl;
+                            changeKey(menuOptions[3].getString().toAnsiString());
+                            break;
+                        case 4:
+                            std::cout << menuOptions[4].getString().toAnsiString() << std::endl;
+                            changeKey(menuOptions[4].getString().toAnsiString());
+                            break;
+                        case 5:
+                            break;
+                        }
                     }
                 }
             }
+            display();
         }
-        display();
     }
 }
