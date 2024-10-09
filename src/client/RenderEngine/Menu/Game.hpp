@@ -45,8 +45,17 @@ namespace RType {
          * @brief Displays the game we are playing.
          */
         void play();
+        /**
+         * @brief set the textures needed from camera to the textures map.
+         */
         void set_texture();
+        /**
+         * @brief Convert structure Size to a Vector2f
+         */
         sf::Vector2f convertToVector2f(const Size& size);
+        /**
+         * @brief Convert structure Position to a Vector2f
+         */
         sf::Vector2f convertToVector2fb(const Position& pos);
 
         /**
