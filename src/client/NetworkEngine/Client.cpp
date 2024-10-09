@@ -5,7 +5,6 @@ namespace NetworkLib {
 		socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)),
 		service_thread(&Client::run_service, this)
 	{
-		std::cout << "Is in Client constructor" << std::endl;
 		try {
 			boost::asio::ip::udp::resolver resolver(io_service);
 			boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, std::to_string(server_port));
