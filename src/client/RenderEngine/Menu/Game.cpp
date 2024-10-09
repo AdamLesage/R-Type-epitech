@@ -84,20 +84,16 @@ RType::Game::~Game()
 void RType::Game::ShootSound()
 {
     int random = rand() % 10;
-    std::cout << "Random: " << random << std::endl;
     if (random == 9) {
-        std::cout << "Shooting 2" << std::endl;
         shoot_music2.setVolume(200);
         shoot_music2.play();
     } else {
-    std::cout << "Shooting" << std::endl;
         shoot_music2.play();
 
     }
 }
 void RType::Game::DisplaySkipIntro()
 {
-    std::cout << "Displaying skip intro" << std::endl;
     sf::Text skipIntro;
     skipIntro.setFont(font);
     skipIntro.setString("Press Space to skip intro");
@@ -148,9 +144,7 @@ void RType::Game::play()
         int keyPressed = _systems.control_system(_registry, *window.get());
         _systems.position_system(_registry);
         _systems.collision_system(_registry, *window.get());
-        // std::cout << "Key pressed: " << keyPressed << std::endl;
         if (keyPressed != -1 && _mediator != nullptr) {
-            std::cout << "Key pressed: " << keyPressed << std::endl;
             this->_mediator->notify("Game", std::to_string(keyPressed));
         }
         if (keyPressed == 88)
