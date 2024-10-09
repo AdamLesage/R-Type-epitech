@@ -172,8 +172,37 @@ void RType::Game::play()
                 window->draw(draw->shape);
             }
         }
+        for (int i; i < entity.size(); i++) {
+            window->draw(entity[i]);
+        }
         // _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         window->display();
+    }
+}
+
+sf::Vector2f RType::Game::convertToVector2f(const Size& size) {
+    return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
+}
+
+sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
+    return sf::Vector2f(static_cast<float>(pos.x), static_cast<float>(pos.y));
+}
+
+void RType::Game::set_texture()
+{
+    entity.clear();
+    for (int i = 0; i < camera->listEntityToDisplay.size(); i++) {
+        entity.push_back(sf::RectangleShape(convertToVector2f(camera->listEntityToDisplay[i].size)));
+    }
+    for (int i = 0; i < camera->listEntityToDisplay.size(); i++) {
+        if (Textures.find(camera->listEntityToDisplay[i].texturePath) != Textures.end()) {
+            entity[i].setTexture(Textures[camera->listEntityToDisplay[i].texturePath]);
+            entity[i].setPosition(convertToVector2fb(camera->listEntityToDisplay[i].position));
+        } else {
+            sf::Texture* texture = new sf::Texture();
+            texture->loadFromFile(camera->listEntityToDisplay[i].texturePath);
+            Textures.insert(std::make_pair(camera->listEntityToDisplay[i].texturePath, texture));
+        }
     }
 }
 
