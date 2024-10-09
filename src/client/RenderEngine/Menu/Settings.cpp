@@ -77,7 +77,7 @@ void Settings::moveUp()
 
 void Settings::moveDown()
 {
-    if (selectedOption + 1 < 6) {
+    if (selectedOption + 1 < 7) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
@@ -94,6 +94,9 @@ void Settings::changeKey(std::string key)
 {
     std::string newKey = key.substr(0, 11);
     std::string newKey2;
+    if (key == "SUBTITLES: ON" || key == "SUBTITLES: OFF") {
+        return;
+    }
     menuOptions[selectedOption].setString("PRESS A KEY");
     config_t cfg;
     config_init(&cfg);
@@ -148,7 +151,7 @@ void Settings::display()
 {
     window->draw(background);
     window->draw(logoSprite);
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 7; ++i) {
         window->draw(menuOptions[i]);
     }
     window->display();
@@ -169,8 +172,8 @@ void Settings::displaySettings(bool ingame)
             config_destroy(&cfg);
             return;
         }
-        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: "};
-        for (int i = 0; i < 6; i++) {
+        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: ", "SUBTITLES: "};
+        for (int i = 0; i < 7; i++) {
             optionsText[i] += get_key_value(&cfg, ("Keys" + std::to_string(i + 1)).c_str());
             menuOptions[i].setFont(font);
             menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
@@ -220,6 +223,16 @@ void Settings::displaySettings(bool ingame)
                             changeKey(menuOptions[4].getString().toAnsiString());
                             break;
                         case 5:
+                            break;
+                        case 6:
+                            std::cout << menuOptions[6].getString().toAnsiString() << std::endl;
+                            if (menuOptions[6].getString().toAnsiString().find("ON") != std::string::npos) {
+                                menuOptions[6].setString("SUBTITLES: OFF");
+                                changeKey("SUBTITLES: OFF");
+                            } else {
+                                menuOptions[6].setString("SUBTITLES: ON");
+                                changeKey("SUBTITLES: ON");
+                            }
                             break;
                         }
                     }
