@@ -123,8 +123,7 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
     bool playerTakeDamage = (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::ENEMY_PROJECTILE) ||
                             (entityType1->type == EntityType::PLAYER_PROJECTILE && entityType2->type == EntityType::ENEMY);
 
-    bool enemyTakeDamage =  (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE) ||
-                            (entityType1->type == EntityType::ENEMY_PROJECTILE && entityType2->type == EntityType::PLAYER);
+    bool enemyTakeDamage =  (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE);
 
     if (playerTakeDamage && collisionX && collisionY) {
         auto &healths = reg.get_components<Health_s>();
