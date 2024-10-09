@@ -48,7 +48,7 @@ void GameLogique::startGame() {
             this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
             this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.5f});
             this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
-            this->reg.add_component<Size>(entity, Size{100, 100});
+            this->reg.add_component<Size>(entity, Size{130, 80});
             this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
         }
         this->running = true;
@@ -57,57 +57,62 @@ void GameLogique::startGame() {
 
 void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
 {
-    size_t entity = this->reg.spawn_entity();
-
-    switch (type)
     {
-    case 0x03:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
-        // this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{-2, 20, std::chrono::steady_clock::now()});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
-    case 0x04:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
-    case 0x05:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{0.5f});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
-    case 0x06:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2, 2, std::chrono::steady_clock::now()});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-    default:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<StraightLinePattern>(entity, {0.5f});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
+        std::lock_guard<std::mutex> lock(this->_mutex);
+
+        size_t entity = this->reg.spawn_entity();
+
+        switch (type)
+        {
+        case 0x03:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
+            this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        case 0x04:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        case 0x05:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{0.5f});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        case 0x06:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+        default:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<StraightLinePattern>(entity, {0.5f});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        }
+        this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
     }
-    this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
+        
 }
 
 void GameLogique::runGame() {
@@ -115,7 +120,7 @@ void GameLogique::runGame() {
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
-            if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) { // If 1/frequency seconds have passed    
+            if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {   
                 clock = std::clock();
                 sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC, logger);
                 sys.Straight_line_pattern_system(this->reg);
@@ -154,7 +159,10 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 
     switch (input) {
         case 'X':
-            this->sys.shoot_system(reg, message.second, this->_networkSender, logger);
+            {
+                std::lock_guard<std::mutex> lock(this->_mutex);
+                this->sys.shoot_system(reg, message.second, this->_networkSender, logger);
+            }
             break;
         case 'Z':
             velocitie->y = -1;

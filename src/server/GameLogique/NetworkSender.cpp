@@ -28,9 +28,10 @@ void NetworkSender::sendCreatePlayer(size_t id, float pos_x, float pos_y)
 
 void NetworkSender::sendCreateEnemy(char type, size_t id, float pos_x, float pos_y)
 {
+    int test = (int)id;
     std::array<char, 13> data{};
     data[0] = type;
-    std::memcpy(&data[1], &id, sizeof(id));
+    std::memcpy(&data[1], &test, sizeof(test));
     std::memcpy(&data[5], &pos_x, sizeof(float));
     std::memcpy(&data[9], &pos_y, sizeof(float));
     this->_network->sendToAll(data.data(), data.size()); 
@@ -53,9 +54,10 @@ void NetworkSender::sendCreateProjectil(size_t id, float pos_x, float pos_y, siz
 {
     std::array<char, 17> data{};
     data[0] = 0x02;
+    std::cout << "projectil pos: " << pos_x << ":" << pos_y << std::endl;
     std::memcpy(&data[1], &id, sizeof(id));
-    std::memcpy(&data[5], &pos_x, sizeof(float));
-    std::memcpy(&data[9], &pos_y, sizeof(float));
+    std::memcpy(&data[5], &pos_x, sizeof(int));
+    std::memcpy(&data[9], &pos_y, sizeof(int));
     std::memcpy(&data[13], &parent_id, sizeof(size_t));
     this->_network->sendToAll(data.data(), data.size());
 }
@@ -84,8 +86,8 @@ void NetworkSender::sendDeleteEntity(size_t id)
 {
     std::array<char, 5> data{};
     data[0] = 0x29;
-    std::memcpy(&data[1], &id, sizeof(id));
-    this->_network->sendToAll(data.data(), data.size());    
+    std::memcpy(&data[1], &id, sizeof(int));
+    this->_network->sendToAll(data.data(), data.size());
 }
 
 void NetworkSender::sendPositionUpdate(size_t id, float pos_x, float pos_y)

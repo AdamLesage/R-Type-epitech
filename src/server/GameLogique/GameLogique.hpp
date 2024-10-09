@@ -44,6 +44,7 @@ class GameLogique {
         int frequency;
         RType::Logger logger;
         bool running;
+        std::mutex _mutex;
         /**
          * @brief listen to the server socket to manage client input
         */
@@ -68,6 +69,7 @@ class GameLogique {
          * 
         */
         void handleClientInput(std::pair<std::string, uint32_t> message);
+
 };
 
 #endif /* !GAMELOGIQUE_HPP_ */
