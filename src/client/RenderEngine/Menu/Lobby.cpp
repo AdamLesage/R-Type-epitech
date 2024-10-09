@@ -119,6 +119,60 @@ int RType::Lobby::getSelectedOption() const
     return selectedOption;
 }
 
+void RType::Lobby::adjustVolume(bool increase)
+{
+    float currentVolume = backgroundMusic.getVolume();
+    if (increase)
+    {
+        currentVolume = std::min(100.0f, currentVolume + 10.0f);
+    }
+    else
+    {
+        currentVolume = std::max(0.0f, currentVolume - 10.0f);
+    }
+    backgroundMusic.setVolume(currentVolume);
+}
+
+void RType::Lobby::handleKeyPress(const sf::Event &event)
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
+    {
+        adjustVolume(true);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
+    {
+        adjustVolume(false);
+    }
+}
+
+void RType::Lobby::displaySound()
+{
+    float currentVolume = backgroundMusic.getVolume();
+    float maxVolume = 100.0f;
+    float volumeBarWidth = 200.0f;
+    float volumeBarHeight = 20.0f;
+    float volumePercentage = currentVolume / maxVolume;
+
+    sf::RectangleShape volumeBarBackground(sf::Vector2f(volumeBarWidth, volumeBarHeight));
+    volumeBarBackground.setFillColor(sf::Color(0, 0, 75)); 
+    volumeBarBackground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
+
+    sf::RectangleShape volumeBarForeground(sf::Vector2f(volumeBarWidth * volumePercentage, volumeBarHeight));
+    volumeBarForeground.setFillColor(sf::Color::Green);
+    volumeBarForeground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
+
+    sf::Text volumeText;
+    volumeText.setFont(font);
+    volumeText.setString("Volume:");
+    volumeText.setCharacterSize(24);
+    volumeText.setFillColor(sf::Color::White);
+    volumeText.setPosition(window->getSize().x - volumeBarWidth - 100, 20);
+
+    window->draw(volumeBarBackground);
+    window->draw(volumeBarForeground);
+    window->draw(volumeText);
+}
+
 void RType::Lobby::displayLobby()
 {
     if (!window) {
@@ -134,6 +188,7 @@ void RType::Lobby::displayLobby()
             if (event.type == sf::Event::Closed) {
                 window->close();
             }
+            handleKeyPress(event);
             if (event.type == sf::Event::KeyPressed)
             {
                 switch (event.key.code)
@@ -148,6 +203,7 @@ void RType::Lobby::displayLobby()
                     switch (getSelectedOption())
                     {
                     case 0: // Start game
+                        backgroundMusic.stop();
                         if (_mediator != nullptr) {
                             _mediator->notify("RenderingEngine", "play");
                         } else {
@@ -159,6 +215,7 @@ void RType::Lobby::displayLobby()
                         settings->displaySettings();
                         break;
                     case 2:
+                        backgroundMusic.stop();
                         window->close();
                         break;
                     }
@@ -183,7 +240,7 @@ void RType::Lobby::displayLobby()
             window->draw(playersNames[i]);
             window->draw(playerSprites[i]);
         }
-
+        displaySound();
         window->display();
     }
 }

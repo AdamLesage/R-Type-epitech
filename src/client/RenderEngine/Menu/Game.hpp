@@ -78,6 +78,8 @@ namespace RType {
         std::vector<sf::RectangleShape> entity;
         std::vector<sf::Texture> playerTextures;
         std::unordered_map<std::string, sf::Texture*> Textures;
+        sf::SoundBuffer game_launch_sound;
+        sf::Sound game_launch_music;
         /**
          * @brief map that will stock the textures, It will allow us to not load a texture every time we find a new entity but just when we find one that is not in our map
          */
