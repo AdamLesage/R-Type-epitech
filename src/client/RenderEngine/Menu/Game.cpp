@@ -146,7 +146,7 @@ void RType::Game::play()
 
 void RType::Game::displayGame()
 {
-    sf::Sprite sprite;
+    sf::RectangleShape rectangleshape;
     sf::Texture texture;
     sf::Clock clock;
 
@@ -163,7 +163,7 @@ void RType::Game::displayGame()
                 game_launch_music.play();
             }
             if (clock.getElapsedTime().asSeconds() > frameDuration) {
-                if (!loadFrameTexture(texture, sprite)) {
+                if (!loadFrameTexture(texture, rectangleshape)) {
                     return;
                 }
                 clock.restart();
@@ -175,7 +175,7 @@ void RType::Game::displayGame()
             game_launch_music.stop();
             play();
         } else {
-            window->draw(sprite);
+            window->draw(rectangleshape);
         }
         window->display();
     }
@@ -187,10 +187,15 @@ void RType::Game::handleEvents()
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             window->close();
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Space) {
+                animationComplete = true;
+            }
+        }
     }
 }
 
-bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
+bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rectangleshape)
 {
     frameDuration = 1.0f / 12.0f;
     std::ostringstream oss;
@@ -201,8 +206,8 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
         std::cerr << "Error loading " << filename << std::endl;
         return false;
     }
-
-    sprite.setTexture(texture);
+    rectangleshape.setTexture(&texture);
+    rectangleshape.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     currentFrame++;
 
     if (currentFrame > 151) {

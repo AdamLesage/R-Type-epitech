@@ -65,7 +65,7 @@ namespace RType {
          * @return true If the texture was loaded successfully.
          * @return false If the texture failed to load.
          */
-        bool loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite);
+        bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
         Registry _registry;
         Systems _systems;
         std::shared_ptr<Settings> settings;
