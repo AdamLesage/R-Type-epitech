@@ -8,6 +8,7 @@
 #include "../../../shared/systems/Systems.hpp"
 #include "../../Mediator/IMediator.hpp"
 #include "Settings.hpp"
+#include "../../Camera.hpp"
 
 namespace RType {
     class Game {
@@ -44,6 +45,18 @@ namespace RType {
          * @brief Displays the game we are playing.
          */
         void play();
+        /**
+         * @brief set the textures needed from camera to the textures map.
+         */
+        void set_texture();
+        /**
+         * @brief Convert structure Size to a Vector2f
+         */
+        sf::Vector2f convertToVector2f(const Size& size);
+        /**
+         * @brief Convert structure Position to a Vector2f
+         */
+        sf::Vector2f convertToVector2fb(const Position& pos);
 
         /**
          * @brief Sets the mediator, it will be used to communicate with the rendering engine.
@@ -81,10 +94,15 @@ namespace RType {
         std::vector<sf::RectangleShape> backgrounds;
         std::vector<sf::Texture> backgroundTextures;
         std::vector<sf::RectangleShape> players;
+        std::vector<sf::RectangleShape> entity;
         std::vector<sf::Texture> playerTextures;
-        std::unordered_map<std::string, sf::Texture> Textures;
+        std::unordered_map<std::string, sf::Texture*> Textures;
         sf::SoundBuffer game_launch_sound;
         sf::Sound game_launch_music;
+        /**
+         * @brief map that will stock the textures, It will allow us to not load a texture every time we find a new entity but just when we find one that is not in our map
+         */
+        std::shared_ptr<Camera> camera;
     };
 }
 
