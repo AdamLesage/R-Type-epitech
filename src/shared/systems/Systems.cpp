@@ -29,44 +29,15 @@ int Systems::control_system(Registry &reg, sf::RenderWindow &window)
         return -1;
     }
 
-    auto &velocities = reg.get_components<Velocity_s>();
-    auto &controllables = reg.get_components<Controllable_s>();
-
-    for (size_t i = 0; i < velocities.size() && i < controllables.size(); ++i) {
-        auto &vel = velocities[i];
-        auto &ctrl = controllables[i];
-
-        if (vel && ctrl) {
-            vel->x = 0;
-            vel->y = 0;
-
-            // Browse each key
-            for (int key = sf::Keyboard::A; key <= sf::Keyboard::KeyCount; ++key) {
-                if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key))) {
-                    switch (static_cast<sf::Keyboard::Key>(key)) {
-                        case sf::Keyboard::Up:
-                            vel->y = -1.0f;
-                            break;
-                        case sf::Keyboard::Down:
-                            vel->y = 1.0f;
-                            break;
-                        case sf::Keyboard::Left:
-                            vel->x = -1.0f;
-                            break;
-                        case sf::Keyboard::Right:
-                            vel->x = 1.0f;
-                            break;
-                        default:
-                            // If the key is a letter or a number return the ASCII value
-                            if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z) {
-                                return static_cast<int>('A' + (key - sf::Keyboard::A));
-                            } else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9) {
-                                return static_cast<int>('0' + (key - sf::Keyboard::Num0));
-                            }
-                            return key;
-                    }
-                }
+    for (int key = sf::Keyboard::A; key <= sf::Keyboard::KeyCount; ++key) {
+        if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key))) {
+            // If the key is a letter or a number return the ASCII value
+            if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z) {
+                return static_cast<int>('A' + (key - sf::Keyboard::A));
+            } else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9) {
+                return static_cast<int>('0' + (key - sf::Keyboard::Num0));
             }
+            return key;
         }
     }
     return -1;
