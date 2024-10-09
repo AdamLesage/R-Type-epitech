@@ -371,7 +371,6 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message, int
         _registry.remove_component<Position>(entity);
         _registry.add_component<Position>(entity, Position{posX, posY});
     } catch (const std::out_of_range &e) {
-        std::cout << "entityId: " << entityId << std::endl;
         std::cerr << "Entity not found for position update" << std::endl;
         return false;
     } catch (const std::exception &e) {
