@@ -180,6 +180,7 @@ void RType::Lobby::displayLobby()
         return;
     }
     backgroundMusic.play();
+    backgroundMusic.setLoop(true);
     while (window->isOpen())
     {
         sf::Event event;
