@@ -17,6 +17,12 @@
 #include "Mediator/Mediator.hpp"
 #include "DLloader.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+    #define LIB_EXTENSION ".dll"
+#elif defined(__linux__)
+    #define LIB_EXTENSION ".so"
+#endif
+
 // Mutex to protect the access to the mediator, they need to be global to be accessible by all threads
 std::mutex gameMutex;
 std::mutex networkMutex;
