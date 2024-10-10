@@ -225,7 +225,19 @@ int RType::Menu::displayMenu()
     }
     draw();
     displaySound();
-    displaySubtitles();
+    config_t cfg;
+    config_init(&cfg);
+        if (!config_read_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors du chargement du fichier de configuration\n");
+            config_destroy(&cfg);
+            return (84);
+        }
+    std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+    if (keyValue == "ON") {
+        std::cout << "Subtitles are on" << std::endl;
+        displaySubtitles();
+    }
+
     return (0);
 }
 
