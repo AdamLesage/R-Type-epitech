@@ -54,7 +54,6 @@ void NetworkSender::sendCreateProjectil(size_t id, float pos_x, float pos_y, siz
 {
     std::array<char, 17> data{};
     data[0] = 0x02;
-    std::cout << "projectil pos: " << pos_x << ":" << pos_y << std::endl;
     std::memcpy(&data[1], &id, sizeof(id));
     std::memcpy(&data[5], &pos_x, sizeof(int));
     std::memcpy(&data[9], &pos_y, sizeof(int));

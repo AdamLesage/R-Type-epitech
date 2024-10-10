@@ -45,6 +45,7 @@ void GameLogique::startGame() {
             this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
             this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
             this->reg.add_component<Tag>(entity, Tag{"player"});
+            this->reg.add_component<Health>(entity, Health{100, 100, true, true});
             this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
             this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.5f});
             this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});

@@ -20,7 +20,11 @@ void Systems::position_system(Registry &reg, std::unique_ptr<NetworkSender> &net
         auto &type = types[i];
 
         if (pos && vel) {
-            if (type->type == EntityType::PROJECTILE) {
+            if (type->type == EntityType::ENEMY_PROJECTILE) {
+                if (vel->x == 0) {
+                    vel->x = -3;
+                }
+            } else if (type->type == EntityType::PLAYER_PROJECTILE) {
                 if (vel->x == 0) {
                     vel->x = 3;
                 }
@@ -107,7 +111,6 @@ void Systems::check_borders_collisions(Registry &reg, size_t entityId, Position_
         (entityPos->x < 0 || entityPos->x + entitySize->x > MapSize.first ||
         entityPos->y < 0 || entityPos->y + entitySize->y > MapSize.second)) {
         reg.kill_entity(entityId);
-        std::cerr << "Projectile " << entityId << " deleted (out of window)" << std::endl;
         networkSender->sendDeleteEntity(entityId);
     }
     if (entityType->type == EntityType::ENEMY && entityPos->x < 0) {
@@ -121,7 +124,6 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
     size_t entityId2, Position_s *entityPos2, Size_s *entitySize2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender,
     Type_s *entityType1, Type_s *entityType2)
 {
-    (void)reg;
     bool collisionX = entityPos1->x < entityPos2->x + entitySize2->x && entityPos1->x + entitySize1->x > entityPos2->x;
     bool collisionY = entityPos1->y < entityPos2->y + entitySize2->y && entityPos1->y + entitySize1->y > entityPos2->y;
 
@@ -130,38 +132,56 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
 
     bool enemyTakeDamage =  (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE);
 
+    if (collisionX == false || collisionY == false || (playerTakeDamage == false && enemyTakeDamage == false)) { // No collision
+        return;
+    }
+
     if (playerTakeDamage && collisionX && collisionY) {
-        auto &healths = reg.get_components<Health_s>();
-        auto &damages = reg.get_components<Damage_s>();
-        auto &tags = reg.get_components<Tag_s>();
+        std::cout << "Player take damage from " << (entityType2->type == EntityType::ENEMY_PROJECTILE ? "projectile" : "enemy") << std::endl;
+        auto &playerHealth = reg.get_components<Health_s>()[entityId1];
+        auto &enemyDamage = reg.get_components<Damage_s>()[entityId2];
+        if (playerHealth == std::nullopt) std::cerr << "playerHealth is nullptr" << std::endl;
+        if (enemyDamage == std::nullopt) std::cerr << "enemyDamage is nullptr" << std::endl;
+        
 
-        for (size_t i = 0; i < healths.size() && i < damages.size() && i < tags.size(); ++i) {
-            auto &health = healths[i];
-            auto &damage = damages[i];
-            auto &tag = tags[i];
-
-            if (health && damage && tag && tag->tag == "player") {
-                health->health -= damage->damage;
-                networkSender->sendHealthUpdate(i, health->health);
+        if (playerHealth && enemyDamage) {
+            playerHealth->health -= enemyDamage->damage;
+            if (playerHealth->health <= 0) {
+                reg.kill_entity(entityId1);
+                networkSender->sendDeleteEntity(entityId1);
+            } else {
+                networkSender->sendHealthUpdate(entityId1, playerHealth->health);
             }
+        } else {
+            logger.log(RType::Logger::ERROR, "Error while getting health or damage component for player");
+        }
+        // Delete entity that hit the player if it's a projectile
+        if (entityType2->type == EntityType::ENEMY_PROJECTILE) {
+            logger.log(RType::Logger::INFO, "Projectile deleted");
+            reg.kill_entity(entityId2);
+            networkSender->sendDeleteEntity(entityId2);
         }
     }
 
     if (enemyTakeDamage && collisionX && collisionY) {
-        auto &healths = reg.get_components<Health_s>();
-        auto &damages = reg.get_components<Damage_s>();
-        auto &tags = reg.get_components<Tag_s>();
+        logger.log(RType::Logger::INFO, "Enemy take damage");
+        auto &enemyHealth = reg.get_components<Health_s>()[entityId1];
+        auto &playerDamage = reg.get_components<Damage_s>()[entityId2];
 
-        for (size_t i = 0; i < healths.size() && i < damages.size() && i < tags.size(); ++i) {
-            auto &health = healths[i];
-            auto &damage = damages[i];
-            auto &tag = tags[i];
-
-            if (health && damage && tag && tag->tag == "enemy") {
-                health->health -= damage->damage;
-                networkSender->sendHealthUpdate(i, health->health);
+        if (enemyHealth && playerDamage) {
+            enemyHealth->health -= playerDamage->damage;
+            if (enemyHealth->health <= 0) {
+                reg.kill_entity(entityId1);
+                networkSender->sendDeleteEntity(entityId1);
+            } else {
+                networkSender->sendHealthUpdate(entityId1, enemyHealth->health);
             }
+        } else {
+            logger.log(RType::Logger::ERROR, "Error while getting health or damage component for enemy");
         }
+        // If enemy take damage, it is only a projectile so we delete it
+        reg.kill_entity(entityId2);
+        networkSender->sendDeleteEntity(entityId2);
     }
 }
 
@@ -171,19 +191,19 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize,
     auto &sizes = reg.get_components<Size_s>();
     auto &types = reg.get_components<Type_s>();
 
-    for (size_t i = 0; i < positions.size() && i < sizes.size(); i++) {
+    for (size_t i = 0; i < positions.size() && i < sizes.size(); i++) { // Browse all entities
         auto &entityPos = positions[i];
         auto &entitySize = sizes[i];
         auto &entityType = types[i];
-        if (entityPos && entitySize, entityType) {
+        if (entityPos && entitySize, entityType) { // Check if entity exists
             check_borders_collisions(reg, i, &(*entityPos), &(*entitySize), &(*entityType), MapSize, logger, networkSender);
 
-            for (size_t j = i + 1; j < positions.size() && j < sizes.size(); ++j) {
+            for (size_t j = i + 1; j < positions.size() && j < sizes.size(); ++j) { // Check collision with other entities
                 auto &entityPos2 = positions[j];
                 auto &entitySize2 = sizes[j];
                 auto &entityType2 = types[j];
 
-                if (entityPos2 && entitySize2) {
+                if (entityPos2 && entitySize2) { // Check if entity 2 exists
                     check_entities_collisions(reg, i, &(*entityPos), &(*entitySize), j, &(*entityPos2), &(*entitySize2), logger, networkSender, &(*entityType), &(*entityType2));
                 }
             }
