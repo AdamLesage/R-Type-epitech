@@ -83,7 +83,6 @@ RType::Game::~Game()
 
 void RType::Game::displayPiou()
 {
-    std::cout << "Piou" << std::endl;
     sf::Text piou;
     piou.setFont(font);
     piou.setString("Piou");
