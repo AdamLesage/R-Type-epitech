@@ -170,9 +170,13 @@ class Systems {
          * @param entityId2 The id of the second entity.
          * @param position2 The position of the second entity.
          * @param size2 The size of the second entity.
+         * @param logger The logger to log the events.
+         * @param networkSender The class for sending.
+         * @param entityType1 The type of the first entity.
+         * @param entityType2 The type of the second entity.
          */
         void check_entities_collisions(Registry &reg, size_t entityId1, Position_s *position1, Size_s *size1,
-            size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender);
+            size_t entityId2, Position_s *position2, Size_s *size2, RType::Logger &logger, std::unique_ptr<NetworkSender> &networkSender, Type_s *entityType1, Type_s *entityType2);
 
         /**
          * @brief Read the file that contains the scores history
