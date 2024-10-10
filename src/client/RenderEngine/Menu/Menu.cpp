@@ -234,7 +234,6 @@ int RType::Menu::displayMenu()
         }
     std::string keyValue = settings->get_key_value(&cfg, "Keys7");
     if (keyValue == "ON") {
-        std::cout << "Subtitles are on" << std::endl;
         displaySubtitles();
     }
 
