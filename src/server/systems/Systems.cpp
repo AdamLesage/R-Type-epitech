@@ -121,7 +121,7 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
     bool collisionY = entityPos1->y < entityPos2->y + entitySize2->y && entityPos1->y + entitySize1->y > entityPos2->y;
 
     bool playerTakeDamage = (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::ENEMY_PROJECTILE) ||
-                            (entityType1->type == EntityType::PLAYER_PROJECTILE && entityType2->type == EntityType::ENEMY);
+                            (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::ENEMY);
 
     bool enemyTakeDamage =  (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE);
 
