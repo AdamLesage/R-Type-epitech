@@ -36,6 +36,8 @@ namespace RType {
          */
         ~Game();
 
+        void displayPiou();
+
         void ShootSound();
 
         /**
@@ -116,6 +118,7 @@ namespace RType {
         sf::Sound shoot_music2;
         bool isShooting;
         sf::Font font;
+        bool piou = false;
 
     };
 }
