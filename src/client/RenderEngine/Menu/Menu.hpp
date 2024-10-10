@@ -70,6 +70,11 @@ namespace RType {
         void displaySound();
 
         /**
+         * @brief Displays the subtitles of the lobby.
+         */
+        void displaySubtitles();
+
+        /**
          * @brief Displays the menu.
          */
         int displayMenu();

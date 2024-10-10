@@ -85,7 +85,7 @@ class Settings {
         sf::Sound selectSound;
         std::shared_ptr<sf::RenderWindow> window;
         sf::Font font;
-        sf::Text menuOptions[6];
+        sf::Text menuOptions[7];
         sf::Texture logoTexture;
         sf::Sprite logoSprite;
         sf::Event event;
