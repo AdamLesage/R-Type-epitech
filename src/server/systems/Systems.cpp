@@ -124,7 +124,7 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
                       entityPos1->y + entitySize1->y > entityPos2->y;
 
     if (collisionX && collisionY) {
-        logger.log(RType::Logger::LogType::INFO, "Entity %d collided with entity %d", entityId1, entityId2);
+        logger.log(RType::Logger::LogType::RTYPEINFO, "Entity %d collided with entity %d", entityId1, entityId2);
         // send_collision_to_clients(entityId1, entityId2);
     }
 }
@@ -332,7 +332,7 @@ void Systems::death_system(Registry &reg, RType::Logger &logger)
 
         if (health && type && health->health <= 0) {
             reg.kill_entity(i);
-            logger.log(RType::Logger::LogType::INFO, "Entity %d died", i);
+            logger.log(RType::Logger::LogType::RTYPEINFO, "Entity %d died", i);
             // send_death to client
         }
     }

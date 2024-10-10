@@ -15,11 +15,11 @@
 namespace RType {
     class Logger {
     public:
-        enum class LogType {
-            INFO,
-            WARN,
-            ERROR,
-            DEBUG
+        enum LogType {
+            RTYPEINFO,
+            RTYPEWARN,
+            RTYPEERROR,
+            RTYPEDEBUG
         };
 
         /**
@@ -30,7 +30,7 @@ namespace RType {
         /**
          * @brief Destroy the Logger object
          */
-        virtual ~Logger();
+        ~Logger() = default;
 
         /**
          * @brief Log a message with a type

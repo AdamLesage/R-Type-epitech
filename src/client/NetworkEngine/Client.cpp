@@ -26,7 +26,7 @@ namespace NetworkLib {
 			// Sending an empty message to test the connection
 			Client::send("");
 			std::string message = "Client connected to " + host + ":" + std::to_string(server_port);
-			_logger.log(RType::Logger::LogType::INFO, message.c_str());
+			_logger.log(RType::Logger::LogType::RTYPEINFO, message.c_str());
 		}
 		catch (const std::exception& e) {
 			std::cerr << "Failed to connect to the server: " << e.what() << std::endl;

@@ -17,10 +17,10 @@ RType::RenderingEngine::~RenderingEngine()
 
 void RType::RenderingEngine::run()
 {
-    logger.log(RType::Logger::LogType::INFO, "RenderingEngine created");
+    logger.log(RType::Logger::LogType::RTYPEINFO, "RenderingEngine created");
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
-    logger.log(RType::Logger::LogType::INFO, "Menu created");
+    logger.log(RType::Logger::LogType::RTYPEINFO, "Menu created");
     try {
         games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);

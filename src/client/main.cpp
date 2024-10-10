@@ -113,9 +113,9 @@ int main(int ac, char **av)
 
     RType::Logger logger;
     if (std::string(PATH_SEPARATOR) == "\\") {
-        logger.log(RType::Logger::LogType::INFO, "Running R-Type on Windows.");
+        logger.log(RType::Logger::LogType::RTYPEINFO, "Running R-Type on Windows.");
     } else {
-        logger.log(RType::Logger::LogType::INFO, "Running R-Type on Unix.");
+        logger.log(RType::Logger::LogType::RTYPEINFO, "Running R-Type on Unix.");
     }
 
     try {
