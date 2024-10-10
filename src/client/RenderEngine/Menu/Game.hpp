@@ -48,7 +48,13 @@ namespace RType {
          */
         void play();
         /**
-         * @brief set the textures needed from camera to the textures map.
+         * @brief Set the camera to display
+         * 
+         * @param camera the camera to set
+         */
+        void setCamera(std::shared_ptr<Camera> camera);
+         /** 
+          * @brief set the textures needed from camera to the textures map
          */
         void set_texture();
         /**
@@ -103,6 +109,7 @@ namespace RType {
         std::vector<sf::RectangleShape> players;
         std::vector<sf::RectangleShape> entity;
         std::vector<sf::Texture> playerTextures;
+        std::shared_ptr<Camera> _camera;
         std::unordered_map<std::string, sf::Texture*> Textures;
         sf::SoundBuffer game_launch_sound;
         sf::Sound game_launch_music;

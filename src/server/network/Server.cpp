@@ -100,7 +100,7 @@ namespace NetworkLib {
 	void Server::sendToAll(const char *message, size_t size)
 	{
 		packetToSend.insert(packetToSend.end(), message, message + size);
-		if (packetToSend.size() < 1500) {
+		if (packetToSend.size() < 1000) {
 		} else {
 			for (auto client : clients)
 				send(packetToSend, client.second);

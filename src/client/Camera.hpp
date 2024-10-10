@@ -1,20 +1,35 @@
-#ifndef CAMERAHPP
-#define CAMERAHPP
+/*
+** EPITECH PROJECT, 2024
+** File description:
+** Camera
+*/
 
-#include <SFML/Graphics.hpp>
-#include "../shared/components/Size.hpp"
-#include "../shared/components/Position.hpp"
-#include "../shared/components/Direction.hpp"
+#ifndef CAMERA_HPP_
+    #define CAMERA_HPP_
 
-typedef struct EntityRenderInfos {
-    Size size;
-    Position position;
-    Direction direction;
-    std::string texturePath;
-} EntityRenderInfo;
+    #include <SFML/Graphics.hpp>
+    #include "../shared/components/Size.hpp"
+    #include "../shared/components/Position.hpp"
+    #include "../shared/components/Direction.hpp"
+    #include "../shared/components/Sprite.hpp"
+    #include <array>
 
-typedef struct Camera_s {
-    std::vector<EntityRenderInfo> listEntityToDisplay;
-} Camera;
+    typedef struct EntityRenderInfo_s {
+        Size size;
+        Position position;
+        Direction direction;
+        Sprite sprite;
+    } EntityRenderInfo;
 
-#endif /* !CAMERA_HPP */
+    /**
+     * @struct Camera_s
+     */
+    typedef struct Camera_s {
+        /**
+         * @brief Camera component, add a camera to an entity
+         *
+         */
+        std::vector<EntityRenderInfo> listEntityToDisplay;
+    } Camera;
+
+#endif /* !CAMERA_HPP_ */

@@ -29,9 +29,13 @@ void RType::RenderingEngine::run()
         std::cerr << e.what() << std::endl;
         exit(84);
     }
-    window->setFramerateLimit(360);
     this->lobby->setMediator(_mediator);
     this->_menu->setMediator(_mediator);
+    if (this->_camera == nullptr) {
+        std::cout << "run camera null" << std::endl;
+    }
+    this->lobby->setCamera(_camera);
+    window->setFramerateLimit(360);
     window->clear();
     while (window->isOpen()) {
         int scene = _menu->displayMenu();
@@ -52,6 +56,15 @@ void RType::RenderingEngine::run()
 void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
+}
+
+void RType::RenderingEngine::setCamera(std::shared_ptr<Camera> &camera)
+{
+    _camera = camera;
+    if (this->games != nullptr) {
+        std::cout << "Render not null, use_count: " << _camera.use_count() << std::endl;
+        this->games->setCamera(_camera);
+    }
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()

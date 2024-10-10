@@ -222,6 +222,7 @@ void RType::Lobby::displayLobby()
                             std::cerr << "Error: Mediator is null" << std::endl;
                         }
                         games->_mediator = _mediator;
+                        games->setCamera(_camera);
                         games->displayGame();
                         break;
                     case 1:
@@ -261,4 +262,12 @@ void RType::Lobby::displayLobby()
 void RType::Lobby::setMediator(std::shared_ptr<RType::IMediator> mediator)
 {
     _mediator = mediator;
+}
+
+void RType::Lobby::setCamera(std::shared_ptr<Camera> camera)
+{
+    this->_camera = camera;
+    if (_camera != nullptr) {
+        std::cout << "set camera not null, use_count: " << _camera.use_count() << std::endl;
+    }
 }

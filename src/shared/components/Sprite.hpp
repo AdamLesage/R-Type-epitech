@@ -8,8 +8,7 @@
 #ifndef SPRITE_HPP_
     #define SPRITE_HPP_
 
-    #include <SFML/Graphics.hpp>
-
+    #include <array>
     /**
      * @struct Sprite_s
      */
@@ -18,7 +17,9 @@
          * @brief Sprite component, add a sprite to an entity
          *
          */
-        sf::Sprite sprite; //sprite of an entity
+        std::string spritePath; //sprite of an entity
+        std::array<int, 2> rectSize;
+        std::array<int, 2> rectPos;
     } Sprite;
 
 #endif /* !SPRITE_HPP_ */

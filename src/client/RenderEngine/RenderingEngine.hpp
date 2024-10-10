@@ -14,6 +14,7 @@
 #include "Menu/Game.hpp"
 #include "Menu/Settings.hpp"
 #include "Menu/Lobby.hpp"
+#include "../Camera.hpp"
 
 namespace RType {
     class RenderingEngine : public AEngine {
@@ -32,6 +33,12 @@ namespace RType {
              * @param mediator The mediator to set.
             */
             void setMediator(std::shared_ptr<IMediator> mediator) override;
+            /**
+             * @brief Set the camera of the game
+             * 
+             * @param Camera the Camera to set
+             */
+            void setCamera(std::shared_ptr<Camera> &Camera);
         protected:
         private:
             std::shared_ptr<Menu> _menu;
@@ -39,6 +46,7 @@ namespace RType {
             std::shared_ptr<Game> games;
             std::shared_ptr<Settings> settings;
             std::shared_ptr<Lobby> lobby;
+            std::shared_ptr<Camera> _camera;
     };
 }
 

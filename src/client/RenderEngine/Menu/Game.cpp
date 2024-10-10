@@ -106,29 +106,6 @@ void RType::Game::DisplaySkipIntro()
 
 void RType::Game::play()
 {
-    entity_t movable = _registry.spawn_entity();
-    _registry.add_component<Position_s>(movable, Position_s{100.f, 100.f});
-    _registry.add_component<Velocity_s>(movable, Velocity_s{0.f, 0.f});
-    _registry.add_component<Drawable_s>(movable, Drawable_s{players[1]});
-    _registry.add_component<Controllable_s>(movable, Controllable_s{});
-
-    entity_t static_entity = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity, Position_s{100.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity]->shape.setFillColor(sf::Color::Red);
-    entity_t static_entity2 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity2, Position_s{300.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity2, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity2]->shape.setFillColor(sf::Color::Blue);
-    entity_t static_entity3 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity3, Position_s{600.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity3, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity3]->shape.setFillColor(sf::Color::Green);
-    entity_t static_entity4 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity4, Position_s{900.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity4, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity4]->shape.setFillColor(sf::Color::Yellow);
-
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -166,22 +143,10 @@ void RType::Game::play()
         for (int i = 0; i < 4; i++) {
             window->draw(backgrounds[i]);
         }
-        auto &positions = _registry.get_components<Position_s>();
-        auto &drawables = _registry.get_components<Drawable_s>();
-
-        for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
-            auto &pos = positions[i];
-            auto &draw = drawables[i];
-
-            if (pos && draw) {
-                draw->shape.setPosition(pos->x, pos->y);
-                window->draw(draw->shape);
-            }
-        }
-        for (int i; i < entity.size(); i++) {
+        this->set_texture();
+        for (int i = 0; i < entity.size(); i++) {
             window->draw(entity[i]);
         }
-        // _systems.logging_system(_registry.get_components<Position_s>(), _registry.get_components<Velocity_s>());
         window->display();
     }
 }
@@ -197,17 +162,29 @@ sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
 void RType::Game::set_texture()
 {
     entity.clear();
-    for (int i = 0; i < camera->listEntityToDisplay.size(); i++) {
-        entity.push_back(sf::RectangleShape(convertToVector2f(camera->listEntityToDisplay[i].size)));
+    if (_camera == nullptr)
+        return;
+
+    for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+        entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
     }
-    for (int i = 0; i < camera->listEntityToDisplay.size(); i++) {
-        if (Textures.find(camera->listEntityToDisplay[i].texturePath) != Textures.end()) {
-            entity[i].setTexture(Textures[camera->listEntityToDisplay[i].texturePath]);
-            entity[i].setPosition(convertToVector2fb(camera->listEntityToDisplay[i].position));
-        } else {
+
+    for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+        if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath) != Textures.end()) { // If texture already loaded
+            entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
+            entity[i].setTextureRect(sf::IntRect(
+                _camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                _camera->listEntityToDisplay[i].sprite.rectSize[0], _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+            entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
+        } else { // If texture not loaded
             sf::Texture* texture = new sf::Texture();
-            texture->loadFromFile(camera->listEntityToDisplay[i].texturePath);
-            Textures.insert(std::make_pair(camera->listEntityToDisplay[i].texturePath, texture));
+            texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath);
+            Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, texture));
+            entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
+            entity[i].setTextureRect(sf::IntRect(
+                _camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                _camera->listEntityToDisplay[i].sprite.rectSize[0], _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+            entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
         }
     }
 }
@@ -285,6 +262,14 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
     }
 
     return true;
+}
+
+void RType::Game::setCamera(std::shared_ptr<Camera> camera)
+{
+    this->_camera = camera;
+    if (_camera != nullptr) {
+        std::cout << "set camera not null, use_count: " << _camera.use_count() << std::endl;
+    }
 }
 
 void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
