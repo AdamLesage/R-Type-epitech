@@ -164,6 +164,15 @@ namespace RType {
              * @return true if the message type is valid, false otherwise.
             */
             bool checkMessageType(const std::string &messageType, const std::string &message, int &index);
+
+            /**
+             * @brief Update the index from the binary data.
+             * 
+             * @param message The message to update.
+             * @param index The index to update.
+             * @return int The new index.
+            */
+            int updateIndexFromBinaryData(const std::string &message, int &index);
         private:
             // Variables
             std::string _protocolPath;

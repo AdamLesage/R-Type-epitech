@@ -68,7 +68,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
         case 0x03:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Health>(entity, Health{50, 50, false, true});
             this->reg.add_component<Damage>(entity, Damage{20});
             this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
             this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
