@@ -62,35 +62,35 @@ int Settings::getSelectedOption() const
     return selectedOption;
 }
 
-void Settings::changeKey(std::string key)
+std::string Settings::changeKey()
 {
-    std::string newKey = key.substr(0, 8);
+    std::string newKey = "";
     menuOptions[selectedOption].setString("PRESS A KEY");
     display();
     sf::Event event2 = event;
     bool keyPressed = false;
+
     while (!keyPressed) {
         while (window->pollEvent(event2)) {
             if (event2.type == sf::Event::KeyPressed) {
                 keyPressed = true;
                 if (event2.key.code >= sf::Keyboard::A && event2.key.code <= sf::Keyboard::Z) {
-                    newKey += static_cast<char>(event2.key.code + 'A');
+                    newKey = static_cast<char>(event2.key.code + 'A');
                 } else if (event2.key.code >= sf::Keyboard::Num1 && event2.key.code <= sf::Keyboard::Num9) {
-                    newKey += static_cast<char>(event2.key.code - sf::Keyboard::Num1 + '1');
+                    newKey = static_cast<char>(event2.key.code - sf::Keyboard::Num1 + '1');
                 } else if (event2.key.code == sf::Keyboard::Space) {
-                    newKey += "SPACE";
+                    newKey = "SPACE";
                 } else if (event2.key.code == sf::Keyboard::Escape) {
-                    newKey += "ESCAPE";
+                    newKey = "ESCAPE";
                 } else {
                     std::cerr << "Unsupported key" << std::endl;
                     keyPressed = false;
-                    continue;
                 }
                 break;
             }
         }
     }
-    menuOptions[selectedOption].setString(newKey);
+    return newKey;
 }
 
 void Settings::display()
@@ -153,7 +153,8 @@ void Settings::displaySettings()
                         currentSetting = "settings.controls.up";
                         std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
                         std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
-                        changeKey(newKey);
+                        newKey = changeKey();
+                        menuOptions[0].setString("UP     : " + newKey);
                         configEditor.queueModification(currentSetting, newKey);
                         break;
                     }
@@ -161,7 +162,8 @@ void Settings::displaySettings()
                         currentSetting = "settings.controls.down";
                         std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
                         std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
-                        changeKey(newKey);
+                        newKey = changeKey();
+                        menuOptions[1].setString("DOWN  : " + newKey);
                         configEditor.queueModification(currentSetting, newKey);
                         break;
                     }
@@ -169,7 +171,8 @@ void Settings::displaySettings()
                         currentSetting = "settings.controls.left";
                         std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
                         std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
-                        changeKey(newKey);
+                        newKey = changeKey();
+                        menuOptions[2].setString("LEFT  : " + newKey);
                         configEditor.queueModification(currentSetting, newKey);
                         break;
                     }
@@ -177,7 +180,8 @@ void Settings::displaySettings()
                         currentSetting = "settings.controls.right";
                         std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
                         std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
-                        changeKey(newKey);
+                        newKey = changeKey();
+                        menuOptions[3].setString("RIGHT : " + newKey);
                         configEditor.queueModification(currentSetting, newKey);
                         break;
                     }
@@ -185,7 +189,8 @@ void Settings::displaySettings()
                         currentSetting = "settings.controls.shoot";
                         std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
                         std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
-                        changeKey(newKey);
+                        newKey = changeKey();
+                        menuOptions[4].setString("SHOOT : " + newKey);
                         configEditor.queueModification(currentSetting, newKey);
                         break;
                     }
@@ -193,7 +198,8 @@ void Settings::displaySettings()
                         currentSetting = "settings.controls.quit";
                         std::string keyWithLabel = menuOptions[selectedOption].getString().toAnsiString();
                         std::string newKey = keyWithLabel.substr(keyWithLabel.find(":") + 2);
-                        changeKey(newKey);
+                        newKey = changeKey();
+                        menuOptions[5].setString("QUIT  : " + newKey);
                         configEditor.queueModification(currentSetting, newKey);
                         break;
                     }

@@ -52,9 +52,9 @@ class Settings {
         /**
          * @brief Changes the key of the selected option.
          *
-         * @param key The new key.
+         * @return Return string of the new key.
          */
-        void changeKey(std::string key);
+        std::string changeKey();
 
         /**
          * @brief Displays the settings.
