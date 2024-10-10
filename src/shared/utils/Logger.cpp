@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** R-Type-epitech
+** R-Type-epitech [WSL: Ubuntu]
 ** File description:
 ** Logger
 */
@@ -9,9 +9,7 @@
 
 using namespace RType;
 
-Logger::~Logger()
-{
-}
+Logger::~Logger() {}
 
 void Logger::log(LogType type, const char *message, ...)
 {
@@ -25,16 +23,16 @@ void Logger::log(LogType type, const char *message, ...)
     const char* blue = "\033[34m";
 
     switch (type) {
-    case INFO:
+    case LogType::INFO:
         printf("%s[INFO] %s", yellow, reset);
         break;
-    case WARN:
+    case LogType::WARN:
         printf("%s[WARN] %s", purple, reset);
         break;
-    case ERROR:
+    case LogType::ERROR:
         printf("%s[ERROR] %s", red, reset);
         break;
-    case DEBUG:
+    case LogType::DEBUG:
         printf("%s[DEBUG] %s", blue, reset);
         break;
     }

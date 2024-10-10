@@ -402,7 +402,7 @@ main () {
     make release
     sudo ln "$(pwd)/r-type_client" ../r-type_client
     sudo ln "$(pwd)/r-type_server" ../r-type_server
-    # cp -r assets ../
+    cp -r assets ../
     cp -r lib ../
     cd ..
     message "$SUCCESS" "Installation completed successfully."
