@@ -94,10 +94,6 @@ void Settings::changeKey(std::string key)
 {
     std::string newKey = key.substr(0, 11);
     std::string newKey2;
-    if (key == "SUBTITLES: ON" || key == "SUBTITLES: OFF") {
-        return;
-    }
-    menuOptions[selectedOption].setString("PRESS A KEY");
     config_t cfg;
     config_init(&cfg);
     if (!config_read_file(&cfg, "src/config/key.cfg")) {
@@ -105,6 +101,21 @@ void Settings::changeKey(std::string key)
         config_destroy(&cfg);
         return;
     }
+    if (key == "SUBTITLES: ON" || key == "SUBTITLES: OFF") {
+        if (key.find("ON") != std::string::npos) {
+            newKey2 = "OFF";
+        } else {
+            newKey2 = "ON";
+        }
+        set_key_value(&cfg, "Keys7", newKey2.c_str());
+        if (!config_write_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors de l'écriture du fichier\n");
+        }
+        config_destroy(&cfg);
+        return;
+    }
+    menuOptions[selectedOption].setString("PRESS A KEY");
+
     display();
     sf::Event event2 = event;
     bool keyPressed = false;
@@ -140,6 +151,7 @@ void Settings::changeKey(std::string key)
     newKey += newKey2;
     menuOptions[selectedOption].setString(newKey);
     newKey.substr(0, 11);
+    std::cout << newKey << "hjgjiouhgjiopiuhgvhuihgv" << std::endl;
     set_key_value(&cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
     if (!config_write_file(&cfg, "src/config/key.cfg")) {
         printf("Erreur lors de l'écriture du fichier\n");
@@ -225,13 +237,12 @@ void Settings::displaySettings(bool ingame)
                         case 5:
                             break;
                         case 6:
-                            std::cout << menuOptions[6].getString().toAnsiString() << std::endl;
                             if (menuOptions[6].getString().toAnsiString().find("ON") != std::string::npos) {
-                                menuOptions[6].setString("SUBTITLES: OFF");
-                                changeKey("SUBTITLES: OFF");
-                            } else {
-                                menuOptions[6].setString("SUBTITLES: ON");
                                 changeKey("SUBTITLES: ON");
+                                menuOptions[6].setString("SUBTITLES: OFF");
+                            } else {
+                                changeKey("SUBTITLES: OFF");
+                                menuOptions[6].setString("SUBTITLES: ON");
                             }
                             break;
                         }
