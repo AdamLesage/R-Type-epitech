@@ -10,7 +10,6 @@
 RType::GameEngine::GameEngine()
 {
     // Register all components
-    _registry.register_component<Camera_s>();
     _registry.register_component<Charging_s>();
     _registry.register_component<Color_s>();
     _registry.register_component<Controllable_s>();
@@ -30,8 +29,12 @@ RType::GameEngine::GameEngine()
     _registry.register_component<Tag_s>();
     _registry.register_component<Type_s>();
     _registry.register_component<Velocity_s>();
+    _registry.register_component<Size>();
+    _registry.register_component<Direction>();
+
 
     _protocolParsing = std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
+    this->_camera = std::make_shared<Camera>();
 }
 
 RType::GameEngine::~GameEngine()
@@ -67,9 +70,9 @@ void RType::GameEngine::run()
     std::thread renderingThread([&]() {
         try {
             _mutex.lock();
+            renderingEngine->setCamera(_camera);
             renderingEngine->run();
             _mutex.unlock();
-            std::cout << "Rendering engine is running" << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
@@ -96,6 +99,10 @@ void RType::GameEngine::run()
     });
 
     // Wait for all threads to finish
+    while (1) {
+        updateCamera();
+    }
+    
     networkThread.join();
     renderingThread.join();
     physicThread.join();
@@ -107,7 +114,6 @@ void RType::GameEngine::send(const std::string &message)
     _mediator->notify("GameEngine", message);
 }
 
-
 void RType::GameEngine::handleServerData(const std::string &message)
 {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
@@ -117,6 +123,30 @@ void RType::GameEngine::handleServerData(const std::string &message)
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
+}
+
+void RType::GameEngine::updateCamera()
+{
+    auto &positions = this->_registry.get_components<Position_s>();
+    auto &sizes = this->_registry.get_components<Size>();
+    auto &directions = this->_registry.get_components<Direction>();
+    auto &sprites = this->_registry.get_components<Sprite>();
+    std::vector<EntityRenderInfo> entityRender;
+    entityRender.reserve(std::min({positions.size(), sizes.size(), directions.size(), sprites.size()}));
+
+    for (size_t i = 0; i < positions.size() && i < sizes.size() 
+        && i < directions.size() && i < sprites.size(); ++i) {
+        auto &position = positions[i];
+        auto &size = sizes[i];
+        auto &direction = directions[i];
+        auto &sprite = sprites[i];
+
+        if (position && size && direction && sprite) {
+            entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
+        }
+    }
+    this->_camera->listEntityToDisplay = std::move(entityRender);
+    usleep(10000);
 }
 
 extern "C" RType::GameEngine *entryPointGameEngine()

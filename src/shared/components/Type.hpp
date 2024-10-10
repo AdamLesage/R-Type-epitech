@@ -11,7 +11,8 @@
     enum EntityType {
         PLAYER,
         ENEMY,
-        PROJECTILE,
+        PLAYER_PROJECTILE,
+        ENEMY_PROJECTILE,
         BACKGROUND,
         OBSTACLE,
         POWERUP

@@ -51,7 +51,6 @@ namespace NetworkLib {
 
 	void Client::send(const std::string& message)
 	{
-		std::cout << "send" << std::endl;
 		socket.send_to(boost::asio::buffer(message), server_endpoint);
 	}
 

@@ -92,6 +92,12 @@ namespace RType
          * @param mediator The mediator to set.
          */
         void setMediator(std::shared_ptr<IMediator> mediator);
+        /**
+         * @brief Set the camera to display
+         * 
+         * @param camera the camera to set
+         */
+        void setCamera(std::shared_ptr<Camera> camera);
         std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
 
     protected:
@@ -110,7 +116,7 @@ namespace RType
         sf::Sound selectSound;
         std::vector<sf::Texture> playerTextures;
         std::vector<sf::Sprite> playerSprites;
-
+        std::shared_ptr<Camera> _camera;
         Registry _registry;
         Systems _systems;
         std::shared_ptr<Game> games;
