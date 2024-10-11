@@ -177,18 +177,18 @@ This document describes the protocol used to communicate between the server and 
 ## Player Death
 | Type  | Entity ID    |
 |-------|--------------|
-| 0x37  | 0x00000001   |
+| 0x38  | 0x00000001   |
 
-- **Type:** 1 byte (0x37 for "state change").
+- **Type:** 1 byte (0x38 for "player Death").
 - **Entity ID:** 4 bytes.
 
 
 ## Number connected player 
 | Type  | Number Player |
 |-------|---------------|
-| 0x38  | 0x00000001    |
+| 0x39  | 0x00000001    |
 
-- **Type:** 1 byte (0x38 for "Number player").
+- **Type:** 1 byte (0x39 for "Number player").
 - **number player:** 4 bytes.
 
 
