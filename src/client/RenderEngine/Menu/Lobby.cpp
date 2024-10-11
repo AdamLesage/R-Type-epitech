@@ -305,7 +305,4 @@ void RType::Lobby::setMediator(std::shared_ptr<RType::IMediator> mediator)
 void RType::Lobby::setCamera(std::shared_ptr<Camera> camera)
 {
     this->_camera = camera;
-    if (_camera != nullptr) {
-        std::cout << "set camera not null, use_count: " << _camera.use_count() << std::endl;
-    }
 }
