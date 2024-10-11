@@ -21,6 +21,12 @@
 #include "../../Mediator/IMediator.hpp"
 #include "../../../shared/utils/Logger.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+    #define PATH_SEPARATOR "\\"
+#else
+    #define PATH_SEPARATOR "/"
+#endif
+
 namespace RType
 {
     class Lobby

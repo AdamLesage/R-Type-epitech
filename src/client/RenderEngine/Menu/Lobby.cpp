@@ -3,7 +3,8 @@
 RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window), selectedOption(0)
 {
     this->window = _window;
-    if (!font.loadFromFile("assets/r-type.ttf"))
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath))
     {
         throw std::runtime_error("Error loading font");
     }
@@ -17,8 +18,8 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         playersNames[i].setString("Player " + std::to_string(i + 1));
         playersNames[i].setCharacterSize(24);
         playersNames[i].setFillColor(sf::Color::White);
-
-        if (!playerTextures[i].loadFromFile("assets/player/player_" + std::to_string(i + 1) + ".png"))
+        std::string playerPath = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_" + std::to_string(i + 1) + ".png";
+        if (!playerTextures[i].loadFromFile(playerPath))
         {
             throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
         }
@@ -286,15 +287,16 @@ void RType::Lobby::displayLobby()
         displaySound();
         config_t cfg;
         config_init(&cfg);
-        if (!config_read_file(&cfg, "src/config/key.cfg")) {
-            printf("Erreur lors du chargement du fichier de configuration\n");
+        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+        if (!config_read_file(&cfg, configPath.c_str())) {
+            printf("Error while loading config file!\n");
             config_destroy(&cfg);
             return;
-            }
+        }
         std::string keyValue = settings->get_key_value(&cfg, "Keys7");
         if (keyValue == "ON") {
             displaySubtitles();
-            }
+        }
         window->display();
     }
 }
