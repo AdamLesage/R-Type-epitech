@@ -227,9 +227,8 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
     if (type && type->type == EntityType::PLAYER && shoot->canShoot) {
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = now - shoot->shootCooldown;
-        float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
-
-        if (elapsed_seconds >= shootingSpeed->shooting_speed) {
+        float elapsed_seconds = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
+        if (elapsed_seconds >= shootingSpeed->shooting_speed * 1000) {
             shoot->shootCooldown = now;
             float projectileX = pos->x + 10;
             float projectileY = pos->y;
