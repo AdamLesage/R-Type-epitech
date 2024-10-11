@@ -6,19 +6,19 @@
 */
 
 #ifndef SCALE_HPP_
-    #define SCALE_HPP_
+#define SCALE_HPP_
 
-    #include <cstddef>
+#include <cstddef>
 
-    /**
-     * @struct Scale_s
-     */
-    typedef struct Scale_s {
+/**
+ * @struct Scale_s
+ */
+typedef struct Scale_s {
         /**
          * @brief Scale component, add a scale to an entity
          *
          */
-        size_t scale; //scale of an entity
-    } Scale;
+        size_t scale; // scale of an entity
+} Scale;
 
 #endif /* !SCALE_HPP_ */

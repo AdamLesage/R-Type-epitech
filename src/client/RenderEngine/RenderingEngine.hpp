@@ -33,20 +33,21 @@ namespace RType {
              * @brief Set the mediator of the engine.
              *
              * @param mediator The mediator to set.
-            */
+             */
             void setMediator(std::shared_ptr<IMediator> mediator) override;
             /**
              * @brief Set the camera of the game
              *
              * @param Camera the Camera to set
              */
-            void setCamera(std::shared_ptr<Camera> &Camera);
+            void setCamera(std::shared_ptr<Camera>& Camera);
             /**
              * @brief Set the mutex
              *
              * @param mutex the mutex to set
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
+
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;
@@ -57,6 +58,6 @@ namespace RType {
             std::shared_ptr<std::mutex> _mutex;
             RType::Logger logger;
     };
-}
+} // namespace RType
 
 #endif /* !RENDERINGENGINE_HPP_ */

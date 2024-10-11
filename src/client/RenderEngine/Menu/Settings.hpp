@@ -17,9 +17,9 @@
 #include <string>
 
 #if defined(_WIN32) || defined(_WIN64)
-    #define PATH_SEPARATOR "\\"
+#define PATH_SEPARATOR "\\"
 #else
-    #define PATH_SEPARATOR "/"
+#define PATH_SEPARATOR "/"
 #endif
 
 class Settings {
@@ -77,7 +77,7 @@ class Settings {
          * @param cfg libconfig
          * @param key_name name of the key needed
          */
-        const char* get_key_value(config_t *cfg, const char *key_name);
+        const char* get_key_value(config_t* cfg, const char* key_name);
         /**
          * @brief get the value of a key from the cfg file
          *
@@ -85,7 +85,8 @@ class Settings {
          * @param key_name name of the key to change
          * @param new_value new value for the key
          */
-        int set_key_value(config_t *cfg, const char *key_name, const char *new_value);
+        int set_key_value(config_t* cfg, const char* key_name, const char* new_value);
+
     protected:
         int selectedOption;
         sf::Sound selectSound;
@@ -97,6 +98,7 @@ class Settings {
         sf::Event event;
         sf::RectangleShape background;
         sf::Texture backgroundTexture;
+
     private:
 };
 

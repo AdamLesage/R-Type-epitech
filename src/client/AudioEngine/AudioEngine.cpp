@@ -7,24 +7,19 @@
 
 #include "AudioEngine.hpp"
 
-RType::AudioEngine::AudioEngine()
-{
+RType::AudioEngine::AudioEngine() {
 }
 
-RType::AudioEngine::~AudioEngine()
-{
+RType::AudioEngine::~AudioEngine() {
 }
 
-void RType::AudioEngine::run()
-{
+void RType::AudioEngine::run() {
 }
 
-void RType::AudioEngine::setMediator(std::shared_ptr<IMediator> mediator)
-{
+void RType::AudioEngine::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
 }
 
-extern "C" RType::AudioEngine *entryPointAudioEngine()
-{
+extern "C" RType::AudioEngine* entryPointAudioEngine() {
     return (new RType::AudioEngine());
 }

@@ -7,13 +7,12 @@
 
 #include "GameLogique.hpp"
 
-GameLogique::GameLogique(size_t port, int _frequency)
-{
-    this->network = std::make_shared<NetworkLib::Server>(port);
+GameLogique::GameLogique(size_t port, int _frequency) {
+    this->network        = std::make_shared<NetworkLib::Server>(port);
     this->_networkSender = std::make_unique<NetworkSender>(this->network);
     this->receiverThread = std::thread(&GameLogique::handleRecieve, this);
-    this->running = false;
-    this->frequency = _frequency;
+    this->running        = false;
+    this->frequency      = _frequency;
     this->reg.register_component<Position>();
     this->reg.register_component<Velocity>();
     this->reg.register_component<Tag>();
@@ -30,8 +29,7 @@ GameLogique::GameLogique(size_t port, int _frequency)
     this->reg.register_component<Size>();
 }
 
-GameLogique::~GameLogique()
-{
+GameLogique::~GameLogique() {
     receiverThread.join();
 }
 
@@ -40,8 +38,8 @@ void GameLogique::startGame() {
         // std::cout << network->getClientCount() << std::endl;
         for (size_t i = 0; i != network->getClientCount(); i++) {
             size_t entity = this->reg.spawn_entity();
-            float xPos = 100.f + (100.f * i);
-            float yPos = 100.f;
+            float xPos    = 100.f + (100.f * i);
+            float yPos    = 100.f;
             this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
             this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
             this->reg.add_component<Tag>(entity, Tag{"player"});
@@ -56,22 +54,21 @@ void GameLogique::startGame() {
     }
 }
 
-void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
-{
+void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     {
         std::lock_guard<std::mutex> lock(this->_mutex);
 
         size_t entity = this->reg.spawn_entity();
 
-        switch (type)
-        {
+        switch (type) {
         case 0x03:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Velocity>(entity, Velocity{0, 0});
             this->reg.add_component<Health>(entity, Health{50, 50, false, true});
             this->reg.add_component<Damage>(entity, Damage{20});
             this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
-            this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+            this->reg.add_component<ShootStraightPattern>(
+                entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
@@ -98,7 +95,8 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
             this->reg.add_component<Velocity>(entity, Velocity{0, 0});
             this->reg.add_component<Health>(entity, Health{100, 100, false, true});
             this->reg.add_component<Damage>(entity, Damage{20});
-            this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+            this->reg.add_component<ShootPlayerPattern>(
+                entity, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
@@ -112,12 +110,12 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
         }
-        this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
+        this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
     }
 }
 
 void GameLogique::runGame() {
-    std::clock_t clock = std::clock();
+    std::clock_t clock      = std::clock();
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
@@ -128,7 +126,8 @@ void GameLogique::runGame() {
                 sys.player_following_pattern_system(this->reg);
                 sys.shoot_player_pattern_system(this->reg, this->_networkSender);
                 sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
-                sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender, logger);
+                sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
+                                     logger);
                 sys.position_system(reg, this->_networkSender, logger);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
@@ -139,8 +138,7 @@ void GameLogique::runGame() {
     }
 }
 
-std::array<char, 6> GameLogique::retrieveInputKeys()
-{
+std::array<char, 6> GameLogique::retrieveInputKeys() {
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     cfg.readFile(configPath.c_str());
@@ -150,10 +148,8 @@ std::array<char, 6> GameLogique::retrieveInputKeys()
     const libconfig::Setting& keys = root["Keys"];
 
     // Map to associate key names with their respective index in the array
-    std::unordered_map<std::string, int> keyMap = {
-        {"up", 0}, {"down", 1}, {"left", 2},
-        {"right", 3}, {"shoot", 4}, {"settings", 5}
-    };
+    std::unordered_map<std::string, int> keyMap = {{"up", 0},    {"down", 1},  {"left", 2},
+                                                   {"right", 3}, {"shoot", 4}, {"settings", 5}};
 
     for (int i = 0; i < keys.getLength(); ++i) {
         const libconfig::Setting& key = keys[i];
@@ -170,26 +166,25 @@ std::array<char, 6> GameLogique::retrieveInputKeys()
     return inputKeys;
 }
 
-void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
-{
+void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
     if (message.first.size() != 6) {
         std::cout << "Invalid message size" << std::endl;
         return;
     }
 
-    size_t id = 0;
+    size_t id  = 0;
     char input = 0;
     memcpy(&id, &(message.first[1]), sizeof(int));
     input = message.first[5];
 
-    auto &velocities = reg.get_components<Velocity_s>();
-    auto &types = reg.get_components<Type>();
+    auto& velocities = reg.get_components<Velocity_s>();
+    auto& types      = reg.get_components<Type>();
     if ((unsigned int)velocities.size() <= message.second && message.second <= (unsigned int)types.size()) {
         std::cerr << "Invalid entity ID: " << message.second << std::endl;
         return;
     }
-    auto &velocitie = velocities[message.second];
-    auto &type = types[message.second];
+    auto& velocitie = velocities[message.second];
+    auto& type      = types[message.second];
     if (type->type != EntityType::PLAYER) {
         return;
     }
@@ -211,14 +206,11 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     }
 }
 
-void GameLogique::handleRecieve()
-{
-    while (1)
-    {
+void GameLogique::handleRecieve() {
+    while (1) {
         if (network->hasMessages()) {
             std::pair<std::string, uint32_t> message = network->popMessage();
-            switch (message.first[0])
-            {
+            switch (message.first[0]) {
             case 0x41:
                 startGame();
                 break;

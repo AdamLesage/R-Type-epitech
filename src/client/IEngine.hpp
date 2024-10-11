@@ -28,9 +28,10 @@ namespace RType {
              * @brief Run current instance of the engine.
              */
             virtual void run() = 0;
+
         protected:
         private:
     };
-}
+} // namespace RType
 
 #endif /* !IENGINE_HPP_ */

@@ -7,24 +7,21 @@
 
 #include "RenderingEngine.hpp"
 
-RType::RenderingEngine::RenderingEngine()
-{
+RType::RenderingEngine::RenderingEngine() {
 }
 
-RType::RenderingEngine::~RenderingEngine()
-{
+RType::RenderingEngine::~RenderingEngine() {
 }
 
-void RType::RenderingEngine::run()
-{
+void RType::RenderingEngine::run() {
     logger.log(RType::Logger::LogType::RTYPEINFO, "RenderingEngine created");
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
-    _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
+    _menu  = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
     logger.log(RType::Logger::LogType::RTYPEINFO, "Menu created");
     try {
         settings = std::make_shared<Settings>(window);
-        lobby = std::make_shared<Lobby>(window);
-    } catch (const std::runtime_error &e) {
+        lobby    = std::make_shared<Lobby>(window);
+    } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         exit(84);
     }
@@ -51,22 +48,18 @@ void RType::RenderingEngine::run()
     exit(0);
 }
 
-void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
-{
+void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
 }
 
-void RType::RenderingEngine::setCamera(std::shared_ptr<Camera> &camera)
-{
+void RType::RenderingEngine::setCamera(std::shared_ptr<Camera>& camera) {
     _camera = camera;
 }
 
-void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex)
-{
+void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex) {
     this->_mutex = mutex;
 }
 
-extern "C" RType::RenderingEngine *entryPointRenderingEngine()
-{
+extern "C" RType::RenderingEngine* entryPointRenderingEngine() {
     return (new RType::RenderingEngine());
 }

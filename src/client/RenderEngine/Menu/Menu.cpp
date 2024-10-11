@@ -7,8 +7,7 @@
 
 #include "Menu.hpp"
 
-RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator)
-{
+RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator) {
     (void)mediator;
     window = wndw;
     if (!font.loadFromFile("assets/r-type.ttf")) {
@@ -42,28 +41,24 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
     std::string soundPath = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "menu.ogg";
-    if (!backgroundBuffer.loadFromFile(soundPath))
-    {
+    if (!backgroundBuffer.loadFromFile(soundPath)) {
         throw std::runtime_error("Error loading select sound");
     }
     backgroundMusic.setBuffer(backgroundBuffer);
     try {
         // games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
-        lobby = std::make_shared<Lobby>(window);
-    } catch (const std::runtime_error &e) {
+        lobby    = std::make_shared<Lobby>(window);
+    } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         exit(84);
     }
     selectedOption = 0;
-        backgroundMusic.play();
+    backgroundMusic.play();
     backgroundMusic.setLoop(true);
-
 }
 
-
-void RType::Menu::draw()
-{
+void RType::Menu::draw() {
     window->draw(background);
     window->draw(logoSprite);
 
@@ -72,8 +67,7 @@ void RType::Menu::draw()
     }
 }
 
-void RType::Menu::moveUp()
-{
+void RType::Menu::moveUp() {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
@@ -82,8 +76,7 @@ void RType::Menu::moveUp()
     }
 }
 
-void RType::Menu::moveDown()
-{
+void RType::Menu::moveDown() {
     if (selectedOption + 1 < 3) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
@@ -92,45 +85,35 @@ void RType::Menu::moveDown()
     }
 }
 
-int RType::Menu::getSelectedOption() const
-{
+int RType::Menu::getSelectedOption() const {
     return selectedOption;
 }
 
-
-void RType::Menu::adjustVolume(bool increase)
-{
+void RType::Menu::adjustVolume(bool increase) {
     float currentVolume = backgroundMusic.getVolume();
-    if (increase)
-    {
+    if (increase) {
         currentVolume = std::min(100.0f, currentVolume + 10.0f);
-    }
-    else
-    {
+    } else {
         currentVolume = std::max(0.0f, currentVolume - 10.0f);
     }
     backgroundMusic.setVolume(currentVolume);
 }
 
-void RType::Menu::handleKeyPress(const sf::Event &event)
-{
+void RType::Menu::handleKeyPress(const sf::Event& event) {
     (void)event;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) {
         adjustVolume(true);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) {
         adjustVolume(false);
     }
 }
 
-void RType::Menu::displaySound()
-{
-    float currentVolume = backgroundMusic.getVolume();
-    float maxVolume = 100.0f;
-    float volumeBarWidth = 200.0f;
-    float volumeBarHeight = 20.0f;
+void RType::Menu::displaySound() {
+    float currentVolume    = backgroundMusic.getVolume();
+    float maxVolume        = 100.0f;
+    float volumeBarWidth   = 200.0f;
+    float volumeBarHeight  = 20.0f;
     float volumePercentage = currentVolume / maxVolume;
 
     sf::RectangleShape volumeBarBackground(sf::Vector2f(volumeBarWidth, volumeBarHeight));
@@ -161,9 +144,7 @@ void RType::Menu::displaySound()
     window->draw(volumeText);
 }
 
-
-void RType::Menu::displaySubtitles()
-{
+void RType::Menu::displaySubtitles() {
     sf::Text subtitle;
     subtitle.setFont(font);
     subtitle.setString("Press Enter to select an option, you can also use the arrow keys to navigate");
@@ -190,8 +171,7 @@ void RType::Menu::displaySubtitles()
     window->draw(subtitle);
 }
 
-int RType::Menu::displayMenu()
-{
+int RType::Menu::displayMenu() {
     sf::Event event;
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -244,7 +224,6 @@ int RType::Menu::displayMenu()
     return (0);
 }
 
-void RType::Menu::setMediator(std::shared_ptr<RType::IMediator> mediator)
-{
+void RType::Menu::setMediator(std::shared_ptr<RType::IMediator> mediator) {
     _mediator = mediator;
 }

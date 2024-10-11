@@ -6,20 +6,12 @@
 */
 
 #ifndef TYPE_HPP_
-    #define TYPE_HPP_
+#define TYPE_HPP_
 
-    enum EntityType {
-        PLAYER,
-        ENEMY,
-        PLAYER_PROJECTILE,
-        ENEMY_PROJECTILE,
-        BACKGROUND,
-        OBSTACLE,
-        POWERUP
-    };
+enum EntityType { PLAYER, ENEMY, PLAYER_PROJECTILE, ENEMY_PROJECTILE, BACKGROUND, OBSTACLE, POWERUP };
 
-    typedef struct Type_s {
+typedef struct Type_s {
         EntityType type;
-    } Type;
+} Type;
 
 #endif /* !TYPE_HPP_ */

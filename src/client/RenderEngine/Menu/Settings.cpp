@@ -7,8 +7,7 @@
 
 #include "Settings.hpp"
 
-Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
-{
+Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     this->window = _window;
     if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
@@ -32,17 +31,16 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window)
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
 }
 
-Settings::~Settings()
-{
+Settings::~Settings() {
 }
 
-const char* Settings::get_key_value(config_t *cfg, const char *key_name) {
-    const char *value;
+const char* Settings::get_key_value(config_t* cfg, const char* key_name) {
+    const char* value;
 
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
 
-    if(config_lookup_string(cfg, path, &value)) {
+    if (config_lookup_string(cfg, path, &value)) {
         return value;
     } else {
         printf("Clé non trouvée : %s\n", key_name);
@@ -50,11 +48,11 @@ const char* Settings::get_key_value(config_t *cfg, const char *key_name) {
     }
 }
 
-int Settings::set_key_value(config_t *cfg, const char *key_name, const char *new_value) {
+int Settings::set_key_value(config_t* cfg, const char* key_name, const char* new_value) {
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
 
-    config_setting_t *setting = config_lookup(cfg, path);
+    config_setting_t* setting = config_lookup(cfg, path);
     if (setting != NULL) {
         config_setting_set_string(setting, new_value);
         return 0;
@@ -64,9 +62,7 @@ int Settings::set_key_value(config_t *cfg, const char *key_name, const char *new
     }
 }
 
-
-void Settings::moveUp()
-{
+void Settings::moveUp() {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
@@ -75,8 +71,7 @@ void Settings::moveUp()
     }
 }
 
-void Settings::moveDown()
-{
+void Settings::moveDown() {
     if (selectedOption + 1 < 7) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
@@ -85,13 +80,11 @@ void Settings::moveDown()
     }
 }
 
-int Settings::getSelectedOption() const
-{
+int Settings::getSelectedOption() const {
     return selectedOption;
 }
 
-void Settings::changeKey(std::string key)
-{
+void Settings::changeKey(std::string key) {
     std::string newKey = key.substr(0, 11);
     std::string newKey2;
     config_t cfg;
@@ -119,7 +112,7 @@ void Settings::changeKey(std::string key)
 
     display();
     sf::Event event2 = event;
-    bool keyPressed = false;
+    bool keyPressed  = false;
     while (!keyPressed) {
         while (window->pollEvent(event2)) {
             if (event2.type == sf::Event::KeyPressed) {
@@ -159,8 +152,7 @@ void Settings::changeKey(std::string key)
     config_destroy(&cfg);
 }
 
-void Settings::display()
-{
+void Settings::display() {
     window->draw(background);
     window->draw(logoSprite);
     for (int i = 0; i < 7; ++i) {
@@ -169,8 +161,7 @@ void Settings::display()
     window->display();
 }
 
-void Settings::displaySettings(bool ingame)
-{
+void Settings::displaySettings(bool ingame) {
     if (!ingame) {
         if (!window) {
             std::cerr << "Error: window is null" << std::endl;
@@ -185,7 +176,8 @@ void Settings::displaySettings(bool ingame)
             config_destroy(&cfg);
             return;
         }
-        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: ", "SUBTITLES: "};
+        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ",
+                                     "SHOOT    : ", "SETTINGS: ",  "SUBTITLES: "};
         for (int i = 0; i < 7; i++) {
             optionsText[i] += get_key_value(&cfg, ("Keys" + std::to_string(i + 1)).c_str());
             menuOptions[i].setFont(font);
@@ -198,22 +190,21 @@ void Settings::displaySettings(bool ingame)
             display();
             window->display();
             while (window->pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                    window->close();
+                if (event.type == sf::Event::Closed) window->close();
 
                 if (event.type == sf::Event::KeyPressed) {
-                    if(event.key.code == sf::Keyboard::Up) {
+                    if (event.key.code == sf::Keyboard::Up) {
                         moveUp();
                         break;
                     }
-                    if(event.key.code == sf::Keyboard::Down) {
+                    if (event.key.code == sf::Keyboard::Down) {
                         moveDown();
                         break;
                     }
-                    if(event.key.code == sf::Keyboard::Escape) {
+                    if (event.key.code == sf::Keyboard::Escape) {
                         return;
                     }
-                    if(event.key.code == sf::Keyboard::Enter) {
+                    if (event.key.code == sf::Keyboard::Enter) {
                         switch (getSelectedOption()) {
                         case 0:
                             std::cout << menuOptions[0].getString().toAnsiString() << std::endl;

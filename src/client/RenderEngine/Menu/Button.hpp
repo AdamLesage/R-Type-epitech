@@ -5,7 +5,6 @@
 ** Button
 */
 
-
 #ifndef BUTTON_HPP_
 #define BUTTON_HPP_
 
@@ -24,18 +23,20 @@
 
 class Button {
     public:
-        enum StateButton {
-            None, Hover, Clicked
-        };
-        Button(sf::Vector2f size, sf::Vector2f pos, sf::Color color,
-            int outline = 0, sf::Color outlineColor = sf::Color::Transparent);
+        enum StateButton { None, Hover, Clicked };
+        Button(sf::Vector2f size,
+               sf::Vector2f pos,
+               sf::Color color,
+               int outline            = 0,
+               sf::Color outlineColor = sf::Color::Transparent);
         ~Button();
-        bool checkClick(std::shared_ptr<sf::RenderWindow> window, sf::Event event); // manage click and hover of the button and change his state
-        void setText(std::string, size_t size = 20); // set the text of the button
-        void setPosition(sf::Vector2f pos); // set the position of the button
-        void setSprite(sf::Sprite sprite); // set the sprite of the button
+        bool checkClick(std::shared_ptr<sf::RenderWindow> window,
+                        sf::Event event); // manage click and hover of the button and change his state
+        void setText(std::string, size_t size = 20);                  // set the text of the button
+        void setPosition(sf::Vector2f pos);                           // set the position of the button
+        void setSprite(sf::Sprite sprite);                            // set the sprite of the button
         void displayButton(std::shared_ptr<sf::RenderWindow> window); // display the Button
-        std::string getText() const; // get the value of the button text
+        std::string getText() const;                                  // get the value of the button text
     protected:
     private:
         sf::String text;

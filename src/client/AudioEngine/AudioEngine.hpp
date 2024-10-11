@@ -23,13 +23,14 @@ namespace RType {
 
             /**
              * @brief Set the mediator of the engine.
-             * 
+             *
              * @param mediator The mediator to set.
-            */
+             */
             void setMediator(std::shared_ptr<IMediator> mediator) override;
+
         protected:
         private:
     };
-}
+} // namespace RType
 
 #endif /* !AUDIOENGINE_HPP_ */

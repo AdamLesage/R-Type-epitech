@@ -6,19 +6,19 @@
 */
 
 #ifndef SHOOT_HPP_
-    #define SHOOT_HPP_
+#define SHOOT_HPP_
 
-    #include <chrono>
-    /**
-     * @struct Shoot_s
-     */
-     typedef struct Shoot_s {
+#include <chrono>
+/**
+ * @struct Shoot_s
+ */
+typedef struct Shoot_s {
         /**
          * @brief Shoot component, add a shoot to an entity
          *
          */
-        bool canShoot; //can the entity shoot
+        bool canShoot; // can the entity shoot
         std::chrono::steady_clock::time_point shootCooldown;
-    } Shoot;
+} Shoot;
 
 #endif /* !SHOOT_HPP_ */

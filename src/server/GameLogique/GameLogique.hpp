@@ -21,9 +21,9 @@
 #include <memory>
 
 #if defined(_WIN32) || defined(_WIN64)
-    #define PATH_SEPARATOR "\\"
+#define PATH_SEPARATOR "\\"
 #else
-    #define PATH_SEPARATOR "/"
+#define PATH_SEPARATOR "/"
 #endif
 
 class GameLogique {
@@ -40,6 +40,7 @@ class GameLogique {
          * @brief update entity every 1 / frequency second
          */
         void runGame();
+
     protected:
     private:
         Registry reg;
@@ -53,11 +54,11 @@ class GameLogique {
         std::mutex _mutex;
         /**
          * @brief listen to the server socket to manage client input
-        */
+         */
         void handleRecieve();
         /**
          * @brief lunch a game with connected player
-        */
+         */
         void startGame();
         /**
          * @brief add a Enemy on the registry and send a notification to connected client
@@ -66,14 +67,14 @@ class GameLogique {
          * @param position_x the x position of the ennemy
          * @param position_y the y position of the ennemy
          *
-        */
+         */
         void spawnEnnemy(char type, float position_x, float position_y);
         /**
          * @brief handle the Inpute of the client
          *
          * @param message the message send by the client
          *
-        */
+         */
         void handleClientInput(std::pair<std::string, uint32_t> message);
 
         /**
@@ -81,7 +82,7 @@ class GameLogique {
          *
          * @param message the message send by the client
          * @return std::vector<char> the array with the input key in the order: [up, down, left, right, shoot]
-        */
+         */
         std::array<char, 6> retrieveInputKeys();
 };
 

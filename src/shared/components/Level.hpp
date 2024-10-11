@@ -6,19 +6,19 @@
 */
 
 #ifndef LEVEL_HPP_
-    #define LEVEL_HPP_
+#define LEVEL_HPP_
 
-    #include <cstddef>
+#include <cstddef>
 
-    /**
-     * @struct Level_s
-     */
-    typedef struct Level_s {
+/**
+ * @struct Level_s
+ */
+typedef struct Level_s {
         /**
          * @brief Level component, add a level to an entity
          *
          */
-        size_t level; //level of an entity (can't be negative)
-    } Level;
+        size_t level; // level of an entity (can't be negative)
+} Level;
 
 #endif /* !LEVEL_HPP_ */

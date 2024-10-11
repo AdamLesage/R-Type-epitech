@@ -21,6 +21,12 @@
 #include "../Camera.hpp"
 #include <mutex>
 
+#ifdef _WIN32
+    #include <Windows.h>
+#else
+    #include <unistd.h>
+#endif
+
 namespace RType {
     class GameEngine : public AEngine {
         public:
@@ -33,40 +39,46 @@ namespace RType {
             void run() override;
 
             /**
-             * @brief Send a message to the network, it will call the mediator to send the message to the network engine.
+             * @brief Send a message to the network, it will call the mediator to send the message to the
+             * network engine.
              *
              * @param message The message to send.
-            */
-            void send(const std::string &message);
+             */
+            void send(const std::string& message);
 
             /**
              * @brief Handle the server data, received from the Mediator notified by the NetworkEngine.
-             *  It will update the registry and the systems. Such as create entities, update entities, delete entities, etc.
-             * 
+             *  It will update the registry and the systems. Such as create entities, update entities, delete
+             * entities, etc.
+             *
              * @param message The message received from the server. Need to be parsed.
-            */
-            void handleServerData(const std::string &message);
+             */
+            void handleServerData(const std::string& message);
 
             /**
              * @brief Set the engines for the game engine.
-             * 
+             *
              * @param networkEngine The network engine.
              * @param renderingEngine The rendering engine.
              * @param physicEngine The physic engine.
              * @param audioEngine The audio engine.
-            */
-            void setEngines(std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine, std::shared_ptr<PhysicEngine> physicEngine, std::shared_ptr<AudioEngine> audioEngine);
+             */
+            void setEngines(std::shared_ptr<NetworkEngine> networkEngine,
+                            std::shared_ptr<RenderingEngine> renderingEngine,
+                            std::shared_ptr<PhysicEngine> physicEngine,
+                            std::shared_ptr<AudioEngine> audioEngine);
 
             /**
              * @brief Set the mediator of the engine.
-             * 
+             *
              * @param mediator The mediator to set.
-            */
+             */
             void setMediator(std::shared_ptr<IMediator> mediator) override;
             /**
              * @brief Update the Camera with the _registery info and send change to RenderEngine
              */
             void updateCamera();
+
         protected:
         private:
             Registry _registry;
@@ -79,6 +91,6 @@ namespace RType {
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
     };
-}
+} // namespace RType
 
 #endif /* !GAMEENGINE_HPP_ */

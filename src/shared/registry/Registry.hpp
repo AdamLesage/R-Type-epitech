@@ -6,15 +6,15 @@
 */
 
 #ifndef REGISTRY_HPP_
-    #define REGISTRY_HPP_
+#define REGISTRY_HPP_
 
-    #include <unordered_map>
-    #include <typeindex>
-    #include <any>
-    #include <functional>
-    #include <vector>
-    #include <queue>
-    #include "../sparse_array/SparseArray.hpp"
+#include <unordered_map>
+#include <typeindex>
+#include <any>
+#include <functional>
+#include <vector>
+#include <queue>
+#include "../sparse_array/SparseArray.hpp"
 
 using entity_t = std::size_t;
 
@@ -48,8 +48,7 @@ class Registry {
          * @tparam Component The type of the component to register.
          * @return SparseArray<Component>& Reference to the newly created sparse array for the component type.
          */
-        template <class Component>
-        SparseArray<Component>& register_component() {
+        template <class Component> SparseArray<Component>& register_component() {
             std::type_index index(typeid(Component));
             if (_components_arrays.find(index) == _components_arrays.end()) {
                 _components_arrays[index] = SparseArray<Component>();
@@ -66,20 +65,21 @@ class Registry {
          * @tparam Component The type of the component.
          * @return SparseArray<Component>& Reference to the sparse array of the specified component type.
          */
-        template <class Component>
-        SparseArray<Component>& get_components() {
-            return std::any_cast<SparseArray<Component>&>(_components_arrays.at(std::type_index(typeid(Component))));
+        template <class Component> SparseArray<Component>& get_components() {
+            return std::any_cast<SparseArray<Component>&>(
+                _components_arrays.at(std::type_index(typeid(Component))));
         }
 
         /**
          * @brief Retrieves the constant sparse array of a specific component type.
          *
          * @tparam Component The type of the component.
-         * @return const SparseArray<Component>& Constant reference to the sparse array of the specified component type.
+         * @return const SparseArray<Component>& Constant reference to the sparse array of the specified
+         * component type.
          */
-        template <class Component>
-        const SparseArray<Component>& get_components() const {
-            return std::any_cast<const SparseArray<Component>&>(_components_arrays.at(std::type_index(typeid(Component))));
+        template <class Component> const SparseArray<Component>& get_components() const {
+            return std::any_cast<const SparseArray<Component>&>(
+                _components_arrays.at(std::type_index(typeid(Component))));
         }
 
         /**
@@ -115,16 +115,13 @@ class Registry {
          * @tparam Component The type of the component.
          * @param from The entity from which the component will be removed.
          */
-        template <typename Component>
-        void remove_component(entity_t const& from) {
+        template <typename Component> void remove_component(entity_t const& from) {
             get_components<Component>().erase(from);
         }
 
-        template <class... Components, typename Function>
-        void add_system(Function && f) {
-            _systems.emplace_back([this, f = std::forward<Function>(f)]() {
-                f(*this, get_components<Components>()...);
-            });
+        template <class... Components, typename Function> void add_system(Function&& f) {
+            _systems.emplace_back(
+                [this, f = std::forward<Function>(f)]() { f(*this, get_components<Components>()...); });
         }
 
         void run_systems() {
@@ -135,7 +132,8 @@ class Registry {
 
     private:
         std::unordered_map<std::type_index, std::any> _components_arrays;
-        std::unordered_map<std::type_index, std::function<void(Registry&, entity_t const&)>> _component_erasers;
+        std::unordered_map<std::type_index, std::function<void(Registry&, entity_t const&)>>
+            _component_erasers;
         std::vector<entity_t> _entities;
         std::queue<entity_t> _dead_entities;
         entity_t _next_entity_id = 0;
