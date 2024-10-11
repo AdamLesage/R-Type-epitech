@@ -22,7 +22,6 @@ void RType::RenderingEngine::run()
     _menu = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
     std::cout << "Menu created" << std::endl;
     try {
-        games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
         lobby = std::make_shared<Lobby>(window);
     } catch (const std::runtime_error &e) {
@@ -35,6 +34,7 @@ void RType::RenderingEngine::run()
         std::cout << "run camera null" << std::endl;
     }
     this->lobby->setCamera(_camera);
+    this->lobby->setMutex(_mutex);
     window->setFramerateLimit(360);
     window->clear();
     while (window->isOpen()) {
@@ -45,8 +45,6 @@ void RType::RenderingEngine::run()
             settings->displaySettings(false);
         } else if (scene == 3) {
             window->close();
-        } else if (scene == 4) {
-            games->displayGame();
         }
         window->display();
     }
@@ -61,10 +59,11 @@ void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator)
 void RType::RenderingEngine::setCamera(std::shared_ptr<Camera> &camera)
 {
     _camera = camera;
-    if (this->games != nullptr) {
-        std::cout << "Render not null, use_count: " << _camera.use_count() << std::endl;
-        this->games->setCamera(_camera);
-    }
+}
+
+void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex)
+{
+    this->_mutex = mutex;
 }
 
 extern "C" RType::RenderingEngine *entryPointRenderingEngine()

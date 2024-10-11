@@ -190,6 +190,7 @@ sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
 
 void RType::Game::set_texture()
 {
+    std::lock_guard<std::mutex> lock(*this->_mutex.get());
     entity.clear();
     if (_camera == nullptr)
         return;
@@ -253,10 +254,10 @@ void RType::Game::displayGame()
             DisplaySkipIntro();
 
         }
-                       if (piou) {
+        if (piou) {
             displayPiou();
             piou = false;
-                       }
+        }
         window->display();
 
     }
@@ -306,4 +307,9 @@ void RType::Game::setCamera(std::shared_ptr<Camera> camera)
 void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
+}
+
+void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex)
+{
+    this->_mutex = mutex;
 }

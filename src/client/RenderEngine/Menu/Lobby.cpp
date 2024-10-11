@@ -250,6 +250,7 @@ void RType::Lobby::displayLobby()
                         }
                         games->_mediator = _mediator;
                         games->setCamera(_camera);
+                        games->setMutex(_mutex);
                         games->displayGame();
                         break;
                     case 1:
@@ -305,4 +306,9 @@ void RType::Lobby::setMediator(std::shared_ptr<RType::IMediator> mediator)
 void RType::Lobby::setCamera(std::shared_ptr<Camera> camera)
 {
     this->_camera = camera;
+}
+
+void RType::Lobby::setMutex(std::shared_ptr<std::mutex> mutex)
+{
+    this->_mutex = mutex;
 }

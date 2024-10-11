@@ -9,6 +9,7 @@
 #include "../../Mediator/IMediator.hpp"
 #include "Settings.hpp"
 #include "../../Camera.hpp"
+#include <mutex>
 
 namespace RType {
     class Game {
@@ -88,6 +89,12 @@ namespace RType {
          * @param mediator The mediator to set.
          */
         void setMediator(std::shared_ptr<IMediator> mediator);
+        /**
+         * @brief Set the mutex
+         * 
+         * @param mutex the mutex to set
+         */
+        void setMutex(std::shared_ptr<std::mutex> mutex);
         std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
     private:
         std::shared_ptr<sf::RenderWindow> window;
@@ -132,6 +139,7 @@ namespace RType {
         sf::Sound shoot_music2;
         bool isShooting;
         sf::Font font;
+        std::shared_ptr<std::mutex> _mutex;
         bool piou = false;
 
     };
