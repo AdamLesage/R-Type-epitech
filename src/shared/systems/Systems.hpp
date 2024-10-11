@@ -9,7 +9,6 @@
     #define SYSTEMS_HPP_
 
     #include "../registry/Registry.hpp"
-    #include "../components/Camera.hpp"
     #include "../components/Charging.hpp"
     #include "../components/Color.hpp"
     #include "../components/Controllable.hpp"
@@ -30,7 +29,9 @@
     #include "../components/Tag.hpp"
     #include "../components/Type.hpp"
     #include "../components/Velocity.hpp"
+    #include "../../client/Mediator/IMediator.hpp"
     #include <iostream>
+    #include <memory>
 
 class Systems {
     public:
@@ -46,8 +47,10 @@ class Systems {
          *
          * @param reg The registry containing the components.
          * @param window The window to get the input from.
+         * @param mediator The mediator to notify the game engine.
+         * @param shootSound The function to play the shoot sound.
          */
-        void control_system(Registry &reg);
+        void control_system(Registry &reg, sf::RenderWindow &window, std::shared_ptr<RType::IMediator> mediator, std::function<void()> shootSound);
 
         /**
          * @brief Draw all entities with a position and a drawable component.

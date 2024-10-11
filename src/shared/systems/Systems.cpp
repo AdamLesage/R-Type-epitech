@@ -23,34 +23,31 @@ void Systems::position_system(Registry &reg)
     }
 }
 
-void Systems::control_system(Registry &reg)
+void Systems::control_system(Registry &reg, sf::RenderWindow &window, std::shared_ptr<RType::IMediator> mediator, std::function<void()> shootSound)
 {
-    auto &velocities = reg.get_components<Velocity_s>();
-    auto &controllables = reg.get_components<Controllable_s>();
+    if (window.hasFocus() == false) {
+        return;
+    }
 
-    for (size_t i = 0; i < velocities.size() && i < controllables.size(); ++i) {
-        auto &vel = velocities[i];
-        auto &ctrl = controllables[i];
-
-        if (vel && ctrl) {
-            vel->x = 0;
-            vel->y = 0;
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                vel->y = -1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                vel->y = 1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                vel->x = -1.0f;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                vel->x = 1.0f;
+    for (int key = sf::Keyboard::A; key <= sf::Keyboard::KeyCount; ++key) {
+        if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key))) {
+            // If the key is a letter or a number return the ASCII value
+            if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z) {
+                if (mediator != nullptr) {
+                    if (key == sf::Keyboard::X) // Shoot, TODO: change according to the key binding in key.cfg file
+                        shootSound();
+                    mediator->notify("Game", std::to_string(static_cast<int>('A' + (key - sf::Keyboard::A))));
+                }
+            } else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9) {
+                if (mediator != nullptr) {
+                    mediator->notify("Game", std::to_string(static_cast<int>('0' + (key - sf::Keyboard::Num0))));
+                }
             }
         }
     }
 }
+
+
 
 void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
 {

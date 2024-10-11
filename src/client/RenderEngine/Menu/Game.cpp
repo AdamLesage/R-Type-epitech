@@ -2,20 +2,21 @@
 ** EPITECH PROJECT, 2024
 ** R-Type-epitech
 ** File description:
-** Settings
+** Game
 */
 #include <SFML/Graphics.hpp>
 #include "Game.hpp"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <random>
 
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), frameDuration(0.05f), animationComplete(false)
 {
     this->window = _window;
-
-    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
-    if (!font.loadFromFile(fontPath)) {
+    std::cout << "Game created and mediator is null" << std::endl;
+    this->_mediator = nullptr;
+    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
 
@@ -43,7 +44,15 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
         throw std::runtime_error("Error loading game launch sound");
     }
     game_launch_music.setBuffer(game_launch_sound);
-
+    isShooting = false;
+    if (!shoot_sound.loadFromFile("src/client/asset/Sounds/shootsounds.wav")) {
+        throw std::runtime_error("Error loading shoot sound");
+    }
+    shoot_music.setBuffer(shoot_sound);
+    if (!shoot_sound2.loadFromFile("src/client/asset/Sounds/Piou.wav")) {
+        throw std::runtime_error("Error loading shoot sound 2");
+    }
+    shoot_music2.setBuffer(shoot_sound2);
     for (int i = 0; i < 3; i++) {
         backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
         backgrounds[i].setTexture(&backgroundTextures[i]);
@@ -80,31 +89,55 @@ RType::Game::~Game()
 {
 }
 
+void RType::Game::displayPiou()
+{
+    sf::Text piou;
+    piou.setFont(font);
+    piou.setString("Piou");
+    piou.setCharacterSize(48);
+    piou.setFillColor(sf::Color::White);
+    piou.setStyle(sf::Text::Bold);
+    piou.setPosition(1920 / 2 - 40,  900);
+    window->draw(piou);
+}
+
+
+void RType::Game::ShootSound()
+{
+    config_t cfg;
+    config_init(&cfg);
+        if (!config_read_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors du chargement du fichier de configuration\n");
+            config_destroy(&cfg);
+            exit;
+        }
+    std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+    if (keyValue == "ON") {
+        piou = true;
+    }
+    int random = rand() % 10;
+    if (random == 9) {
+        shoot_music2.setVolume(200);
+        shoot_music2.play();
+    } else {
+        shoot_music2.play();
+
+    }
+}
+void RType::Game::DisplaySkipIntro()
+{
+    sf::Text skipIntro;
+    skipIntro.setFont(font);
+    skipIntro.setString("Press Space to skip intro");
+    skipIntro.setCharacterSize(48);
+    skipIntro.setFillColor(sf::Color::White);
+    skipIntro.setStyle(sf::Text::Bold);
+    skipIntro.setPosition(1920 / 2 - 200, 1080 - 100);
+    window->draw(skipIntro);
+}
+
 void RType::Game::play()
 {
-    entity_t movable = _registry.spawn_entity();
-    _registry.add_component<Position_s>(movable, Position_s{100.f, 100.f});
-    _registry.add_component<Velocity_s>(movable, Velocity_s{0.f, 0.f});
-    _registry.add_component<Drawable_s>(movable, Drawable_s{players[1]});
-    _registry.add_component<Controllable_s>(movable, Controllable_s{});
-
-    entity_t static_entity = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity, Position_s{100.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity]->shape.setFillColor(sf::Color::Red);
-    entity_t static_entity2 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity2, Position_s{300.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity2, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity2]->shape.setFillColor(sf::Color::Blue);
-    entity_t static_entity3 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity3, Position_s{600.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity3, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity3]->shape.setFillColor(sf::Color::Green);
-    entity_t static_entity4 = _registry.spawn_entity();
-    _registry.add_component<Position_s>(static_entity4, Position_s{900.f, 300.f});
-    _registry.add_component<Drawable_s>(static_entity4, Drawable_s{sf::RectangleShape(sf::Vector2f(50.f, 50.f))});
-    _registry.get_components<Drawable_s>()[static_entity4]->shape.setFillColor(sf::Color::Yellow);
-
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -112,14 +145,16 @@ void RType::Game::play()
                 window->close();
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Escape) {
-                    settings->displaySettings();
+                    settings->displaySettings(true);
                 }
             }
         }
 
-        _systems.control_system(_registry);
+        _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
         _systems.position_system(_registry);
         _systems.collision_system(_registry, *window.get());
+        // if (keyPressed == 88)
+        //     ShootSound();
 
         window->clear();
         if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
@@ -137,25 +172,61 @@ void RType::Game::play()
         for (int i = 0; i < 4; i++) {
             window->draw(backgrounds[i]);
         }
-        auto &positions = _registry.get_components<Position_s>();
-        auto &drawables = _registry.get_components<Drawable_s>();
-
-        for (size_t i = 0; i < positions.size() && i < drawables.size(); ++i) {
-            auto &pos = positions[i];
-            auto &draw = drawables[i];
-
-            if (pos && draw) {
-                draw->shape.setPosition(pos->x, pos->y);
-                window->draw(draw->shape);
-            }
+        this->set_texture();
+        for (int i = 0; i < (int)entity.size(); i++) {
+            window->draw(entity[i]);
+        }
+        if (piou) {
+            displayPiou();
+            piou = false;
         }
         window->display();
+
+    }
+}
+
+sf::Vector2f RType::Game::convertToVector2f(const Size& size) {
+    return sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y));
+}
+
+sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
+    return sf::Vector2f(static_cast<float>(pos.x), static_cast<float>(pos.y));
+}
+
+void RType::Game::set_texture()
+{
+    std::lock_guard<std::mutex> lock(*this->_mutex.get());
+    entity.clear();
+    if (_camera == nullptr)
+        return;
+
+    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
+        entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
+    }
+
+    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
+        if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath) != Textures.end()) { // If texture already loaded
+            entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
+            entity[i].setTextureRect(sf::IntRect(
+                _camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                _camera->listEntityToDisplay[i].sprite.rectSize[0], _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+            entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
+        } else { // If texture not loaded
+            sf::Texture* texture = new sf::Texture();
+            texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath);
+            Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, texture));
+            entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
+            entity[i].setTextureRect(sf::IntRect(
+                _camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                _camera->listEntityToDisplay[i].sprite.rectSize[0], _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+            entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
+        }
     }
 }
 
 void RType::Game::displayGame()
 {
-    sf::Sprite sprite;
+    sf::RectangleShape rectangleshape;
     sf::Texture texture;
     sf::Clock clock;
 
@@ -172,7 +243,7 @@ void RType::Game::displayGame()
                 game_launch_music.play();
             }
             if (clock.getElapsedTime().asSeconds() > frameDuration) {
-                if (!loadFrameTexture(texture, sprite)) {
+                if (!loadFrameTexture(texture, rectangleshape)) {
                     return;
                 }
                 clock.restart();
@@ -184,9 +255,16 @@ void RType::Game::displayGame()
             game_launch_music.stop();
             play();
         } else {
-            window->draw(sprite);
+            window->draw(rectangleshape);
+            DisplaySkipIntro();
+
+        }
+        if (piou) {
+            displayPiou();
+            piou = false;
         }
         window->display();
+
     }
 }
 
@@ -196,10 +274,15 @@ void RType::Game::handleEvents()
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             window->close();
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Space) {
+                animationComplete = true;
+            }
+        }
     }
 }
 
-bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
+bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rectangleshape)
 {
     frameDuration = 1.0f / 12.0f;
     std::ostringstream oss;
@@ -211,8 +294,8 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
         std::cerr << "Error loading " << filename << std::endl;
         return false;
     }
-
-    sprite.setTexture(texture);
+    rectangleshape.setTexture(&texture);
+    rectangleshape.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     currentFrame++;
 
     if (currentFrame > 151) {
@@ -220,4 +303,19 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::Sprite& sprite)
     }
 
     return true;
+}
+
+void RType::Game::setCamera(std::shared_ptr<Camera> camera)
+{
+    this->_camera = camera;
+}
+
+void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
+{
+    _mediator = mediator;
+}
+
+void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex)
+{
+    this->_mutex = mutex;
 }

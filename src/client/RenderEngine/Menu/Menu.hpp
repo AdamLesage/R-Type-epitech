@@ -50,6 +50,30 @@ namespace RType {
          * @return int The selected option.
          */
         int getSelectedOption() const;
+         /**
+         * @brief Handles key press events for volume adjustment.
+         *
+         * @param event The SFML event to handle.
+         */
+        void handleKeyPress(const sf::Event &event);
+
+          /**
+         * @brief Adjusts the volume of the background music.
+         *
+         * @param increase Whether to increase or decrease the volume.
+         */
+        void adjustVolume(bool increase);
+
+          /**
+         * @brief Displays the sound of the lobby.
+         */
+        void displaySound();
+
+        /**
+         * @brief Displays the subtitles of the lobby.
+         */
+        void displaySubtitles();
+
         /**
          * @brief Displays the menu.
          */
@@ -76,6 +100,8 @@ namespace RType {
         sf::Texture backgroundTexture;
         std::shared_ptr<Settings> settings;
         std::shared_ptr<Lobby> lobby;
+        sf::SoundBuffer backgroundBuffer;
+        sf::Sound backgroundMusic;
         // std::shared_ptr<Game> games;
 
     };

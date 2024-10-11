@@ -71,6 +71,13 @@ namespace RType
 
 
         /**
+         * @brief Displays the subtitles of the lobby.
+         */
+        void displaySubtitles();
+
+
+
+        /**
          * @brief Displays the sound of the lobby.
          */
         void displaySound();
@@ -86,8 +93,20 @@ namespace RType
          * @param mediator The mediator to set.
          */
         void setMediator(std::shared_ptr<IMediator> mediator);
-        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
+        /**
+         * @brief Set the camera to display
+         * 
+         * @param camera the camera to set
+         */
+        void setCamera(std::shared_ptr<Camera> camera);
+        /**
+         * @brief Set the mutex
+         * 
+         * @param mutex the mutex to set
+         */
+        void setMutex(std::shared_ptr<std::mutex> mutex);
 
+        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
     protected:
         std::shared_ptr<sf::RenderWindow> window;
         int selectedOption;
@@ -104,12 +123,12 @@ namespace RType
         sf::Sound selectSound;
         std::vector<sf::Texture> playerTextures;
         std::vector<sf::Sprite> playerSprites;
-
+        std::shared_ptr<Camera> _camera;
         Registry _registry;
         Systems _systems;
         std::shared_ptr<Game> games;
         std::shared_ptr<Settings> settings;
-
+        std::shared_ptr<std::mutex> _mutex;
     private:
         Logger _logger;
     };

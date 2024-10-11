@@ -18,6 +18,7 @@
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/systems/Systems.hpp"
 #include "ProtocolParsing.hpp"
+#include "../Camera.hpp"
 #include <mutex>
 
 namespace RType {
@@ -62,6 +63,10 @@ namespace RType {
              * @param mediator The mediator to set.
             */
             void setMediator(std::shared_ptr<IMediator> mediator) override;
+            /**
+             * @brief Update the Camera with the _registery info and send change to RenderEngine
+             */
+            void updateCamera();
         protected:
         private:
             Registry _registry;
@@ -71,7 +76,8 @@ namespace RType {
             std::shared_ptr<RenderingEngine> _renderingEngine;
             std::shared_ptr<PhysicEngine> _physicEngine;
             std::shared_ptr<AudioEngine> _audioEngine;
-            std::mutex _mutex;
+            std::shared_ptr<Camera> _camera;
+            std::shared_ptr<std::mutex> _mutex;
     };
 }
 

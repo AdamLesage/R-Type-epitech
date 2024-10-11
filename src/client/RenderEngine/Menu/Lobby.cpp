@@ -75,12 +75,13 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         float optionWidth = menuOptions[i].getLocalBounds().width;
         float totalMenuWidth = (3 * optionWidth) + (2 * 100);
         float xPos = (window->getSize().x / 2.0f) - (totalMenuWidth / 2.0f) + i * (optionWidth + 100);
-        menuOptions[i].setPosition(xPos, window->getSize().y - 100);
+        menuOptions[i].setPosition(xPos, window->getSize().y - 200);
     }
 
     try
     {
         games = std::make_shared<Game>(window);
+        // games->setMediator(std::shared_ptr<IMediator>(this->_mediator));
         settings = std::make_shared<Settings>(window);
     }
     catch (const std::runtime_error &e)
@@ -156,10 +157,12 @@ void RType::Lobby::displaySound()
 
     sf::RectangleShape volumeBarBackground(sf::Vector2f(volumeBarWidth, volumeBarHeight));
     volumeBarBackground.setFillColor(sf::Color(0, 0, 75));
+    volumeBarBackground.setOutlineThickness(2);
+    volumeBarBackground.setOutlineColor(sf::Color::White);
     volumeBarBackground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
 
     sf::RectangleShape volumeBarForeground(sf::Vector2f(volumeBarWidth * volumePercentage, volumeBarHeight));
-    volumeBarForeground.setFillColor(sf::Color::Green);
+    volumeBarForeground.setFillColor(sf::Color::Blue);
     volumeBarForeground.setPosition(window->getSize().x - volumeBarWidth - 20, 20);
 
     sf::Text volumeText;
@@ -167,12 +170,47 @@ void RType::Lobby::displaySound()
     volumeText.setString("Volume:");
     volumeText.setCharacterSize(24);
     volumeText.setFillColor(sf::Color::White);
-    volumeText.setPosition(window->getSize().x - volumeBarWidth - 100, 20);
+    volumeText.setStyle(sf::Text::Bold);
+    volumeText.setPosition(window->getSize().x - volumeBarWidth - 120, 15);
+
+    sf::Text volumeTextShadow = volumeText;
+    volumeTextShadow.setFillColor(sf::Color(0, 0, 0, 150));
+    volumeTextShadow.setPosition(volumeText.getPosition().x + 2, volumeText.getPosition().y + 2);
 
     window->draw(volumeBarBackground);
     window->draw(volumeBarForeground);
+    window->draw(volumeTextShadow);
     window->draw(volumeText);
 }
+
+void RType::Lobby::displaySubtitles()
+{
+    sf::Text subtitle;
+    subtitle.setFont(font);
+    subtitle.setString("Press Enter to select an option, you can also use the arrow keys to navigate");
+    subtitle.setCharacterSize(48);
+    subtitle.setFillColor(sf::Color::White);
+    subtitle.setStyle(sf::Text::Bold);
+
+    sf::FloatRect textRect = subtitle.getLocalBounds();
+    subtitle.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+    subtitle.setPosition(window->getSize().x / 2.0f, window->getSize().y - 50);
+
+    sf::Text subtitleShadow = subtitle;
+    subtitleShadow.setFillColor(sf::Color(0, 0, 130, 150));
+    subtitleShadow.setPosition(subtitle.getPosition().x + 2, subtitle.getPosition().y + 2);
+
+    sf::RectangleShape backgroundRect;
+    backgroundRect.setSize(sf::Vector2f(textRect.width + 20, textRect.height + 20));
+    backgroundRect.setFillColor(sf::Color(0, 0, 0, 150));
+    backgroundRect.setOrigin(backgroundRect.getSize().x / 2.0f, backgroundRect.getSize().y / 2.0f);
+    backgroundRect.setPosition(subtitle.getPosition());
+
+    window->draw(backgroundRect);
+    window->draw(subtitleShadow);
+    window->draw(subtitle);
+}
+
 
 void RType::Lobby::displayLobby()
 {
@@ -181,6 +219,7 @@ void RType::Lobby::displayLobby()
         return;
     }
     backgroundMusic.play();
+    backgroundMusic.setLoop(true);
     while (window->isOpen())
     {
         sf::Event event;
@@ -210,10 +249,13 @@ void RType::Lobby::displayLobby()
                         } else {
                             std::cerr << "Error: Mediator is null" << std::endl;
                         }
+                        games->_mediator = _mediator;
+                        games->setCamera(_camera);
+                        games->setMutex(_mutex);
                         games->displayGame();
                         break;
                     case 1:
-                        settings->displaySettings();
+                        settings->displaySettings(false);
                         break;
                     case 2:
                         backgroundMusic.stop();
@@ -242,6 +284,17 @@ void RType::Lobby::displayLobby()
             window->draw(playerSprites[i]);
         }
         displaySound();
+        config_t cfg;
+        config_init(&cfg);
+        if (!config_read_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors du chargement du fichier de configuration\n");
+            config_destroy(&cfg);
+            return;
+            }
+        std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+        if (keyValue == "ON") {
+            displaySubtitles();
+            }
         window->display();
     }
 }
@@ -249,4 +302,14 @@ void RType::Lobby::displayLobby()
 void RType::Lobby::setMediator(std::shared_ptr<RType::IMediator> mediator)
 {
     _mediator = mediator;
+}
+
+void RType::Lobby::setCamera(std::shared_ptr<Camera> camera)
+{
+    this->_camera = camera;
+}
+
+void RType::Lobby::setMutex(std::shared_ptr<std::mutex> mutex)
+{
+    this->_mutex = mutex;
 }

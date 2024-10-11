@@ -37,7 +37,7 @@ GameLogique::~GameLogique()
 
 void GameLogique::startGame() {
     if (running == false) {
-        std::cout << network->getClientCount() << std::endl;
+        // std::cout << network->getClientCount() << std::endl;
         for (size_t i = 0; i != network->getClientCount(); i++) {
             size_t entity = this->reg.spawn_entity();
             float xPos = 100.f + (100.f * i);
@@ -45,10 +45,11 @@ void GameLogique::startGame() {
             this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
             this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
             this->reg.add_component<Tag>(entity, Tag{"player"});
+            this->reg.add_component<Health>(entity, Health{100, 100, true, true});
             this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
-            this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.5f});
+            this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
             this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
-            this->reg.add_component<Size>(entity, Size{100, 100});
+            this->reg.add_component<Size>(entity, Size{130, 80});
             this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
         }
         this->running = true;
@@ -57,58 +58,62 @@ void GameLogique::startGame() {
 
 void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
 {
-    size_t entity = this->reg.spawn_entity();
-
-    switch (type)
     {
-    case 0x03:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{0.1f});
-        this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{2, 2, std::chrono::steady_clock::now()});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
-    case 0x04:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
-    case 0x05:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{0.5f});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
-    case 0x06:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2, 2, std::chrono::steady_clock::now()});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
-    default:
-        this->reg.add_component<Position>(entity, Position{position_x, position_y});
-        this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-        this->reg.add_component<Health>(entity, Health{100, 100, false, true});
-        this->reg.add_component<Damage>(entity, Damage{20});
-        this->reg.add_component<StraightLinePattern>(entity, {0.5f});
-        this->reg.add_component<Size>(entity, Size{100, 100});
-        this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-        break;
+        std::lock_guard<std::mutex> lock(this->_mutex);
+
+        size_t entity = this->reg.spawn_entity();
+
+        switch (type)
+        {
+        case 0x03:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{50, 50, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
+            this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        case 0x04:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        case 0x05:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{0.5f});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        case 0x06:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        default:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Damage>(entity, Damage{20});
+            this->reg.add_component<StraightLinePattern>(entity, {0.5f});
+            this->reg.add_component<Size>(entity, Size{70, 71});
+            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
+        }
+        this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
     }
-    this->_networkSender->sendCreateEnemy(type, entity, position_x , position_y);
 }
 
 void GameLogique::runGame() {
@@ -127,17 +132,47 @@ void GameLogique::runGame() {
                 sys.position_system(reg, this->_networkSender, logger);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
-                this->spawnEnnemy(0x04, 1000, rand() % 700 + 200);
+                this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
         }
     }
 }
 
+std::array<char, 6> GameLogique::retrieveInputKeys()
+{
+    libconfig::Config cfg;
+    cfg.readFile("./src/config/key.cfg");
+    std::string keyStr;
+    std::array<char, 6> inputKeys;
+    const libconfig::Setting& root = cfg.getRoot();
+    const libconfig::Setting& keys = root["Keys"];
+
+    // Map to associate key names with their respective index in the array
+    std::unordered_map<std::string, int> keyMap = {
+        {"up", 0}, {"down", 1}, {"left", 2},
+        {"right", 3}, {"shoot", 4}, {"settings", 5}
+    };
+
+    for (int i = 0; i < keys.getLength(); ++i) {
+        const libconfig::Setting& key = keys[i];
+        std::string name;
+        key.lookupValue("name", name);
+        auto it = keyMap.find(name);
+
+        // If the key name is found in the map, assign the value
+        if (it != keyMap.end()) {
+            key.lookupValue("value", keyStr);
+            inputKeys[it->second] = keyStr[0];
+        }
+    }
+    return inputKeys;
+}
+
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
 {
     if (message.first.size() != 6) {
-        std::cerr << "invalide player Input:" << std::endl;
+        std::cout << "Invalid message size" << std::endl;
         return;
     }
 
@@ -147,30 +182,31 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     input = message.first[5];
 
     auto &velocities = reg.get_components<Velocity_s>();
-    if ((size_t)velocities.size() <= id) {
-        std::cerr << "Invalid entity ID: " << id << std::endl;
+    auto &types = reg.get_components<Type>();
+    if ((unsigned int)velocities.size() <= message.second && message.second <= (unsigned int)types.size()) {
+        std::cerr << "Invalid entity ID: " << message.second << std::endl;
         return;
     }
-    auto &velocitie = velocities[id];
+    auto &velocitie = velocities[message.second];
+    auto &type = types[message.second];
+    if (type->type != EntityType::PLAYER) {
+        return;
+    }
+    std::array<char, 6> keys = retrieveInputKeys();
 
-    switch (input) {
-        case 'x':
-            this->sys.shoot_system(reg, id, this->_networkSender, logger);
-            break;
-        case 'z':
-            velocitie->y = -1;
-            break;
-        case 'q':
-            velocitie->x = -1;
-            break;
-        case 's':
-            velocitie->y = 1;
-            break;
-        case 'd':
-            velocitie->x = 1;
-            break;
-        default:
-            break;
+    if (input == keys[0]) { // UP
+        velocitie->y = -2;
+    } else if (input == keys[1]) { // DOWN
+        velocitie->y = 2;
+    } else if (input == keys[2]) { // RIGHT
+        velocitie->x = 2;
+    } else if (input == keys[3]) { // LEFT
+        velocitie->x = -2;
+    } else if (input == keys[4]) { // SHOOT
+        {
+            std::lock_guard<std::mutex> lock(this->_mutex);
+            this->sys.shoot_system(reg, message.second, this->_networkSender, logger);
+        }
     }
 }
 
