@@ -130,7 +130,8 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message, int
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{130, 80});
         _registry.add_component<Direction>(entity, Direction{1, 0});
-        _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/player/player_1.png", {263, 116}, {0, 0}});
+        std::string path = "src/client/asset/player/player_" + std::to_string(entity + 1) + ".png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
