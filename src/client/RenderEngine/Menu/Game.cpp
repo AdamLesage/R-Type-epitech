@@ -267,9 +267,6 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
 void RType::Game::setCamera(std::shared_ptr<Camera> camera)
 {
     this->_camera = camera;
-    if (_camera != nullptr) {
-        std::cout << "set camera not null, use_count: " << _camera.use_count() << std::endl;
-    }
 }
 
 void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
