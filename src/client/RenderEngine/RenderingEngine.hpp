@@ -15,6 +15,7 @@
 #include "Menu/Settings.hpp"
 #include "Menu/Lobby.hpp"
 #include "../Camera.hpp"
+#include <mutex>
 
 namespace RType {
     class RenderingEngine : public AEngine {
@@ -39,6 +40,12 @@ namespace RType {
              * @param Camera the Camera to set
              */
             void setCamera(std::shared_ptr<Camera> &Camera);
+            /**
+             * @brief Set the mutex
+             * 
+             * @param mutex the mutex to set
+             */
+            void setMutex(std::shared_ptr<std::mutex> mutex);
         protected:
         private:
             std::shared_ptr<Menu> _menu;
@@ -47,6 +54,7 @@ namespace RType {
             std::shared_ptr<Settings> settings;
             std::shared_ptr<Lobby> lobby;
             std::shared_ptr<Camera> _camera;
+            std::shared_ptr<std::mutex> _mutex;
     };
 }
 

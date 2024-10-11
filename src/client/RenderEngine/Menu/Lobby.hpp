@@ -91,8 +91,14 @@ namespace RType
          * @param camera the camera to set
          */
         void setCamera(std::shared_ptr<Camera> camera);
-        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
+        /**
+         * @brief Set the mutex
+         * 
+         * @param mutex the mutex to set
+         */
+        void setMutex(std::shared_ptr<std::mutex> mutex);
 
+        std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
     protected:
         int selectedOption;
         std::shared_ptr<sf::RenderWindow> window;
@@ -114,8 +120,7 @@ namespace RType
         Systems _systems;
         std::shared_ptr<Game> games;
         std::shared_ptr<Settings> settings;
-
-
+        std::shared_ptr<std::mutex> _mutex;
     private:
     };
 

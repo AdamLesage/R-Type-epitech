@@ -77,7 +77,7 @@ namespace RType {
             std::shared_ptr<PhysicEngine> _physicEngine;
             std::shared_ptr<AudioEngine> _audioEngine;
             std::shared_ptr<Camera> _camera;
-            std::mutex _mutex;
+            std::shared_ptr<std::mutex> _mutex;
     };
 }
 

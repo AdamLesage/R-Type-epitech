@@ -477,7 +477,7 @@ void Systems::shoot_straight_pattern_system(Registry &reg, std::unique_ptr<Netwo
             std::chrono::duration<float> fs = now - pattern->lastShotTime;
             float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
 
-            if (elapsed_seconds >= pattern->shootCooldown && pattern->shootCooldown > 10) { // Enemy spawn every 10 second
+            if (elapsed_seconds >= pattern->shootCooldown && pattern->shootCooldown > 1) {
                 pattern->lastShotTime = now;
                 entity_t projectile = reg.spawn_entity();
                 reg.add_component<Position_s>(projectile, Position_s{position->x, position->y + (size->y / 2) - (30 / 2)});

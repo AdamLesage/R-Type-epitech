@@ -161,6 +161,7 @@ sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
 
 void RType::Game::set_texture()
 {
+    std::lock_guard<std::mutex> lock(*this->_mutex.get());
     entity.clear();
     if (_camera == nullptr)
         return;
@@ -168,7 +169,6 @@ void RType::Game::set_texture()
     for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
         entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
     }
-
     for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
         if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath) != Textures.end()) { // If texture already loaded
             entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
@@ -275,4 +275,9 @@ void RType::Game::setCamera(std::shared_ptr<Camera> camera)
 void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)
 {
     _mediator = mediator;
+}
+
+void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex)
+{
+    this->_mutex = mutex;
 }

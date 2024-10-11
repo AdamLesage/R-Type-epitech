@@ -35,6 +35,7 @@ RType::GameEngine::GameEngine()
 
     _protocolParsing = std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
     this->_camera = std::make_shared<Camera>();
+    this->_mutex = std::make_shared<std::mutex>();
 }
 
 RType::GameEngine::~GameEngine()
@@ -69,10 +70,9 @@ void RType::GameEngine::run()
 
     std::thread renderingThread([&]() {
         try {
-            _mutex.lock();
-            renderingEngine->setCamera(_camera);
+            renderingEngine->setCamera(this->_camera);
+            renderingEngine->setMutex(this->_mutex);
             renderingEngine->run();
-            _mutex.unlock();
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
@@ -80,9 +80,7 @@ void RType::GameEngine::run()
     
     std::thread physicThread([&]() {
         try {
-            _mutex.lock();
             physicEngine->run();
-            _mutex.unlock();
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
@@ -90,9 +88,7 @@ void RType::GameEngine::run()
 
     std::thread audioThread([&]() {
         try {
-            _mutex.lock();
             audioEngine->run();
-            _mutex.unlock();
         } catch (const std::exception& e) {
             std::cerr << "Error running audio engine: " << e.what() << std::endl;
         }
@@ -145,7 +141,10 @@ void RType::GameEngine::updateCamera()
             entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
         }
     }
-    this->_camera->listEntityToDisplay = std::move(entityRender);
+    {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        this->_camera->listEntityToDisplay = std::move(entityRender);
+    }
     usleep(10000);
 }
 
