@@ -96,8 +96,9 @@ void Settings::changeKey(std::string key)
     std::string newKey2;
     config_t cfg;
     config_init(&cfg);
-    if (!config_read_file(&cfg, "src/config/key.cfg")) {
-        printf("Erreur lors du chargement du fichier de configuration\n");
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    if (!config_read_file(&cfg, configPath.c_str())) {
+        printf("Error while loading config file!\n");
         config_destroy(&cfg);
         return;
     }
@@ -108,8 +109,8 @@ void Settings::changeKey(std::string key)
             newKey2 = "ON";
         }
         set_key_value(&cfg, "Keys7", newKey2.c_str());
-        if (!config_write_file(&cfg, "src/config/key.cfg")) {
-            printf("Erreur lors de l'écriture du fichier\n");
+        if (!config_write_file(&cfg, configPath.c_str())) {
+            printf("Error while writing file config!\n");
         }
         config_destroy(&cfg);
         return;
@@ -152,8 +153,8 @@ void Settings::changeKey(std::string key)
     menuOptions[selectedOption].setString(newKey);
     newKey.substr(0, 11);
     set_key_value(&cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
-    if (!config_write_file(&cfg, "src/config/key.cfg")) {
-        printf("Erreur lors de l'écriture du fichier\n");
+    if (!config_write_file(&cfg, configPath.c_str())) {
+        printf("Error while saving config file!\n");
     }
     config_destroy(&cfg);
 }
@@ -178,8 +179,9 @@ void Settings::displaySettings(bool ingame)
         selectedOption = 0;
         config_t cfg;
         config_init(&cfg);
-        if (!config_read_file(&cfg, "src/config/key.cfg")) {
-            printf("Erreur lors du chargement du fichier de configuration\n");
+        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+        if (!config_read_file(&cfg, configPath.c_str())) {
+            printf("Error: while loading config file\n");
             config_destroy(&cfg);
             return;
         }
