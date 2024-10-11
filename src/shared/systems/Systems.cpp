@@ -25,6 +25,7 @@ void Systems::position_system(Registry &reg)
 
 void Systems::control_system(Registry &reg, sf::RenderWindow &window, std::shared_ptr<RType::IMediator> mediator, std::function<void()> shootSound)
 {
+    (void)reg;
     if (window.hasFocus() == false) {
         return;
     }
@@ -64,19 +65,6 @@ void Systems::draw_system(Registry &reg, sf::RenderWindow &window)
         }
     }
 }
-
-// void Systems::logging_system(SparseArray<Position_s> const &positions, SparseArray<Velocity_s> const &velocities)
-// {
-//     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
-//         auto const& pos = positions[i];
-//         auto const& vel = velocities[i];
-//         // if (pos && vel) {
-//         //     std::cerr << i << " : Position = { " << pos.value().x << " , " << pos.value().y
-//         //             << " } , Velocity = { " << vel.value().x << " , " << vel.value().y
-//         //             << " }" << std::endl;
-//         // }
-//     }
-// }
 
 void Systems::collision_system(Registry &reg, sf::RenderWindow &window)
 {
