@@ -441,6 +441,27 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const std::string &message, in
         return false;
     }
 
+    try {
+        entity_t entity = _registry.entity_from_index(entityId);
+        auto optionalDirectionComponent = _registry.get_components<Direction>()[entity];
+
+        // Check if the entity has a direction component
+        if (optionalDirectionComponent.has_value()) {
+            Direction &directionComponent = optionalDirectionComponent.value();
+            // Remove the old direction component and add the new one to update the direction
+            _registry.remove_component<Direction>(entity);
+            _registry.add_component<Direction>(entity, Direction{directionX, directionY});
+        } else {
+            _registry.add_component<Direction>(entity, Direction{directionX, directionY});
+        }
+    } catch (const std::out_of_range &e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while updating the direction" << std::endl;
+        return false;
+    }
+
     return true;
 }
 
@@ -460,7 +481,18 @@ bool RType::ProtocolParsing::parseObjectCollection(const std::string &message, i
         return false;
     }
 
-    // Need to implement a way to know if the object is collected by the player
+    try {
+        entity_t playerEntity = _registry.entity_from_index(playerId);
+        entity_t objectEntity = _registry.entity_from_index(objectId);
+
+        // Need to implement a mediator notification to the RenderEngine to create an animation for the object collection
+    } catch (const std::out_of_range &e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while updating the object collection" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -504,7 +536,18 @@ bool RType::ProtocolParsing::parseProjectileCollision(const std::string &message
         return false;
     }
 
-    // Need to implement the method to remove health point and destroy the projectile
+    try {
+        entity_t projectileEntity = _registry.entity_from_index(projectileId);
+        entity_t entity = _registry.entity_from_index(entityId);
+
+        // Need to implement the method to update the entity health and destroy the projectile
+    } catch (const std::out_of_range &e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while updating the projectile collision" << std::endl;
+        return false;
+    }
 
     return true;
 }
@@ -546,7 +589,17 @@ bool RType::ProtocolParsing::parseStateChange(const std::string &message, int &i
         return false;
     }
 
-    // Need to create a component state to update the entity state
+    try {
+        entity_t entity = _registry.entity_from_index(entityId);
+        
+        // Need to implement the method to update the entity state
+    } catch (const std::out_of_range &e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception &e) {
+        std::cerr << "An error occurred while updating the state" << std::endl;
+        return false;
+    }
 
     return true;
 }
