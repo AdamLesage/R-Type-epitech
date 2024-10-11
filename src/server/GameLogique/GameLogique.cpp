@@ -183,11 +183,16 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     input = message.first[5];
 
     auto &velocities = reg.get_components<Velocity_s>();
-    if ((unsigned int)velocities.size() <= message.second) {
+    auto &types = reg.get_components<Type>();
+    if ((unsigned int)velocities.size() <= message.second && message.second <= (unsigned int)types.size()) {
         std::cerr << "Invalid entity ID: " << message.second << std::endl;
         return;
     }
     auto &velocitie = velocities[message.second];
+    auto &type = types[message.second];
+    if (type->type != EntityType::PLAYER) {
+        return;
+    }
     std::array<char, 6> keys = retrieveInputKeys();
 
     if (input == keys[0]) { // UP
