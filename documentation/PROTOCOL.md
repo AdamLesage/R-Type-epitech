@@ -4,10 +4,10 @@
 
 This document describes the protocol used to communicate between the server and the client.
 
-## Protocol Specification
+# Server-to-Client Protocol
 
 
-### Player Creation
+## Player Creation
 | Type  | Player ID   | Position X   | Position Y   |
 |-------|-------------|--------------|--------------|
 | 0x01  | 0x00000001  | 0x42f60000   | 0x42960000   |
@@ -17,9 +17,9 @@ This document describes the protocol used to communicate between the server and 
 - **Position X:** 4 bytes (e.g., 0x42e00000 for X position of 112.0).
 - **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
 
----
 
-### Projectile Creation
+
+## Projectile Creation
 | Type  | Projectile ID | Position X   | Position Y   | Parent ID   |
 |-------|---------------|--------------|--------------|-------------|
 | 0x02  | 0x00000001    | 0x42f60000   | 0x42960000   | 0x00000001  |
@@ -30,9 +30,9 @@ This document describes the protocol used to communicate between the server and 
 - **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
 - **Parent ID:** 4 bytes.
 
----
 
-### Enemy Creation
+
+## Enemy Creation
 | Type  | Enemy ID     | Position X   | Position Y   |
 |-------|--------------|--------------|--------------|
 | 0x03  | 0x00000001   | 0x42f60000   | 0x42960000   |
@@ -41,10 +41,9 @@ This document describes the protocol used to communicate between the server and 
 - **Enemy ID:** 4 bytes (e.g., 0x00000100 for an enemy with this ID).
 - **Position X:** 4 bytes (e.g., 0x42e00000 for X position of 112.0).
 - **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
+#### From 0x03 to 0x20
 
----
-
-### Bonus Creation
+## Bonus Creation
 | Type  | Bonus ID     | Position X   | Position Y   |
 |-------|--------------|--------------|--------------|
 | 0x21  | 0x00000001   | 0x42f60000   | 0x42960000   |
@@ -53,10 +52,9 @@ This document describes the protocol used to communicate between the server and 
 - **Bonus ID:** 4 bytes (e.g., 0x00000100 for a bonus with this ID).
 - **Position X:** 4 bytes (e.g., 0x42e00000 for X position of 112.0).
 - **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
+#### From 0x21 to 0x24
 
----
-
-### Wall Creation
+## Wall Creation
 | Type  | Wall ID      | Position X   | Position Y   | Size X      | Size Y      |
 |-------|--------------|--------------|--------------|-------------|-------------|
 | 0x25  | 0x00000001   | 0x42f60000   | 0x42960000   | 0x42f60000  | 0x42960000  |
@@ -68,9 +66,8 @@ This document describes the protocol used to communicate between the server and 
 - **Size X:** 4 bytes.
 - **Size Y:** 4 bytes.
 
----
 
-### Reward Creation
+## Reward Creation
 | Type  | Reward ID    | Position X   | Position Y   | Size X      | Size Y      |
 |-------|--------------|--------------|--------------|-------------|-------------|
 | 0x26  | 0x00000001   | 0x42f60000   | 0x42960000   | 0x42f60000  | 0x42960000  |
@@ -82,9 +79,10 @@ This document describes the protocol used to communicate between the server and 
 - **Size X:** 4 bytes.
 - **Size Y:** 4 bytes.
 
----
+#### From 0x26 to 0x28
 
-### Entity Deletion
+
+## Entity Deletion
 | Type  | Entity ID    |
 |-------|--------------|
 | 0x29  | 0x00000001   |
@@ -92,9 +90,8 @@ This document describes the protocol used to communicate between the server and 
 - **Type:** 1 byte (0x29 for "entity deletion").
 - **Entity ID:** 4 bytes (e.g., 0x00000100 for an entity with this ID).
 
----
 
-### Position Update
+## Position Update
 | Type  | Entity ID    | Position X   | Position Y   |
 |-------|--------------|--------------|--------------|
 | 0x30  | 0x00000200   | 0x43160000   | 0x428c0000   |
@@ -104,9 +101,8 @@ This document describes the protocol used to communicate between the server and 
 - **Position X:** 4 bytes.
 - **Position Y:** 4 bytes.
 
----
 
-### Health Update
+## Health Update
 | Type  | Entity ID    | Health Points |
 |-------|--------------|---------------|
 | 0x31  | 0x00000001   | 0x00000064    |
@@ -115,9 +111,8 @@ This document describes the protocol used to communicate between the server and 
 - **Entity ID:** 4 bytes.
 - **Health Points:** 4 bytes.
 
----
 
-### Direction Update
+## Direction Update
 | Type  | Entity ID    | Direction X  | Direction Y  |
 |-------|--------------|--------------|--------------|
 | 0x32  | 0x00000001   | 0x42c80000   | 0x42960000   |
@@ -127,9 +122,8 @@ This document describes the protocol used to communicate between the server and 
 - **Direction X:** 4 bytes (float).
 - **Direction Y:** 4 bytes (float).
 
----
 
-### Object Collection
+## Object Collection
 | Type  | Player ID    | Object ID    |
 |-------|--------------|--------------|
 | 0x33  | 0x00000001   | 0x00000002   |
@@ -138,9 +132,8 @@ This document describes the protocol used to communicate between the server and 
 - **Player ID:** 4 bytes.
 - **Object ID:** 4 bytes.
 
----
 
-### Projectile Firing
+## Projectile Firing
 | Type  | Shooter ID   | Position X   | Position Y   |
 |-------|--------------|--------------|--------------|
 | 0x34  | 0x00000001   | 0x42f60000   | 0x42960000   |
@@ -150,9 +143,8 @@ This document describes the protocol used to communicate between the server and 
 - **Position X:** 4 bytes.
 - **Position Y:** 4 bytes.
 
----
 
-### Projectile Collision
+## Projectile Collision
 | Type  | Projectile ID| Entity ID    |
 |-------|--------------|--------------|
 | 0x35  | 0x00000002   | 0x00000001   |
@@ -161,9 +153,8 @@ This document describes the protocol used to communicate between the server and 
 - **Projectile ID:** 4 bytes.
 - **Entity ID:** 4 bytes.
 
----
 
-### Score Update
+## Score Update
 | Type  | Player ID    | New Score    |
 |-------|--------------|--------------|
 | 0x36  | 0x00000001   | 0x000003E8   |
@@ -172,9 +163,8 @@ This document describes the protocol used to communicate between the server and 
 - **Player ID:** 4 bytes.
 - **New Score:** 4 bytes.
 
----
 
-### State Change
+## State Change
 | Type  | Entity ID    | New State    |
 |-------|--------------|--------------|
 | 0x37  | 0x00000001   | 0x00000002   |
@@ -183,7 +173,24 @@ This document describes the protocol used to communicate between the server and 
 - **Entity ID:** 4 bytes.
 - **New State:** 4 bytes.
 
----
+
+## Player Death
+| Type  | Entity ID    |
+|-------|--------------|
+| 0x37  | 0x00000001   |
+
+- **Type:** 1 byte (0x37 for "state change").
+- **Entity ID:** 4 bytes.
+
+
+## Number connected player 
+| Type  | Number Player |
+|-------|---------------|
+| 0x38  | 0x00000001    |
+
+- **Type:** 1 byte (0x38 for "Number player").
+- **number player:** 4 bytes.
+
 
 # Client-to-Server Protocol: Player Input and Start Game
 
