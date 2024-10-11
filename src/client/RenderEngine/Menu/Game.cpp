@@ -81,8 +81,32 @@ RType::Game::~Game()
 {
 }
 
+void RType::Game::displayPiou()
+{
+    sf::Text piou;
+    piou.setFont(font);
+    piou.setString("Piou");
+    piou.setCharacterSize(48);
+    piou.setFillColor(sf::Color::White);
+    piou.setStyle(sf::Text::Bold);
+    piou.setPosition(1920 / 2 - 40,  900);
+    window->draw(piou);
+}
+
+
 void RType::Game::ShootSound()
 {
+    config_t cfg;
+    config_init(&cfg);
+        if (!config_read_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors du chargement du fichier de configuration\n");
+            config_destroy(&cfg);
+            exit;
+        }
+    std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+    if (keyValue == "ON") {
+        piou = true;
+    }
     int random = rand() % 10;
     if (random == 9) {
         shoot_music2.setVolume(200);
@@ -147,7 +171,12 @@ void RType::Game::play()
         for (int i = 0; i < entity.size(); i++) {
             window->draw(entity[i]);
         }
+        if (piou) {
+            displayPiou();
+            piou = false;
+        }
         window->display();
+
     }
 }
 
@@ -224,7 +253,12 @@ void RType::Game::displayGame()
             DisplaySkipIntro();
 
         }
+                       if (piou) {
+            displayPiou();
+            piou = false;
+                       }
         window->display();
+
     }
 }
 

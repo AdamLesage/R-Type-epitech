@@ -70,6 +70,13 @@ namespace RType
 
 
         /**
+         * @brief Displays the subtitles of the lobby.
+         */
+        void displaySubtitles();
+
+
+
+        /**
          * @brief Displays the sound of the lobby.
          */
         void displaySound();

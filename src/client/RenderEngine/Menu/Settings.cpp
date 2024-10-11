@@ -77,7 +77,7 @@ void Settings::moveUp()
 
 void Settings::moveDown()
 {
-    if (selectedOption + 1 < 6) {
+    if (selectedOption + 1 < 7) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
@@ -94,7 +94,6 @@ void Settings::changeKey(std::string key)
 {
     std::string newKey = key.substr(0, 11);
     std::string newKey2;
-    menuOptions[selectedOption].setString("PRESS A KEY");
     config_t cfg;
     config_init(&cfg);
     if (!config_read_file(&cfg, "src/config/key.cfg")) {
@@ -102,6 +101,21 @@ void Settings::changeKey(std::string key)
         config_destroy(&cfg);
         return;
     }
+    if (key == "SUBTITLES: ON" || key == "SUBTITLES: OFF") {
+        if (key.find("ON") != std::string::npos) {
+            newKey2 = "OFF";
+        } else {
+            newKey2 = "ON";
+        }
+        set_key_value(&cfg, "Keys7", newKey2.c_str());
+        if (!config_write_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors de l'écriture du fichier\n");
+        }
+        config_destroy(&cfg);
+        return;
+    }
+    menuOptions[selectedOption].setString("PRESS A KEY");
+
     display();
     sf::Event event2 = event;
     bool keyPressed = false;
@@ -148,7 +162,7 @@ void Settings::display()
 {
     window->draw(background);
     window->draw(logoSprite);
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 7; ++i) {
         window->draw(menuOptions[i]);
     }
     window->display();
@@ -169,8 +183,8 @@ void Settings::displaySettings(bool ingame)
             config_destroy(&cfg);
             return;
         }
-        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: "};
-        for (int i = 0; i < 6; i++) {
+        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ", "SHOOT    : ", "SETTINGS: ", "SUBTITLES: "};
+        for (int i = 0; i < 7; i++) {
             optionsText[i] += get_key_value(&cfg, ("Keys" + std::to_string(i + 1)).c_str());
             menuOptions[i].setFont(font);
             menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
@@ -220,6 +234,15 @@ void Settings::displaySettings(bool ingame)
                             changeKey(menuOptions[4].getString().toAnsiString());
                             break;
                         case 5:
+                            break;
+                        case 6:
+                            if (menuOptions[6].getString().toAnsiString().find("ON") != std::string::npos) {
+                                changeKey("SUBTITLES: ON");
+                                menuOptions[6].setString("SUBTITLES: OFF");
+                            } else {
+                                changeKey("SUBTITLES: OFF");
+                                menuOptions[6].setString("SUBTITLES: ON");
+                            }
                             break;
                         }
                     }
