@@ -43,6 +43,23 @@ RType::ProtocolParsing::~ProtocolParsing()
 {
 }
 
+int RType::ProtocolParsing::updateIndexFromBinaryData(const std::string &message, int &index)
+{
+    int totalSize;
+
+    try {
+        totalSize = _cfg.lookup("protocol").lookup(message).lookup("total_size");
+    } catch (const libconfig::SettingNotFoundException &nfex) {
+        std::cerr << "Setting not found: " << nfex.getPath() << std::endl;
+        return false;
+    } catch (const libconfig::SettingTypeException &stex) {
+        std::cerr << "Setting type error: " << stex.getPath() << std::endl;
+        return false;
+    }
+    index += totalSize;
+    return index;
+}
+
 bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, const std::string &message, int &index)
 {
     // Check if message is for the current parsing function such as current type (0xXX) is correct
@@ -67,7 +84,7 @@ bool RType::ProtocolParsing::checkMessageType(const std::string &messageType, co
     }
     try {
         int totalSize = element.lookup("total_size");
-        if (static_cast<int>(message.length()) - index < totalSize) {
+        if (static_cast<int>(message.length()) - index < totalSize) { // Check if the message size is correct
             return false;
         }
     } catch (const std::invalid_argument& e) {
@@ -114,7 +131,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string &message, int
         _registry.add_component<Size>(entity, Size{130, 80});
         _registry.add_component<Direction>(entity, Direction{1, 0});
         _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/player/player_1.png", {263, 116}, {0, 0}});
-        index += 13;
+        this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
         return false;
@@ -154,7 +171,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string &message,
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
         _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/bullet/missile_1.png", {71, 32}, {0, 0}});
-        index += 17;
+        this->updateIndexFromBinaryData("projectile_creation", index);
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the projectile" << std::endl;
         return false;
@@ -194,7 +211,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string &message, int 
         _registry.add_component<Size>(entity, Size{70, 71});
         _registry.add_component<Direction>(entity, Direction{-1, 0});
         _registry.add_component<Sprite>(entity, Sprite{"src/client/asset/ennemy/enemy_2.png", {33, 36}, {0, 0}});
-        index += 13;
+        this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
         return false;
@@ -228,6 +245,7 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string &message, int 
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        this->updateIndexFromBinaryData("bonus_creation", index);
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
         return false;
@@ -266,6 +284,7 @@ bool RType::ProtocolParsing::parseWallCreation(const std::string &message, int &
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Health>(entity, Health{100, 100, false, false}); // We can destroy the wall with a projectile
+        this->updateIndexFromBinaryData("wall_creation", index);
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the wall" << std::endl;
         return false;
@@ -303,6 +322,7 @@ bool RType::ProtocolParsing::parseRewardCreation(const std::string &message, int
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        this->updateIndexFromBinaryData("reward_creation", index);
     } catch (const std::exception &e) {
         std::cerr << "An error occurred while creating the reward" << std::endl;
         return false;
@@ -328,7 +348,7 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string &message, int
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
-        index += 5;
+        this->updateIndexFromBinaryData("entity_deletion", index);
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found for deletion" << std::endl;
         return false;
@@ -362,7 +382,6 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message, int
         entity_t entity = _registry.entity_from_index(entityId);
 
         // Check if the entity has a position component
-        index += 13;
         auto optionalPositionComponent = _registry.get_components<Position>()[entity];
         if (optionalPositionComponent.has_value() == false) { // If the entity doesn't have a position component, add it
             _registry.add_component<Position>(entity, Position{posX, posY});
@@ -372,6 +391,7 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string &message, int
         // Remove the old position component and add the new one to update the position
         _registry.remove_component<Position>(entity);
         _registry.add_component<Position>(entity, Position{posX, posY});
+        this->updateIndexFromBinaryData("position_update", index);
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found for position update" << std::endl;
         return false;
@@ -412,6 +432,7 @@ bool RType::ProtocolParsing::parseHealthUpdate(const std::string &message, int &
         } else {
             _registry.add_component<Health>(entity, Health{health, 100, true, true});
         }
+        this->updateIndexFromBinaryData("health_update", index);
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found for health update" << std::endl;
         return false;
@@ -441,6 +462,7 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const std::string &message, in
         return false;
     }
 
+
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         auto optionalDirectionComponent = _registry.get_components<Direction>()[entity];
@@ -454,6 +476,7 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const std::string &message, in
         } else {
             _registry.add_component<Direction>(entity, Direction{directionX, directionY});
         }
+        this->updateIndexFromBinaryData("direction_update", index);
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found" << std::endl;
         return false;
@@ -485,7 +508,8 @@ bool RType::ProtocolParsing::parseObjectCollection(const std::string &message, i
         entity_t playerEntity = _registry.entity_from_index(playerId);
         entity_t objectEntity = _registry.entity_from_index(objectId);
 
-        // Need to implement a mediator notification to the RenderEngine to create an animation for the object collection
+        this->updateIndexFromBinaryData("object_collection", index);
+    // Need to implement a mediator notification to the RenderEngine to create an animation for the object collection
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found" << std::endl;
         return false;
@@ -515,6 +539,7 @@ bool RType::ProtocolParsing::parseProjectileFiring(const std::string &message, i
         return false;
     }
 
+    this->updateIndexFromBinaryData("projectile_firing", index);
     // Need to implement a mediator notification to the RenderEngine to create an animation for the projectile firing
 
     return true;
@@ -540,7 +565,8 @@ bool RType::ProtocolParsing::parseProjectileCollision(const std::string &message
         entity_t projectileEntity = _registry.entity_from_index(projectileId);
         entity_t entity = _registry.entity_from_index(entityId);
 
-        // Need to implement the method to update the entity health and destroy the projectile
+        this->updateIndexFromBinaryData("projectile_collision", index);
+    // Need to implement the method to update the entity health and destroy the projectile
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found" << std::endl;
         return false;
@@ -568,6 +594,7 @@ bool RType::ProtocolParsing::parseScoreUpdate(const std::string &message, int &i
         return false;
     }
 
+    this->updateIndexFromBinaryData("score_update", index);
     // Need to implement the method to update the player score
 
     return true;
@@ -592,7 +619,8 @@ bool RType::ProtocolParsing::parseStateChange(const std::string &message, int &i
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         
-        // Need to implement the method to update the entity state
+        this->updateIndexFromBinaryData("state_change", index);
+    // Need to implement the method to update the entity state
     } catch (const std::out_of_range &e) {
         std::cerr << "Entity not found" << std::endl;
         return false;

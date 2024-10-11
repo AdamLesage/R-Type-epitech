@@ -166,10 +166,11 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
     if (enemyTakeDamage && collisionX && collisionY) {
         logger.log(RType::Logger::INFO, "Enemy take damage");
         auto &enemyHealth = reg.get_components<Health_s>()[entityId1];
-        auto &playerDamage = reg.get_components<Damage_s>()[entityId2];
+        auto &projectileDamage = reg.get_components<Damage_s>()[entityId2];
 
-        if (enemyHealth && playerDamage) {
-            enemyHealth->health -= playerDamage->damage;
+        if (enemyHealth && projectileDamage) {
+            enemyHealth->health -= projectileDamage->damage;
+            std::cout << "Enemy health: " << enemyHealth->health << std::endl;
             if (enemyHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
@@ -240,7 +241,7 @@ void Systems::shoot_system(Registry &reg, entity_t playerId, std::unique_ptr<Net
             reg.add_component<Position_s>(projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
             reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
             reg.add_component<Type_s>(projectile, Type_s{EntityType::PLAYER_PROJECTILE});
-            reg.add_component<Damage_s>(projectile, Damage_s{10});
+            reg.add_component<Damage_s>(projectile, Damage_s{25});
             reg.add_component<Size>(projectile, Size{70, 30});
 
             networkSender->sendCreateProjectil(projectile, projectileX, projectileY, playerId);
@@ -476,7 +477,7 @@ void Systems::shoot_straight_pattern_system(Registry &reg, std::unique_ptr<Netwo
             std::chrono::duration<float> fs = now - pattern->lastShotTime;
             float elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
 
-            if (elapsed_seconds >= pattern->shootCooldown && pattern->shootCooldown > 1) {
+            if (elapsed_seconds >= pattern->shootCooldown && pattern->shootCooldown > 10) { // Enemy spawn every 10 second
                 pattern->lastShotTime = now;
                 entity_t projectile = reg.spawn_entity();
                 reg.add_component<Position_s>(projectile, Position_s{position->x, position->y + (size->y / 2) - (30 / 2)});
