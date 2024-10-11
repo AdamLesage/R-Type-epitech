@@ -142,14 +142,11 @@ void RType::Game::play()
             }
         }
 
-        int keyPressed = _systems.control_system(_registry, *window.get());
+        _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
         _systems.position_system(_registry);
         _systems.collision_system(_registry, *window.get());
-        if (keyPressed != -1 && _mediator != nullptr) {
-            this->_mediator->notify("Game", std::to_string(keyPressed));
-        }
-        if (keyPressed == 88)
-            ShootSound();
+        // if (keyPressed == 88)
+        //     ShootSound();
 
         window->clear();
         if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {

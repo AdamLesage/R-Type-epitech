@@ -23,24 +23,28 @@ void Systems::position_system(Registry &reg)
     }
 }
 
-int Systems::control_system(Registry &reg, sf::RenderWindow &window)
+void Systems::control_system(Registry &reg, sf::RenderWindow &window, std::shared_ptr<RType::IMediator> mediator, std::function<void()> shootSound)
 {
     if (window.hasFocus() == false) {
-        return -1;
+        return;
     }
 
     for (int key = sf::Keyboard::A; key <= sf::Keyboard::KeyCount; ++key) {
         if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key))) {
             // If the key is a letter or a number return the ASCII value
             if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z) {
-                return static_cast<int>('A' + (key - sf::Keyboard::A));
+                if (mediator != nullptr) {
+                    if (key == sf::Keyboard::X) // Shoot, TODO: change according to the key binding in key.cfg file
+                        shootSound();
+                    mediator->notify("Game", std::to_string(static_cast<int>('A' + (key - sf::Keyboard::A))));
+                }
             } else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9) {
-                return static_cast<int>('0' + (key - sf::Keyboard::Num0));
+                if (mediator != nullptr) {
+                    mediator->notify("Game", std::to_string(static_cast<int>('0' + (key - sf::Keyboard::Num0))));
+                }
             }
-            return key;
         }
     }
-    return -1;
 }
 
 
