@@ -81,8 +81,32 @@ RType::Game::~Game()
 {
 }
 
+void RType::Game::displayPiou()
+{
+    sf::Text piou;
+    piou.setFont(font);
+    piou.setString("Piou");
+    piou.setCharacterSize(48);
+    piou.setFillColor(sf::Color::White);
+    piou.setStyle(sf::Text::Bold);
+    piou.setPosition(1920 / 2 - 40,  900);
+    window->draw(piou);
+}
+
+
 void RType::Game::ShootSound()
 {
+    config_t cfg;
+    config_init(&cfg);
+        if (!config_read_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors du chargement du fichier de configuration\n");
+            config_destroy(&cfg);
+            exit;
+        }
+    std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+    if (keyValue == "ON") {
+        piou = true;
+    }
     int random = rand() % 10;
     if (random == 9) {
         shoot_music2.setVolume(200);
@@ -144,10 +168,15 @@ void RType::Game::play()
             window->draw(backgrounds[i]);
         }
         this->set_texture();
-        for (int i = 0; i < entity.size(); i++) {
+        for (int i = 0; i < (int)entity.size(); i++) {
             window->draw(entity[i]);
         }
+        if (piou) {
+            displayPiou();
+            piou = false;
+        }
         window->display();
+
     }
 }
 
@@ -166,10 +195,11 @@ void RType::Game::set_texture()
     if (_camera == nullptr)
         return;
 
-    for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
         entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
     }
-    for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+
+    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
         if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath) != Textures.end()) { // If texture already loaded
             entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
             entity[i].setTextureRect(sf::IntRect(
@@ -224,7 +254,12 @@ void RType::Game::displayGame()
             DisplaySkipIntro();
 
         }
+        if (piou) {
+            displayPiou();
+            piou = false;
+        }
         window->display();
+
     }
 }
 
@@ -267,9 +302,6 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
 void RType::Game::setCamera(std::shared_ptr<Camera> camera)
 {
     this->_camera = camera;
-    if (_camera != nullptr) {
-        std::cout << "set camera not null, use_count: " << _camera.use_count() << std::endl;
-    }
 }
 
 void RType::Game::setMediator(std::shared_ptr<IMediator> mediator)

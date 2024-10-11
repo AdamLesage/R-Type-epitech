@@ -75,7 +75,7 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         float optionWidth = menuOptions[i].getLocalBounds().width;
         float totalMenuWidth = (3 * optionWidth) + (2 * 100);
         float xPos = (window->getSize().x / 2.0f) - (totalMenuWidth / 2.0f) + i * (optionWidth + 100);
-        menuOptions[i].setPosition(xPos, window->getSize().y - 100);
+        menuOptions[i].setPosition(xPos, window->getSize().y - 200);
     }
 
     try
@@ -182,6 +182,33 @@ void RType::Lobby::displaySound()
     window->draw(volumeText);
 }
 
+void RType::Lobby::displaySubtitles()
+{
+    sf::Text subtitle;
+    subtitle.setFont(font);
+    subtitle.setString("Press Enter to select an option, you can also use the arrow keys to navigate");
+    subtitle.setCharacterSize(48);
+    subtitle.setFillColor(sf::Color::White);
+    subtitle.setStyle(sf::Text::Bold);
+
+    sf::FloatRect textRect = subtitle.getLocalBounds();
+    subtitle.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+    subtitle.setPosition(window->getSize().x / 2.0f, window->getSize().y - 50);
+
+    sf::Text subtitleShadow = subtitle;
+    subtitleShadow.setFillColor(sf::Color(0, 0, 130, 150));
+    subtitleShadow.setPosition(subtitle.getPosition().x + 2, subtitle.getPosition().y + 2);
+
+    sf::RectangleShape backgroundRect;
+    backgroundRect.setSize(sf::Vector2f(textRect.width + 20, textRect.height + 20));
+    backgroundRect.setFillColor(sf::Color(0, 0, 0, 150));
+    backgroundRect.setOrigin(backgroundRect.getSize().x / 2.0f, backgroundRect.getSize().y / 2.0f);
+    backgroundRect.setPosition(subtitle.getPosition());
+
+    window->draw(backgroundRect);
+    window->draw(subtitleShadow);
+    window->draw(subtitle);
+}
 
 
 void RType::Lobby::displayLobby()
@@ -256,6 +283,17 @@ void RType::Lobby::displayLobby()
             window->draw(playerSprites[i]);
         }
         displaySound();
+        config_t cfg;
+        config_init(&cfg);
+        if (!config_read_file(&cfg, "src/config/key.cfg")) {
+            printf("Erreur lors du chargement du fichier de configuration\n");
+            config_destroy(&cfg);
+            return;
+            }
+        std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+        if (keyValue == "ON") {
+            displaySubtitles();
+            }
         window->display();
     }
 }

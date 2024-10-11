@@ -140,8 +140,6 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
         std::cout << "Player take damage from " << (entityType2->type == EntityType::ENEMY_PROJECTILE ? "projectile" : "enemy") << std::endl;
         auto &playerHealth = reg.get_components<Health_s>()[entityId1];
         auto &enemyDamage = reg.get_components<Damage_s>()[entityId2];
-        if (playerHealth == std::nullopt) std::cerr << "playerHealth is nullptr" << std::endl;
-        if (enemyDamage == std::nullopt) std::cerr << "enemyDamage is nullptr" << std::endl;
         
 
         if (playerHealth && enemyDamage) {
@@ -163,14 +161,13 @@ void Systems::check_entities_collisions(Registry &reg, size_t entityId1, Positio
         }
     }
 
-    if (enemyTakeDamage && collisionX && collisionY) {
+    if (enemyTakeDamage && collisionX && collisionY) {  
         logger.log(RType::Logger::INFO, "Enemy take damage");
         auto &enemyHealth = reg.get_components<Health_s>()[entityId1];
         auto &projectileDamage = reg.get_components<Damage_s>()[entityId2];
 
         if (enemyHealth && projectileDamage) {
             enemyHealth->health -= projectileDamage->damage;
-            std::cout << "Enemy health: " << enemyHealth->health << std::endl;
             if (enemyHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
