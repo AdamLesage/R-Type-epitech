@@ -16,7 +16,8 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
     this->window = _window;
     std::cout << "Game created and mediator is null" << std::endl;
     this->_mediator = nullptr;
-    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
     }
 
@@ -45,11 +46,13 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window) : currentFrame(1), 
     }
     game_launch_music.setBuffer(game_launch_sound);
     isShooting = false;
-    if (!shoot_sound.loadFromFile("src/client/asset/Sounds/shootsounds.wav")) {
+    std::string shootPath = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "shootsounds.wav";
+    if (!shoot_sound.loadFromFile(shootPath)) {
         throw std::runtime_error("Error loading shoot sound");
     }
     shoot_music.setBuffer(shoot_sound);
-    if (!shoot_sound2.loadFromFile("src/client/asset/Sounds/Piou.wav")) {
+    std::string shootPath2 = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "Piou.wav";
+    if (!shoot_sound2.loadFromFile(shootPath2)) {
         throw std::runtime_error("Error loading shoot sound 2");
     }
     shoot_music2.setBuffer(shoot_sound2);
@@ -91,14 +94,14 @@ RType::Game::~Game()
 
 void RType::Game::displayPiou()
 {
-    sf::Text piou;
-    piou.setFont(font);
-    piou.setString("Piou");
-    piou.setCharacterSize(48);
-    piou.setFillColor(sf::Color::White);
-    piou.setStyle(sf::Text::Bold);
-    piou.setPosition(1920 / 2 - 40,  900);
-    window->draw(piou);
+    sf::Text piouText;
+    piouText.setFont(font);
+    piouText.setString("Piou");
+    piouText.setCharacterSize(48);
+    piouText.setFillColor(sf::Color::White);
+    piouText.setStyle(sf::Text::Bold);
+    piouText.setPosition(1920 / 2 - 40,  900);
+    window->draw(piouText);
 }
 
 
@@ -106,11 +109,12 @@ void RType::Game::ShootSound()
 {
     config_t cfg;
     config_init(&cfg);
-        if (!config_read_file(&cfg, "src/config/key.cfg")) {
-            printf("Erreur lors du chargement du fichier de configuration\n");
-            config_destroy(&cfg);
-            exit;
-        }
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    if (!config_read_file(&cfg, configPath.c_str())) {
+        printf("Error while loading config file!\n");
+        config_destroy(&cfg);
+        exit(84);
+    }
     std::string keyValue = settings->get_key_value(&cfg, "Keys7");
     if (keyValue == "ON") {
         piou = true;

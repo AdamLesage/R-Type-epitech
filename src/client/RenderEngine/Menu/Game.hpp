@@ -66,11 +66,11 @@ namespace RType {
         void play();
         /**
          * @brief Set the camera to display
-         * 
+         *
          * @param camera the camera to set
          */
         void setCamera(std::shared_ptr<Camera> camera);
-         /** 
+         /**
           * @brief set the textures needed from camera to the textures map
          */
         void set_texture();
@@ -97,7 +97,7 @@ namespace RType {
         void setMediator(std::shared_ptr<IMediator> mediator);
         /**
          * @brief Set the mutex
-         * 
+         *
          * @param mutex the mutex to set
          */
         void setMutex(std::shared_ptr<std::mutex> mutex);
