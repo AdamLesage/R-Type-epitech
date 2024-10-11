@@ -36,7 +36,15 @@ namespace RType {
          */
         ~Game();
 
+        /**
+         * @brief Displays the subtitle of a shoot.
+         */
+
         void displayPiou();
+
+        /**
+         * @brief Plays the shoot sound.
+         */
 
         void ShootSound();
 
