@@ -55,6 +55,7 @@ namespace RType {
             std::shared_ptr<Lobby> lobby;
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
+            RType::Logger logger;
     };
 }
 
