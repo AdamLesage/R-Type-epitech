@@ -88,3 +88,12 @@ if (Test-Path "$PSScriptRoot\R-Type-epitech\lib") {
 } else {
     Write-Host "Lib directory not found!"
 }
+
+$configSrc = "$PSScriptRoot\R-Type-epitech\config"
+$configDst = "$PSScriptRoot\config"
+
+if (Test-Path $configSrc) {
+    Copy-Item -Path $configSrc -Destination $configDst -Recurse
+} else {
+    Write-Host "Config directory not found!"
+}

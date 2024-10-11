@@ -404,6 +404,7 @@ main () {
     sudo ln "$(pwd)/r-type_server" ../r-type_server
     cp -r assets ../
     cp -r lib ../
+    cp -r config ../
     cd ..
     message "$SUCCESS" "Installation completed successfully."
 }
