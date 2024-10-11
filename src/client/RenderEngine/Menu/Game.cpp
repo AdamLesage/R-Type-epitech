@@ -144,7 +144,7 @@ void RType::Game::play()
             window->draw(backgrounds[i]);
         }
         this->set_texture();
-        for (int i = 0; i < entity.size(); i++) {
+        for (int i = 0; i < (int)entity.size(); i++) {
             window->draw(entity[i]);
         }
         window->display();
@@ -165,11 +165,11 @@ void RType::Game::set_texture()
     if (_camera == nullptr)
         return;
 
-    for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
         entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
     }
 
-    for (int i = 0; i < _camera->listEntityToDisplay.size(); i++) {
+    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
         if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath) != Textures.end()) { // If texture already loaded
             entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
             entity[i].setTextureRect(sf::IntRect(

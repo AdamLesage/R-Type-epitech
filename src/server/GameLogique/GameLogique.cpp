@@ -101,6 +101,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y)
             this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            break;
         default:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Velocity>(entity, Velocity{0, 0});
@@ -182,7 +183,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     input = message.first[5];
 
     auto &velocities = reg.get_components<Velocity_s>();
-    if ((int)velocities.size() <= message.second) {
+    if ((unsigned int)velocities.size() <= message.second) {
         std::cerr << "Invalid entity ID: " << message.second << std::endl;
         return;
     }
