@@ -47,7 +47,7 @@ void GameLogique::startGame() {
             this->reg.add_component<Tag>(entity, Tag{"player"});
             this->reg.add_component<Health>(entity, Health{100, 100, true, true});
             this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
-            this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.5f});
+            this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
             this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
             this->reg.add_component<Size>(entity, Size{130, 80});
             this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
@@ -196,13 +196,13 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message)
     std::array<char, 6> keys = retrieveInputKeys();
 
     if (input == keys[0]) { // UP
-        velocitie->y = -1;
+        velocitie->y = -2;
     } else if (input == keys[1]) { // DOWN
-        velocitie->y = 1;
+        velocitie->y = 2;
     } else if (input == keys[2]) { // RIGHT
-        velocitie->x = 1;
+        velocitie->x = 2;
     } else if (input == keys[3]) { // LEFT
-        velocitie->x = -1;
+        velocitie->x = -2;
     } else if (input == keys[4]) { // SHOOT
         {
             std::lock_guard<std::mutex> lock(this->_mutex);
