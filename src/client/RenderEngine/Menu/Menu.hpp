@@ -13,6 +13,12 @@
 #include <memory>
 #include "Lobby.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+    #define PATH_SEPARATOR "\\"
+#else
+    #define PATH_SEPARATOR "/"
+#endif
+
 namespace RType {
     class IMediator;
     class Menu

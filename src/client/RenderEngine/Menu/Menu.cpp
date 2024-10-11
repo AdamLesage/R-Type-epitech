@@ -41,7 +41,8 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-   if (!backgroundBuffer.loadFromFile("src/client/asset/Sounds/menu.ogg"))
+    std::string soundPath = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "menu.ogg";
+    if (!backgroundBuffer.loadFromFile(soundPath))
     {
         throw std::runtime_error("Error loading select sound");
     }
@@ -113,6 +114,7 @@ void RType::Menu::adjustVolume(bool increase)
 
 void RType::Menu::handleKeyPress(const sf::Event &event)
 {
+    (void)event;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
     {
         adjustVolume(true);
@@ -228,11 +230,12 @@ int RType::Menu::displayMenu()
     displaySound();
     config_t cfg;
     config_init(&cfg);
-        if (!config_read_file(&cfg, "src/config/key.cfg")) {
-            printf("Erreur lors du chargement du fichier de configuration\n");
-            config_destroy(&cfg);
-            return (84);
-        }
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    if (!config_read_file(&cfg, configPath.c_str())) {
+        printf("Error while loading config file!\n");
+        config_destroy(&cfg);
+        return (84);
+    }
     std::string keyValue = settings->get_key_value(&cfg, "Keys7");
     if (keyValue == "ON") {
         displaySubtitles();
