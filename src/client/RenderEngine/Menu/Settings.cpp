@@ -151,7 +151,6 @@ void Settings::changeKey(std::string key)
     newKey += newKey2;
     menuOptions[selectedOption].setString(newKey);
     newKey.substr(0, 11);
-    std::cout << newKey << "hjgjiouhgjiopiuhgvhuihgv" << std::endl;
     set_key_value(&cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
     if (!config_write_file(&cfg, "src/config/key.cfg")) {
         printf("Erreur lors de l'écriture du fichier\n");
