@@ -142,7 +142,8 @@ void GameLogique::runGame() {
 std::array<char, 6> GameLogique::retrieveInputKeys()
 {
     libconfig::Config cfg;
-    cfg.readFile("./src/config/key.cfg");
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    cfg.readFile(configPath.c_str());
     std::string keyStr;
     std::array<char, 6> inputKeys;
     const libconfig::Setting& root = cfg.getRoot();
