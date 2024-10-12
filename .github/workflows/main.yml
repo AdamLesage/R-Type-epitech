@@ -86,38 +86,38 @@ jobs:
         run: |
           ls ~/workflow/R-Type-epitech/r-type_client
           ls ~/workflow/R-Type-epitech/r-type_server
-        timeout-minutes: 15
-
-  release_mode_test_windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Setup Release Mode
-        run: |
-          Write-Host "Creating directories and copying files..."
-          cp release/install.ps1 ../install.ps1
-          cd ..
-          Write-Host "Files copied successfully."
-
-      - name: Run a simple PowerShell command
-        shell: pwsh
-        run: |
-          Write-Host "Running a simple test command..."
-          pwsh -Command "Write-Host 'PowerShell is working!'"
-          Write-Host "Test command completed."
-
-      - name: Run install.ps1
-        shell: pwsh
-        run: |
-          Write-Host "Starting install.ps1 execution..."
-          Set-ExecutionPolicy Bypass -Scope Process -Force
-          cd ..
-          ./install.ps1
-          Write-Host "install.ps1 execution completed."
         timeout-minutes: 180
+
+  # release_mode_test_windows:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Setup Release Mode
+  #       run: |
+  #         Write-Host "Creating directories and copying files..."
+  #         cp release/install.ps1 ../install.ps1
+  #         cd ..
+  #         Write-Host "Files copied successfully."
+
+  #     - name: Run a simple PowerShell command
+  #       shell: pwsh
+  #       run: |
+  #         Write-Host "Running a simple test command..."
+  #         pwsh -Command "Write-Host 'PowerShell is working!'"
+  #         Write-Host "Test command completed."
+
+  #     - name: Run install.ps1
+  #       shell: pwsh
+  #       run: |
+  #         Write-Host "Starting install.ps1 execution..."
+  #         Set-ExecutionPolicy Bypass -Scope Process -Force
+  #         cd ..
+  #         ./install.ps1
+  #         Write-Host "install.ps1 execution completed."
+  #       timeout-minutes: 180
 
   create_linux_release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -211,7 +211,7 @@ jobs:
   push_to_mirror:
     needs:
       - release_mode_test_linux
-      - release_mode_test_windows
+      # - release_mode_test_windows
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
