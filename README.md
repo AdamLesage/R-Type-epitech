@@ -29,7 +29,7 @@ This will create an executable file called `rtype` in the `build` directory.
 If you want to install and use the software as a regular user, simply download the latest release from the [Releases](https://github.com/AdamLesage/R-Type-epitech/releases) section on GitHub.
 
 For **Linux** users:
-1. Download the Linux installer from the release page.
+1. Download the Linux release from the release page.
 2. Make the installer executable:
     ```shell
     chmod +x linux_installer.sh
@@ -41,7 +41,14 @@ For **Linux** users:
 
 For more details on the installation, check the documentation file: `./documentation/LINUX_INSTALL.md`.
 
-For **Windows** users, download the Windows installer and follow the instructions provided in `./documentation/WINDOWS_INSTALL.md`.
+For **Windows** users:
+
+1. Download the Windows release from the release page.
+2. Right click on the windows_installer.exe and run it as an administrator
+3. Then answer the question (You need to say yes to install all the dependancies to run the project)
+4. The project will build and will be ready to use
+
+more details on the installation, check the documentation file: `./documentation/WINDOWS_INSTALL.md`.
 
 ## Developing
 
