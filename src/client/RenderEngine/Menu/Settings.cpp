@@ -34,30 +34,40 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
 Settings::~Settings() {
 }
 
-const char* Settings::get_key_value(config_t* cfg, const char* key_name) {
+const char* Settings::get_key_value(libconfig::Config &cfg, const char* key_name) {
     const char* value;
 
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
 
-    if (config_lookup_string(cfg, path, &value)) {
+    try {
+        cfg.lookupValue(path, value);
         return value;
-    } else {
-        printf("Clé non trouvée : %s\n", key_name);
+    } catch (const libconfig::SettingNotFoundException& nfex) {
+        std::cerr << "Key not found: " << key_name << std::endl;
         return NULL;
     }
 }
 
-int Settings::set_key_value(config_t* cfg, const char* key_name, const char* new_value) {
+int Settings::set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value) {
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
 
-    config_setting_t* setting = config_lookup(cfg, path);
-    if (setting != NULL) {
-        config_setting_set_string(setting, new_value);
-        return 0;
-    } else {
-        printf("Clé non trouvée : %s\n", key_name);
+    libconfig::Setting &setting = cfg.lookup(path);
+
+    try {
+        if (cfg.exists(path)) {
+            setting = new_value;
+            return 0;
+        } else {
+            std::cerr << "Key not found: " << key_name << std::endl;
+            return -1;
+        }
+    } catch (const libconfig::SettingNotFoundException &nfex) {
+        std::cerr << "Key not found: " << key_name << std::endl;
+        return -1;
+    } catch (const libconfig::SettingTypeException &tex) {
+        std::cerr << "Invalid type for key: " << key_name << std::endl;
         return -1;
     }
 }
@@ -87,12 +97,13 @@ int Settings::getSelectedOption() const {
 void Settings::changeKey(std::string key) {
     std::string newKey = key.substr(0, 11);
     std::string newKey2;
-    config_t cfg;
-    config_init(&cfg);
+    libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-    if (!config_read_file(&cfg, configPath.c_str())) {
-        printf("Error while loading config file!\n");
-        config_destroy(&cfg);
+
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
     if (key == "SUBTITLES: ON" || key == "SUBTITLES: OFF") {
@@ -101,11 +112,13 @@ void Settings::changeKey(std::string key) {
         } else {
             newKey2 = "ON";
         }
-        set_key_value(&cfg, "Keys7", newKey2.c_str());
-        if (!config_write_file(&cfg, configPath.c_str())) {
-            printf("Error while writing file config!\n");
+        set_key_value(cfg, "Keys8", newKey2.c_str());
+        try {
+            cfg.writeFile(configPath.c_str());
+        } catch (const libconfig::FileIOException& fioex) {
+            std::cerr << "Error while writing file: " << configPath << std::endl;
+            return;
         }
-        config_destroy(&cfg);
         return;
     }
     menuOptions[selectedOption].setString("PRESS A KEY");
@@ -145,11 +158,13 @@ void Settings::changeKey(std::string key) {
     newKey += newKey2;
     menuOptions[selectedOption].setString(newKey);
     newKey.substr(0, 11);
-    set_key_value(&cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
-    if (!config_write_file(&cfg, configPath.c_str())) {
-        printf("Error while saving config file!\n");
+    set_key_value(cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
+    try {
+        cfg.writeFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "Error while writing file: " << configPath << std::endl;
+        return;
     }
-    config_destroy(&cfg);
 }
 
 void Settings::display() {
@@ -168,18 +183,18 @@ void Settings::displaySettings(bool ingame) {
             return;
         }
         selectedOption = 0;
-        config_t cfg;
-        config_init(&cfg);
+        libconfig::Config cfg;
         std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-        if (!config_read_file(&cfg, configPath.c_str())) {
-            printf("Error: while loading config file\n");
-            config_destroy(&cfg);
+        try {
+            cfg.readFile(configPath.c_str());
+        } catch (const libconfig::FileIOException& fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
             return;
         }
         std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ",
                                      "SHOOT    : ", "SETTINGS: ",  "SUBTITLES: "};
         for (int i = 0; i < 7; i++) {
-            optionsText[i] += get_key_value(&cfg, ("Keys" + std::to_string(i + 1)).c_str());
+            optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)).c_str());
             menuOptions[i].setFont(font);
             menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
             menuOptions[i].setString(optionsText[i]);

@@ -250,15 +250,15 @@ void RType::Lobby::displayLobby() {
             window->draw(playerSprites[i]);
         }
         displaySound();
-        config_t cfg;
-        config_init(&cfg);
+        libconfig::Config cfg;
         std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-        if (!config_read_file(&cfg, configPath.c_str())) {
-            printf("Error while loading config file!\n");
-            config_destroy(&cfg);
+        try {
+            cfg.readFile(configPath.c_str());
+        } catch (const libconfig::FileIOException& fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
             return;
         }
-        std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+        std::string keyValue = settings->get_key_value(cfg, "Keys7");
         if (keyValue == "ON") {
             displaySubtitles();
         }

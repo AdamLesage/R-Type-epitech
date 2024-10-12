@@ -10,6 +10,7 @@
 #include "Settings.hpp"
 #include "../../Camera.hpp"
 #include <mutex>
+#include <libconfig.h++>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
