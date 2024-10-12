@@ -11,33 +11,30 @@ if(WIN32)
 
     project(r-type)
 
-    # Compiler flags
     set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
     add_definitions(-D_WIN32_WINNT=0x0601)
 
     add_compile_options(/w)
 
-    find_package(Boost 1.70 REQUIRED COMPONENTS system asio)
-    if (Boost_FOUND)
-        include_directories(${Boost_INCLUDE_DIRS})
-        message(STATUS "Boost found: ${Boost_INCLUDE_DIRS}")
+    find_package(boost_asio CONFIG REQUIRED)
+    find_package(boost_system CONFIG REQUIRED)
+    if (boost_asio_FOUND AND boost_system_FOUND)
+        message(STATUS "Boost ASIO and System found")
     else()
-        message(FATAL_ERROR "Boost not found!")
+        message(FATAL_ERROR "Boost ASIO or System not found!")
     endif()
 
-    find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+    find_package(SFML 2.5 COMPONENTS system window graphics network audio CONFIG REQUIRED)
     if (SFML_FOUND)
-        include_directories(${SFML_INCLUDE_DIR})
-        message(STATUS "SFML found: ${SFML_INCLUDE_DIR}")
+        message(STATUS "SFML found")
     else()
         message(FATAL_ERROR "SFML not found!")
     endif()
 
     find_package(libconfig CONFIG REQUIRED)
     if (libconfig_FOUND)
-        message(STATUS "libconfig++ found: ${libconfig_INCLUDE_DIRS}")
-        include_directories(${libconfig_INCLUDE_DIRS})
+        message(STATUS "libconfig++ found")
     else()
         message(FATAL_ERROR "libconfig++ not found!")
     endif()
@@ -55,19 +52,19 @@ if(WIN32)
     add_library(AudioEngine SHARED ${SRC_CLIENT})
     add_library(RenderingEngine SHARED ${SRC_CLIENT})
 
-    target_link_libraries(NetworkEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::libconfig++)
-    target_link_libraries(GameEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::libconfig++)
-    target_link_libraries(PhysicEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::libconfig++)
-    target_link_libraries(AudioEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::libconfig++)
-    target_link_libraries(RenderingEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio ${Boost_LIBRARIES} libconfig::libconfig++)
+    target_link_libraries(NetworkEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio Boost::asio Boost::system libconfig::libconfig++)
+    target_link_libraries(GameEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio Boost::asio Boost::system libconfig::libconfig++)
+    target_link_libraries(PhysicEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio Boost::asio Boost::system libconfig::libconfig++)
+    target_link_libraries(AudioEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio Boost::asio Boost::system libconfig::libconfig++)
+    target_link_libraries(RenderingEngine PUBLIC sfml-system sfml-window sfml-graphics sfml-network sfml-audio Boost::asio Boost::system libconfig::libconfig++)
 
     add_executable(r-type_client ${SRC_CLIENT})
 
-    target_link_libraries(r-type_client NetworkEngine GameEngine PhysicEngine AudioEngine RenderingEngine ${Boost_LIBRARIES} sfml-system sfml-window sfml-graphics sfml-network sfml-audio libconfig::libconfig++)
+    target_link_libraries(r-type_client NetworkEngine GameEngine PhysicEngine AudioEngine RenderingEngine Boost::asio Boost::system sfml-system sfml-window sfml-graphics sfml-network sfml-audio libconfig::libconfig++)
 
     add_executable(r-type_server ${SRC_SERVER})
 
-    target_link_libraries(r-type_server NetworkEngine GameEngine PhysicEngine AudioEngine RenderingEngine ${Boost_LIBRARIES} sfml-system sfml-window sfml-graphics sfml-network sfml-audio libconfig::libconfig++)
+    target_link_libraries(r-type_server NetworkEngine GameEngine PhysicEngine AudioEngine RenderingEngine Boost::asio Boost::system sfml-system sfml-window sfml-graphics sfml-network sfml-audio libconfig::libconfig++)
 
 else()
     message(STATUS "Building for Linux")
