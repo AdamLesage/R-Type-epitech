@@ -40,8 +40,8 @@ void GameLogique::startGame() {
         // std::cout << network->getClientCount() << std::endl;
         for (size_t i = 0; i != network->getClientCount(); i++) {
             size_t entity = this->reg.spawn_entity();
-            float xPos = 100.f + (100.f * i);
-            float yPos = 100.f;
+            float xPos = 100.f;
+            float yPos = 100.f + (200.f * i);
             this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
             this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
             this->reg.add_component<Tag>(entity, Tag{"player"});
