@@ -23,7 +23,7 @@ class NetworkSender {
          * @param pos_x The x-coordinate of the player's initial position.
          * @param pos_y The y-coordinate of the player's initial position.
          */
-        void sendCreatePlayer(size_t id, float pos_x, float pos_y);
+        void sendCreatePlayer(int id, float pos_x, float pos_y);
 
         /**
          * @brief Sends the creation of an enemy to all clients.
@@ -33,7 +33,7 @@ class NetworkSender {
          * @param pos_x The x-coordinate of the enemy's initial position.
          * @param pos_y The y-coordinate of the enemy's initial position.
          */
-        void sendCreateEnemy(char type, size_t id, float pos_x, float pos_y);
+        void sendCreateEnemy(char type, int id, float pos_x, float pos_y);
 
         /**
          * @brief Sends the creation of a wall entity to all clients.
@@ -44,7 +44,7 @@ class NetworkSender {
          * @param size_x The width of the wall.
          * @param size_y The height of the wall.
          */
-        void sendCreateWall(size_t id, float pos_x, float pos_y, float size_x, float size_y);
+        void sendCreateWall(int id, float pos_x, float pos_y, float size_x, float size_y);
 
         /**
          * @brief Sends the creation of a projectile to all clients.
@@ -54,7 +54,7 @@ class NetworkSender {
          * @param pos_y The y-coordinate of the projectile's position.
          * @param parent_id The identifier of the entity that created or shot the projectile.
          */
-        void sendCreateProjectil(size_t id, float pos_x, float pos_y, size_t parent_id);
+        void sendCreateProjectil(int id, float pos_x, float pos_y, int parent_id);
 
         /**
          * @brief Sends the creation of a reward (e.g., collectible) to all clients.
@@ -63,7 +63,7 @@ class NetworkSender {
          * @param pos_x The x-coordinate of the reward's position.
          * @param pos_y The y-coordinate of the reward's position.
          */
-        void sendCreateReward(size_t id, float pos_x, float pos_y);
+        void sendCreateReward(int id, float pos_x, float pos_y);
 
         /**
          * @brief Sends the creation of a bonus or power-up to all clients.
@@ -73,14 +73,14 @@ class NetworkSender {
          * @param pos_x The x-coordinate of the bonus's position.
          * @param pos_y The y-coordinate of the bonus's position.
          */
-        void sendCreateBonus(char type, size_t id, float pos_x, float pos_y);
+        void sendCreateBonus(char type, int id, float pos_x, float pos_y);
 
         /**
          * @brief Sends a delete command for an entity to all clients.
          *
          * @param id The unique identifier of the entity to be deleted.
          */
-        void sendDeleteEntity(size_t id);
+        void sendDeleteEntity(int id);
 
         /**
          * @brief Sends an update on the position of an entity to all clients.
@@ -89,7 +89,7 @@ class NetworkSender {
          * @param pos_x The new x-coordinate of the entity's position.
          * @param pos_y The new y-coordinate of the entity's position.
          */
-        void sendPositionUpdate(size_t id, float pos_x, float pos_y);
+        void sendPositionUpdate(int id, float pos_x, float pos_y);
 
         /**
          * @brief Sends a health update for an entity to all clients.
@@ -97,7 +97,7 @@ class NetworkSender {
          * @param id The unique identifier of the entity whose health is being updated.
          * @param hp The updated health points of the entity.
          */
-        void sendHealthUpdate(size_t id, size_t hp);
+        void sendHealthUpdate(int id, int hp);
 
         /**
          * @brief Sends information about a projectile collision with another entity to all clients.
@@ -105,7 +105,7 @@ class NetworkSender {
          * @param id_projectil The unique identifier of the projectile involved in the collision.
          * @param id_entity The unique identifier of the entity hit by the projectile.
          */
-        void sendProjectilColision(size_t id_projectil, size_t id_entity);
+        void sendProjectilColision(int id_projectil, int id_entity);
 
     private:
         std::shared_ptr<NetworkLib::Server> _network;

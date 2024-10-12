@@ -14,7 +14,7 @@ NetworkSender::NetworkSender(std::shared_ptr<NetworkLib::Server> network) {
 NetworkSender::~NetworkSender() {
 }
 
-void NetworkSender::sendCreatePlayer(size_t id, float pos_x, float pos_y) {
+void NetworkSender::sendCreatePlayer(int id, float pos_x, float pos_y) {
     std::array<char, 13> data{};
     data[0] = 0x01;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -23,7 +23,7 @@ void NetworkSender::sendCreatePlayer(size_t id, float pos_x, float pos_y) {
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendCreateEnemy(char type, size_t id, float pos_x, float pos_y) {
+void NetworkSender::sendCreateEnemy(char type, int id, float pos_x, float pos_y) {
     int test = (int)id;
     std::array<char, 13> data{};
     data[0] = type;
@@ -33,7 +33,7 @@ void NetworkSender::sendCreateEnemy(char type, size_t id, float pos_x, float pos
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendCreateWall(size_t id, float pos_x, float pos_y, float size_x, float size_y) {
+void NetworkSender::sendCreateWall(int id, float pos_x, float pos_y, float size_x, float size_y) {
     std::array<char, 21> data{};
 
     data[0] = 0x025;
@@ -45,17 +45,17 @@ void NetworkSender::sendCreateWall(size_t id, float pos_x, float pos_y, float si
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendCreateProjectil(size_t id, float pos_x, float pos_y, size_t parent_id) {
+void NetworkSender::sendCreateProjectil(int id, float pos_x, float pos_y, int parent_id) {
     std::array<char, 17> data{};
     data[0] = 0x02;
     std::memcpy(&data[1], &id, sizeof(id));
     std::memcpy(&data[5], &pos_x, sizeof(int));
     std::memcpy(&data[9], &pos_y, sizeof(int));
-    std::memcpy(&data[13], &parent_id, sizeof(size_t));
+    std::memcpy(&data[13], &parent_id, sizeof(int));
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendCreateReward(size_t id, float pos_x, float pos_y) {
+void NetworkSender::sendCreateReward(int id, float pos_x, float pos_y) {
     std::array<char, 13> data{};
     data[0] = 0x26;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -64,7 +64,7 @@ void NetworkSender::sendCreateReward(size_t id, float pos_x, float pos_y) {
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendCreateBonus(char type, size_t id, float pos_x, float pos_y) {
+void NetworkSender::sendCreateBonus(char type, int id, float pos_x, float pos_y) {
     std::array<char, 13> data{};
     data[0] = type;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -73,14 +73,14 @@ void NetworkSender::sendCreateBonus(char type, size_t id, float pos_x, float pos
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendDeleteEntity(size_t id) {
+void NetworkSender::sendDeleteEntity(int id) {
     std::array<char, 5> data{};
     data[0] = 0x29;
     std::memcpy(&data[1], &id, sizeof(int));
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendPositionUpdate(size_t id, float pos_x, float pos_y) {
+void NetworkSender::sendPositionUpdate(int id, float pos_x, float pos_y) {
     std::array<char, 13> data{};
     data[0] = 0x30;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -89,7 +89,7 @@ void NetworkSender::sendPositionUpdate(size_t id, float pos_x, float pos_y) {
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendHealthUpdate(size_t id, size_t hp) {
+void NetworkSender::sendHealthUpdate(int id, int hp) {
     std::array<char, 9> data{};
     data[0] = 0x31;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -97,7 +97,7 @@ void NetworkSender::sendHealthUpdate(size_t id, size_t hp) {
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendProjectilColision(size_t id_projectil, size_t id_entity) {
+void NetworkSender::sendProjectilColision(int id_projectil, int id_entity) {
     std::array<char, 9> data{};
     data[0] = 0x35;
     std::memcpy(&data[1], &id_projectil, sizeof(id_projectil));
