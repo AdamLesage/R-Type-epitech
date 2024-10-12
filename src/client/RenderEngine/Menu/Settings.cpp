@@ -157,7 +157,9 @@ void Settings::changeKey(std::string key) {
     }
     newKey += newKey2;
     menuOptions[selectedOption].setString(newKey);
-    newKey.substr(0, 11);
+    std::string tmpKey = newKey;
+    newKey.clear();
+    newKey = tmpKey.substr(0, 11);
     set_key_value(cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(), newKey2.c_str());
     try {
         cfg.writeFile(configPath.c_str());
