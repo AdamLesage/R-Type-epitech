@@ -1,0 +1,10 @@
+<map id="src/client/NetworkEngine/IClient.hpp" name="src/client/NetworkEngine/IClient.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,189,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="108,167,167,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,47,62,63,51,81,45,99,49,117,70,142,97,159,94,164,66,146,44,120,40,99,46,78,58,60,73,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="59,93,136,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="100,46,100,79,95,79,95,46"/>
+<area shape="rect" id="Node000004" href="$IMediator_8hpp.html" title=" " alt="" coords="161,93,346,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="136,43,219,85,217,89,134,48"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="236,121,169,162,167,157,233,116"/>
+</map>

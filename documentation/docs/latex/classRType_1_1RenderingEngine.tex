@@ -1,0 +1,218 @@
+\doxysection{RType\+::Rendering\+Engine Class Reference}
+\hypertarget{classRType_1_1RenderingEngine}{}\label{classRType_1_1RenderingEngine}\index{RType::RenderingEngine@{RType::RenderingEngine}}
+
+
+{\ttfamily \#include $<$Rendering\+Engine.\+hpp$>$}
+
+
+
+Inheritance diagram for RType\+::Rendering\+Engine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classRType_1_1RenderingEngine__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for RType\+::Rendering\+Engine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=274pt]{classRType_1_1RenderingEngine__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1RenderingEngine_a52d4204cad8b014be9dd98b5cbf673d9}{Rendering\+Engine}} ()
+\item 
+void \mbox{\hyperlink{classRType_1_1RenderingEngine_a3564e7658de04f52ff11c04c096b4a2e}{run}} () override
+\begin{DoxyCompactList}\small\item\em Run current instance of the engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1RenderingEngine_a7e6b5d1c4de648ab3266eac41d9a6328}{set\+Camera}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ \&\mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}})
+\begin{DoxyCompactList}\small\item\em Set the camera of the game. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1RenderingEngine_a8557934de657fe865ce9fdbd07f3f721}{set\+Mediator}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator) override
+\begin{DoxyCompactList}\small\item\em Set the mediator of the engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1RenderingEngine_a50ab4397bf6ada4f69328c5a81d813dd}{set\+Mutex}} (std\+::shared\+\_\+ptr$<$ std\+::mutex $>$ mutex)
+\begin{DoxyCompactList}\small\item\em Set the mutex. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1RenderingEngine_ac0568e01eae9feecb4b5a4055839a9d7}{\texorpdfstring{$\sim$}{\string~}\+Rendering\+Engine}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1AEngine}{RType\+::\+AEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_ad9170d8096a08f20f5f1fb16563aae35}{AEngine}} ()=default
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_a1c1bf96c081fbdcc94c08215ea3e9915}{AEngine}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator)
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_abe04c83551ef423bc1f70c3947eb9dea}{\texorpdfstring{$\sim$}{\string~}\+AEngine}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1IEngine}{RType\+::\+IEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classRType_1_1IEngine_ae6e489807eebe1f9f8c9a58ef23c75a9}{\texorpdfstring{$\sim$}{\string~}\+IEngine}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ \mbox{\hyperlink{classRType_1_1RenderingEngine_a7a456c6b8c1db7caa6b8097fec95d940}{\+\_\+camera}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1Menu}{Menu}} $>$ \mbox{\hyperlink{classRType_1_1RenderingEngine_a366543d36b58c8b74d1d9efaec1ad82c}{\+\_\+menu}}
+\item 
+std\+::shared\+\_\+ptr$<$ std\+::mutex $>$ \mbox{\hyperlink{classRType_1_1RenderingEngine_a096077c72a536af7f0fe043d9938c007}{\+\_\+mutex}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1Game}{Game}} $>$ \mbox{\hyperlink{classRType_1_1RenderingEngine_ab4fec2543aa357b26a925de0e2f86c65}{games}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1Lobby}{Lobby}} $>$ \mbox{\hyperlink{classRType_1_1RenderingEngine_af2caa9d3149079e6492da45b92435d99}{lobby}}
+\item 
+\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \mbox{\hyperlink{classRType_1_1RenderingEngine_a2831a900a1345baf18bc8a56fe0a08d9}{logger}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classSettings}{Settings}} $>$ \mbox{\hyperlink{classRType_1_1RenderingEngine_a3adc84a9d36e9293a5e6a4485e985de1}{settings}}
+\item 
+std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$ \mbox{\hyperlink{classRType_1_1RenderingEngine_a85b0a813c7a814457257402987000b87}{window}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classRType_1_1AEngine}{RType\+::\+AEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ \mbox{\hyperlink{classRType_1_1AEngine_a21ce6a304197b6980c0cfc6b2a0327f5}{\+\_\+mediator}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1RenderingEngine_a52d4204cad8b014be9dd98b5cbf673d9}\label{classRType_1_1RenderingEngine_a52d4204cad8b014be9dd98b5cbf673d9} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!RenderingEngine@{RenderingEngine}}
+\index{RenderingEngine@{RenderingEngine}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{RenderingEngine()}{RenderingEngine()}}
+{\footnotesize\ttfamily RType\+::\+Rendering\+Engine\+::\+Rendering\+Engine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{classRType_1_1RenderingEngine_ac0568e01eae9feecb4b5a4055839a9d7}\label{classRType_1_1RenderingEngine_ac0568e01eae9feecb4b5a4055839a9d7} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!````~RenderingEngine@{\texorpdfstring{$\sim$}{\string~}RenderingEngine}}
+\index{````~RenderingEngine@{\texorpdfstring{$\sim$}{\string~}RenderingEngine}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}RenderingEngine()}{\string~RenderingEngine()}}
+{\footnotesize\ttfamily RType\+::\+Rendering\+Engine\+::\texorpdfstring{$\sim$}{\string~}\+Rendering\+Engine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1RenderingEngine_a3564e7658de04f52ff11c04c096b4a2e}\label{classRType_1_1RenderingEngine_a3564e7658de04f52ff11c04c096b4a2e} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!run@{run}}
+\index{run@{run}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily void RType\+::\+Rendering\+Engine\+::run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Run current instance of the engine. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classRType_1_1AEngine_a563ab86b6c77395ee4e145eda107e098}{RType\+::\+AEngine}}.
+
+\Hypertarget{classRType_1_1RenderingEngine_a7e6b5d1c4de648ab3266eac41d9a6328}\label{classRType_1_1RenderingEngine_a7e6b5d1c4de648ab3266eac41d9a6328} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!setCamera@{setCamera}}
+\index{setCamera@{setCamera}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{setCamera()}{setCamera()}}
+{\footnotesize\ttfamily void RType\+::\+Rendering\+Engine\+::set\+Camera (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ \&}]{Camera }\end{DoxyParamCaption})}
+
+
+
+Set the camera of the game. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Camera} & the Camera to set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1RenderingEngine_a8557934de657fe865ce9fdbd07f3f721}\label{classRType_1_1RenderingEngine_a8557934de657fe865ce9fdbd07f3f721} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!setMediator@{setMediator}}
+\index{setMediator@{setMediator}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{setMediator()}{setMediator()}}
+{\footnotesize\ttfamily void RType\+::\+Rendering\+Engine\+::set\+Mediator (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$}]{mediator }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the mediator of the engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mediator} & The mediator to set. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classRType_1_1AEngine_a50753867e2ec1b0942aa2d43195baa17}{RType\+::\+AEngine}}.
+
+\Hypertarget{classRType_1_1RenderingEngine_a50ab4397bf6ada4f69328c5a81d813dd}\label{classRType_1_1RenderingEngine_a50ab4397bf6ada4f69328c5a81d813dd} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!setMutex@{setMutex}}
+\index{setMutex@{setMutex}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{setMutex()}{setMutex()}}
+{\footnotesize\ttfamily void RType\+::\+Rendering\+Engine\+::set\+Mutex (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ std\+::mutex $>$}]{mutex }\end{DoxyParamCaption})}
+
+
+
+Set the mutex. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & the mutex to set \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1RenderingEngine_a7a456c6b8c1db7caa6b8097fec95d940}\label{classRType_1_1RenderingEngine_a7a456c6b8c1db7caa6b8097fec95d940} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!\_camera@{\_camera}}
+\index{\_camera@{\_camera}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{\_camera}{\_camera}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}}$>$ RType\+::\+Rendering\+Engine\+::\+\_\+camera\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderingEngine_a366543d36b58c8b74d1d9efaec1ad82c}\label{classRType_1_1RenderingEngine_a366543d36b58c8b74d1d9efaec1ad82c} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!\_menu@{\_menu}}
+\index{\_menu@{\_menu}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{\_menu}{\_menu}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1Menu}{Menu}}$>$ RType\+::\+Rendering\+Engine\+::\+\_\+menu\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderingEngine_a096077c72a536af7f0fe043d9938c007}\label{classRType_1_1RenderingEngine_a096077c72a536af7f0fe043d9938c007} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!\_mutex@{\_mutex}}
+\index{\_mutex@{\_mutex}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{\_mutex}{\_mutex}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$std\+::mutex$>$ RType\+::\+Rendering\+Engine\+::\+\_\+mutex\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderingEngine_ab4fec2543aa357b26a925de0e2f86c65}\label{classRType_1_1RenderingEngine_ab4fec2543aa357b26a925de0e2f86c65} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!games@{games}}
+\index{games@{games}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{games}{games}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1Game}{Game}}$>$ RType\+::\+Rendering\+Engine\+::games\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderingEngine_af2caa9d3149079e6492da45b92435d99}\label{classRType_1_1RenderingEngine_af2caa9d3149079e6492da45b92435d99} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!lobby@{lobby}}
+\index{lobby@{lobby}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{lobby}{lobby}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1Lobby}{Lobby}}$>$ RType\+::\+Rendering\+Engine\+::lobby\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderingEngine_a2831a900a1345baf18bc8a56fe0a08d9}\label{classRType_1_1RenderingEngine_a2831a900a1345baf18bc8a56fe0a08d9} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!logger@{logger}}
+\index{logger@{logger}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{logger}{logger}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} RType\+::\+Rendering\+Engine\+::logger\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderingEngine_a3adc84a9d36e9293a5e6a4485e985de1}\label{classRType_1_1RenderingEngine_a3adc84a9d36e9293a5e6a4485e985de1} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!settings@{settings}}
+\index{settings@{settings}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{settings}{settings}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classSettings}{Settings}}$>$ RType\+::\+Rendering\+Engine\+::settings\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderingEngine_a85b0a813c7a814457257402987000b87}\label{classRType_1_1RenderingEngine_a85b0a813c7a814457257402987000b87} 
+\index{RType::RenderingEngine@{RType::RenderingEngine}!window@{window}}
+\index{window@{window}!RType::RenderingEngine@{RType::RenderingEngine}}
+\doxysubsubsection{\texorpdfstring{window}{window}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$sf\+::\+Render\+Window$>$ RType\+::\+Rendering\+Engine\+::window\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Render\+Engine/\mbox{\hyperlink{RenderingEngine_8hpp}{Rendering\+Engine.\+hpp}}\item 
+src/client/\+Render\+Engine/\mbox{\hyperlink{RenderingEngine_8cpp}{Rendering\+Engine.\+cpp}}\end{DoxyCompactItemize}

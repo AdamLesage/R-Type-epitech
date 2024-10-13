@@ -1,0 +1,28 @@
+var classSystems =
+[
+    [ "check_borders_collisions", "classSystems.html#a1347863e13fb7877cb47d73545125639", null ],
+    [ "check_entities_collisions", "classSystems.html#aed75ccedfe0706436bd161f5c94c3162", null ],
+    [ "collision_system", "classSystems.html#a9fd5e7c4746285e015c83fe6b8578e08", null ],
+    [ "collision_system", "classSystems.html#a36b7e556b1a5277b0e0afd3dd0d37757", null ],
+    [ "control_system", "classSystems.html#a3610e24c0863c6b59f66393174811685", null ],
+    [ "control_system", "classSystems.html#a9208400eaa9881a3ad7e3e8d7639cf1e", null ],
+    [ "death_system", "classSystems.html#ae5f687a91108acc210db906c10afd248", null ],
+    [ "direction_system", "classSystems.html#a001a6064ddcf6bc06b4ea136beb5addf", null ],
+    [ "draw_system", "classSystems.html#a4b1e12820a116b1fd1aad5a131871afe", null ],
+    [ "draw_system", "classSystems.html#a024418f680bed2146fd5da3eaa3081c1", null ],
+    [ "find_closest_player", "classSystems.html#acd14cffb2b6b579cf461f7a078886a70", null ],
+    [ "health_system", "classSystems.html#a34c12cc97287c7fe1b0d5ac48896f07e", null ],
+    [ "logging_system", "classSystems.html#a7406833bdf06fcf4d06a42303e9ed0c7", null ],
+    [ "player_following_pattern_system", "classSystems.html#ae4da57e750620f8b91f41f26063c5f57", null ],
+    [ "position_system", "classSystems.html#aaa2d87ef6b2d62277ea94b2814ddccfe", null ],
+    [ "position_system", "classSystems.html#a775197fd612072c1259eda4f5c1f3670", null ],
+    [ "read_scores_file", "classSystems.html#ac82e6ceedbce2fe2092fe8a4c041ed3b", null ],
+    [ "score_system", "classSystems.html#a47618fb35cede5ad08488080aabeef2e", null ],
+    [ "shoot_player_pattern_system", "classSystems.html#ae8e503be3a1136a85762f7fea4472981", null ],
+    [ "shoot_straight_pattern_system", "classSystems.html#a9976dac12dd12c4fda9da8fccb7c38ec", null ],
+    [ "shoot_system", "classSystems.html#a7505bc2f8ce971dc2232c9973d653caa", null ],
+    [ "Straight_line_pattern_system", "classSystems.html#ad04861719062fb00cf4548ed3b766c4c", null ],
+    [ "update_scores", "classSystems.html#a59a7aadf30c7a592489d0120950a16e8", null ],
+    [ "wave_pattern_system", "classSystems.html#a6b747a9200cc2b1d588be196f029ef20", null ],
+    [ "write_to_scores_file", "classSystems.html#a9934da042f123d154eb1dac2d89c5659", null ]
+];

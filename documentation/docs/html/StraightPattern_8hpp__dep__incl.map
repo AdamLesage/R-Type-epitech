@@ -1,0 +1,13 @@
+<map id="src/shared/components/StraightPattern.hpp" name="src/shared/components/StraightPattern.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="209,5,382,45"/>
+<area shape="rect" id="Node000002" href="$server_2systems_2Systems_8hpp.html" title=" " alt="" coords="223,93,368,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="298,59,298,93,293,93,293,59"/>
+<area shape="rect" id="Node000003" href="$GameLogique_8hpp.html" title=" " alt="" coords="112,181,292,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="266,145,224,183,221,179,263,141"/>
+<area shape="rect" id="Node000006" href="$server_2systems_2Systems_8cpp.html" title=" " alt="" coords="316,181,461,221"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="328,141,370,179,366,183,324,145"/>
+<area shape="rect" id="Node000004" href="$GameLogique_8cpp.html" title=" " alt="" coords="5,269,185,309"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="169,232,121,271,117,267,166,228"/>
+<area shape="rect" id="Node000005" href="$main__server_8cpp.html" title=" " alt="" coords="210,277,407,302"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="238,228,296,274,292,278,235,232"/>
+</map>

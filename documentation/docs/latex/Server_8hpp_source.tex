@@ -1,0 +1,81 @@
+\doxysection{Server.\+hpp}
+\hypertarget{Server_8hpp_source}{}\label{Server_8hpp_source}\index{src/server/network/Server.hpp@{src/server/network/Server.hpp}}
+\mbox{\hyperlink{Server_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Server}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ Server\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ Server\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Constants_8hpp}{../../shared/network/Constants.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{LockedQueue_8hpp}{../../shared/network/LockedQueue.hpp}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IServer_8hpp}{IServer.hpp}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <boost/asio.hpp>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <shared\_mutex>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceNetworkLib}{NetworkLib}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNetworkLib_1_1Server}{Server}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classNetworkLib_1_1IServer}{IServer}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classNetworkLib_1_1Server_ad657b232e8c6660722b96244ac520d72}{Server}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ local\_port);}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a7059e5a11fc25d4cda2dd9fb63e64a9d}{\string~Server}}();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a0d2ee751a46b553413f7e379a0eb84ee}{hasMessages}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<std::string,\ uint32\_t>\ \mbox{\hyperlink{classNetworkLib_1_1Server_a93ce18bc28a39b5ad433a4bc6e60b4af}{popMessage}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a96c2446a41b26797549dd60a99da76c6}{sendToClient}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message,\ \textcolor{keywordtype}{size\_t}\ size,\ uint32\_t\ clientID)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a6d1c608fcfa9e210f935d0b847fb2876}{sendToAll}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message,\ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNetworkLib_1_1Server_ac8510127828867b407a0ec105a6d8c21}{getClientCount}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{classNetworkLib_1_1Server_a803a38791ee912988a5ea0a3cdb6044a}{getClientIdByIndex}}(\textcolor{keywordtype}{size\_t}\ index)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::function<void(uint32\_t)>>\ \mbox{\hyperlink{classNetworkLib_1_1Server_acee121499deaabd39822b0e2a3110316}{clientDisconnectedHandlers}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::io\_service\ \mbox{\hyperlink{classNetworkLib_1_1Server_acf7643a8547871b3db564d3055f54b96}{io\_service}};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::ip::udp::socket\ \mbox{\hyperlink{classNetworkLib_1_1Server_a2cc5e8c3f6ce5bc235d7542c9dbcc1d5}{socket}};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::ip::udp::endpoint\ \mbox{\hyperlink{classNetworkLib_1_1Server_ad563a5ab04f68fc47f7ffe6ac7466bd5}{server\_endpoint}};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::ip::udp::endpoint\ \mbox{\hyperlink{classNetworkLib_1_1Server_a3cb582a61a381e6621c8e6b471cbbe8f}{\_remote\_endpoint}};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ std::array<char,\ NetworkBufferSize>\ \mbox{\hyperlink{classNetworkLib_1_1Server_acb52a8816d4a74131f03ba3a3e9a912a}{recv\_buffer}};}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ std::thread\ \mbox{\hyperlink{classNetworkLib_1_1Server_ab564931593779afb4956f0cd5feefa52}{service\_thread}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a91f52319048855efc639522f2e32df62}{start\_receive}}();}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a15ab981427933f3c6a1b37eb3e840964}{handle\_remote\_error}}(\textcolor{keyword}{const}\ boost::asio::ip::udp::endpoint\ remote\_endpoint);}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a07c241f561accad7ff9ef946b81fb948}{handle\_receive}}(\textcolor{keyword}{const}\ std::error\_code\&\ error,\ std::size\_t\ bytes\_transferred);}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a280e177a6ceae88029290d7f7ee5d1b7}{handle\_send}}(std::string\ \textcolor{comment}{/*message*/},}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::error\_code\&\ \textcolor{comment}{/*error*/},}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ \textcolor{comment}{/*bytes\_transferred*/})\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_aa10cdd2e5eb9c59bb66bb0f35fed0f7a}{run\_service}}();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Client\ management}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ \mbox{\hyperlink{classNetworkLib_1_1Server_ac4565e4aa0002d99461a8d6f427cc762}{get\_or\_create\_client\_id}}(boost::asio::ip::udp::endpoint\ endpoint);}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a9fb1d6705fcb55421a4ec29b7e51b0d0}{on\_client\_disconnected}}(int32\_t\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a061128b775e0d4a007a7fbb129f93b1c}{send}}(std::vector<char>\ message,\ boost::asio::ip::udp::endpoint\ target\_endpoint);}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Server_a061128b775e0d4a007a7fbb129f93b1c}{send}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message,\ \textcolor{keywordtype}{size\_t}\ size,\ boost::asio::ip::udp::endpoint\ target\_endpoint);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Incoming\ messages\ queue}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{LockedQueue<std::pair<std::string,\ uint32\_t>}}>\ \mbox{\hyperlink{classNetworkLib_1_1Server_a880e0485ae60a209b6009c6647f67e2f}{incomingMessages}};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clients\ of\ the\ server}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ std::map<uint32\_t,\ boost::asio::ip::udp::endpoint>\ \mbox{\hyperlink{classNetworkLib_1_1Server_adad828b1edc2162cc43793317da2e869}{clients}};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ int32\_t\ \mbox{\hyperlink{classNetworkLib_1_1Server_a56c1f8a6e5a071725e3bf866cdf21e81}{nextClientID}};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_mutex\ \mbox{\hyperlink{classNetworkLib_1_1Server_aa611ffb4506e12794ff252b97f30ab71}{mtx}};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classNetworkLib_1_1Server_ac1ac7b3851d6ec49ab27f2daceac28e7}{packetToSend}};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1Server_a7426a1188961e43c5caa6364509fde2c}{Server}}(\mbox{\hyperlink{classNetworkLib_1_1Server}{Server}}\&);}
+\DoxyCodeLine{00072\ \ \ \ \ \};}
+\DoxyCodeLine{00073\ \}\ \textcolor{comment}{//\ namespace\ NetworkLib}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,261 @@
+\doxysection{Settings Class Reference}
+\hypertarget{classSettings}{}\label{classSettings}\index{Settings@{Settings}}
+
+
+{\ttfamily \#include $<$Settings.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classSettings_a51f61ad13488ef94e97031fecc4f0151}{change\+Key}} (std\+::string key)
+\begin{DoxyCompactList}\small\item\em Changes the key of the selected option. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSettings_a68b10616575fe42789e404cb0d9c6f38}{display}} ()
+\begin{DoxyCompactList}\small\item\em Displays the settings. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSettings_a6f3a774f2d06e9e058612e009d0e9c17}{display\+Settings}} (bool ingame)
+\begin{DoxyCompactList}\small\item\em Displays the settings. \end{DoxyCompactList}\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classSettings_ae716045a68bde0c2fb8efccf85dcdc49}{get\+\_\+key\+\_\+value}} (libconfig\+::\+Config \&cfg, const char \texorpdfstring{$\ast$}{*}key\+\_\+name)
+\begin{DoxyCompactList}\small\item\em get the value of a key from the cfg file \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classSettings_a93feaf64c533f6b34456f0a575514add}{get\+Selected\+Option}} () const
+\begin{DoxyCompactList}\small\item\em Get the selected option. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSettings_afe55def75057cd7438d0d13d45934bcf}{move\+Down}} ()
+\begin{DoxyCompactList}\small\item\em Moves the selection down. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSettings_a1a665e8ef8d2b22767ffc0cd7fb68f40}{move\+Up}} ()
+\begin{DoxyCompactList}\small\item\em Moves the selection up. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classSettings_a0fd7533f47ccece5db5a7c148f933be2}{set\+\_\+key\+\_\+value}} (libconfig\+::\+Config \&cfg, const char \texorpdfstring{$\ast$}{*}key\+\_\+name, const char \texorpdfstring{$\ast$}{*}new\+\_\+value)
+\begin{DoxyCompactList}\small\item\em get the value of a key from the cfg file \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSettings_a8e077c4f55ea52bb8b0b396bde409daf}{Settings}} (std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$ \+\_\+window)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classSettings}{Settings} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSettings_a4a65be5921dfc9fddc476e5320541d89}{\texorpdfstring{$\sim$}{\string~}\+Settings}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \doxylink{classSettings}{Settings} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+sf\+::\+Rectangle\+Shape \mbox{\hyperlink{classSettings_a805877afb7409a3e6c0f9677d4c9589b}{background}}
+\item 
+sf\+::\+Texture \mbox{\hyperlink{classSettings_aeecbb64e7cd675cea8745147c873beb4}{background\+Texture}}
+\item 
+sf\+::\+Event \mbox{\hyperlink{classSettings_a2b8c81e60ba5e937a316240d8c3abc6e}{event}}
+\item 
+sf\+::\+Font \mbox{\hyperlink{classSettings_a27411dcc1281904bf83e9f3930bf9be1}{font}}
+\item 
+sf\+::\+Sprite \mbox{\hyperlink{classSettings_a0246ec374cc9d2d83f33144b89da3dbe}{logo\+Sprite}}
+\item 
+sf\+::\+Texture \mbox{\hyperlink{classSettings_a9746901ddb2b6d7a1040b1800aeaadae}{logo\+Texture}}
+\item 
+sf\+::\+Text \mbox{\hyperlink{classSettings_ace9228bbbf6372c2c6a9ccb17b6ddf59}{menu\+Options}} \mbox{[}7\mbox{]}
+\item 
+int \mbox{\hyperlink{classSettings_ae2d2223755a6f562513d2fbab9c50431}{selected\+Option}}
+\item 
+sf\+::\+Sound \mbox{\hyperlink{classSettings_a3508d090736fe83e3a3129812c62a245}{select\+Sound}}
+\item 
+std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$ \mbox{\hyperlink{classSettings_a45294dfea16ac0d10a14f33b43fc59d6}{window}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classSettings_a8e077c4f55ea52bb8b0b396bde409daf}\label{classSettings_a8e077c4f55ea52bb8b0b396bde409daf} 
+\index{Settings@{Settings}!Settings@{Settings}}
+\index{Settings@{Settings}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{Settings()}{Settings()}}
+{\footnotesize\ttfamily Settings\+::\+Settings (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$}]{\+\_\+window }\end{DoxyParamCaption})}
+
+
+
+Construct a new \doxylink{classSettings}{Settings} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+window} & The window to display the settings on. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSettings_a4a65be5921dfc9fddc476e5320541d89}\label{classSettings_a4a65be5921dfc9fddc476e5320541d89} 
+\index{Settings@{Settings}!````~Settings@{\texorpdfstring{$\sim$}{\string~}Settings}}
+\index{````~Settings@{\texorpdfstring{$\sim$}{\string~}Settings}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Settings()}{\string~Settings()}}
+{\footnotesize\ttfamily Settings\+::\texorpdfstring{$\sim$}{\string~}\+Settings (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destroy the \doxylink{classSettings}{Settings} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classSettings_a51f61ad13488ef94e97031fecc4f0151}\label{classSettings_a51f61ad13488ef94e97031fecc4f0151} 
+\index{Settings@{Settings}!changeKey@{changeKey}}
+\index{changeKey@{changeKey}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{changeKey()}{changeKey()}}
+{\footnotesize\ttfamily void Settings\+::change\+Key (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})}
+
+
+
+Changes the key of the selected option. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The new key. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSettings_a68b10616575fe42789e404cb0d9c6f38}\label{classSettings_a68b10616575fe42789e404cb0d9c6f38} 
+\index{Settings@{Settings}!display@{display}}
+\index{display@{display}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{display()}{display()}}
+{\footnotesize\ttfamily void Settings\+::display (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the settings. 
+
+\Hypertarget{classSettings_a6f3a774f2d06e9e058612e009d0e9c17}\label{classSettings_a6f3a774f2d06e9e058612e009d0e9c17} 
+\index{Settings@{Settings}!displaySettings@{displaySettings}}
+\index{displaySettings@{displaySettings}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{displaySettings()}{displaySettings()}}
+{\footnotesize\ttfamily void Settings\+::display\+Settings (\begin{DoxyParamCaption}\item[{bool}]{ingame }\end{DoxyParamCaption})}
+
+
+
+Displays the settings. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em if} & the bool is true it means that we are in a game \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSettings_ae716045a68bde0c2fb8efccf85dcdc49}\label{classSettings_ae716045a68bde0c2fb8efccf85dcdc49} 
+\index{Settings@{Settings}!get\_key\_value@{get\_key\_value}}
+\index{get\_key\_value@{get\_key\_value}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{get\_key\_value()}{get\_key\_value()}}
+{\footnotesize\ttfamily const char \texorpdfstring{$\ast$}{*} Settings\+::get\+\_\+key\+\_\+value (\begin{DoxyParamCaption}\item[{libconfig\+::\+Config \&}]{cfg,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{key\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+get the value of a key from the cfg file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & libconfig \\
+\hline
+{\em key\+\_\+name} & name of the key needed \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSettings_a93feaf64c533f6b34456f0a575514add}\label{classSettings_a93feaf64c533f6b34456f0a575514add} 
+\index{Settings@{Settings}!getSelectedOption@{getSelectedOption}}
+\index{getSelectedOption@{getSelectedOption}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{getSelectedOption()}{getSelectedOption()}}
+{\footnotesize\ttfamily int Settings\+::get\+Selected\+Option (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the selected option. 
+
+\begin{DoxyReturn}{Returns}
+int The selected option. 
+\end{DoxyReturn}
+\Hypertarget{classSettings_afe55def75057cd7438d0d13d45934bcf}\label{classSettings_afe55def75057cd7438d0d13d45934bcf} 
+\index{Settings@{Settings}!moveDown@{moveDown}}
+\index{moveDown@{moveDown}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{moveDown()}{moveDown()}}
+{\footnotesize\ttfamily void Settings\+::move\+Down (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Moves the selection down. 
+
+\Hypertarget{classSettings_a1a665e8ef8d2b22767ffc0cd7fb68f40}\label{classSettings_a1a665e8ef8d2b22767ffc0cd7fb68f40} 
+\index{Settings@{Settings}!moveUp@{moveUp}}
+\index{moveUp@{moveUp}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{moveUp()}{moveUp()}}
+{\footnotesize\ttfamily void Settings\+::move\+Up (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Moves the selection up. 
+
+\Hypertarget{classSettings_a0fd7533f47ccece5db5a7c148f933be2}\label{classSettings_a0fd7533f47ccece5db5a7c148f933be2} 
+\index{Settings@{Settings}!set\_key\_value@{set\_key\_value}}
+\index{set\_key\_value@{set\_key\_value}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{set\_key\_value()}{set\_key\_value()}}
+{\footnotesize\ttfamily int Settings\+::set\+\_\+key\+\_\+value (\begin{DoxyParamCaption}\item[{libconfig\+::\+Config \&}]{cfg,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{key\+\_\+name,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+value }\end{DoxyParamCaption})}
+
+
+
+get the value of a key from the cfg file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & libconfig \\
+\hline
+{\em key\+\_\+name} & name of the key to change \\
+\hline
+{\em new\+\_\+value} & new value for the key \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classSettings_a805877afb7409a3e6c0f9677d4c9589b}\label{classSettings_a805877afb7409a3e6c0f9677d4c9589b} 
+\index{Settings@{Settings}!background@{background}}
+\index{background@{background}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{background}{background}}
+{\footnotesize\ttfamily sf\+::\+Rectangle\+Shape Settings\+::background\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_aeecbb64e7cd675cea8745147c873beb4}\label{classSettings_aeecbb64e7cd675cea8745147c873beb4} 
+\index{Settings@{Settings}!backgroundTexture@{backgroundTexture}}
+\index{backgroundTexture@{backgroundTexture}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{backgroundTexture}{backgroundTexture}}
+{\footnotesize\ttfamily sf\+::\+Texture Settings\+::background\+Texture\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_a2b8c81e60ba5e937a316240d8c3abc6e}\label{classSettings_a2b8c81e60ba5e937a316240d8c3abc6e} 
+\index{Settings@{Settings}!event@{event}}
+\index{event@{event}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{event}{event}}
+{\footnotesize\ttfamily sf\+::\+Event Settings\+::event\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_a27411dcc1281904bf83e9f3930bf9be1}\label{classSettings_a27411dcc1281904bf83e9f3930bf9be1} 
+\index{Settings@{Settings}!font@{font}}
+\index{font@{font}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{font}{font}}
+{\footnotesize\ttfamily sf\+::\+Font Settings\+::font\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_a0246ec374cc9d2d83f33144b89da3dbe}\label{classSettings_a0246ec374cc9d2d83f33144b89da3dbe} 
+\index{Settings@{Settings}!logoSprite@{logoSprite}}
+\index{logoSprite@{logoSprite}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{logoSprite}{logoSprite}}
+{\footnotesize\ttfamily sf\+::\+Sprite Settings\+::logo\+Sprite\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_a9746901ddb2b6d7a1040b1800aeaadae}\label{classSettings_a9746901ddb2b6d7a1040b1800aeaadae} 
+\index{Settings@{Settings}!logoTexture@{logoTexture}}
+\index{logoTexture@{logoTexture}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{logoTexture}{logoTexture}}
+{\footnotesize\ttfamily sf\+::\+Texture Settings\+::logo\+Texture\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_ace9228bbbf6372c2c6a9ccb17b6ddf59}\label{classSettings_ace9228bbbf6372c2c6a9ccb17b6ddf59} 
+\index{Settings@{Settings}!menuOptions@{menuOptions}}
+\index{menuOptions@{menuOptions}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{menuOptions}{menuOptions}}
+{\footnotesize\ttfamily sf\+::\+Text Settings\+::menu\+Options\mbox{[}7\mbox{]}\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_ae2d2223755a6f562513d2fbab9c50431}\label{classSettings_ae2d2223755a6f562513d2fbab9c50431} 
+\index{Settings@{Settings}!selectedOption@{selectedOption}}
+\index{selectedOption@{selectedOption}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{selectedOption}{selectedOption}}
+{\footnotesize\ttfamily int Settings\+::selected\+Option\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_a3508d090736fe83e3a3129812c62a245}\label{classSettings_a3508d090736fe83e3a3129812c62a245} 
+\index{Settings@{Settings}!selectSound@{selectSound}}
+\index{selectSound@{selectSound}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{selectSound}{selectSound}}
+{\footnotesize\ttfamily sf\+::\+Sound Settings\+::select\+Sound\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classSettings_a45294dfea16ac0d10a14f33b43fc59d6}\label{classSettings_a45294dfea16ac0d10a14f33b43fc59d6} 
+\index{Settings@{Settings}!window@{window}}
+\index{window@{window}!Settings@{Settings}}
+\doxysubsubsection{\texorpdfstring{window}{window}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$sf\+::\+Render\+Window$>$ Settings\+::window\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Render\+Engine/\+Menu/\mbox{\hyperlink{Settings_8hpp}{Settings.\+hpp}}\item 
+src/client/\+Render\+Engine/\+Menu/\mbox{\hyperlink{Settings_8cpp}{Settings.\+cpp}}\end{DoxyCompactItemize}

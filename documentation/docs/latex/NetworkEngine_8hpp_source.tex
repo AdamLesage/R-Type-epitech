@@ -1,0 +1,44 @@
+\doxysection{Network\+Engine.\+hpp}
+\hypertarget{NetworkEngine_8hpp_source}{}\label{NetworkEngine_8hpp_source}\index{src/client/NetworkEngine/NetworkEngine.hpp@{src/client/NetworkEngine/NetworkEngine.hpp}}
+\mbox{\hyperlink{NetworkEngine_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ NetworkEngine}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ NETWORKENGINE\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ NETWORKENGINE\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{AEngine_8hpp}{../AEngine.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IMediator_8hpp}{../Mediator/IMediator.hpp}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Client_8hpp}{Client.hpp}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{targetver_8h}{targetver.h}}"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceRType}{RType}}\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRType_1_1NetworkEngine}{NetworkEngine}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classRType_1_1AEngine}{AEngine}}\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1NetworkEngine_a4c27467a533440888682bbad60b38c11}{NetworkEngine}}();}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1NetworkEngine_a4c27467a533440888682bbad60b38c11}{NetworkEngine}}(std::string\ host,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ server\_port,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ local\_port\ =\ 50010);}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1NetworkEngine_aa236ccca53ca0cfac2255bf1aa16b90c}{\string~NetworkEngine}}();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1NetworkEngine_a3d9b3f700aaf9dd2949f38d972f0ae1d}{run}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1NetworkEngine_abb39466e9536cf420329456c5eae2251}{updateData}}();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1NetworkEngine_a225d4ffcbd7059fa15b5b79f2b26ca74}{setMediator}}(std::shared\_ptr<IMediator>\ mediator)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1NetworkEngine_a41dfae31c1e6be06c61e822346e3cb59}{setParams}}(std::string\ host,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ server\_port,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ local\_port);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_ptr<NetworkLib::IClient>}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1NetworkEngine_ae3fae412408e083596ff083722095ea3}{\_client}};\ \textcolor{comment}{//\ Public\ attribute\ to\ be\ able\ to\ access\ it\ from\ Mediator.}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ \ \ \ \ \};}
+\DoxyCodeLine{00048\ \}\ \textcolor{comment}{//\ namespace\ RType}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !NETWORKENGINE\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

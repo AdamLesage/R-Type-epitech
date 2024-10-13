@@ -1,0 +1,70 @@
+\doxysection{Spatial\+Hash Struct Reference}
+\hypertarget{structSpatialHash}{}\label{structSpatialHash}\index{SpatialHash@{SpatialHash}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ size\+\_\+t $>$ \mbox{\hyperlink{structSpatialHash_abae75f36cee9b7a0454e4ee9c5ee1650}{get\+Nearby\+Entities}} (int x, int y) const
+\item 
+int \mbox{\hyperlink{structSpatialHash_a7b4c94bc0f39d481c8894a197936dbd3}{hash}} (int x, int y) const
+\item 
+void \mbox{\hyperlink{structSpatialHash_ada38ccf052b9c19784f93643a801cb74}{insert}} (int x, int y, size\+\_\+t entity\+Index)
+\item 
+\mbox{\hyperlink{structSpatialHash_a1ae9e6b6034065c429f795620f0e9878}{Spatial\+Hash}} (int initial\+Cell\+Size)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{structSpatialHash_a367c1f5254358fe2bc865b4531dc837e}{cell\+Size}}
+\item 
+std\+::unordered\+\_\+map$<$ int, std\+::vector$<$ size\+\_\+t $>$ $>$ \mbox{\hyperlink{structSpatialHash_a4c2a3b5e3078a45090b634f8b8488563}{grid}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structSpatialHash_a1ae9e6b6034065c429f795620f0e9878}\label{structSpatialHash_a1ae9e6b6034065c429f795620f0e9878} 
+\index{SpatialHash@{SpatialHash}!SpatialHash@{SpatialHash}}
+\index{SpatialHash@{SpatialHash}!SpatialHash@{SpatialHash}}
+\doxysubsubsection{\texorpdfstring{SpatialHash()}{SpatialHash()}}
+{\footnotesize\ttfamily Spatial\+Hash\+::\+Spatial\+Hash (\begin{DoxyParamCaption}\item[{int}]{initial\+Cell\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structSpatialHash_abae75f36cee9b7a0454e4ee9c5ee1650}\label{structSpatialHash_abae75f36cee9b7a0454e4ee9c5ee1650} 
+\index{SpatialHash@{SpatialHash}!getNearbyEntities@{getNearbyEntities}}
+\index{getNearbyEntities@{getNearbyEntities}!SpatialHash@{SpatialHash}}
+\doxysubsubsection{\texorpdfstring{getNearbyEntities()}{getNearbyEntities()}}
+{\footnotesize\ttfamily std\+::vector$<$ size\+\_\+t $>$ Spatial\+Hash\+::get\+Nearby\+Entities (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{structSpatialHash_a7b4c94bc0f39d481c8894a197936dbd3}\label{structSpatialHash_a7b4c94bc0f39d481c8894a197936dbd3} 
+\index{SpatialHash@{SpatialHash}!hash@{hash}}
+\index{hash@{hash}!SpatialHash@{SpatialHash}}
+\doxysubsubsection{\texorpdfstring{hash()}{hash()}}
+{\footnotesize\ttfamily int Spatial\+Hash\+::hash (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{structSpatialHash_ada38ccf052b9c19784f93643a801cb74}\label{structSpatialHash_ada38ccf052b9c19784f93643a801cb74} 
+\index{SpatialHash@{SpatialHash}!insert@{insert}}
+\index{insert@{insert}!SpatialHash@{SpatialHash}}
+\doxysubsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily void Spatial\+Hash\+::insert (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{size\+\_\+t}]{entity\+Index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structSpatialHash_a367c1f5254358fe2bc865b4531dc837e}\label{structSpatialHash_a367c1f5254358fe2bc865b4531dc837e} 
+\index{SpatialHash@{SpatialHash}!cellSize@{cellSize}}
+\index{cellSize@{cellSize}!SpatialHash@{SpatialHash}}
+\doxysubsubsection{\texorpdfstring{cellSize}{cellSize}}
+{\footnotesize\ttfamily int Spatial\+Hash\+::cell\+Size}
+
+\Hypertarget{structSpatialHash_a4c2a3b5e3078a45090b634f8b8488563}\label{structSpatialHash_a4c2a3b5e3078a45090b634f8b8488563} 
+\index{SpatialHash@{SpatialHash}!grid@{grid}}
+\index{grid@{grid}!SpatialHash@{SpatialHash}}
+\doxysubsubsection{\texorpdfstring{grid}{grid}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$int, std\+::vector$<$size\+\_\+t$>$ $>$ Spatial\+Hash\+::grid}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/server/systems/\mbox{\hyperlink{server_2systems_2Systems_8cpp}{Systems.\+cpp}}\end{DoxyCompactItemize}

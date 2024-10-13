@@ -1,0 +1,106 @@
+\doxysection{RType\+::Render\+Mediator Class Reference}
+\hypertarget{classRType_1_1RenderMediator}{}\label{classRType_1_1RenderMediator}\index{RType::RenderMediator@{RType::RenderMediator}}
+
+
+{\ttfamily \#include $<$Render\+Mediator.\+hpp$>$}
+
+
+
+Inheritance diagram for RType\+::Render\+Mediator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=209pt]{classRType_1_1RenderMediator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for RType\+::Render\+Mediator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=209pt]{classRType_1_1RenderMediator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classRType_1_1RenderMediator_ae8e6c88cdd8a44724fd733f6c2d86e6a}{notify}} (std\+::string sender, const std\+::string \&event) override
+\begin{DoxyCompactList}\small\item\em Notify the engine of an event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1RenderMediator_a2d180eb88f5f23bbcb2ae22799c36c5e}{Render\+Mediator}} (std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1Menu}{Menu}} $>$ \&menu, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$ rendering\+Engine)
+\item 
+\mbox{\hyperlink{classRType_1_1RenderMediator_a8afdbd085a998359f4ce14f6f90e32ba}{\texorpdfstring{$\sim$}{\string~}\+Render\+Mediator}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1IMediator}{RType\+::\+IMediator}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classRType_1_1IMediator_a25d39086cbc54dc07e6742ebacbf067d}{\texorpdfstring{$\sim$}{\string~}\+IMediator}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1Menu}{Menu}} $>$ \mbox{\hyperlink{classRType_1_1RenderMediator_a61234543d4fa0f9d0e7fcef376329e2b}{\+\_\+menu}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1RenderMediator_a867a5ad7cf5afd0661ab4db2dc80703e}{\+\_\+rendering\+Engine}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1RenderMediator_a2d180eb88f5f23bbcb2ae22799c36c5e}\label{classRType_1_1RenderMediator_a2d180eb88f5f23bbcb2ae22799c36c5e} 
+\index{RType::RenderMediator@{RType::RenderMediator}!RenderMediator@{RenderMediator}}
+\index{RenderMediator@{RenderMediator}!RType::RenderMediator@{RType::RenderMediator}}
+\doxysubsubsection{\texorpdfstring{RenderMediator()}{RenderMediator()}}
+{\footnotesize\ttfamily RType\+::\+Render\+Mediator\+::\+Render\+Mediator (\begin{DoxyParamCaption}\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1Menu}{Menu}} $>$ \&}]{menu,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$}]{rendering\+Engine }\end{DoxyParamCaption})}
+
+\Hypertarget{classRType_1_1RenderMediator_a8afdbd085a998359f4ce14f6f90e32ba}\label{classRType_1_1RenderMediator_a8afdbd085a998359f4ce14f6f90e32ba} 
+\index{RType::RenderMediator@{RType::RenderMediator}!````~RenderMediator@{\texorpdfstring{$\sim$}{\string~}RenderMediator}}
+\index{````~RenderMediator@{\texorpdfstring{$\sim$}{\string~}RenderMediator}!RType::RenderMediator@{RType::RenderMediator}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}RenderMediator()}{\string~RenderMediator()}}
+{\footnotesize\ttfamily RType\+::\+Render\+Mediator\+::\texorpdfstring{$\sim$}{\string~}\+Render\+Mediator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1RenderMediator_ae8e6c88cdd8a44724fd733f6c2d86e6a}\label{classRType_1_1RenderMediator_ae8e6c88cdd8a44724fd733f6c2d86e6a} 
+\index{RType::RenderMediator@{RType::RenderMediator}!notify@{notify}}
+\index{notify@{notify}!RType::RenderMediator@{RType::RenderMediator}}
+\doxysubsubsection{\texorpdfstring{notify()}{notify()}}
+{\footnotesize\ttfamily void RType\+::\+Render\+Mediator\+::notify (\begin{DoxyParamCaption}\item[{std\+::string}]{sender,  }\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Notify the engine of an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classRType_1_1IMediator_afb1ef0fe4ffef3e82b7136ecc0d50bf7}{RType\+::\+IMediator}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1RenderMediator_a61234543d4fa0f9d0e7fcef376329e2b}\label{classRType_1_1RenderMediator_a61234543d4fa0f9d0e7fcef376329e2b} 
+\index{RType::RenderMediator@{RType::RenderMediator}!\_menu@{\_menu}}
+\index{\_menu@{\_menu}!RType::RenderMediator@{RType::RenderMediator}}
+\doxysubsubsection{\texorpdfstring{\_menu}{\_menu}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1Menu}{Menu}}$>$ RType\+::\+Render\+Mediator\+::\+\_\+menu\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1RenderMediator_a867a5ad7cf5afd0661ab4db2dc80703e}\label{classRType_1_1RenderMediator_a867a5ad7cf5afd0661ab4db2dc80703e} 
+\index{RType::RenderMediator@{RType::RenderMediator}!\_renderingEngine@{\_renderingEngine}}
+\index{\_renderingEngine@{\_renderingEngine}!RType::RenderMediator@{RType::RenderMediator}}
+\doxysubsubsection{\texorpdfstring{\_renderingEngine}{\_renderingEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}}$>$ RType\+::\+Render\+Mediator\+::\+\_\+rendering\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Render\+Engine/\mbox{\hyperlink{RenderMediator_8hpp}{Render\+Mediator.\+hpp}}\end{DoxyCompactItemize}

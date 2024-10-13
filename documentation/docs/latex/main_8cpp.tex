@@ -1,0 +1,139 @@
+\doxysection{src/client/main.cpp File Reference}
+\hypertarget{main_8cpp}{}\label{main_8cpp}\index{src/client/main.cpp@{src/client/main.cpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+{\ttfamily \#include $<$mutex$>$}\newline
+{\ttfamily \#include "{}Network\+Engine/\+Network\+Engine.\+hpp"{}}\newline
+{\ttfamily \#include "{}Render\+Engine/\+Rendering\+Engine.\+hpp"{}}\newline
+{\ttfamily \#include "{}Game\+Engine/\+Game\+Engine.\+hpp"{}}\newline
+{\ttfamily \#include "{}Physic\+Engine/\+Physic\+Engine.\+hpp"{}}\newline
+{\ttfamily \#include "{}Audio\+Engine/\+Audio\+Engine.\+hpp"{}}\newline
+{\ttfamily \#include "{}Mediator/\+Mediator.\+hpp"{}}\newline
+{\ttfamily \#include "{}DLloader.\+hpp"{}}\newline
+{\ttfamily \#include "{}../shared/utils/\+Logger.\+hpp"{}}\newline
+{\ttfamily \#include $<$dlfcn.\+h$>$}\newline
+Include dependency graph for main.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a0db2181927a02db5929b5634d971988e}{LIB\+\_\+\+EXTENSION}}~"{}.so"{}
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a256a5721249aa3309437212cc21a9fe4}{PATH\+\_\+\+SEPARATOR}}~"{}/"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8cpp_aa219984c7202c0d64e5237f1b72eb9a7}{error\+Handling}} (int ac, char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}av)
+\item 
+std\+::string \mbox{\hyperlink{main_8cpp_ab162029e1fa07a1cd0684b88a635a8df}{get\+Library\+Path}} (const std\+::string \&lib\+Name)
+\item 
+{\footnotesize template$<$typename Engine\+Type $>$ }\\std\+::shared\+\_\+ptr$<$ Engine\+Type $>$ \mbox{\hyperlink{main_8cpp_a699feed83a082a137a72fa9065c2ccbc}{load\+Engine}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classDLLoader}{DLLoader}} $>$ loader, const std\+::string \&entry\+Point)
+\item 
+int \mbox{\hyperlink{main_8cpp_a0c99d968a34e803d378692bde2e3f18f}{main}} (int ac, char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}av)
+\item 
+void \mbox{\hyperlink{main_8cpp_af4ec31235f1aa34e684716a2747924a0}{run\+Engines}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1GameEngine}{RType\+::\+Game\+Engine}} $>$ game\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{RType\+::\+Network\+Engine}} $>$ network\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{RType\+::\+Rendering\+Engine}} $>$ rendering\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{RType\+::\+Physic\+Engine}} $>$ physic\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{RType\+::\+Audio\+Engine}} $>$ audio\+Engine)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::mutex \mbox{\hyperlink{main_8cpp_a47647be211ee37cfa588b5788a46ab3f}{audio\+Mutex}}
+\item 
+std\+::mutex \mbox{\hyperlink{main_8cpp_a40075ad2607d34aadca35e2737a09d62}{game\+Mutex}}
+\item 
+std\+::mutex \mbox{\hyperlink{main_8cpp_a95a51c006852d3215656803baed696d2}{network\+Mutex}}
+\item 
+std\+::mutex \mbox{\hyperlink{main_8cpp_af11490f045cd3914f3ca2bfdf11bf1e2}{physic\+Mutex}}
+\item 
+std\+::mutex \mbox{\hyperlink{main_8cpp_ae753cc3ee3e456e1b1b59f381fe76241}{rendering\+Mutex}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{main_8cpp_a0db2181927a02db5929b5634d971988e}\label{main_8cpp_a0db2181927a02db5929b5634d971988e} 
+\index{main.cpp@{main.cpp}!LIB\_EXTENSION@{LIB\_EXTENSION}}
+\index{LIB\_EXTENSION@{LIB\_EXTENSION}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{LIB\_EXTENSION}{LIB\_EXTENSION}}
+{\footnotesize\ttfamily \#define LIB\+\_\+\+EXTENSION~"{}.so"{}}
+
+\Hypertarget{main_8cpp_a256a5721249aa3309437212cc21a9fe4}\label{main_8cpp_a256a5721249aa3309437212cc21a9fe4} 
+\index{main.cpp@{main.cpp}!PATH\_SEPARATOR@{PATH\_SEPARATOR}}
+\index{PATH\_SEPARATOR@{PATH\_SEPARATOR}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{PATH\_SEPARATOR}{PATH\_SEPARATOR}}
+{\footnotesize\ttfamily \#define PATH\+\_\+\+SEPARATOR~"{}/"{}}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8cpp_aa219984c7202c0d64e5237f1b72eb9a7}\label{main_8cpp_aa219984c7202c0d64e5237f1b72eb9a7} 
+\index{main.cpp@{main.cpp}!errorHandling@{errorHandling}}
+\index{errorHandling@{errorHandling}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{errorHandling()}{errorHandling()}}
+{\footnotesize\ttfamily void error\+Handling (\begin{DoxyParamCaption}\item[{int}]{ac,  }\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{av }\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_ab162029e1fa07a1cd0684b88a635a8df}\label{main_8cpp_ab162029e1fa07a1cd0684b88a635a8df} 
+\index{main.cpp@{main.cpp}!getLibraryPath@{getLibraryPath}}
+\index{getLibraryPath@{getLibraryPath}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{getLibraryPath()}{getLibraryPath()}}
+{\footnotesize\ttfamily std\+::string get\+Library\+Path (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{lib\+Name }\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a699feed83a082a137a72fa9065c2ccbc}\label{main_8cpp_a699feed83a082a137a72fa9065c2ccbc} 
+\index{main.cpp@{main.cpp}!loadEngine@{loadEngine}}
+\index{loadEngine@{loadEngine}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{loadEngine()}{loadEngine()}}
+{\footnotesize\ttfamily template$<$typename Engine\+Type $>$ \\
+std\+::shared\+\_\+ptr$<$ Engine\+Type $>$ load\+Engine (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classDLLoader}{DLLoader}} $>$}]{loader,  }\item[{const std\+::string \&}]{entry\+Point }\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a0c99d968a34e803d378692bde2e3f18f}\label{main_8cpp_a0c99d968a34e803d378692bde2e3f18f} 
+\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{ac,  }\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{av }\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_af4ec31235f1aa34e684716a2747924a0}\label{main_8cpp_af4ec31235f1aa34e684716a2747924a0} 
+\index{main.cpp@{main.cpp}!runEngines@{runEngines}}
+\index{runEngines@{runEngines}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{runEngines()}{runEngines()}}
+{\footnotesize\ttfamily void run\+Engines (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1GameEngine}{RType\+::\+Game\+Engine}} $>$}]{game\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{RType\+::\+Network\+Engine}} $>$}]{network\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{RType\+::\+Rendering\+Engine}} $>$}]{rendering\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{RType\+::\+Physic\+Engine}} $>$}]{physic\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{RType\+::\+Audio\+Engine}} $>$}]{audio\+Engine }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8cpp_a47647be211ee37cfa588b5788a46ab3f}\label{main_8cpp_a47647be211ee37cfa588b5788a46ab3f} 
+\index{main.cpp@{main.cpp}!audioMutex@{audioMutex}}
+\index{audioMutex@{audioMutex}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{audioMutex}{audioMutex}}
+{\footnotesize\ttfamily std\+::mutex audio\+Mutex}
+
+\Hypertarget{main_8cpp_a40075ad2607d34aadca35e2737a09d62}\label{main_8cpp_a40075ad2607d34aadca35e2737a09d62} 
+\index{main.cpp@{main.cpp}!gameMutex@{gameMutex}}
+\index{gameMutex@{gameMutex}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gameMutex}{gameMutex}}
+{\footnotesize\ttfamily std\+::mutex game\+Mutex}
+
+\Hypertarget{main_8cpp_a95a51c006852d3215656803baed696d2}\label{main_8cpp_a95a51c006852d3215656803baed696d2} 
+\index{main.cpp@{main.cpp}!networkMutex@{networkMutex}}
+\index{networkMutex@{networkMutex}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{networkMutex}{networkMutex}}
+{\footnotesize\ttfamily std\+::mutex network\+Mutex}
+
+\Hypertarget{main_8cpp_af11490f045cd3914f3ca2bfdf11bf1e2}\label{main_8cpp_af11490f045cd3914f3ca2bfdf11bf1e2} 
+\index{main.cpp@{main.cpp}!physicMutex@{physicMutex}}
+\index{physicMutex@{physicMutex}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{physicMutex}{physicMutex}}
+{\footnotesize\ttfamily std\+::mutex physic\+Mutex}
+
+\Hypertarget{main_8cpp_ae753cc3ee3e456e1b1b59f381fe76241}\label{main_8cpp_ae753cc3ee3e456e1b1b59f381fe76241} 
+\index{main.cpp@{main.cpp}!renderingMutex@{renderingMutex}}
+\index{renderingMutex@{renderingMutex}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{renderingMutex}{renderingMutex}}
+{\footnotesize\ttfamily std\+::mutex rendering\+Mutex}
+

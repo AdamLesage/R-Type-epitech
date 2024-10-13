@@ -1,0 +1,64 @@
+# Path to the main page
+INPUT = README.md src/ include/  # Ajoutez les dossiers de votre projet pour inclure le code C++
+RECURSIVE = YES
+
+# Set this to YES to generate documentation for all classes, structs, functions, and more.
+EXTRACT_ALL = YES
+
+# Set to YES to extract private and protected members as well.
+EXTRACT_PRIVATE = YES
+EXTRACT_PROTECTED = YES
+
+# Set to YES to extract static class members.
+EXTRACT_STATIC = YES
+
+# Define the project name
+PROJECT_NAME = "R-Type Epitech"
+
+# Generate HTML documentation
+GENERATE_HTML = YES
+
+# Use the README.md as the main page of the documentation
+USE_MDFILE_AS_MAINPAGE = README.md
+
+# Specify the file types to be included in the documentation
+FILE_PATTERNS = *.c *.cc *.cpp *.cxx *.c++ *.h *.hh *.hpp *.hxx *.h++ *.md *.py *.sh
+
+# Enable grouping of classes and modules
+ENABLE_GROUPS = YES
+
+# Enable class documentation generation and include all details
+OPTIMIZE_OUTPUT_FOR_C = NO
+GENERATE_TREEVIEW = YES
+HAVE_DOT = YES  # Enable this if you want class diagrams (requires Graphviz)
+CLASS_DIAGRAMS = YES
+
+# Generate LaTeX documentation for PDF generation
+GENERATE_LATEX = YES
+PDF_HYPERLINKS = YES  # Enable hyperlinks in the PDF
+USE_PDFLATEX = YES
+
+# Command to generate the PDF file after generating LaTeX files
+GENERATE_LATEXPDF = YES  # Custom option, run pdflatex manually if not supported directly
+
+# Advanced options for better class documentation structure
+SORT_MEMBER_DOCS = YES
+SORT_BRIEF_DOCS = YES
+SORT_BY_SCOPE_NAME = YES
+
+# Enable collaboration diagrams for classes
+CLASS_GRAPH = YES
+COLLABORATION_GRAPH = YES
+
+# Set the output directory (optional)
+OUTPUT_DIRECTORY = docs/
+
+# Enable documentation for namespaces if your project uses them
+EXTRACT_NAMESPACE = YES
+
+# Enable documentation for files and directories
+SHOW_FILES = YES
+SHOW_NAMESPACES = YES
+
+# Allow for documentation of friend classes/functions
+EXTRACT_ALL = YES

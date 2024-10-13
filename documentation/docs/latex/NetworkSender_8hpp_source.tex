@@ -1,0 +1,49 @@
+\doxysection{Network\+Sender.\+hpp}
+\hypertarget{NetworkSender_8hpp_source}{}\label{NetworkSender_8hpp_source}\index{src/server/GameLogique/NetworkSender.hpp@{src/server/GameLogique/NetworkSender.hpp}}
+\mbox{\hyperlink{NetworkSender_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ NetworkSender}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ NetworkSender\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ NetworkSender\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Server_8hpp}{../network/Server.hpp}}"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNetworkSender}{NetworkSender}}\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkSender_a469d575713cd8f290746993776650943}{NetworkSender}}(std::shared\_ptr<NetworkLib::Server>\ network);}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkSender_aea53f6a7ce915a608088b71544269fc0}{\string~NetworkSender}}();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a54ccb7c6c62acd8dadfdbf0147c71b93}{sendCreatePlayer}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{float}\ pos\_x,\ \textcolor{keywordtype}{float}\ pos\_y);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a75f5bc6381149fae05892c28553095f3}{sendCreateEnemy}}(\textcolor{keywordtype}{char}\ type,\ \textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{float}\ pos\_x,\ \textcolor{keywordtype}{float}\ pos\_y);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a160894716811d758c3dad30d6bef57ae}{sendCreateWall}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{float}\ pos\_x,\ \textcolor{keywordtype}{float}\ pos\_y,\ \textcolor{keywordtype}{float}\ size\_x,\ \textcolor{keywordtype}{float}\ size\_y);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_ab34239ad6938b44e612d8c86952490c5}{sendCreateProjectil}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{float}\ pos\_x,\ \textcolor{keywordtype}{float}\ pos\_y,\ \textcolor{keywordtype}{int}\ parent\_id);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a0fd1069e0047f07e19033980967ba3af}{sendCreateReward}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{float}\ pos\_x,\ \textcolor{keywordtype}{float}\ pos\_y);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a53725a6647dd94744be9e42ada5cfd39}{sendCreateBonus}}(\textcolor{keywordtype}{char}\ type,\ \textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{float}\ pos\_x,\ \textcolor{keywordtype}{float}\ pos\_y);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a851bb43edd7e2ea1fbeb6bf75503037b}{sendDeleteEntity}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a4044acdadf23ab059aa9d62991c2e4dd}{sendPositionUpdate}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{float}\ pos\_x,\ \textcolor{keywordtype}{float}\ pos\_y);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a9e1469e7427260b33b8d7efdc6c68e32}{sendHealthUpdate}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{int}\ hp);}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkSender_a0c43c5012bfcd84debc352c9936776f8}{sendProjectilColision}}(\textcolor{keywordtype}{int}\ id\_projectil,\ \textcolor{keywordtype}{int}\ id\_entity);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ std::shared\_ptr<NetworkLib::Server>\ \mbox{\hyperlink{classNetworkSender_a62a919dba5812edb38c71bab9029436b}{\_network}};}
+\DoxyCodeLine{00112\ \};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !NetworkSender\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

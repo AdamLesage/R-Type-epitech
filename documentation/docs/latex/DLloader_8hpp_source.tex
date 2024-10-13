@@ -1,0 +1,88 @@
+\doxysection{DLloader.\+hpp}
+\hypertarget{DLloader_8hpp_source}{}\label{DLloader_8hpp_source}\index{src/client/DLloader.hpp@{src/client/DLloader.hpp}}
+\mbox{\hyperlink{DLloader_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ DLLoader}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ DLLOADER\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ DLLOADER\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{DLError_8hpp}{./Error/DLError.hpp}}"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <dlfcn.h>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classDLLoader}{DLLoader}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDLLoader_a8ce5da9e3963146e6aeb15dcf1afdda9}{DLLoader}}()\ :\ \mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}}(nullptr)\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDLLoader_adee3003360d686b70e5b584b519ba23a}{DLLoader}}(\textcolor{keyword}{const}\ std::string\&\ nameLib)\ \{}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}}\ =\ LoadLibrary(nameLib.c\_str());}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}})\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ loading\ lib\ "{}}\ <<\ nameLib\ <<\ std::endl;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classRType_1_1DLError}{RType::DLError}}(\textcolor{stringliteral}{"{}Error\ loading\ lib\ "{}}\ +\ nameLib,\ \textcolor{stringliteral}{"{}src/DLLoader.hpp/DLLoader"{}});}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}}\ =\ dlopen(nameLib.c\_str(),\ RTLD\_NOW);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}})\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ loading\ lib\ "{}}\ <<\ nameLib\ <<\ std::endl;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classRType_1_1DLError}{RType::DLError}}(\textcolor{stringliteral}{"{}Error\ loading\ lib\ "{}}\ +\ nameLib,\ \textcolor{stringliteral}{"{}src/DLLoader.hpp/DLLoader"{}});}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDLLoader_a564de3277545e9e82201847b3a1c8f16}{\string~DLLoader}}()\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}})\ \{}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FreeLibrary(\textcolor{keyword}{static\_cast<}HMODULE\textcolor{keyword}{>}(\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}}));}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dlclose(\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}});}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ T*\ \mbox{\hyperlink{classDLLoader_ac232146baacf0101bad6ee0a21dfeb9d}{getInstance}}(\textcolor{keyword}{const}\ std::string\&\ symbolName)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}})\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ T*\ (*entryPoint)();}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ entryPoint\ =}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{reinterpret\_cast<}T*\ (*)()\textcolor{keyword}{>}(GetProcAddress(\textcolor{keyword}{static\_cast<}HMODULE\textcolor{keyword}{>}(\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}}),\ symbolName.c\_str()));}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!entryPoint)\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ loading\ symbol:\ "{}}\ <<\ symbolName\ <<\ std::endl;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classRType_1_1DLError}{RType::DLError}}(\textcolor{stringliteral}{"{}Error\ loading\ symbol"{}},\ \textcolor{stringliteral}{"{}src/DLLoader.hpp/getInstance"{}});}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ error\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ T*\ (*entryPoint)();}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ entryPoint\ =\ (T\ *\ (*)())\ dlsym(\mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}},\ symbolName.c\_str());}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!entryPoint)\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ loading\ symbol:\ "{}}\ <<\ symbolName\ <<\ std::endl;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classRType_1_1DLError}{RType::DLError}}(\textcolor{stringliteral}{"{}Error\ loading\ symbol"{}},\ \textcolor{stringliteral}{"{}src/DLLoader.hpp/getInstance"{}});}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ error\ =\ dlerror();}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (error)\ std::cerr\ <<\ \textcolor{stringliteral}{"{}dlsym\ error:\ "{}}\ <<\ error\ <<\ std::endl;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ entryPoint();}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classDLLoader_a605aa895f0b4a347a2fa9426ab1c4719}{handle}};}
+\DoxyCodeLine{00080\ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !DLLOADER\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

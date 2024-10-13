@@ -1,0 +1,94 @@
+\doxysection{Lobby.\+hpp}
+\hypertarget{Lobby_8hpp_source}{}\label{Lobby_8hpp_source}\index{src/client/RenderEngine/Menu/Lobby.hpp@{src/client/RenderEngine/Menu/Lobby.hpp}}
+\mbox{\hyperlink{Lobby_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Lobby}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ Lobby\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ Lobby\_HPP\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <SFML/Audio.hpp>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Entity_8hpp}{../../../shared/entities/Entity.hpp}}"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Registry_8hpp}{../../../shared/registry/Registry.hpp}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{shared_2systems_2Systems_8hpp}{../../../shared/systems/Systems.hpp}}"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Game_8hpp}{Game.hpp}}"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Settings_8hpp}{Settings.hpp}}"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IMediator_8hpp}{../../Mediator/IMediator.hpp}}"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Logger_8hpp}{../../../shared/utils/Logger.hpp}}"{}}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}\(\backslash\)\(\backslash\)"{}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}/"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceRType}{RType}}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRType_1_1Lobby}{Lobby}}\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Lobby_aae0a0df1b4066fecf47b3f8638316c00}{Lobby}}(std::shared\_ptr<sf::RenderWindow>\ \_window);}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Lobby_abf026e5553596929ce02fe216efcfcba}{\string~Lobby}}();}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_a9a4fb44bdeeefbe0c28e19336cf94378}{moveRight}}();}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_aba90d48eff361575483f153a10a7f5a5}{moveLeft}}();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classRType_1_1Lobby_a465eeedc6662d6812834180b0469ec2b}{getSelectedOption}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_afa37f45f05cc91158e7e59c4ba8707a6}{adjustVolume}}(\textcolor{keywordtype}{bool}\ increase);}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_a0e76186e82512383fb8bdef42e1dd3a1}{handleKeyPress}}(\textcolor{keyword}{const}\ sf::Event\&\ event);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_ad377791faed3d8782731c4d1a3c3611a}{displaySubtitles}}();}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_aaae5e016098a38696d6777b6a93268de}{displaySound}}();}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_a19e980b1cf704fbdf06cfb8977c25a02}{displayLobby}}();}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_a0fda53e65b484ce4527aa724bb09b4b6}{setMediator}}(std::shared\_ptr<IMediator>\ mediator);}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_aa61f4853be1fd94b9e1fb699a1a2e2ea}{setCamera}}(std::shared\_ptr<Camera>\ camera);}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Lobby_a26b947ed7b5110ef45dbb1b5fd9067b0}{setMutex}}(std::shared\_ptr<std::mutex>\ mutex);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<IMediator>}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Lobby_aef19db6d163985c90a18b39d3d1536a4}{\_mediator}};\ \textcolor{comment}{//\ Public\ attribute\ to\ be\ able\ to\ access\ it\ from\ the\ derived\ class.}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<sf::RenderWindow>\ \mbox{\hyperlink{classRType_1_1Lobby_aea5e0a587c807b12726b1be546afdfb8}{window}};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classRType_1_1Lobby_ac44c8d80f120c2c3ec37d98c085c15d1}{selectedOption}};}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Font\ \mbox{\hyperlink{classRType_1_1Lobby_a2ea18503f15341c203fa9e7d6ff8db88}{font}};}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Text\ \mbox{\hyperlink{classRType_1_1Lobby_a6d4365b1e1049e2ec0d909e5d4a97b35}{playersNames}}[5];}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Sound\ \mbox{\hyperlink{classRType_1_1Lobby_aec5c6baeff97255e032b85e536ea2e06}{backgroundMusic}};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ sf::SoundBuffer\ \mbox{\hyperlink{classRType_1_1Lobby_a855a533f8381a75485560c887f2cb0a5}{backgroundBuffer}};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Texture\ \mbox{\hyperlink{classRType_1_1Lobby_a49466ba0f35e5839cb5d9e90e6f99e17}{backgroundTexture}};}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ sf::RectangleShape\ \mbox{\hyperlink{classRType_1_1Lobby_ae93a47c3c0674e7b0382d4340aaeca11}{background}};}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Texture\ \mbox{\hyperlink{classRType_1_1Lobby_aafda4cfc9f4a56c883c68760c12fe867}{logoTexture}};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Sprite\ \mbox{\hyperlink{classRType_1_1Lobby_ae0b9d4563445d5b3dd4a9371180501e2}{logoSprite}};}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Text\ \mbox{\hyperlink{classRType_1_1Lobby_a4fd85f7ef6943b6a7263ff5a92e89e09}{menuOptions}}[3];\ \textcolor{comment}{//\ Play,\ Settings,\ Quit}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ sf::SoundBuffer\ \mbox{\hyperlink{classRType_1_1Lobby_a12411c66f2f65fc7f99684c48208d306}{selectBuffer}};}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Sound\ \mbox{\hyperlink{classRType_1_1Lobby_a8bb5cd6bb43bd2f52c348fc535430cc1}{selectSound}};}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<sf::Texture>\ \mbox{\hyperlink{classRType_1_1Lobby_aa29085b5a1b19a94ca8b9ae13f9da4e6}{playerTextures}};}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<sf::Sprite>\ \mbox{\hyperlink{classRType_1_1Lobby_a56d339f73bb7a50a0ad8c59883b9cec7}{playerSprites}};}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Camera>\ \mbox{\hyperlink{classRType_1_1Lobby_a1be10e26c504b929f421cbfc8a23af35}{\_camera}};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRegistry}{Registry}}\ \mbox{\hyperlink{classRType_1_1Lobby_a942c342a9b84f9c6cf5551b1bec845c5}{\_registry}};}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSystems}{Systems}}\ \mbox{\hyperlink{classRType_1_1Lobby_a237d9a90c7fee51fefc1874459955ae6}{\_systems}};}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Game>\ \mbox{\hyperlink{classRType_1_1Lobby_adbd1adb965054d9e064e4d4a728b2e76}{games}};}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Settings>\ \mbox{\hyperlink{classRType_1_1Lobby_a271abe4213ba0050ad1379154dd3ec4c}{settings}};}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<std::mutex>\ \mbox{\hyperlink{classRType_1_1Lobby_a516d351b21bcb3488639c5952c419bd7}{\_mutex}};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{Logger}}\ \mbox{\hyperlink{classRType_1_1Lobby_ab364f061050e6fc70659b8c956851108}{\_logger}};}
+\DoxyCodeLine{00137\ \ \ \ \ \};}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \}\ \textcolor{comment}{//\ namespace\ RType}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !Lobby\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

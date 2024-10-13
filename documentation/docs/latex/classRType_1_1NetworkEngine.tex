@@ -1,0 +1,155 @@
+\doxysection{RType\+::Network\+Engine Class Reference}
+\hypertarget{classRType_1_1NetworkEngine}{}\label{classRType_1_1NetworkEngine}\index{RType::NetworkEngine@{RType::NetworkEngine}}
+
+
+{\ttfamily \#include $<$Network\+Engine.\+hpp$>$}
+
+
+
+Inheritance diagram for RType\+::Network\+Engine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{classRType_1_1NetworkEngine__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for RType\+::Network\+Engine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{classRType_1_1NetworkEngine__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1NetworkEngine_a4c27467a533440888682bbad60b38c11}{Network\+Engine}} ()
+\item 
+\mbox{\hyperlink{classRType_1_1NetworkEngine_a7fe966c047f24729b7bd7ab42bc173b5}{Network\+Engine}} (std\+::string host, unsigned short server\+\_\+port, unsigned short local\+\_\+port=50010)
+\item 
+void \mbox{\hyperlink{classRType_1_1NetworkEngine_a3d9b3f700aaf9dd2949f38d972f0ae1d}{run}} () override
+\begin{DoxyCompactList}\small\item\em Run current instance of the engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1NetworkEngine_a225d4ffcbd7059fa15b5b79f2b26ca74}{set\+Mediator}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator) override
+\begin{DoxyCompactList}\small\item\em Set the mediator of the engine and of the client. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1NetworkEngine_a41dfae31c1e6be06c61e822346e3cb59}{set\+Params}} (std\+::string host, unsigned short server\+\_\+port, unsigned short local\+\_\+port)
+\item 
+void \mbox{\hyperlink{classRType_1_1NetworkEngine_abb39466e9536cf420329456c5eae2251}{update\+Data}} ()
+\begin{DoxyCompactList}\small\item\em Send a message to the game engine, it will call the mediator to send the message to the game engine. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1NetworkEngine_aa236ccca53ca0cfac2255bf1aa16b90c}{\texorpdfstring{$\sim$}{\string~}\+Network\+Engine}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1AEngine}{RType\+::\+AEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_ad9170d8096a08f20f5f1fb16563aae35}{AEngine}} ()=default
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_a1c1bf96c081fbdcc94c08215ea3e9915}{AEngine}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator)
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_abe04c83551ef423bc1f70c3947eb9dea}{\texorpdfstring{$\sim$}{\string~}\+AEngine}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1IEngine}{RType\+::\+IEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classRType_1_1IEngine_ae6e489807eebe1f9f8c9a58ef23c75a9}{\texorpdfstring{$\sim$}{\string~}\+IEngine}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkLib_1_1IClient}{Network\+Lib\+::\+IClient}} $>$ \mbox{\hyperlink{classRType_1_1NetworkEngine_ae3fae412408e083596ff083722095ea3}{\+\_\+client}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classRType_1_1AEngine}{RType\+::\+AEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ \mbox{\hyperlink{classRType_1_1AEngine_a21ce6a304197b6980c0cfc6b2a0327f5}{\+\_\+mediator}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1NetworkEngine_a4c27467a533440888682bbad60b38c11}\label{classRType_1_1NetworkEngine_a4c27467a533440888682bbad60b38c11} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!NetworkEngine@{NetworkEngine}}
+\index{NetworkEngine@{NetworkEngine}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{NetworkEngine()}{NetworkEngine()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily RType\+::\+Network\+Engine\+::\+Network\+Engine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{classRType_1_1NetworkEngine_a7fe966c047f24729b7bd7ab42bc173b5}\label{classRType_1_1NetworkEngine_a7fe966c047f24729b7bd7ab42bc173b5} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!NetworkEngine@{NetworkEngine}}
+\index{NetworkEngine@{NetworkEngine}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{NetworkEngine()}{NetworkEngine()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily RType\+::\+Network\+Engine\+::\+Network\+Engine (\begin{DoxyParamCaption}\item[{std\+::string}]{host,  }\item[{unsigned short}]{server\+\_\+port,  }\item[{unsigned short}]{local\+\_\+port = {\ttfamily 50010} }\end{DoxyParamCaption})}
+
+\Hypertarget{classRType_1_1NetworkEngine_aa236ccca53ca0cfac2255bf1aa16b90c}\label{classRType_1_1NetworkEngine_aa236ccca53ca0cfac2255bf1aa16b90c} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!````~NetworkEngine@{\texorpdfstring{$\sim$}{\string~}NetworkEngine}}
+\index{````~NetworkEngine@{\texorpdfstring{$\sim$}{\string~}NetworkEngine}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}NetworkEngine()}{\string~NetworkEngine()}}
+{\footnotesize\ttfamily RType\+::\+Network\+Engine\+::\texorpdfstring{$\sim$}{\string~}\+Network\+Engine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1NetworkEngine_a3d9b3f700aaf9dd2949f38d972f0ae1d}\label{classRType_1_1NetworkEngine_a3d9b3f700aaf9dd2949f38d972f0ae1d} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!run@{run}}
+\index{run@{run}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily void RType\+::\+Network\+Engine\+::run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Run current instance of the engine. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classRType_1_1AEngine_a563ab86b6c77395ee4e145eda107e098}{RType\+::\+AEngine}}.
+
+\Hypertarget{classRType_1_1NetworkEngine_a225d4ffcbd7059fa15b5b79f2b26ca74}\label{classRType_1_1NetworkEngine_a225d4ffcbd7059fa15b5b79f2b26ca74} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!setMediator@{setMediator}}
+\index{setMediator@{setMediator}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{setMediator()}{setMediator()}}
+{\footnotesize\ttfamily void RType\+::\+Network\+Engine\+::set\+Mediator (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$}]{mediator }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the mediator of the engine and of the client. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mediator} & The mediator to set. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classRType_1_1AEngine_a50753867e2ec1b0942aa2d43195baa17}{RType\+::\+AEngine}}.
+
+\Hypertarget{classRType_1_1NetworkEngine_a41dfae31c1e6be06c61e822346e3cb59}\label{classRType_1_1NetworkEngine_a41dfae31c1e6be06c61e822346e3cb59} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!setParams@{setParams}}
+\index{setParams@{setParams}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{setParams()}{setParams()}}
+{\footnotesize\ttfamily void RType\+::\+Network\+Engine\+::set\+Params (\begin{DoxyParamCaption}\item[{std\+::string}]{host,  }\item[{unsigned short}]{server\+\_\+port,  }\item[{unsigned short}]{local\+\_\+port }\end{DoxyParamCaption})}
+
+\Hypertarget{classRType_1_1NetworkEngine_abb39466e9536cf420329456c5eae2251}\label{classRType_1_1NetworkEngine_abb39466e9536cf420329456c5eae2251} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!updateData@{updateData}}
+\index{updateData@{updateData}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{updateData()}{updateData()}}
+{\footnotesize\ttfamily void RType\+::\+Network\+Engine\+::update\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Send a message to the game engine, it will call the mediator to send the message to the game engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1NetworkEngine_ae3fae412408e083596ff083722095ea3}\label{classRType_1_1NetworkEngine_ae3fae412408e083596ff083722095ea3} 
+\index{RType::NetworkEngine@{RType::NetworkEngine}!\_client@{\_client}}
+\index{\_client@{\_client}!RType::NetworkEngine@{RType::NetworkEngine}}
+\doxysubsubsection{\texorpdfstring{\_client}{\_client}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classNetworkLib_1_1IClient}{Network\+Lib\+::\+IClient}}$>$ RType\+::\+Network\+Engine\+::\+\_\+client}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Network\+Engine/\mbox{\hyperlink{NetworkEngine_8hpp}{Network\+Engine.\+hpp}}\item 
+src/client/\+Network\+Engine/\mbox{\hyperlink{NetworkEngine_8cpp}{Network\+Engine.\+cpp}}\end{DoxyCompactItemize}

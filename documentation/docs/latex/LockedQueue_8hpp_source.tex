@@ -1,0 +1,50 @@
+\doxysection{Locked\+Queue.\+hpp}
+\hypertarget{LockedQueue_8hpp_source}{}\label{LockedQueue_8hpp_source}\index{src/shared/network/LockedQueue.hpp@{src/shared/network/LockedQueue.hpp}}
+\mbox{\hyperlink{LockedQueue_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ LockedQueue}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ NETWORKLIB\_LOCKEDQUEUE}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ NETWORKLIB\_LOCKEDQUEUE}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <queue>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <list>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceNetworkLib}{NetworkLib}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//\ Simple\ mutex-\/guarded\ queue}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ \_T>\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{LockedQueue}}\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ std::mutex\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a8772164d563bf3769c839522920a67ad}{mutex}};}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ std::queue<\_T>\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{queue}};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a67fb52aad4d04cd56f515e37d68eacb5}{push}}(\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\_T}}\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{value}})\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_lock<std::mutex>\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{lock}}(\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a8772164d563bf3769c839522920a67ad}{mutex}});}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{queue}}.push(\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{value}});}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ top\ message\ in\ the\ queue}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Note:\ not\ exception-\/safe\ (will\ lose\ the\ message)}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\_T}}\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a49b5e3a13757c9e62c3b06579d9a6dd4}{pop}}()\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_lock<std::mutex>\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{lock}}(\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a8772164d563bf3769c839522920a67ad}{mutex}});}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\_T}}\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{value}};}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::swap(\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{value}},\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{queue}}.front());}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{queue}}.pop();}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{value}};}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a78201547c85f721e62e468c5ff5755bc}{empty}}()\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_lock<std::mutex>\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{lock}}(\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a8772164d563bf3769c839522920a67ad}{mutex}});}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{queue}}.empty();}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00042\ \ \ \ \ \};}
+\DoxyCodeLine{00043\ \}\ \textcolor{comment}{//\ namespace\ NetworkLib}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,107 @@
+\doxysection{RType\+::AError Class Reference}
+\hypertarget{classRType_1_1AError}{}\label{classRType_1_1AError}\index{RType::AError@{RType::AError}}
+
+
+{\ttfamily \#include $<$AError.\+hpp$>$}
+
+
+
+Inheritance diagram for RType\+::AError\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=167pt]{classRType_1_1AError__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for RType\+::AError\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=166pt]{classRType_1_1AError__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1AError_ad48ec29cf02e438feaa82342759c46b3}{AError}} (const std\+::string \&message, const std\+::string \&location)
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classRType_1_1AError_a47abedef341861eb63be9e2cab55dc49}{what}} () const noexcept override
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classRType_1_1AError_acbac147f7e785098d265ccd8ca1a2702}{where}} () const noexcept
+\item 
+virtual \mbox{\hyperlink{classRType_1_1AError_a8f85c9a04ce9b9eace80389126b00014}{\texorpdfstring{$\sim$}{\string~}\+AError}} () noexcept=default
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1IError}{RType\+::\+IError}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classRType_1_1IError_aa88834d4819e3db64eddce35754affda}{\texorpdfstring{$\sim$}{\string~}\+IError}} () noexcept=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classRType_1_1AError_a117318f2b455b598ba61e6dee19f18c4}{\+\_\+error\+Location}}
+\item 
+std\+::string \mbox{\hyperlink{classRType_1_1AError_aa6506deeb9ad06c63b8020839c91dad7}{\+\_\+error\+Message}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1AError_ad48ec29cf02e438feaa82342759c46b3}\label{classRType_1_1AError_ad48ec29cf02e438feaa82342759c46b3} 
+\index{RType::AError@{RType::AError}!AError@{AError}}
+\index{AError@{AError}!RType::AError@{RType::AError}}
+\doxysubsubsection{\texorpdfstring{AError()}{AError()}}
+{\footnotesize\ttfamily RType\+::\+AError\+::\+AError (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message,  }\item[{const std\+::string \&}]{location }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classRType_1_1AError_a8f85c9a04ce9b9eace80389126b00014}\label{classRType_1_1AError_a8f85c9a04ce9b9eace80389126b00014} 
+\index{RType::AError@{RType::AError}!````~AError@{\texorpdfstring{$\sim$}{\string~}AError}}
+\index{````~AError@{\texorpdfstring{$\sim$}{\string~}AError}!RType::AError@{RType::AError}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}AError()}{\string~AError()}}
+{\footnotesize\ttfamily virtual RType\+::\+AError\+::\texorpdfstring{$\sim$}{\string~}\+AError (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1AError_a47abedef341861eb63be9e2cab55dc49}\label{classRType_1_1AError_a47abedef341861eb63be9e2cab55dc49} 
+\index{RType::AError@{RType::AError}!what@{what}}
+\index{what@{what}!RType::AError@{RType::AError}}
+\doxysubsubsection{\texorpdfstring{what()}{what()}}
+{\footnotesize\ttfamily const char \texorpdfstring{$\ast$}{*} RType\+::\+AError\+::what (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Implements \mbox{\hyperlink{classRType_1_1IError_ac7a40ee7508df4717cbc5b787e12fa1d}{RType\+::\+IError}}.
+
+\Hypertarget{classRType_1_1AError_acbac147f7e785098d265ccd8ca1a2702}\label{classRType_1_1AError_acbac147f7e785098d265ccd8ca1a2702} 
+\index{RType::AError@{RType::AError}!where@{where}}
+\index{where@{where}!RType::AError@{RType::AError}}
+\doxysubsubsection{\texorpdfstring{where()}{where()}}
+{\footnotesize\ttfamily const char \texorpdfstring{$\ast$}{*} RType\+::\+AError\+::where (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Implements \mbox{\hyperlink{classRType_1_1IError_a7d023d4cc66cebabe4ab476eeb2a6ae7}{RType\+::\+IError}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1AError_a117318f2b455b598ba61e6dee19f18c4}\label{classRType_1_1AError_a117318f2b455b598ba61e6dee19f18c4} 
+\index{RType::AError@{RType::AError}!\_errorLocation@{\_errorLocation}}
+\index{\_errorLocation@{\_errorLocation}!RType::AError@{RType::AError}}
+\doxysubsubsection{\texorpdfstring{\_errorLocation}{\_errorLocation}}
+{\footnotesize\ttfamily std\+::string RType\+::\+AError\+::\+\_\+error\+Location\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1AError_aa6506deeb9ad06c63b8020839c91dad7}\label{classRType_1_1AError_aa6506deeb9ad06c63b8020839c91dad7} 
+\index{RType::AError@{RType::AError}!\_errorMessage@{\_errorMessage}}
+\index{\_errorMessage@{\_errorMessage}!RType::AError@{RType::AError}}
+\doxysubsubsection{\texorpdfstring{\_errorMessage}{\_errorMessage}}
+{\footnotesize\ttfamily std\+::string RType\+::\+AError\+::\+\_\+error\+Message\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Error/\mbox{\hyperlink{AError_8hpp}{AError.\+hpp}}\end{DoxyCompactItemize}

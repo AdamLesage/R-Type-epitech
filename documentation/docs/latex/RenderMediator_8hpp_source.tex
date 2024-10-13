@@ -1,0 +1,39 @@
+\doxysection{Render\+Mediator.\+hpp}
+\hypertarget{RenderMediator_8hpp_source}{}\label{RenderMediator_8hpp_source}\index{src/client/RenderEngine/RenderMediator.hpp@{src/client/RenderEngine/RenderMediator.hpp}}
+\mbox{\hyperlink{RenderMediator_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ RenderMediator}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ RENDERMEDIATOR\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ RENDERMEDIATOR\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IMediator_8hpp}{../Mediator/IMediator.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Menu_8hpp}{Menu/Menu.hpp}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceRType}{RType}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{class\ }Menu;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{class\ }RenderingEngine;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRType_1_1RenderMediator}{RenderMediator}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1RenderMediator_a2d180eb88f5f23bbcb2ae22799c36c5e}{RenderMediator}}(std::unique\_ptr<Menu>\&\ menu,\ std::shared\_ptr<RenderingEngine>\ renderingEngine);}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1RenderMediator_a8afdbd085a998359f4ce14f6f90e32ba}{\string~RenderMediator}}();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1RenderMediator_ae8e6c88cdd8a44724fd733f6c2d86e6a}{notify}}(std::string\ sender,\ \textcolor{keyword}{const}\ std::string\&\ event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_ptr<Menu>\ \mbox{\hyperlink{classRType_1_1RenderMediator_a61234543d4fa0f9d0e7fcef376329e2b}{\_menu}};}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<RenderingEngine>\ \mbox{\hyperlink{classRType_1_1RenderMediator_a867a5ad7cf5afd0661ab4db2dc80703e}{\_renderingEngine}};}
+\DoxyCodeLine{00030\ \ \ \ \ \};}
+\DoxyCodeLine{00031\ \}\ \textcolor{comment}{//\ namespace\ RType}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !RENDERMEDIATOR\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

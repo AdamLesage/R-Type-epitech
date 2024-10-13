@@ -1,0 +1,238 @@
+\doxysection{RType\+::Mediator Class Reference}
+\hypertarget{classRType_1_1Mediator}{}\label{classRType_1_1Mediator}\index{RType::Mediator@{RType::Mediator}}
+
+
+{\ttfamily \#include $<$Mediator.\+hpp$>$}
+
+
+
+Inheritance diagram for RType\+::Mediator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{classRType_1_1Mediator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for RType\+::Mediator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{classRType_1_1Mediator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1Mediator_a3d1c31bc0d9f8f9ab600caeb9b207213}{Mediator}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1GameEngine}{Game\+Engine}} $>$ game\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}} $>$ network\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$ rendering\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}} $>$ physic\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}} $>$ audio\+Engine)
+\item 
+void \mbox{\hyperlink{classRType_1_1Mediator_af900d1234e653275db6215e1858cfbb3}{notify}} (std\+::string sender, const std\+::string \&event) override
+\begin{DoxyCompactList}\small\item\em Notify the engine of an event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1Mediator_ae84230448a00a5605959a2e2dfcd6872}{\texorpdfstring{$\sim$}{\string~}\+Mediator}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1IMediator}{RType\+::\+IMediator}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classRType_1_1IMediator_a25d39086cbc54dc07e6742ebacbf067d}{\texorpdfstring{$\sim$}{\string~}\+IMediator}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classRType_1_1Mediator_aa548f5975bf298ff0b4e0d95cd509709}{notify\+Audio\+Engine}} (std\+::string sender, const std\+::string \&event)
+\begin{DoxyCompactList}\small\item\em Notify the audio engine of an event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Mediator_a5ae3331381769821269b924d76977fe2}{notify\+Game\+Engine}} (std\+::string sender, const std\+::string \&event)
+\begin{DoxyCompactList}\small\item\em Notify the engine of an event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Mediator_a8f1d9978e5dd752a5b5e99ae8a67f3b6}{notify\+Network\+Engine}} (std\+::string sender, const std\+::string \&event)
+\begin{DoxyCompactList}\small\item\em Notify the network engine of an event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Mediator_a611d4dd6801f659be60298857d8bdb09}{notify\+Physic\+Engine}} (std\+::string sender, const std\+::string \&event)
+\begin{DoxyCompactList}\small\item\em Notify the physic engine of an event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Mediator_ab2b69221a04d99e2fc2d1247f72a8807}{notify\+Rendering\+Engine}} (std\+::string sender, const std\+::string \&event)
+\begin{DoxyCompactList}\small\item\em Notify the rendering engine of an event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1Mediator_ad8735e751c7d20f0000869cb385bc349}{\+\_\+audio\+Engine}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1GameEngine}{Game\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1Mediator_a677384a53e6dcdf659ee0ee38d186540}{\+\_\+game\+Engine}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1Mediator_afa9d99aced91b1156f61e6a253e38edb}{\+\_\+network\+Engine}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1Mediator_aa7d7019024bd33f71a58ffdfe506696b}{\+\_\+physic\+Engine}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1Mediator_a5f94a9fbc9220633ba8eddedc3cb25a5}{\+\_\+rendering\+Engine}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1Mediator_a3d1c31bc0d9f8f9ab600caeb9b207213}\label{classRType_1_1Mediator_a3d1c31bc0d9f8f9ab600caeb9b207213} 
+\index{RType::Mediator@{RType::Mediator}!Mediator@{Mediator}}
+\index{Mediator@{Mediator}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{Mediator()}{Mediator()}}
+{\footnotesize\ttfamily RType\+::\+Mediator\+::\+Mediator (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1GameEngine}{Game\+Engine}} $>$}]{game\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}} $>$}]{network\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$}]{rendering\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}} $>$}]{physic\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}} $>$}]{audio\+Engine }\end{DoxyParamCaption})}
+
+\Hypertarget{classRType_1_1Mediator_ae84230448a00a5605959a2e2dfcd6872}\label{classRType_1_1Mediator_ae84230448a00a5605959a2e2dfcd6872} 
+\index{RType::Mediator@{RType::Mediator}!````~Mediator@{\texorpdfstring{$\sim$}{\string~}Mediator}}
+\index{````~Mediator@{\texorpdfstring{$\sim$}{\string~}Mediator}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Mediator()}{\string~Mediator()}}
+{\footnotesize\ttfamily RType\+::\+Mediator\+::\texorpdfstring{$\sim$}{\string~}\+Mediator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1Mediator_af900d1234e653275db6215e1858cfbb3}\label{classRType_1_1Mediator_af900d1234e653275db6215e1858cfbb3} 
+\index{RType::Mediator@{RType::Mediator}!notify@{notify}}
+\index{notify@{notify}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{notify()}{notify()}}
+{\footnotesize\ttfamily void RType\+::\+Mediator\+::notify (\begin{DoxyParamCaption}\item[{std\+::string}]{sender,  }\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Notify the engine of an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classRType_1_1IMediator_afb1ef0fe4ffef3e82b7136ecc0d50bf7}{RType\+::\+IMediator}}.
+
+\Hypertarget{classRType_1_1Mediator_aa548f5975bf298ff0b4e0d95cd509709}\label{classRType_1_1Mediator_aa548f5975bf298ff0b4e0d95cd509709} 
+\index{RType::Mediator@{RType::Mediator}!notifyAudioEngine@{notifyAudioEngine}}
+\index{notifyAudioEngine@{notifyAudioEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{notifyAudioEngine()}{notifyAudioEngine()}}
+{\footnotesize\ttfamily void RType\+::\+Mediator\+::notify\+Audio\+Engine (\begin{DoxyParamCaption}\item[{std\+::string}]{sender,  }\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Notify the audio engine of an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Mediator_a5ae3331381769821269b924d76977fe2}\label{classRType_1_1Mediator_a5ae3331381769821269b924d76977fe2} 
+\index{RType::Mediator@{RType::Mediator}!notifyGameEngine@{notifyGameEngine}}
+\index{notifyGameEngine@{notifyGameEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{notifyGameEngine()}{notifyGameEngine()}}
+{\footnotesize\ttfamily void RType\+::\+Mediator\+::notify\+Game\+Engine (\begin{DoxyParamCaption}\item[{std\+::string}]{sender,  }\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Notify the engine of an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify.\\
+\hline
+\end{DoxyParams}
+Notify the game engine of an event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Mediator_a8f1d9978e5dd752a5b5e99ae8a67f3b6}\label{classRType_1_1Mediator_a8f1d9978e5dd752a5b5e99ae8a67f3b6} 
+\index{RType::Mediator@{RType::Mediator}!notifyNetworkEngine@{notifyNetworkEngine}}
+\index{notifyNetworkEngine@{notifyNetworkEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{notifyNetworkEngine()}{notifyNetworkEngine()}}
+{\footnotesize\ttfamily void RType\+::\+Mediator\+::notify\+Network\+Engine (\begin{DoxyParamCaption}\item[{std\+::string}]{sender,  }\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Notify the network engine of an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Mediator_a611d4dd6801f659be60298857d8bdb09}\label{classRType_1_1Mediator_a611d4dd6801f659be60298857d8bdb09} 
+\index{RType::Mediator@{RType::Mediator}!notifyPhysicEngine@{notifyPhysicEngine}}
+\index{notifyPhysicEngine@{notifyPhysicEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{notifyPhysicEngine()}{notifyPhysicEngine()}}
+{\footnotesize\ttfamily void RType\+::\+Mediator\+::notify\+Physic\+Engine (\begin{DoxyParamCaption}\item[{std\+::string}]{sender,  }\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Notify the physic engine of an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Mediator_ab2b69221a04d99e2fc2d1247f72a8807}\label{classRType_1_1Mediator_ab2b69221a04d99e2fc2d1247f72a8807} 
+\index{RType::Mediator@{RType::Mediator}!notifyRenderingEngine@{notifyRenderingEngine}}
+\index{notifyRenderingEngine@{notifyRenderingEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{notifyRenderingEngine()}{notifyRenderingEngine()}}
+{\footnotesize\ttfamily void RType\+::\+Mediator\+::notify\+Rendering\+Engine (\begin{DoxyParamCaption}\item[{std\+::string}]{sender,  }\item[{const std\+::string \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Notify the rendering engine of an event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The sender of the event. \\
+\hline
+{\em event} & The event to notify. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1Mediator_ad8735e751c7d20f0000869cb385bc349}\label{classRType_1_1Mediator_ad8735e751c7d20f0000869cb385bc349} 
+\index{RType::Mediator@{RType::Mediator}!\_audioEngine@{\_audioEngine}}
+\index{\_audioEngine@{\_audioEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{\_audioEngine}{\_audioEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}}$>$ RType\+::\+Mediator\+::\+\_\+audio\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Mediator_a677384a53e6dcdf659ee0ee38d186540}\label{classRType_1_1Mediator_a677384a53e6dcdf659ee0ee38d186540} 
+\index{RType::Mediator@{RType::Mediator}!\_gameEngine@{\_gameEngine}}
+\index{\_gameEngine@{\_gameEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{\_gameEngine}{\_gameEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1GameEngine}{Game\+Engine}}$>$ RType\+::\+Mediator\+::\+\_\+game\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Mediator_afa9d99aced91b1156f61e6a253e38edb}\label{classRType_1_1Mediator_afa9d99aced91b1156f61e6a253e38edb} 
+\index{RType::Mediator@{RType::Mediator}!\_networkEngine@{\_networkEngine}}
+\index{\_networkEngine@{\_networkEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{\_networkEngine}{\_networkEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}}$>$ RType\+::\+Mediator\+::\+\_\+network\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Mediator_aa7d7019024bd33f71a58ffdfe506696b}\label{classRType_1_1Mediator_aa7d7019024bd33f71a58ffdfe506696b} 
+\index{RType::Mediator@{RType::Mediator}!\_physicEngine@{\_physicEngine}}
+\index{\_physicEngine@{\_physicEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{\_physicEngine}{\_physicEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}}$>$ RType\+::\+Mediator\+::\+\_\+physic\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Mediator_a5f94a9fbc9220633ba8eddedc3cb25a5}\label{classRType_1_1Mediator_a5f94a9fbc9220633ba8eddedc3cb25a5} 
+\index{RType::Mediator@{RType::Mediator}!\_renderingEngine@{\_renderingEngine}}
+\index{\_renderingEngine@{\_renderingEngine}!RType::Mediator@{RType::Mediator}}
+\doxysubsubsection{\texorpdfstring{\_renderingEngine}{\_renderingEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}}$>$ RType\+::\+Mediator\+::\+\_\+rendering\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Mediator/\mbox{\hyperlink{Mediator_8hpp}{Mediator.\+hpp}}\item 
+src/client/\+Mediator/\mbox{\hyperlink{Mediator_8cpp}{Mediator.\+cpp}}\end{DoxyCompactItemize}

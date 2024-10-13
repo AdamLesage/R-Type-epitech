@@ -1,0 +1,245 @@
+\doxysection{Network\+Lib\+::Client Class Reference}
+\hypertarget{classNetworkLib_1_1Client}{}\label{classNetworkLib_1_1Client}\index{NetworkLib::Client@{NetworkLib::Client}}
+
+
+{\ttfamily \#include $<$Client.\+hpp$>$}
+
+
+
+Inheritance diagram for Network\+Lib\+::Client\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{classNetworkLib_1_1Client__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Network\+Lib\+::Client\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classNetworkLib_1_1Client__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNetworkLib_1_1Client_ab71eaac593b89e8bbb13a17af5e99d8f}{Client}} (std\+::string host, unsigned short server\+\_\+port, unsigned short local\+\_\+port=0)
+\item 
+bool \mbox{\hyperlink{classNetworkLib_1_1Client_ac5054f38d2f68e8322756b05fa0cead7}{has\+Message}} () override
+\begin{DoxyCompactList}\small\item\em Check if the client has a message. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classNetworkLib_1_1Client_a9460f7b5b2969964bdd95a89559c63de}{pop\+Message}} () override
+\begin{DoxyCompactList}\small\item\em Get the message from the server and remove it from the queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkLib_1_1Client_accb455b7127ec10ea29319aa779a99f3}{send}} (const std\+::string \&message) override
+\begin{DoxyCompactList}\small\item\em Send a message to the server. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNetworkLib_1_1Client_afb280be925bf419b4cf1da86172cffbd}{\texorpdfstring{$\sim$}{\string~}\+Client}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classNetworkLib_1_1IClient}{Network\+Lib\+::\+IClient}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classNetworkLib_1_1IClient_ae283200f812645fb1dbb5ea7614527e0}{\texorpdfstring{$\sim$}{\string~}\+IClient}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNetworkLib_1_1Client_aa1d8a1a7caca7f005cdaba60f63ca0ee}{Client}} (\mbox{\hyperlink{classNetworkLib_1_1Client}{Client}} \&)
+\item 
+void \mbox{\hyperlink{classNetworkLib_1_1Client_aedb40dec7883c872d2125589b8912b5b}{handle\+\_\+receive}} (const std\+::error\+\_\+code \&error, std\+::size\+\_\+t bytes\+\_\+transferred)
+\begin{DoxyCompactList}\small\item\em Handle the receive process. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkLib_1_1Client_a5f080e4a5b3f4f675e4987fd64ae3fd4}{run\+\_\+service}} ()
+\begin{DoxyCompactList}\small\item\em Run the service thread. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkLib_1_1Client_a451070acad659aa365543cec22f5be61}{start\+\_\+receive}} ()
+\begin{DoxyCompactList}\small\item\em Start the receive process. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \mbox{\hyperlink{classNetworkLib_1_1Client_a4777cdb5bcf854a41159e3f95a8bbf66}{\+\_\+logger}}
+\item 
+\mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{Locked\+Queue}}$<$ std\+::string $>$ \mbox{\hyperlink{classNetworkLib_1_1Client_ab5b8b3bccd88b874a50c99b91698967d}{incoming\+Messages}}
+\item 
+boost\+::asio\+::io\+\_\+service \mbox{\hyperlink{classNetworkLib_1_1Client_aec921ec8bfb29b009f52011dc0e9fcd5}{io\+\_\+service}}
+\item 
+std\+::array$<$ char, \mbox{\hyperlink{Constants_8hpp_ab498e222ac1111629d511797dc5c1856}{Network\+Buffer\+Size}} $>$ \mbox{\hyperlink{classNetworkLib_1_1Client_a8f3a6fda69e1206c55145a1173ede6f7}{recv\+\_\+buffer}}
+\item 
+boost\+::asio\+::ip\+::udp\+::endpoint \mbox{\hyperlink{classNetworkLib_1_1Client_a358f37c7494d998c64cc091c9371de87}{remote\+\_\+endpoint}}
+\item 
+boost\+::asio\+::ip\+::udp\+::endpoint \mbox{\hyperlink{classNetworkLib_1_1Client_a004ddcee6391e0da41ab5bbd2a4bc87e}{server\+\_\+endpoint}}
+\item 
+std\+::thread \mbox{\hyperlink{classNetworkLib_1_1Client_a762ab55678461a27e05ed13583542030}{service\+\_\+thread}}
+\item 
+boost\+::asio\+::ip\+::udp\+::socket \mbox{\hyperlink{classNetworkLib_1_1Client_ab68afeb097e9e0b641cc615edcbfd740}{socket}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classNetworkLib_1_1Client_ab71eaac593b89e8bbb13a17af5e99d8f}\label{classNetworkLib_1_1Client_ab71eaac593b89e8bbb13a17af5e99d8f} 
+\index{NetworkLib::Client@{NetworkLib::Client}!Client@{Client}}
+\index{Client@{Client}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{Client()}{Client()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Network\+Lib\+::\+Client\+::\+Client (\begin{DoxyParamCaption}\item[{std\+::string}]{host,  }\item[{unsigned short}]{server\+\_\+port,  }\item[{unsigned short}]{local\+\_\+port = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\Hypertarget{classNetworkLib_1_1Client_afb280be925bf419b4cf1da86172cffbd}\label{classNetworkLib_1_1Client_afb280be925bf419b4cf1da86172cffbd} 
+\index{NetworkLib::Client@{NetworkLib::Client}!````~Client@{\texorpdfstring{$\sim$}{\string~}Client}}
+\index{````~Client@{\texorpdfstring{$\sim$}{\string~}Client}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Client()}{\string~Client()}}
+{\footnotesize\ttfamily Network\+Lib\+::\+Client\+::\texorpdfstring{$\sim$}{\string~}\+Client (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{classNetworkLib_1_1Client_aa1d8a1a7caca7f005cdaba60f63ca0ee}\label{classNetworkLib_1_1Client_aa1d8a1a7caca7f005cdaba60f63ca0ee} 
+\index{NetworkLib::Client@{NetworkLib::Client}!Client@{Client}}
+\index{Client@{Client}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{Client()}{Client()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Network\+Lib\+::\+Client\+::\+Client (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNetworkLib_1_1Client}{Client}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNetworkLib_1_1Client_aedb40dec7883c872d2125589b8912b5b}\label{classNetworkLib_1_1Client_aedb40dec7883c872d2125589b8912b5b} 
+\index{NetworkLib::Client@{NetworkLib::Client}!handle\_receive@{handle\_receive}}
+\index{handle\_receive@{handle\_receive}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{handle\_receive()}{handle\_receive()}}
+{\footnotesize\ttfamily void Network\+Lib\+::\+Client\+::handle\+\_\+receive (\begin{DoxyParamCaption}\item[{const std\+::error\+\_\+code \&}]{error,  }\item[{std\+::size\+\_\+t}]{bytes\+\_\+transferred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handle the receive process. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & the error code \\
+\hline
+{\em bytes\+\_\+transferred} & the number of bytes transferred \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkLib_1_1Client_ac5054f38d2f68e8322756b05fa0cead7}\label{classNetworkLib_1_1Client_ac5054f38d2f68e8322756b05fa0cead7} 
+\index{NetworkLib::Client@{NetworkLib::Client}!hasMessage@{hasMessage}}
+\index{hasMessage@{hasMessage}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{hasMessage()}{hasMessage()}}
+{\footnotesize\ttfamily bool Network\+Lib\+::\+Client\+::has\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Check if the client has a message. 
+
+\begin{DoxyReturn}{Returns}
+true if the client has a message 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classNetworkLib_1_1IClient_a47587b04cad36d8a41c073cac9414a01}{Network\+Lib\+::\+IClient}}.
+
+\Hypertarget{classNetworkLib_1_1Client_a9460f7b5b2969964bdd95a89559c63de}\label{classNetworkLib_1_1Client_a9460f7b5b2969964bdd95a89559c63de} 
+\index{NetworkLib::Client@{NetworkLib::Client}!popMessage@{popMessage}}
+\index{popMessage@{popMessage}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{popMessage()}{popMessage()}}
+{\footnotesize\ttfamily std\+::string Network\+Lib\+::\+Client\+::pop\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the message from the server and remove it from the queue. 
+
+\begin{DoxyReturn}{Returns}
+the message from the server 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classNetworkLib_1_1IClient_aad0c22fdea3cd1cac5c8596a12fbec3f}{Network\+Lib\+::\+IClient}}.
+
+\Hypertarget{classNetworkLib_1_1Client_a5f080e4a5b3f4f675e4987fd64ae3fd4}\label{classNetworkLib_1_1Client_a5f080e4a5b3f4f675e4987fd64ae3fd4} 
+\index{NetworkLib::Client@{NetworkLib::Client}!run\_service@{run\_service}}
+\index{run\_service@{run\_service}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{run\_service()}{run\_service()}}
+{\footnotesize\ttfamily void Network\+Lib\+::\+Client\+::run\+\_\+service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Run the service thread. 
+
+\Hypertarget{classNetworkLib_1_1Client_accb455b7127ec10ea29319aa779a99f3}\label{classNetworkLib_1_1Client_accb455b7127ec10ea29319aa779a99f3} 
+\index{NetworkLib::Client@{NetworkLib::Client}!send@{send}}
+\index{send@{send}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily void Network\+Lib\+::\+Client\+::send (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Send a message to the server. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & the message to send \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classNetworkLib_1_1IClient_a1f1b5000e9d7a61a6a319e6f3722d68e}{Network\+Lib\+::\+IClient}}.
+
+\Hypertarget{classNetworkLib_1_1Client_a451070acad659aa365543cec22f5be61}\label{classNetworkLib_1_1Client_a451070acad659aa365543cec22f5be61} 
+\index{NetworkLib::Client@{NetworkLib::Client}!start\_receive@{start\_receive}}
+\index{start\_receive@{start\_receive}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{start\_receive()}{start\_receive()}}
+{\footnotesize\ttfamily void Network\+Lib\+::\+Client\+::start\+\_\+receive (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Start the receive process. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classNetworkLib_1_1Client_a4777cdb5bcf854a41159e3f95a8bbf66}\label{classNetworkLib_1_1Client_a4777cdb5bcf854a41159e3f95a8bbf66} 
+\index{NetworkLib::Client@{NetworkLib::Client}!\_logger@{\_logger}}
+\index{\_logger@{\_logger}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{\_logger}{\_logger}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} Network\+Lib\+::\+Client\+::\+\_\+logger\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1Client_ab5b8b3bccd88b874a50c99b91698967d}\label{classNetworkLib_1_1Client_ab5b8b3bccd88b874a50c99b91698967d} 
+\index{NetworkLib::Client@{NetworkLib::Client}!incomingMessages@{incomingMessages}}
+\index{incomingMessages@{incomingMessages}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{incomingMessages}{incomingMessages}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{Locked\+Queue}}$<$std\+::string$>$ Network\+Lib\+::\+Client\+::incoming\+Messages\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1Client_aec921ec8bfb29b009f52011dc0e9fcd5}\label{classNetworkLib_1_1Client_aec921ec8bfb29b009f52011dc0e9fcd5} 
+\index{NetworkLib::Client@{NetworkLib::Client}!io\_service@{io\_service}}
+\index{io\_service@{io\_service}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{io\_service}{io\_service}}
+{\footnotesize\ttfamily boost\+::asio\+::io\+\_\+service Network\+Lib\+::\+Client\+::io\+\_\+service\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1Client_a8f3a6fda69e1206c55145a1173ede6f7}\label{classNetworkLib_1_1Client_a8f3a6fda69e1206c55145a1173ede6f7} 
+\index{NetworkLib::Client@{NetworkLib::Client}!recv\_buffer@{recv\_buffer}}
+\index{recv\_buffer@{recv\_buffer}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{recv\_buffer}{recv\_buffer}}
+{\footnotesize\ttfamily std\+::array$<$char, \mbox{\hyperlink{Constants_8hpp_ab498e222ac1111629d511797dc5c1856}{Network\+Buffer\+Size}}$>$ Network\+Lib\+::\+Client\+::recv\+\_\+buffer\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1Client_a358f37c7494d998c64cc091c9371de87}\label{classNetworkLib_1_1Client_a358f37c7494d998c64cc091c9371de87} 
+\index{NetworkLib::Client@{NetworkLib::Client}!remote\_endpoint@{remote\_endpoint}}
+\index{remote\_endpoint@{remote\_endpoint}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{remote\_endpoint}{remote\_endpoint}}
+{\footnotesize\ttfamily boost\+::asio\+::ip\+::udp\+::endpoint Network\+Lib\+::\+Client\+::remote\+\_\+endpoint\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1Client_a004ddcee6391e0da41ab5bbd2a4bc87e}\label{classNetworkLib_1_1Client_a004ddcee6391e0da41ab5bbd2a4bc87e} 
+\index{NetworkLib::Client@{NetworkLib::Client}!server\_endpoint@{server\_endpoint}}
+\index{server\_endpoint@{server\_endpoint}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{server\_endpoint}{server\_endpoint}}
+{\footnotesize\ttfamily boost\+::asio\+::ip\+::udp\+::endpoint Network\+Lib\+::\+Client\+::server\+\_\+endpoint\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1Client_a762ab55678461a27e05ed13583542030}\label{classNetworkLib_1_1Client_a762ab55678461a27e05ed13583542030} 
+\index{NetworkLib::Client@{NetworkLib::Client}!service\_thread@{service\_thread}}
+\index{service\_thread@{service\_thread}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{service\_thread}{service\_thread}}
+{\footnotesize\ttfamily std\+::thread Network\+Lib\+::\+Client\+::service\+\_\+thread\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1Client_ab68afeb097e9e0b641cc615edcbfd740}\label{classNetworkLib_1_1Client_ab68afeb097e9e0b641cc615edcbfd740} 
+\index{NetworkLib::Client@{NetworkLib::Client}!socket@{socket}}
+\index{socket@{socket}!NetworkLib::Client@{NetworkLib::Client}}
+\doxysubsubsection{\texorpdfstring{socket}{socket}}
+{\footnotesize\ttfamily boost\+::asio\+::ip\+::udp\+::socket Network\+Lib\+::\+Client\+::socket\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Network\+Engine/\mbox{\hyperlink{Client_8hpp}{Client.\+hpp}}\item 
+src/client/\+Network\+Engine/\mbox{\hyperlink{Client_8cpp}{Client.\+cpp}}\end{DoxyCompactItemize}

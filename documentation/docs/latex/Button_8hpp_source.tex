@@ -1,0 +1,58 @@
+\doxysection{Button.\+hpp}
+\hypertarget{Button_8hpp_source}{}\label{Button_8hpp_source}\index{src/client/RenderEngine/Menu/Button.hpp@{src/client/RenderEngine/Menu/Button.hpp}}
+\mbox{\hyperlink{Button_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Zappy}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Button}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ BUTTON\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ BUTTON\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <SFML/Graphics/RenderWindow.hpp>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <SFML/Graphics/Texture.hpp>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <SFML/Graphics/Sprite.hpp>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <SFML/Audio/SoundBuffer.hpp>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <SFML/Audio/Sound.hpp>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <SFML/Window/Mouse.hpp>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <SFML/Window/Keyboard.hpp>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <SFML/System/Clock.hpp>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <SFML/System/Time.hpp>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <SFML/Window/Event.hpp>}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classButton}{Button}}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{classButton_ac1aa51f216722186f6775bd9089a06ea}{StateButton}}\ \{\ \mbox{\hyperlink{classButton_ac1aa51f216722186f6775bd9089a06eaa1da53fb6d02c1cbd49bb2580580773a2}{None}},\ \mbox{\hyperlink{classButton_ac1aa51f216722186f6775bd9089a06eaa7e0616591271323c04ba244b14344cfd}{Hover}},\ \mbox{\hyperlink{classButton_ac1aa51f216722186f6775bd9089a06eaa0b6e01e7c0088ececdf9bd7812c80ce8}{Clicked}}\ \};}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classButton_a6fceefa26b7d54b09169d07f07cfbb01}{Button}}(sf::Vector2f\ size,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Vector2f\ pos,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Color\ color,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ outline\ \ \ \ \ \ \ \ \ \ \ \ =\ 0,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Color\ outlineColor\ =\ sf::Color::Transparent);}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classButton_a2a001eb9c3cc8ae54768a850dd345002}{\string~Button}}();}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classButton_a3de16077381e25fd93070a7bb7df25f4}{checkClick}}(std::shared\_ptr<sf::RenderWindow>\ window,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event\ event);\ \textcolor{comment}{//\ manage\ click\ and\ hover\ of\ the\ button\ and\ change\ his\ state}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_aae0bb91d87016de7256a46a72b1ba915}{setText}}(std::string,\ \textcolor{keywordtype}{size\_t}\ size\ =\ 20);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ text\ of\ the\ button}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_a93438906f229fb6e2ba63103140dbd9f}{setPosition}}(sf::Vector2f\ pos);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ position\ of\ the\ button}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_a8de111a6b4ed22a99aca635edc62411e}{setSprite}}(sf::Sprite\ sprite);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ set\ the\ sprite\ of\ the\ button}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_af6e6f8c65792795bb47d77d6eb1134a7}{displayButton}}(std::shared\_ptr<sf::RenderWindow>\ window);\ \textcolor{comment}{//\ display\ the\ Button}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classButton_ab535ce6d90b62f744ca4c05262ad8190}{getText}}()\ \textcolor{keyword}{const};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ get\ the\ value\ of\ the\ button\ text}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ sf::String\ \mbox{\hyperlink{classButton_a68a6b2be8b4b23ef83e811522b9afa36}{text}};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_ac9f24cf17c1b4fb5989956de1519bbfb}{setState}}(\mbox{\hyperlink{classButton_ac1aa51f216722186f6775bd9089a06ea}{StateButton}});\ \textcolor{comment}{//\ set\ the\ state\ of\ the\ button}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classButton_ac1aa51f216722186f6775bd9089a06ea}{StateButton}}\ \mbox{\hyperlink{classButton_a7351b1e98e218fc6819a4916e248d669}{state}};}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ sf::RectangleShape\ \mbox{\hyperlink{classButton_ab86193fd8a7d8930880ddd5890adcd5f}{shape}};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ sf::Texture\ \mbox{\hyperlink{classButton_a032df8df54e24520682bad89361acf19}{Texture}};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ sf::Text\ \mbox{\hyperlink{classButton_a887ecf8671577abf964c289c7fc5637a}{renderText}};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ sf::RectangleShape\ \mbox{\hyperlink{classButton_acaa6d2e69c6b9b9b1696f2a3e41af877}{hoverSape}};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classButton_ac5a1c79bd201a670439b99931cccc443}{\_characterSize}};}
+\DoxyCodeLine{00050\ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !BUTTON\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

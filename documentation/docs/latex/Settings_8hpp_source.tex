@@ -1,0 +1,66 @@
+\doxysection{Settings.\+hpp}
+\hypertarget{Settings_8hpp_source}{}\label{Settings_8hpp_source}\index{src/client/RenderEngine/Menu/Settings.hpp@{src/client/RenderEngine/Menu/Settings.hpp}}
+\mbox{\hyperlink{Settings_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Settings}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ SETTINGS\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ SETTINGS\_HPP\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Button_8hpp}{Button.hpp}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <libconfig.h++>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}\(\backslash\)\(\backslash\)"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}/"{}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classSettings}{Settings}}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSettings_a8e077c4f55ea52bb8b0b396bde409daf}{Settings}}(std::shared\_ptr<sf::RenderWindow>\ \_window);}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSettings_a4a65be5921dfc9fddc476e5320541d89}{\string~Settings}}();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSettings_a6f3a774f2d06e9e058612e009d0e9c17}{displaySettings}}(\textcolor{keywordtype}{bool}\ ingame);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSettings_a1a665e8ef8d2b22767ffc0cd7fb68f40}{moveUp}}();}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSettings_afe55def75057cd7438d0d13d45934bcf}{moveDown}}();}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classSettings_a93feaf64c533f6b34456f0a575514add}{getSelectedOption}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSettings_a51f61ad13488ef94e97031fecc4f0151}{changeKey}}(std::string\ key);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSettings_a68b10616575fe42789e404cb0d9c6f38}{display}}();}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{classSettings_ae716045a68bde0c2fb8efccf85dcdc49}{get\_key\_value}}(libconfig::Config\ \&cfg,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ key\_name);}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classSettings_a0fd7533f47ccece5db5a7c148f933be2}{set\_key\_value}}(libconfig::Config\ \&cfg,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ key\_name,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ new\_value);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classSettings_ae2d2223755a6f562513d2fbab9c50431}{selectedOption}};}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ sf::Sound\ \mbox{\hyperlink{classSettings_a3508d090736fe83e3a3129812c62a245}{selectSound}};}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::shared\_ptr<sf::RenderWindow>\ \mbox{\hyperlink{classSettings_a45294dfea16ac0d10a14f33b43fc59d6}{window}};}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ sf::Font\ \mbox{\hyperlink{classSettings_a27411dcc1281904bf83e9f3930bf9be1}{font}};}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ sf::Text\ \mbox{\hyperlink{classSettings_ace9228bbbf6372c2c6a9ccb17b6ddf59}{menuOptions}}[7];}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ sf::Texture\ \mbox{\hyperlink{classSettings_a9746901ddb2b6d7a1040b1800aeaadae}{logoTexture}};}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ sf::Sprite\ \mbox{\hyperlink{classSettings_a0246ec374cc9d2d83f33144b89da3dbe}{logoSprite}};}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ sf::Event\ \mbox{\hyperlink{classSettings_a2b8c81e60ba5e937a316240d8c3abc6e}{event}};}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ sf::RectangleShape\ \mbox{\hyperlink{classSettings_a805877afb7409a3e6c0f9677d4c9589b}{background}};}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ sf::Texture\ \mbox{\hyperlink{classSettings_aeecbb64e7cd675cea8745147c873beb4}{backgroundTexture}};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00103\ \};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !SETTINGS\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

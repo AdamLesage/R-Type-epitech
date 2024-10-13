@@ -1,0 +1,111 @@
+\doxysection{Systems.\+hpp}
+\hypertarget{server_2systems_2Systems_8hpp_source}{}\label{server_2systems_2Systems_8hpp_source}\index{src/server/systems/Systems.hpp@{src/server/systems/Systems.hpp}}
+\mbox{\hyperlink{server_2systems_2Systems_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech\ [WSL:\ Ubuntu]}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Systems}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ SYSTEMS\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ SYSTEMS\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Registry_8hpp}{../../shared/registry/Registry.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Controllable_8hpp}{../../shared/components/Controllable.hpp}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Drawable_8hpp}{../../shared/components/Drawable.hpp}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Position_8hpp}{../../shared/components/Position.hpp}}"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Velocity_8hpp}{../../shared/components/Velocity.hpp}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Type_8hpp}{../../shared/components/Type.hpp}}"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Health_8hpp}{../../shared/components/Health.hpp}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Damage_8hpp}{../../shared/components/Damage.hpp}}"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{ShootingSpeed_8hpp}{../../shared/components/ShootingSpeed.hpp}}"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Score_8hpp}{../../shared/components/Score.hpp}}"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Wave__Pattern_8hpp}{../../shared/components/Wave\_Pattern.hpp}}"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{StraightPattern_8hpp}{../../shared/components/StraightPattern.hpp}}"{}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{PlayerFollowingPattern_8hpp}{../../shared/components/PlayerFollowingPattern.hpp}}"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{ShootPlayerPattern_8hpp}{../../shared/components/ShootPlayerPattern.hpp}}"{}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{ShootStraightPattern_8hpp}{../../shared/components/ShootStraightPattern.hpp}}"{}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Shoot_8hpp}{../../shared/components/Shoot.hpp}}"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Direction_8hpp}{../../shared/components/Direction.hpp}}"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{NetworkSender_8hpp}{../GameLogique/NetworkSender.hpp}}"{}}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Size_8hpp}{../../shared/components/Size.hpp}}"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Tag_8hpp}{../../shared/components/Tag.hpp}}"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <libconfig.h++>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Logger_8hpp}{../../shared/utils/Logger.hpp}}"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classSystems}{Systems}}\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a775197fd612072c1259eda4f5c1f3670}{position\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ std::unique\_ptr<NetworkSender>\&\ network,\ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a3610e24c0863c6b59f66393174811685}{control\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ \textcolor{keywordtype}{bool}\ up,\ \textcolor{keywordtype}{bool}\ down,\ \textcolor{keywordtype}{bool}\ left,\ \textcolor{keywordtype}{bool}\ right,\ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a024418f680bed2146fd5da3eaa3081c1}{draw\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ sf::RenderWindow\&\ window,\ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a7406833bdf06fcf4d06a42303e9ed0c7}{logging\_system}}(\mbox{\hyperlink{classSparseArray}{SparseArray<Position\_s>}}\ \textcolor{keyword}{const}\&\ positions,}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSparseArray}{SparseArray<Velocity\_s>}}\ \textcolor{keyword}{const}\&\ velocities,}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a36b7e556b1a5277b0e0afd3dd0d37757}{collision\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<size\_t,\ size\_t>\ MapSize,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_ptr<NetworkSender>\&\ networkSender,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a7505bc2f8ce971dc2232c9973d653caa}{shoot\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\_t}}\ playerId,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_ptr<NetworkSender>\&\ networkSender,}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a47618fb35cede5ad08488080aabeef2e}{score\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg);}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a6b747a9200cc2b1d588be196f029ef20}{wave\_pattern\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ \textcolor{keywordtype}{float}\ totalTime,\ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a34c12cc97287c7fe1b0d5ac48896f07e}{health\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg);}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_ae5f687a91108acc210db906c10afd248}{death\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger);}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_ad04861719062fb00cf4548ed3b766c4c}{Straight\_line\_pattern\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg);}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_ae4da57e750620f8b91f41f26063c5f57}{player\_following\_pattern\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg);}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a9976dac12dd12c4fda9da8fccb7c38ec}{shoot\_straight\_pattern\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ std::unique\_ptr<NetworkSender>\&\ networkSender);}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_ae8e503be3a1136a85762f7fea4472981}{shoot\_player\_pattern\_system}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ std::unique\_ptr<NetworkSender>\&\ networkSender);}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a1347863e13fb7877cb47d73545125639}{check\_borders\_collisions}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ entityId,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structPosition__s}{Position\_s}}*\ position,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSize__s}{Size\_s}}*\ size,}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structType__s}{Type\_s}}*\ type,}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<size\_t,\ size\_t>\ MapSize,}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger,}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_ptr<NetworkSender>\&\ networkSender);}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_aed75ccedfe0706436bd161f5c94c3162}{check\_entities\_collisions}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ entityId1,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structPosition__s}{Position\_s}}*\ position1,}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSize__s}{Size\_s}}*\ size1,}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ entityId2,}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structPosition__s}{Position\_s}}*\ position2,}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSize__s}{Size\_s}}*\ size2,}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\&\ logger,}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::unique\_ptr<NetworkSender>\&\ networkSender,}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structType__s}{Type\_s}}*\ entityType1,}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structType__s}{Type\_s}}*\ entityType2);}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classSystems_ac82e6ceedbce2fe2092fe8a4c041ed3b}{read\_scores\_file}}(libconfig::Config\&\ cfg,\ \textcolor{keyword}{const}\ std::string\&\ configPath);}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSystems_a59a7aadf30c7a592489d0120950a16e8}{update\_scores}}(libconfig::Config\&\ cfg,\ \textcolor{keyword}{const}\ std::string\&\ playerNames,\ \textcolor{keywordtype}{size\_t}\ totalScore);}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classSystems_a9934da042f123d154eb1dac2d89c5659}{write\_to\_scores\_file}}(libconfig::Config\&\ cfg,\ \textcolor{keyword}{const}\ std::string\&\ configPath);}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ std::array<float,\ 2>\ \mbox{\hyperlink{classSystems_acd14cffb2b6b579cf461f7a078886a70}{find\_closest\_player}}(\mbox{\hyperlink{classRegistry}{Registry}}\&\ reg,\ \mbox{\hyperlink{structPosition__s}{Position}}*\ position\_entity);}
+\DoxyCodeLine{00242\ \};}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !SYSTEMS\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

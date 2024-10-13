@@ -1,0 +1,479 @@
+\doxysection{RType\+::Game Class Reference}
+\hypertarget{classRType_1_1Game}{}\label{classRType_1_1Game}\index{RType::Game@{RType::Game}}
+
+
+{\ttfamily \#include $<$Game.\+hpp$>$}
+
+
+
+Collaboration diagram for RType\+::Game\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=219pt]{classRType_1_1Game__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+sf\+::\+Vector2f \mbox{\hyperlink{classRType_1_1Game_acd128cc1be83a90247d0ae8f5c58034c}{convert\+To\+Vector2f}} (const \mbox{\hyperlink{Size_8hpp_a2faa07b4077890f24c0e05160de993fa}{Size}} \&size)
+\begin{DoxyCompactList}\small\item\em Convert structure Size to a Vector2f. \end{DoxyCompactList}\item 
+sf\+::\+Vector2f \mbox{\hyperlink{classRType_1_1Game_a34d223f816465e204f3b4e9bae0ba41b}{convert\+To\+Vector2fb}} (const \mbox{\hyperlink{Position_8hpp_a914352882bc89719adfa7e8a2716a2c3}{Position}} \&pos)
+\begin{DoxyCompactList}\small\item\em Convert structure Position to a Vector2f. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_a3f912b8b42e8b2bc0b5029ab5d711344}{display\+Game}} ()
+\begin{DoxyCompactList}\small\item\em Displays the cinematic just before the game starts. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_af5a07777e8051b0c1fbbac182bbfff7f}{display\+Piou}} ()
+\begin{DoxyCompactList}\small\item\em Displays the subtitle of a shoot. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_a8e6891b6cd5c67ed6d46713f216c28f1}{Display\+Skip\+Intro}} ()
+\begin{DoxyCompactList}\small\item\em Displays the skip intro text. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1Game_aaaed99fdf0e1c3134addea50e9ee1b4d}{Game}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1Game_af11aa5a38e72270d2f05050837cec0f3}{Game}} (std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$ \+\_\+window)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classRType_1_1Game}{Game} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_a13586bdc6c10d65b2dcfa86513e3a1c9}{play}} ()
+\begin{DoxyCompactList}\small\item\em Displays the game we are playing. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_a08c5149485749e0b12987699766452b8}{set\+\_\+texture}} ()
+\begin{DoxyCompactList}\small\item\em set the textures needed from camera to the textures map \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_a5f88defb98648e71cd8a0605b8654731}{set\+Camera}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ camera)
+\begin{DoxyCompactList}\small\item\em Set the camera to display. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_a66bac10b286c55720bd20ed64d5bc4ea}{set\+Mediator}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator)
+\begin{DoxyCompactList}\small\item\em Sets the mediator, it will be used to communicate with the rendering engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_af1a841d8c3872e05531a5e0190bc4206}{set\+Mutex}} (std\+::shared\+\_\+ptr$<$ std\+::mutex $>$ mutex)
+\begin{DoxyCompactList}\small\item\em Set the mutex. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Game_a35b5a8463c470710bdf60437997962a5}{Shoot\+Sound}} ()
+\begin{DoxyCompactList}\small\item\em Plays the shoot sound. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1Game_a64c7e50263137dd25a655b342f6002a2}{\texorpdfstring{$\sim$}{\string~}\+Game}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \doxylink{classRType_1_1Game}{Game} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ \mbox{\hyperlink{classRType_1_1Game_aa94b376b8d1c6ed4f00227e938fa7c11}{\+\_\+mediator}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classRType_1_1Game_acde7384da42bc35badafa066f4095dcf}{handle\+Events}} ()
+\begin{DoxyCompactList}\small\item\em Handles the events of the game. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classRType_1_1Game_a660edc21a4f7e391a150b650c2625f6f}{load\+Frame\+Texture}} (sf\+::\+Texture \&texture, sf\+::\+Rectangle\+Shape \&shape)
+\begin{DoxyCompactList}\small\item\em Loads the texture of the current frame. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ \mbox{\hyperlink{classRType_1_1Game_a5286c9c13a2b5d47a9f01cc72752df72}{\+\_\+camera}}
+\item 
+std\+::shared\+\_\+ptr$<$ std\+::mutex $>$ \mbox{\hyperlink{classRType_1_1Game_a377cbef1646929a845443ae578e40266}{\+\_\+mutex}}
+\item 
+\mbox{\hyperlink{classRegistry}{Registry}} \mbox{\hyperlink{classRType_1_1Game_a74b6018255a4078256fe0037942f6ba0}{\+\_\+registry}}
+\item 
+\mbox{\hyperlink{classSystems}{Systems}} \mbox{\hyperlink{classRType_1_1Game_a788196222c55b981fa6b6b55f8759bb8}{\+\_\+systems}}
+\item 
+bool \mbox{\hyperlink{classRType_1_1Game_a0c834063cd5cf6dec40a333eb71194cc}{animation\+Complete}}
+\item 
+sf\+::\+Clock \mbox{\hyperlink{classRType_1_1Game_ac01943766c9e2713f1593aaebac76a56}{Background\+Clock}}
+\item 
+std\+::vector$<$ sf\+::\+Rectangle\+Shape $>$ \mbox{\hyperlink{classRType_1_1Game_ae73d6da89938054ec8b6ecf91894cfab}{backgrounds}}
+\item 
+std\+::vector$<$ sf\+::\+Texture $>$ \mbox{\hyperlink{classRType_1_1Game_a9af8fc6b8eaf521d76913aede5d7afdb}{background\+Textures}}
+\item 
+int \mbox{\hyperlink{classRType_1_1Game_a75dc3e04b1947c1fb7993ca4eb3fbc8d}{current\+Frame}}
+\item 
+std\+::vector$<$ sf\+::\+Rectangle\+Shape $>$ \mbox{\hyperlink{classRType_1_1Game_a2ae91578f8af9b27f50cb12af1b67ca6}{entity}}
+\item 
+sf\+::\+Font \mbox{\hyperlink{classRType_1_1Game_a59459f52a644d40bfbbe7482088db12a}{font}}
+\item 
+float \mbox{\hyperlink{classRType_1_1Game_a7cb1df0c2ec6acff7cb6c6244afc8e86}{frame\+Duration}}
+\item 
+sf\+::\+Sound \mbox{\hyperlink{classRType_1_1Game_a06cd74f23ca0dda337c917d059e949da}{game\+\_\+launch\+\_\+music}}
+\item 
+sf\+::\+Sound\+Buffer \mbox{\hyperlink{classRType_1_1Game_a5283b91f86f32e846cbb39213efbf2cc}{game\+\_\+launch\+\_\+sound}}
+\item 
+bool \mbox{\hyperlink{classRType_1_1Game_a3dfa46eb0da219488d26cea2ab10721b}{is\+Shooting}}
+\item 
+bool \mbox{\hyperlink{classRType_1_1Game_af9460c613fe7f77bb10741aade29ca27}{piou}} = false
+\item 
+std\+::vector$<$ sf\+::\+Rectangle\+Shape $>$ \mbox{\hyperlink{classRType_1_1Game_a4726ddc1b25fdce3f032fb8770ec78fb}{players}}
+\item 
+std\+::vector$<$ sf\+::\+Texture $>$ \mbox{\hyperlink{classRType_1_1Game_ad3be4cf859e63494c557cc5adc88f44b}{player\+Textures}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classSettings}{Settings}} $>$ \mbox{\hyperlink{classRType_1_1Game_a04e3f5e61125fbb1c20807999419f449}{settings}}
+\item 
+sf\+::\+Sound \mbox{\hyperlink{classRType_1_1Game_ab2773f40be59a87724fd3ba8f6406125}{shoot\+\_\+music}}
+\item 
+sf\+::\+Sound \mbox{\hyperlink{classRType_1_1Game_a22144b146422c4c11e4ce6536ac203f2}{shoot\+\_\+music2}}
+\item 
+sf\+::\+Sound\+Buffer \mbox{\hyperlink{classRType_1_1Game_a6235b79b0108db356210dd63e5afae33}{shoot\+\_\+sound}}
+\item 
+sf\+::\+Sound\+Buffer \mbox{\hyperlink{classRType_1_1Game_af45676b6781615aaeee8aa0cc83b6a39}{shoot\+\_\+sound2}}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, sf\+::\+Texture \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classRType_1_1Game_a6d7f7c64d4f5ffc288ab828d8598b96e}{Textures}}
+\begin{DoxyCompactList}\small\item\em map that will stock the textures, It will allow us to not load a texture every time we find a new entity but just when we find one that is not in our map \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$ \mbox{\hyperlink{classRType_1_1Game_a76ea6d75d2e7a23292bcae26b2f7fa14}{window}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1Game_aaaed99fdf0e1c3134addea50e9ee1b4d}\label{classRType_1_1Game_aaaed99fdf0e1c3134addea50e9ee1b4d} 
+\index{RType::Game@{RType::Game}!Game@{Game}}
+\index{Game@{Game}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{Game()}{Game()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily RType\+::\+Game\+::\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default constructor. 
+
+\Hypertarget{classRType_1_1Game_af11aa5a38e72270d2f05050837cec0f3}\label{classRType_1_1Game_af11aa5a38e72270d2f05050837cec0f3} 
+\index{RType::Game@{RType::Game}!Game@{Game}}
+\index{Game@{Game}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{Game()}{Game()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily RType\+::\+Game\+::\+Game (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$}]{\+\_\+window }\end{DoxyParamCaption})}
+
+
+
+Construct a new \doxylink{classRType_1_1Game}{Game} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+window} & The window to display the game on. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Game_a64c7e50263137dd25a655b342f6002a2}\label{classRType_1_1Game_a64c7e50263137dd25a655b342f6002a2} 
+\index{RType::Game@{RType::Game}!````~Game@{\texorpdfstring{$\sim$}{\string~}Game}}
+\index{````~Game@{\texorpdfstring{$\sim$}{\string~}Game}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Game()}{\string~Game()}}
+{\footnotesize\ttfamily RType\+::\+Game\+::\texorpdfstring{$\sim$}{\string~}\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destroy the \doxylink{classRType_1_1Game}{Game} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1Game_acd128cc1be83a90247d0ae8f5c58034c}\label{classRType_1_1Game_acd128cc1be83a90247d0ae8f5c58034c} 
+\index{RType::Game@{RType::Game}!convertToVector2f@{convertToVector2f}}
+\index{convertToVector2f@{convertToVector2f}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{convertToVector2f()}{convertToVector2f()}}
+{\footnotesize\ttfamily sf\+::\+Vector2f RType\+::\+Game\+::convert\+To\+Vector2f (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{Size_8hpp_a2faa07b4077890f24c0e05160de993fa}{Size}} \&}]{size }\end{DoxyParamCaption})}
+
+
+
+Convert structure Size to a Vector2f. 
+
+\Hypertarget{classRType_1_1Game_a34d223f816465e204f3b4e9bae0ba41b}\label{classRType_1_1Game_a34d223f816465e204f3b4e9bae0ba41b} 
+\index{RType::Game@{RType::Game}!convertToVector2fb@{convertToVector2fb}}
+\index{convertToVector2fb@{convertToVector2fb}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{convertToVector2fb()}{convertToVector2fb()}}
+{\footnotesize\ttfamily sf\+::\+Vector2f RType\+::\+Game\+::convert\+To\+Vector2fb (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{Position_8hpp_a914352882bc89719adfa7e8a2716a2c3}{Position}} \&}]{pos }\end{DoxyParamCaption})}
+
+
+
+Convert structure Position to a Vector2f. 
+
+\Hypertarget{classRType_1_1Game_a3f912b8b42e8b2bc0b5029ab5d711344}\label{classRType_1_1Game_a3f912b8b42e8b2bc0b5029ab5d711344} 
+\index{RType::Game@{RType::Game}!displayGame@{displayGame}}
+\index{displayGame@{displayGame}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{displayGame()}{displayGame()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::display\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the cinematic just before the game starts. 
+
+\Hypertarget{classRType_1_1Game_af5a07777e8051b0c1fbbac182bbfff7f}\label{classRType_1_1Game_af5a07777e8051b0c1fbbac182bbfff7f} 
+\index{RType::Game@{RType::Game}!displayPiou@{displayPiou}}
+\index{displayPiou@{displayPiou}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{displayPiou()}{displayPiou()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::display\+Piou (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the subtitle of a shoot. 
+
+\Hypertarget{classRType_1_1Game_a8e6891b6cd5c67ed6d46713f216c28f1}\label{classRType_1_1Game_a8e6891b6cd5c67ed6d46713f216c28f1} 
+\index{RType::Game@{RType::Game}!DisplaySkipIntro@{DisplaySkipIntro}}
+\index{DisplaySkipIntro@{DisplaySkipIntro}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{DisplaySkipIntro()}{DisplaySkipIntro()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::\+Display\+Skip\+Intro (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the skip intro text. 
+
+\Hypertarget{classRType_1_1Game_acde7384da42bc35badafa066f4095dcf}\label{classRType_1_1Game_acde7384da42bc35badafa066f4095dcf} 
+\index{RType::Game@{RType::Game}!handleEvents@{handleEvents}}
+\index{handleEvents@{handleEvents}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{handleEvents()}{handleEvents()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::handle\+Events (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handles the events of the game. 
+
+This function processes events such as closing the window. \Hypertarget{classRType_1_1Game_a660edc21a4f7e391a150b650c2625f6f}\label{classRType_1_1Game_a660edc21a4f7e391a150b650c2625f6f} 
+\index{RType::Game@{RType::Game}!loadFrameTexture@{loadFrameTexture}}
+\index{loadFrameTexture@{loadFrameTexture}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{loadFrameTexture()}{loadFrameTexture()}}
+{\footnotesize\ttfamily bool RType\+::\+Game\+::load\+Frame\+Texture (\begin{DoxyParamCaption}\item[{sf\+::\+Texture \&}]{texture,  }\item[{sf\+::\+Rectangle\+Shape \&}]{shape }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Loads the texture of the current frame. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture} & The texture to load. \\
+\hline
+{\em sprite} & The sprite to load. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true If the texture was loaded successfully. 
+
+false If the texture failed to load. 
+\end{DoxyReturn}
+\Hypertarget{classRType_1_1Game_a13586bdc6c10d65b2dcfa86513e3a1c9}\label{classRType_1_1Game_a13586bdc6c10d65b2dcfa86513e3a1c9} 
+\index{RType::Game@{RType::Game}!play@{play}}
+\index{play@{play}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{play()}{play()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::play (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the game we are playing. 
+
+\Hypertarget{classRType_1_1Game_a08c5149485749e0b12987699766452b8}\label{classRType_1_1Game_a08c5149485749e0b12987699766452b8} 
+\index{RType::Game@{RType::Game}!set\_texture@{set\_texture}}
+\index{set\_texture@{set\_texture}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{set\_texture()}{set\_texture()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::set\+\_\+texture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+set the textures needed from camera to the textures map 
+
+\Hypertarget{classRType_1_1Game_a5f88defb98648e71cd8a0605b8654731}\label{classRType_1_1Game_a5f88defb98648e71cd8a0605b8654731} 
+\index{RType::Game@{RType::Game}!setCamera@{setCamera}}
+\index{setCamera@{setCamera}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{setCamera()}{setCamera()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::set\+Camera (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$}]{camera }\end{DoxyParamCaption})}
+
+
+
+Set the camera to display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em camera} & the camera to set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Game_a66bac10b286c55720bd20ed64d5bc4ea}\label{classRType_1_1Game_a66bac10b286c55720bd20ed64d5bc4ea} 
+\index{RType::Game@{RType::Game}!setMediator@{setMediator}}
+\index{setMediator@{setMediator}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{setMediator()}{setMediator()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::set\+Mediator (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$}]{mediator }\end{DoxyParamCaption})}
+
+
+
+Sets the mediator, it will be used to communicate with the rendering engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mediator} & The mediator to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Game_af1a841d8c3872e05531a5e0190bc4206}\label{classRType_1_1Game_af1a841d8c3872e05531a5e0190bc4206} 
+\index{RType::Game@{RType::Game}!setMutex@{setMutex}}
+\index{setMutex@{setMutex}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{setMutex()}{setMutex()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::set\+Mutex (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ std\+::mutex $>$}]{mutex }\end{DoxyParamCaption})}
+
+
+
+Set the mutex. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & the mutex to set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Game_a35b5a8463c470710bdf60437997962a5}\label{classRType_1_1Game_a35b5a8463c470710bdf60437997962a5} 
+\index{RType::Game@{RType::Game}!ShootSound@{ShootSound}}
+\index{ShootSound@{ShootSound}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{ShootSound()}{ShootSound()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+::\+Shoot\+Sound (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Plays the shoot sound. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1Game_a5286c9c13a2b5d47a9f01cc72752df72}\label{classRType_1_1Game_a5286c9c13a2b5d47a9f01cc72752df72} 
+\index{RType::Game@{RType::Game}!\_camera@{\_camera}}
+\index{\_camera@{\_camera}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{\_camera}{\_camera}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}}$>$ RType\+::\+Game\+::\+\_\+camera\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_aa94b376b8d1c6ed4f00227e938fa7c11}\label{classRType_1_1Game_aa94b376b8d1c6ed4f00227e938fa7c11} 
+\index{RType::Game@{RType::Game}!\_mediator@{\_mediator}}
+\index{\_mediator@{\_mediator}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{\_mediator}{\_mediator}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1IMediator}{IMediator}}$>$ RType\+::\+Game\+::\+\_\+mediator}
+
+\Hypertarget{classRType_1_1Game_a377cbef1646929a845443ae578e40266}\label{classRType_1_1Game_a377cbef1646929a845443ae578e40266} 
+\index{RType::Game@{RType::Game}!\_mutex@{\_mutex}}
+\index{\_mutex@{\_mutex}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{\_mutex}{\_mutex}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$std\+::mutex$>$ RType\+::\+Game\+::\+\_\+mutex\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a74b6018255a4078256fe0037942f6ba0}\label{classRType_1_1Game_a74b6018255a4078256fe0037942f6ba0} 
+\index{RType::Game@{RType::Game}!\_registry@{\_registry}}
+\index{\_registry@{\_registry}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{\_registry}{\_registry}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRegistry}{Registry}} RType\+::\+Game\+::\+\_\+registry\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a788196222c55b981fa6b6b55f8759bb8}\label{classRType_1_1Game_a788196222c55b981fa6b6b55f8759bb8} 
+\index{RType::Game@{RType::Game}!\_systems@{\_systems}}
+\index{\_systems@{\_systems}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{\_systems}{\_systems}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSystems}{Systems}} RType\+::\+Game\+::\+\_\+systems\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a0c834063cd5cf6dec40a333eb71194cc}\label{classRType_1_1Game_a0c834063cd5cf6dec40a333eb71194cc} 
+\index{RType::Game@{RType::Game}!animationComplete@{animationComplete}}
+\index{animationComplete@{animationComplete}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{animationComplete}{animationComplete}}
+{\footnotesize\ttfamily bool RType\+::\+Game\+::animation\+Complete\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_ac01943766c9e2713f1593aaebac76a56}\label{classRType_1_1Game_ac01943766c9e2713f1593aaebac76a56} 
+\index{RType::Game@{RType::Game}!BackgroundClock@{BackgroundClock}}
+\index{BackgroundClock@{BackgroundClock}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{BackgroundClock}{BackgroundClock}}
+{\footnotesize\ttfamily sf\+::\+Clock RType\+::\+Game\+::\+Background\+Clock\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_ae73d6da89938054ec8b6ecf91894cfab}\label{classRType_1_1Game_ae73d6da89938054ec8b6ecf91894cfab} 
+\index{RType::Game@{RType::Game}!backgrounds@{backgrounds}}
+\index{backgrounds@{backgrounds}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{backgrounds}{backgrounds}}
+{\footnotesize\ttfamily std\+::vector$<$sf\+::\+Rectangle\+Shape$>$ RType\+::\+Game\+::backgrounds\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a9af8fc6b8eaf521d76913aede5d7afdb}\label{classRType_1_1Game_a9af8fc6b8eaf521d76913aede5d7afdb} 
+\index{RType::Game@{RType::Game}!backgroundTextures@{backgroundTextures}}
+\index{backgroundTextures@{backgroundTextures}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{backgroundTextures}{backgroundTextures}}
+{\footnotesize\ttfamily std\+::vector$<$sf\+::\+Texture$>$ RType\+::\+Game\+::background\+Textures\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a75dc3e04b1947c1fb7993ca4eb3fbc8d}\label{classRType_1_1Game_a75dc3e04b1947c1fb7993ca4eb3fbc8d} 
+\index{RType::Game@{RType::Game}!currentFrame@{currentFrame}}
+\index{currentFrame@{currentFrame}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{currentFrame}{currentFrame}}
+{\footnotesize\ttfamily int RType\+::\+Game\+::current\+Frame\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a2ae91578f8af9b27f50cb12af1b67ca6}\label{classRType_1_1Game_a2ae91578f8af9b27f50cb12af1b67ca6} 
+\index{RType::Game@{RType::Game}!entity@{entity}}
+\index{entity@{entity}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{entity}{entity}}
+{\footnotesize\ttfamily std\+::vector$<$sf\+::\+Rectangle\+Shape$>$ RType\+::\+Game\+::entity\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a59459f52a644d40bfbbe7482088db12a}\label{classRType_1_1Game_a59459f52a644d40bfbbe7482088db12a} 
+\index{RType::Game@{RType::Game}!font@{font}}
+\index{font@{font}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{font}{font}}
+{\footnotesize\ttfamily sf\+::\+Font RType\+::\+Game\+::font\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a7cb1df0c2ec6acff7cb6c6244afc8e86}\label{classRType_1_1Game_a7cb1df0c2ec6acff7cb6c6244afc8e86} 
+\index{RType::Game@{RType::Game}!frameDuration@{frameDuration}}
+\index{frameDuration@{frameDuration}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{frameDuration}{frameDuration}}
+{\footnotesize\ttfamily float RType\+::\+Game\+::frame\+Duration\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a06cd74f23ca0dda337c917d059e949da}\label{classRType_1_1Game_a06cd74f23ca0dda337c917d059e949da} 
+\index{RType::Game@{RType::Game}!game\_launch\_music@{game\_launch\_music}}
+\index{game\_launch\_music@{game\_launch\_music}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{game\_launch\_music}{game\_launch\_music}}
+{\footnotesize\ttfamily sf\+::\+Sound RType\+::\+Game\+::game\+\_\+launch\+\_\+music\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a5283b91f86f32e846cbb39213efbf2cc}\label{classRType_1_1Game_a5283b91f86f32e846cbb39213efbf2cc} 
+\index{RType::Game@{RType::Game}!game\_launch\_sound@{game\_launch\_sound}}
+\index{game\_launch\_sound@{game\_launch\_sound}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{game\_launch\_sound}{game\_launch\_sound}}
+{\footnotesize\ttfamily sf\+::\+Sound\+Buffer RType\+::\+Game\+::game\+\_\+launch\+\_\+sound\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a3dfa46eb0da219488d26cea2ab10721b}\label{classRType_1_1Game_a3dfa46eb0da219488d26cea2ab10721b} 
+\index{RType::Game@{RType::Game}!isShooting@{isShooting}}
+\index{isShooting@{isShooting}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{isShooting}{isShooting}}
+{\footnotesize\ttfamily bool RType\+::\+Game\+::is\+Shooting\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_af9460c613fe7f77bb10741aade29ca27}\label{classRType_1_1Game_af9460c613fe7f77bb10741aade29ca27} 
+\index{RType::Game@{RType::Game}!piou@{piou}}
+\index{piou@{piou}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{piou}{piou}}
+{\footnotesize\ttfamily bool RType\+::\+Game\+::piou = false\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a4726ddc1b25fdce3f032fb8770ec78fb}\label{classRType_1_1Game_a4726ddc1b25fdce3f032fb8770ec78fb} 
+\index{RType::Game@{RType::Game}!players@{players}}
+\index{players@{players}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{players}{players}}
+{\footnotesize\ttfamily std\+::vector$<$sf\+::\+Rectangle\+Shape$>$ RType\+::\+Game\+::players\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_ad3be4cf859e63494c557cc5adc88f44b}\label{classRType_1_1Game_ad3be4cf859e63494c557cc5adc88f44b} 
+\index{RType::Game@{RType::Game}!playerTextures@{playerTextures}}
+\index{playerTextures@{playerTextures}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{playerTextures}{playerTextures}}
+{\footnotesize\ttfamily std\+::vector$<$sf\+::\+Texture$>$ RType\+::\+Game\+::player\+Textures\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a04e3f5e61125fbb1c20807999419f449}\label{classRType_1_1Game_a04e3f5e61125fbb1c20807999419f449} 
+\index{RType::Game@{RType::Game}!settings@{settings}}
+\index{settings@{settings}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{settings}{settings}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classSettings}{Settings}}$>$ RType\+::\+Game\+::settings\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_ab2773f40be59a87724fd3ba8f6406125}\label{classRType_1_1Game_ab2773f40be59a87724fd3ba8f6406125} 
+\index{RType::Game@{RType::Game}!shoot\_music@{shoot\_music}}
+\index{shoot\_music@{shoot\_music}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{shoot\_music}{shoot\_music}}
+{\footnotesize\ttfamily sf\+::\+Sound RType\+::\+Game\+::shoot\+\_\+music\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a22144b146422c4c11e4ce6536ac203f2}\label{classRType_1_1Game_a22144b146422c4c11e4ce6536ac203f2} 
+\index{RType::Game@{RType::Game}!shoot\_music2@{shoot\_music2}}
+\index{shoot\_music2@{shoot\_music2}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{shoot\_music2}{shoot\_music2}}
+{\footnotesize\ttfamily sf\+::\+Sound RType\+::\+Game\+::shoot\+\_\+music2\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a6235b79b0108db356210dd63e5afae33}\label{classRType_1_1Game_a6235b79b0108db356210dd63e5afae33} 
+\index{RType::Game@{RType::Game}!shoot\_sound@{shoot\_sound}}
+\index{shoot\_sound@{shoot\_sound}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{shoot\_sound}{shoot\_sound}}
+{\footnotesize\ttfamily sf\+::\+Sound\+Buffer RType\+::\+Game\+::shoot\+\_\+sound\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_af45676b6781615aaeee8aa0cc83b6a39}\label{classRType_1_1Game_af45676b6781615aaeee8aa0cc83b6a39} 
+\index{RType::Game@{RType::Game}!shoot\_sound2@{shoot\_sound2}}
+\index{shoot\_sound2@{shoot\_sound2}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{shoot\_sound2}{shoot\_sound2}}
+{\footnotesize\ttfamily sf\+::\+Sound\+Buffer RType\+::\+Game\+::shoot\+\_\+sound2\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Game_a6d7f7c64d4f5ffc288ab828d8598b96e}\label{classRType_1_1Game_a6d7f7c64d4f5ffc288ab828d8598b96e} 
+\index{RType::Game@{RType::Game}!Textures@{Textures}}
+\index{Textures@{Textures}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{Textures}{Textures}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, sf\+::\+Texture\texorpdfstring{$\ast$}{*}$>$ RType\+::\+Game\+::\+Textures\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+map that will stock the textures, It will allow us to not load a texture every time we find a new entity but just when we find one that is not in our map 
+
+\Hypertarget{classRType_1_1Game_a76ea6d75d2e7a23292bcae26b2f7fa14}\label{classRType_1_1Game_a76ea6d75d2e7a23292bcae26b2f7fa14} 
+\index{RType::Game@{RType::Game}!window@{window}}
+\index{window@{window}!RType::Game@{RType::Game}}
+\doxysubsubsection{\texorpdfstring{window}{window}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$sf\+::\+Render\+Window$>$ RType\+::\+Game\+::window\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Render\+Engine/\+Menu/\mbox{\hyperlink{Game_8hpp}{Game.\+hpp}}\item 
+src/client/\+Render\+Engine/\+Menu/\mbox{\hyperlink{Game_8cpp}{Game.\+cpp}}\end{DoxyCompactItemize}
