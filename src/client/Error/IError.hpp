@@ -13,12 +13,12 @@
 namespace RType {
     class IError : public std::exception {
         public:
-            virtual ~IError() noexcept = default;
+            virtual ~IError() noexcept                         = default;
             virtual const char* what() const noexcept override = 0;
-            virtual const char* where() const noexcept = 0;
+            virtual const char* where() const noexcept         = 0;
 
         protected:
     };
-}
+} // namespace RType
 
 #endif /* !IERROR_HPP_ */

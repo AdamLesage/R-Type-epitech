@@ -9,54 +9,74 @@
 #define DLLOADER_HPP_
 
 #include <string>
-#include <dlfcn.h>
+#include <iostream>
 #include "./Error/DLError.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
 
 class DLLoader {
     public:
-        DLLoader() {
-            this->handle = nullptr;
-        }
-        DLLoader(std::string nameLib) {
-            this->handle = dlopen(nameLib.c_str(), RTLD_NOW);
-            if (handle == nullptr) {
-                std::cout << "Error loading lib " << nameLib << std::endl;
-                throw RType::DLError("Error loading lib " + nameLib, "src/DLloader.hpp/DLloader");
-            }
-        }
-        ~DLLoader() {
-            dlclose(this->handle);
+        DLLoader() : handle(nullptr) {
         }
 
-        /**
-         * @brief Get the Instance object
-         * 
-         * @param Name path of the shared library
-         * @return T* Template of the current instance of the class
-        */
-        template <typename T>
-        T *getInstance(std::string Name) const // load the class in the library
-        {
+        DLLoader(const std::string& nameLib) {
+#if defined(_WIN32) || defined(_WIN64)
+            handle = LoadLibrary(nameLib.c_str());
             if (!handle) {
-                return nullptr;
+                std::cerr << "Error loading lib " << nameLib << std::endl;
+                throw RType::DLError("Error loading lib " + nameLib, "src/DLLoader.hpp/DLLoader");
             }
-            char *error = NULL;
-            T *(*entryPoint)();
+#else
+            handle = dlopen(nameLib.c_str(), RTLD_NOW);
+            if (!handle) {
+                std::cerr << "Error loading lib " << nameLib << std::endl;
+                throw RType::DLError("Error loading lib " + nameLib, "src/DLLoader.hpp/DLLoader");
+            }
+#endif
+        }
 
-            entryPoint = (T *(*)()) dlsym(handle, Name.c_str());
+        ~DLLoader() {
+            if (handle) {
+#if defined(_WIN32) || defined(_WIN64)
+                FreeLibrary(static_cast<HMODULE>(handle));
+#else
+                dlclose(handle);
+#endif
+            }
+        }
+
+        template <typename T> T* getInstance(const std::string& symbolName) const {
+            if (!handle) return nullptr;
+
+#if defined(_WIN32) || defined(_WIN64)
+            T* (*entryPoint)();
+            entryPoint =
+                reinterpret_cast<T* (*)()>(GetProcAddress(static_cast<HMODULE>(handle), symbolName.c_str()));
             if (!entryPoint) {
-                std::cout << Name << std::endl;
-                throw RType::DLError("Error loading entyPoint", "stc/DLloader.hpp/getInstance");
+                std::cerr << "Error loading symbol: " << symbolName << std::endl;
+                throw RType::DLError("Error loading symbol", "src/DLLoader.hpp/getInstance");
+            }
+#else
+            char* error = nullptr;
+            T* (*entryPoint)();
+            entryPoint = (T * (*)()) dlsym(handle, symbolName.c_str());
+            if (!entryPoint) {
+                std::cerr << "Error loading symbol: " << symbolName << std::endl;
+                throw RType::DLError("Error loading symbol", "src/DLLoader.hpp/getInstance");
             }
             error = dlerror();
-            if (error != NULL) {
-                printf("error\n");
-            }
+            if (error) std::cerr << "dlsym error: " << error << std::endl;
+
+#endif
             return entryPoint();
         }
+
     private:
-        void *handle;
+        void* handle;
 };
 
 #endif /* !DLLOADER_HPP_ */

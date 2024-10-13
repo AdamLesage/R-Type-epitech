@@ -6,13 +6,12 @@
 */
 
 #ifndef SPARSEARRAY_HPP_
-    #define SPARSEARRAY_HPP_
+#define SPARSEARRAY_HPP_
 
-    #include <vector>
-    #include <optional>
+#include <vector>
+#include <optional>
 
-template <typename Component>
-class SparseArray {
+template <typename Component> class SparseArray {
     public:
         /**
          * @typedef value_type
@@ -67,7 +66,7 @@ class SparseArray {
          *
          * @param other The SparseArray instance to copy from.
          */
-        SparseArray(SparseArray const &other) {
+        SparseArray(SparseArray const& other) {
             _data = other._data;
         }
 
@@ -76,14 +75,15 @@ class SparseArray {
          *
          * @param other The SparseArray instance to move from.
          */
-        SparseArray(SparseArray &&other) noexcept {
+        SparseArray(SparseArray&& other) noexcept {
             _data = std::move(other._data);
         }
 
         /**
          * @brief Destructor for SparseArray.
          */
-        ~SparseArray() {}
+        ~SparseArray() {
+        }
 
         /**
          * @brief Copy assignment operator.
@@ -91,7 +91,7 @@ class SparseArray {
          * @param other The SparseArray instance to copy from.
          * @return Reference to the current object.
          */
-        SparseArray &operator=(SparseArray const &other) {
+        SparseArray& operator=(SparseArray const& other) {
             _data = other._data;
             return *this;
         }
@@ -102,7 +102,7 @@ class SparseArray {
          * @param other The SparseArray instance to move from.
          * @return Reference to the current object.
          */
-        SparseArray &operator=(SparseArray &&other) noexcept {
+        SparseArray& operator=(SparseArray&& other) noexcept {
             _data = std::move(other._data);
             return *this;
         }
@@ -190,7 +190,7 @@ class SparseArray {
          * @param component The component to insert.
          * @return Reference to the inserted component.
          */
-        reference_type insert_at(size_type pos, Component const &component) {
+        reference_type insert_at(size_type pos, Component const& component) {
             if (pos >= _data.size()) {
                 _data.resize(pos + 1);
             }
@@ -205,7 +205,7 @@ class SparseArray {
          * @param component The component to insert.
          * @return Reference to the inserted component.
          */
-        reference_type insert_at(size_type pos, Component &&component) {
+        reference_type insert_at(size_type pos, Component&& component) {
             if (pos >= _data.size()) {
                 _data.resize(pos + 1);
             }
@@ -221,8 +221,7 @@ class SparseArray {
          * @param params Parameters for constructing the component.
          * @return Reference to the emplaced component.
          */
-        template <class... Params>
-        reference_type emplace_at(size_type pos, Params &&...params) {
+        template <class... Params> reference_type emplace_at(size_type pos, Params&&... params) {
             if (pos >= _data.size()) {
                 _data.resize(pos + 1);
             }
@@ -247,7 +246,7 @@ class SparseArray {
          * @param component The component to search for.
          * @return The index of the component.
          */
-        size_type getIndex(value_type const &component) const {
+        size_type getIndex(value_type const& component) const {
             for (size_type i = 0; i < _data.size(); i++) {
                 if (_data[i] == component) {
                     return i;
@@ -255,6 +254,7 @@ class SparseArray {
             }
             return -1;
         }
+
     private:
         container_t _data;
 };

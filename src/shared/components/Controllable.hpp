@@ -6,17 +6,17 @@
 */
 
 #ifndef CONTROLLABLE_HPP_
-    #define CONTROLLABLE_HPP_
+#define CONTROLLABLE_HPP_
 
-    /**
-     * @struct Controllable_s
-     */
-    typedef struct Controllable_s {
+/**
+ * @struct Controllable_s
+ */
+typedef struct Controllable_s {
         /**
          * @brief Controllable component, add a controllable to an entity if it can be controlled
          *
          */
-        bool isControllable; //is the entity controllable (ex: player = true, enemy = false)
+        bool isControllable; // is the entity controllable (ex: player = true, enemy = false)
 
         /**
          * @brief Values to check if the entity is moving up, down, left or right
@@ -26,6 +26,6 @@
         bool down;
         bool left;
         bool right;
-    } Controllable;
+} Controllable;
 
 #endif /* !CONTROLLABLE_HPP_ */

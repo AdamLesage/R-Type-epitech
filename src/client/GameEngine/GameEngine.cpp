@@ -7,8 +7,7 @@
 
 #include "GameEngine.hpp"
 
-RType::GameEngine::GameEngine()
-{
+RType::GameEngine::GameEngine() {
     // Register all components
     _registry.register_component<Charging_s>();
     _registry.register_component<Color_s>();
@@ -32,33 +31,30 @@ RType::GameEngine::GameEngine()
     _registry.register_component<Size>();
     _registry.register_component<Direction>();
 
-
-    _protocolParsing = std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
+    _protocolParsing =
+        std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
     this->_camera = std::make_shared<Camera>();
-    this->_mutex = std::make_shared<std::mutex>();
+    this->_mutex  = std::make_shared<std::mutex>();
 }
 
-RType::GameEngine::~GameEngine()
-{
+RType::GameEngine::~GameEngine() {
 }
 
-
-void RType::GameEngine::setEngines(std::shared_ptr<NetworkEngine> networkEngine, std::shared_ptr<RenderingEngine> renderingEngine, std::shared_ptr<PhysicEngine> physicEngine, std::shared_ptr<AudioEngine> audioEngine)
-{
-    _networkEngine = networkEngine;
+void RType::GameEngine::setEngines(std::shared_ptr<NetworkEngine> networkEngine,
+                                   std::shared_ptr<RenderingEngine> renderingEngine,
+                                   std::shared_ptr<PhysicEngine> physicEngine,
+                                   std::shared_ptr<AudioEngine> audioEngine) {
+    _networkEngine   = networkEngine;
     _renderingEngine = renderingEngine;
-    _physicEngine = physicEngine;
-    _audioEngine = audioEngine;
+    _physicEngine    = physicEngine;
+    _audioEngine     = audioEngine;
 }
 
-
-
-void RType::GameEngine::run()
-{
-    auto& networkEngine = _networkEngine;
+void RType::GameEngine::run() {
+    auto& networkEngine   = _networkEngine;
     auto& renderingEngine = _renderingEngine;
-    auto& physicEngine = _physicEngine;
-    auto& audioEngine = _audioEngine;
+    auto& physicEngine    = _physicEngine;
+    auto& audioEngine     = _audioEngine;
 
     std::thread networkThread([&]() {
         try {
@@ -77,7 +73,7 @@ void RType::GameEngine::run()
             std::cerr << "Error running render engine: " << e.what() << std::endl;
         }
     });
-    
+
     std::thread physicThread([&]() {
         try {
             physicEngine->run();
@@ -98,44 +94,40 @@ void RType::GameEngine::run()
     while (1) {
         updateCamera();
     }
-    
+
     networkThread.join();
     renderingThread.join();
     physicThread.join();
     audioThread.join();
 }
 
-void RType::GameEngine::send(const std::string &message)
-{
+void RType::GameEngine::send(const std::string& message) {
     _mediator->notify("GameEngine", message);
 }
 
-void RType::GameEngine::handleServerData(const std::string &message)
-{
+void RType::GameEngine::handleServerData(const std::string& message) {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
     _protocolParsing->parseData(message);
 }
 
-void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator)
-{
+void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
 }
 
-void RType::GameEngine::updateCamera()
-{
-    auto &positions = this->_registry.get_components<Position_s>();
-    auto &sizes = this->_registry.get_components<Size>();
-    auto &directions = this->_registry.get_components<Direction>();
-    auto &sprites = this->_registry.get_components<Sprite>();
+void RType::GameEngine::updateCamera() {
+    auto& positions  = this->_registry.get_components<Position_s>();
+    auto& sizes      = this->_registry.get_components<Size>();
+    auto& directions = this->_registry.get_components<Direction>();
+    auto& sprites    = this->_registry.get_components<Sprite>();
     std::vector<EntityRenderInfo> entityRender;
     entityRender.reserve(std::min({positions.size(), sizes.size(), directions.size(), sprites.size()}));
 
-    for (size_t i = 0; i < positions.size() && i < sizes.size() 
-        && i < directions.size() && i < sprites.size(); ++i) {
-        auto &position = positions[i];
-        auto &size = sizes[i];
-        auto &direction = directions[i];
-        auto &sprite = sprites[i];
+    for (size_t i = 0;
+         i < positions.size() && i < sizes.size() && i < directions.size() && i < sprites.size(); ++i) {
+        auto& position  = positions[i];
+        auto& size      = sizes[i];
+        auto& direction = directions[i];
+        auto& sprite    = sprites[i];
 
         if (position && size && direction && sprite) {
             entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
@@ -145,10 +137,13 @@ void RType::GameEngine::updateCamera()
         std::lock_guard<std::mutex> lock(*this->_mutex.get());
         this->_camera->listEntityToDisplay = std::move(entityRender);
     }
-    usleep(10000);
+    #ifdef _WIN32
+        Sleep(10);
+    #else
+        usleep(10000);
+    #endif
 }
 
-extern "C" RType::GameEngine *entryPointGameEngine()
-{
+extern "C" RType::GameEngine* entryPointGameEngine() {
     return (new RType::GameEngine());
 }

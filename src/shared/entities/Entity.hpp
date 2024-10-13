@@ -6,9 +6,9 @@
 */
 
 #ifndef ENTITY_HPP_
-    #define ENTITY_HPP_
+#define ENTITY_HPP_
 
-    #include <cstddef>
+#include <cstddef>
 
 class Entity {
     public:

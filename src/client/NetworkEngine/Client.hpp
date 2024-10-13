@@ -10,6 +10,7 @@
 
 #include "../../shared/network/Constants.hpp"
 #include "../../shared/network/LockedQueue.hpp"
+#include "../../shared/utils/Logger.hpp"
 #include <boost/asio.hpp>
 #include <array>
 #include <thread>
@@ -17,65 +18,66 @@
 #include <iostream>
 
 namespace NetworkLib {
-	class Client : public IClient {
-	public:
-		Client(std::string host, unsigned short server_port, unsigned short local_port = 0);
-		~Client();
+    class Client : public IClient {
+        public:
+            Client(std::string host, unsigned short server_port, unsigned short local_port = 0);
+            ~Client();
 
-		/**
-		 * @brief Send a message to the server
-		 * 
-		 * @param message the message to send
-		*/
-		void send(const std::string& message) override;
+            /**
+             * @brief Send a message to the server
+             *
+             * @param message the message to send
+             */
+            void send(const std::string& message) override;
 
-		/**
-		 * @brief Check if the client has a message
-		 * 
-		 * @return true if the client has a message
-		*/
-		bool hasMessage() override;
+            /**
+             * @brief Check if the client has a message
+             *
+             * @return true if the client has a message
+             */
+            bool hasMessage() override;
 
-		/**
-		 * @brief Get the message from the server and remove it from the queue
-		 * 
-		 * @return the message from the server
-		*/
-		std::string popMessage() override;
+            /**
+             * @brief Get the message from the server and remove it from the queue
+             *
+             * @return the message from the server
+             */
+            std::string popMessage() override;
 
-	private:
-		// Network send/receive stuff
-		boost::asio::io_service io_service;
-		boost::asio::ip::udp::socket socket;
-		boost::asio::ip::udp::endpoint server_endpoint;
-		boost::asio::ip::udp::endpoint remote_endpoint;
-		std::array<char, NetworkBufferSize> recv_buffer;
-		std::thread service_thread;
+        private:
+            // Network send/receive stuff
+            boost::asio::io_service io_service;
+            boost::asio::ip::udp::socket socket;
+            boost::asio::ip::udp::endpoint server_endpoint;
+            boost::asio::ip::udp::endpoint remote_endpoint;
+            std::array<char, NetworkBufferSize> recv_buffer;
+            std::thread service_thread;
 
-		// Queues for messages
-		LockedQueue<std::string> incomingMessages;
+            // Queues for messages
+            LockedQueue<std::string> incomingMessages;
 
-		/**
-		 * @brief Start the receive process
-		*/
-		void start_receive();
+            /**
+             * @brief Start the receive process
+             */
+            void start_receive();
 
-		/**
-		 * @brief Handle the receive process
-		 * 
-		 * @param error the error code
-		 * @param bytes_transferred the number of bytes transferred
-		*/
-		void handle_receive(const std::error_code& error, std::size_t bytes_transferred);
+            /**
+             * @brief Handle the receive process
+             *
+             * @param error the error code
+             * @param bytes_transferred the number of bytes transferred
+             */
+            void handle_receive(const std::error_code& error, std::size_t bytes_transferred);
 
-		/**
-		 * @brief Run the service thread
-		*/
-		void run_service();
+            /**
+             * @brief Run the service thread
+             */
+            void run_service();
 
-		Client(Client&); // block default copy constructor
-	};
-}
+            Client(Client&); // block default copy constructor
 
+            RType::Logger _logger;
+    };
+} // namespace NetworkLib
 
 #endif /* !CLIENT_HPP_ */

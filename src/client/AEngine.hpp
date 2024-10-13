@@ -29,10 +29,11 @@ namespace RType {
              */
             void run() override;
 
-            std::shared_ptr<IMediator> _mediator; // Public attribute to be able to access it from the derived class.
+            std::shared_ptr<IMediator>
+                _mediator; // Public attribute to be able to access it from the derived class.
         protected:
         private:
     };
-}
+} // namespace RType
 
 #endif /* !AENGINE_HPP_ */

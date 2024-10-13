@@ -7,19 +7,19 @@
 
 #include "Menu.hpp"
 
-RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator)
-{
+RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator) {
+    (void)mediator;
     window = wndw;
-    if (!font.loadFromFile("src/client/asset/r-type.ttf")) {
+    if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
         return;
     }
 
-    if (!logoTexture.loadFromFile("src/client/asset/rtypelogo.png")) {
+    if (!logoTexture.loadFromFile("assets/rtypelogo.png")) {
         std::cerr << "Error loading logo" << std::endl;
         return;
     }
-    if (!backgroundTexture.loadFromFile("src/client/asset/background/menu.jpg")) {
+    if (!backgroundTexture.loadFromFile("assets/background/menu.jpg")) {
         std::cerr << "Error loading background" << std::endl;
         return;
     }
@@ -28,7 +28,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
-    if (!selectBuffer.loadFromFile("src/client/asset/Sounds/selectsound.wav")) {
+    if (!selectBuffer.loadFromFile("assets/Sounds/selectsound.wav")) {
         std::cerr << "Error loading select sound" << std::endl;
     } else {
         selectSound.setBuffer(selectBuffer);
@@ -40,28 +40,25 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-   if (!backgroundBuffer.loadFromFile("src/client/asset/Sounds/menu.ogg"))
-    {
+    std::string soundPath = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "menu.ogg";
+    if (!backgroundBuffer.loadFromFile(soundPath)) {
         throw std::runtime_error("Error loading select sound");
     }
     backgroundMusic.setBuffer(backgroundBuffer);
     try {
         // games = std::make_shared<Game>(window);
         settings = std::make_shared<Settings>(window);
-        lobby = std::make_shared<Lobby>(window);
-    } catch (const std::runtime_error &e) {
+        lobby    = std::make_shared<Lobby>(window);
+    } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         exit(84);
     }
     selectedOption = 0;
-        backgroundMusic.play();
+    backgroundMusic.play();
     backgroundMusic.setLoop(true);
-
 }
 
-
-void RType::Menu::draw()
-{
+void RType::Menu::draw() {
     window->draw(background);
     window->draw(logoSprite);
 
@@ -70,8 +67,7 @@ void RType::Menu::draw()
     }
 }
 
-void RType::Menu::moveUp()
-{
+void RType::Menu::moveUp() {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
@@ -80,8 +76,7 @@ void RType::Menu::moveUp()
     }
 }
 
-void RType::Menu::moveDown()
-{
+void RType::Menu::moveDown() {
     if (selectedOption + 1 < 3) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
@@ -90,44 +85,35 @@ void RType::Menu::moveDown()
     }
 }
 
-int RType::Menu::getSelectedOption() const
-{
+int RType::Menu::getSelectedOption() const {
     return selectedOption;
 }
 
-
-void RType::Menu::adjustVolume(bool increase)
-{
+void RType::Menu::adjustVolume(bool increase) {
     float currentVolume = backgroundMusic.getVolume();
-    if (increase)
-    {
+    if (increase) {
         currentVolume = std::min(100.0f, currentVolume + 10.0f);
-    }
-    else
-    {
+    } else {
         currentVolume = std::max(0.0f, currentVolume - 10.0f);
     }
     backgroundMusic.setVolume(currentVolume);
 }
 
-void RType::Menu::handleKeyPress(const sf::Event &event)
-{
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
-    {
+void RType::Menu::handleKeyPress(const sf::Event& event) {
+    (void)event;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) {
         adjustVolume(true);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) {
         adjustVolume(false);
     }
 }
 
-void RType::Menu::displaySound()
-{
-    float currentVolume = backgroundMusic.getVolume();
-    float maxVolume = 100.0f;
-    float volumeBarWidth = 200.0f;
-    float volumeBarHeight = 20.0f;
+void RType::Menu::displaySound() {
+    float currentVolume    = backgroundMusic.getVolume();
+    float maxVolume        = 100.0f;
+    float volumeBarWidth   = 200.0f;
+    float volumeBarHeight  = 20.0f;
     float volumePercentage = currentVolume / maxVolume;
 
     sf::RectangleShape volumeBarBackground(sf::Vector2f(volumeBarWidth, volumeBarHeight));
@@ -158,9 +144,7 @@ void RType::Menu::displaySound()
     window->draw(volumeText);
 }
 
-
-void RType::Menu::displaySubtitles()
-{
+void RType::Menu::displaySubtitles() {
     sf::Text subtitle;
     subtitle.setFont(font);
     subtitle.setString("Press Enter to select an option, you can also use the arrow keys to navigate");
@@ -187,8 +171,7 @@ void RType::Menu::displaySubtitles()
     window->draw(subtitle);
 }
 
-int RType::Menu::displayMenu()
-{
+int RType::Menu::displayMenu() {
     sf::Event event;
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -225,14 +208,15 @@ int RType::Menu::displayMenu()
     }
     draw();
     displaySound();
-    config_t cfg;
-    config_init(&cfg);
-        if (!config_read_file(&cfg, "src/config/key.cfg")) {
-            printf("Erreur lors du chargement du fichier de configuration\n");
-            config_destroy(&cfg);
-            return (84);
-        }
-    std::string keyValue = settings->get_key_value(&cfg, "Keys7");
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return 84;
+    }
+    std::string keyValue = settings->get_key_value(cfg, "Keys7");
     if (keyValue == "ON") {
         displaySubtitles();
     }
@@ -240,7 +224,6 @@ int RType::Menu::displayMenu()
     return (0);
 }
 
-void RType::Menu::setMediator(std::shared_ptr<RType::IMediator> mediator)
-{
+void RType::Menu::setMediator(std::shared_ptr<RType::IMediator> mediator) {
     _mediator = mediator;
 }

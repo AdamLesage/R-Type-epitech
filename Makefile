@@ -49,6 +49,15 @@ fclean: clean
 
 re: fclean all
 
+linter:
+	@echo "$(RUNNING) Checking coding style"
+	@find ./ -name "*.cpp" -o -name "*.hpp" | xargs clang-format --dry-run -Werror
+
+format:
+	@echo "$(RUNNING) Formatting code"
+	@find ./ -name "*.cpp" -o -name "*.hpp" | xargs clang-format -i
+	@echo "$(SUCCESS) Code formatted successfully"
+
 tests_run:
 	@echo "$(RUNNING) Compiling and running tests"
 	@mkdir -p tests/build

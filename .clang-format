@@ -1,0 +1,68 @@
+# Based on the LLVM style, adapted for your C++ project
+BasedOnStyle: LLVM
+
+# Number of spaces for indentation
+IndentWidth: 4
+
+# Use spaces for indentation instead of tabs
+UseTab: Never
+
+# Column limit set to 110 characters
+ColumnLimit: 110
+
+# Align parameter declarations in functions/methods
+AlignAfterOpenBracket: Align
+
+# Brace wrapping rules for different code blocks
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: false
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  BeforeCatch: true
+  BeforeElse: true
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+# Place logical operators at the beginning of a line
+BreakBeforeBinaryOperators: NonAssignment
+
+# Formatting rule for comments
+CommentPragmas: '^ IWYU pragma:'
+
+# Do not automatically sort #includes
+SortIncludes: false
+
+# Alignment of pointers/references
+PointerAlignment: Left
+
+# Main alignment for consecutive assignments
+AlignConsecutiveAssignments: true
+AllowShortFunctionsOnASingleLine: None
+
+# Put each parameter on a separate line if it exceeds column limit
+BinPackParameters: false
+
+# Formatting configuration for templates
+SpaceBeforeParens: ControlStatements
+
+# Keep single-line if statements on one line
+AllowShortIfStatementsOnASingleLine: true
+
+# --- Header file specific formatting ---
+
+# Indent #include directives properly
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '.*'
+    Priority: 1
+
+# Indent access modifiers within classes
+IndentAccessModifiers: true
+AccessModifierOffset: -4
+
+# Correct indentation within namespaces and classes in header files
+NamespaceIndentation: All

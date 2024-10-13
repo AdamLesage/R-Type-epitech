@@ -7,24 +7,19 @@
 
 #include "PhysicEngine.hpp"
 
-RType::PhysicEngine::PhysicEngine()
-{
+RType::PhysicEngine::PhysicEngine() {
 }
 
-RType::PhysicEngine::~PhysicEngine()
-{
+RType::PhysicEngine::~PhysicEngine() {
 }
 
-void RType::PhysicEngine::run()
-{
+void RType::PhysicEngine::run() {
 }
 
-void RType::PhysicEngine::setMediator(std::shared_ptr<IMediator> mediator)
-{
+void RType::PhysicEngine::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
 }
 
-extern "C" RType::PhysicEngine *entryPointPhysicEngine()
-{
+extern "C" RType::PhysicEngine* entryPointPhysicEngine() {
     return (new RType::PhysicEngine());
 }

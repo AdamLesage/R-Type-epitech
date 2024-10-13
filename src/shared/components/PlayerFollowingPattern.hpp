@@ -9,11 +9,11 @@
 #define PLAYER_FOLLOWING_PATTERN_HPP_
 
 typedef struct PlayerFollowingPattern_s {
-    /**
-     * @brief PlayerFollowingPattern add the PlayerFollowing to an entity
-     *
-     */
-    float speed;
+        /**
+         * @brief PlayerFollowingPattern add the PlayerFollowing to an entity
+         *
+         */
+        float speed;
 } PlayerFollowingPattern;
 
 #endif
