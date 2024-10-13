@@ -21,10 +21,23 @@ UDP (User Datagram Protocol) combined with binary protocols offers significant a
 
 ### Spawn of entities
 
-### Boss
+The spawn of entities in a video game like the R-type is an important aspect of the gameplay.
+
+Currently, the game can spawn many different enemies, but we decided to implement a simple algorithm to spawn them. Only one type of enemy is spawning at an defined interval. This interval is defined in the configuration file. The algorithm is simple, it will spawn an enemy at the defined interval. The enemy will spawn at a random position on the screen. The enemy will then move to the left of the screen. If the enemy is destroyed or reach the left of the screen, the enemy will be deleted and the algorithm will wait for the next interval to spawn a new enemy.
 
 ## Storage
 
 In a video game like the R-type there are many information and assets that you need to store (Image, sound, font, configuration file). Most of them can be stored in different formats which will not really influence our code. However, for the configuration we chose to use the libconfig library. The libconfig will allow us to store our data in a **.cfg** file and use multiple function that will help us read those files.
 
+Voici un paragraphe ajouté à la section **Security** du document pour décrire les aspects de sécurité liés au protocole binaire :
+
+---
+
 ## Security
+
+The binary protocol used for communication between the server and client offers certain security benefits by adding a layer of complexity in the interpretation of the data being exchanged. The compact and encoded nature of the binary format makes it inherently less human-readable than text-based formats such as JSON or XML, which helps in obfuscating the transmitted information and makes it more difficult for unauthorized entities to interpret the raw data directly.
+
+However, while this complexity can slow down potential attackers trying to reverse-engineer the communication, it is important to emphasize that binary encoding alone does not provide comprehensive security. To ensure the confidentiality and integrity of the data exchanged, the protocol is designed to be used in conjunction with encryption mechanisms like TLS/SSL. This ensures that even if an attacker intercepts the data stream, the actual content remains encrypted and unreadable.
+
+Furthermore, the binary protocol helps reduce the risk of injection attacks that are common in text-based formats, such as SQL injections or XML injections. By structuring the data into fixed-size fields and using predefined data types, it limits the possibility of unexpected inputs being executed as commands, thus providing an additional layer of resilience against data manipulation.
+
