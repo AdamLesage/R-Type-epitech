@@ -1,0 +1,57 @@
+\doxysection{Mediator.\+hpp}
+\hypertarget{Mediator_8hpp_source}{}\label{Mediator_8hpp_source}\index{src/client/Mediator/Mediator.hpp@{src/client/Mediator/Mediator.hpp}}
+\mbox{\hyperlink{Mediator_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Mediator}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ MEDIATOR\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ MEDIATOR\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IMediator_8hpp}{IMediator.hpp}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{GameEngine_8hpp}{../GameEngine/GameEngine.hpp}}"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{NetworkEngine_8hpp}{../NetworkEngine/NetworkEngine.hpp}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{RenderingEngine_8hpp}{../RenderEngine/RenderingEngine.hpp}}"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{PhysicEngine_8hpp}{../PhysicEngine/PhysicEngine.hpp}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{AudioEngine_8hpp}{../AudioEngine/AudioEngine.hpp}}"{}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceRType}{RType}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRType_1_1Mediator}{Mediator}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Mediator_a3d1c31bc0d9f8f9ab600caeb9b207213}{Mediator}}(std::shared\_ptr<GameEngine>\ gameEngine,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<NetworkEngine>\ networkEngine,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<RenderingEngine>\ renderingEngine,}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<PhysicEngine>\ physicEngine,}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<AudioEngine>\ audioEngine);}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Mediator_ae84230448a00a5605959a2e2dfcd6872}{\string~Mediator}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Mediator_af900d1234e653275db6215e1858cfbb3}{notify}}(std::string\ sender,\ \textcolor{keyword}{const}\ std::string\&\ event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Mediator_a5ae3331381769821269b924d76977fe2}{notifyGameEngine}}(std::string\ sender,\ \textcolor{keyword}{const}\ std::string\&\ event);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Mediator_a8f1d9978e5dd752a5b5e99ae8a67f3b6}{notifyNetworkEngine}}(std::string\ sender,\ \textcolor{keyword}{const}\ std::string\&\ event);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Mediator_ab2b69221a04d99e2fc2d1247f72a8807}{notifyRenderingEngine}}(std::string\ sender,\ \textcolor{keyword}{const}\ std::string\&\ event);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Mediator_a611d4dd6801f659be60298857d8bdb09}{notifyPhysicEngine}}(std::string\ sender,\ \textcolor{keyword}{const}\ std::string\&\ event);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1Mediator_aa548f5975bf298ff0b4e0d95cd509709}{notifyAudioEngine}}(std::string\ sender,\ \textcolor{keyword}{const}\ std::string\&\ event);}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<GameEngine>\ \mbox{\hyperlink{classRType_1_1Mediator_a677384a53e6dcdf659ee0ee38d186540}{\_gameEngine}};}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<NetworkEngine>\ \mbox{\hyperlink{classRType_1_1Mediator_afa9d99aced91b1156f61e6a253e38edb}{\_networkEngine}};}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<RenderingEngine>\ \mbox{\hyperlink{classRType_1_1Mediator_a5f94a9fbc9220633ba8eddedc3cb25a5}{\_renderingEngine}};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<PhysicEngine>\ \mbox{\hyperlink{classRType_1_1Mediator_aa7d7019024bd33f71a58ffdfe506696b}{\_physicEngine}};}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<AudioEngine>\ \mbox{\hyperlink{classRType_1_1Mediator_ad8735e751c7d20f0000869cb385bc349}{\_audioEngine}};}
+\DoxyCodeLine{00084\ \ \ \ \ \};}
+\DoxyCodeLine{00085\ \}\ \textcolor{comment}{//\ namespace\ RType}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !MEDIATOR\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

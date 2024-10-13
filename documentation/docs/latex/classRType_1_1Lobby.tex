@@ -1,0 +1,416 @@
+\doxysection{RType\+::Lobby Class Reference}
+\hypertarget{classRType_1_1Lobby}{}\label{classRType_1_1Lobby}\index{RType::Lobby@{RType::Lobby}}
+
+
+{\ttfamily \#include $<$Lobby.\+hpp$>$}
+
+
+
+Collaboration diagram for RType\+::Lobby\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=317pt]{classRType_1_1Lobby__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_afa37f45f05cc91158e7e59c4ba8707a6}{adjust\+Volume}} (bool increase)
+\begin{DoxyCompactList}\small\item\em Adjusts the volume of the background music. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_a19e980b1cf704fbdf06cfb8977c25a02}{display\+Lobby}} ()
+\begin{DoxyCompactList}\small\item\em Displays the menu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_aaae5e016098a38696d6777b6a93268de}{display\+Sound}} ()
+\begin{DoxyCompactList}\small\item\em Displays the sound of the lobby. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_ad377791faed3d8782731c4d1a3c3611a}{display\+Subtitles}} ()
+\begin{DoxyCompactList}\small\item\em Displays the subtitles of the lobby. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classRType_1_1Lobby_a465eeedc6662d6812834180b0469ec2b}{get\+Selected\+Option}} () const
+\begin{DoxyCompactList}\small\item\em Get the selected option. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_a0e76186e82512383fb8bdef42e1dd3a1}{handle\+Key\+Press}} (const sf\+::\+Event \&event)
+\begin{DoxyCompactList}\small\item\em Handles key press events for volume adjustment. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1Lobby_aae0a0df1b4066fecf47b3f8638316c00}{Lobby}} (std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$ \+\_\+window)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classRType_1_1Lobby}{Lobby} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_aba90d48eff361575483f153a10a7f5a5}{move\+Left}} ()
+\begin{DoxyCompactList}\small\item\em Moves the selection left. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_a9a4fb44bdeeefbe0c28e19336cf94378}{move\+Right}} ()
+\begin{DoxyCompactList}\small\item\em Moves the selection right. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_aa61f4853be1fd94b9e1fb699a1a2e2ea}{set\+Camera}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ camera)
+\begin{DoxyCompactList}\small\item\em Set the camera to display. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_a0fda53e65b484ce4527aa724bb09b4b6}{set\+Mediator}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator)
+\begin{DoxyCompactList}\small\item\em Sets the mediator, it will be used to communicate with the rendering engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1Lobby_a26b947ed7b5110ef45dbb1b5fd9067b0}{set\+Mutex}} (std\+::shared\+\_\+ptr$<$ std\+::mutex $>$ mutex)
+\begin{DoxyCompactList}\small\item\em Set the mutex. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1Lobby_abf026e5553596929ce02fe216efcfcba}{\texorpdfstring{$\sim$}{\string~}\+Lobby}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \doxylink{classRType_1_1Lobby}{Lobby} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ \mbox{\hyperlink{classRType_1_1Lobby_aef19db6d163985c90a18b39d3d1536a4}{\+\_\+mediator}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ \mbox{\hyperlink{classRType_1_1Lobby_a1be10e26c504b929f421cbfc8a23af35}{\+\_\+camera}}
+\item 
+std\+::shared\+\_\+ptr$<$ std\+::mutex $>$ \mbox{\hyperlink{classRType_1_1Lobby_a516d351b21bcb3488639c5952c419bd7}{\+\_\+mutex}}
+\item 
+\mbox{\hyperlink{classRegistry}{Registry}} \mbox{\hyperlink{classRType_1_1Lobby_a942c342a9b84f9c6cf5551b1bec845c5}{\+\_\+registry}}
+\item 
+\mbox{\hyperlink{classSystems}{Systems}} \mbox{\hyperlink{classRType_1_1Lobby_a237d9a90c7fee51fefc1874459955ae6}{\+\_\+systems}}
+\item 
+sf\+::\+Rectangle\+Shape \mbox{\hyperlink{classRType_1_1Lobby_ae93a47c3c0674e7b0382d4340aaeca11}{background}}
+\item 
+sf\+::\+Sound\+Buffer \mbox{\hyperlink{classRType_1_1Lobby_a855a533f8381a75485560c887f2cb0a5}{background\+Buffer}}
+\item 
+sf\+::\+Sound \mbox{\hyperlink{classRType_1_1Lobby_aec5c6baeff97255e032b85e536ea2e06}{background\+Music}}
+\item 
+sf\+::\+Texture \mbox{\hyperlink{classRType_1_1Lobby_a49466ba0f35e5839cb5d9e90e6f99e17}{background\+Texture}}
+\item 
+sf\+::\+Font \mbox{\hyperlink{classRType_1_1Lobby_a2ea18503f15341c203fa9e7d6ff8db88}{font}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1Game}{Game}} $>$ \mbox{\hyperlink{classRType_1_1Lobby_adbd1adb965054d9e064e4d4a728b2e76}{games}}
+\item 
+sf\+::\+Sprite \mbox{\hyperlink{classRType_1_1Lobby_ae0b9d4563445d5b3dd4a9371180501e2}{logo\+Sprite}}
+\item 
+sf\+::\+Texture \mbox{\hyperlink{classRType_1_1Lobby_aafda4cfc9f4a56c883c68760c12fe867}{logo\+Texture}}
+\item 
+sf\+::\+Text \mbox{\hyperlink{classRType_1_1Lobby_a4fd85f7ef6943b6a7263ff5a92e89e09}{menu\+Options}} \mbox{[}3\mbox{]}
+\item 
+sf\+::\+Text \mbox{\hyperlink{classRType_1_1Lobby_a6d4365b1e1049e2ec0d909e5d4a97b35}{players\+Names}} \mbox{[}5\mbox{]}
+\item 
+std\+::vector$<$ sf\+::\+Sprite $>$ \mbox{\hyperlink{classRType_1_1Lobby_a56d339f73bb7a50a0ad8c59883b9cec7}{player\+Sprites}}
+\item 
+std\+::vector$<$ sf\+::\+Texture $>$ \mbox{\hyperlink{classRType_1_1Lobby_aa29085b5a1b19a94ca8b9ae13f9da4e6}{player\+Textures}}
+\item 
+sf\+::\+Sound\+Buffer \mbox{\hyperlink{classRType_1_1Lobby_a12411c66f2f65fc7f99684c48208d306}{select\+Buffer}}
+\item 
+int \mbox{\hyperlink{classRType_1_1Lobby_ac44c8d80f120c2c3ec37d98c085c15d1}{selected\+Option}}
+\item 
+sf\+::\+Sound \mbox{\hyperlink{classRType_1_1Lobby_a8bb5cd6bb43bd2f52c348fc535430cc1}{select\+Sound}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classSettings}{Settings}} $>$ \mbox{\hyperlink{classRType_1_1Lobby_a271abe4213ba0050ad1379154dd3ec4c}{settings}}
+\item 
+std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$ \mbox{\hyperlink{classRType_1_1Lobby_aea5e0a587c807b12726b1be546afdfb8}{window}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1Logger}{Logger}} \mbox{\hyperlink{classRType_1_1Lobby_ab364f061050e6fc70659b8c956851108}{\+\_\+logger}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1Lobby_aae0a0df1b4066fecf47b3f8638316c00}\label{classRType_1_1Lobby_aae0a0df1b4066fecf47b3f8638316c00} 
+\index{RType::Lobby@{RType::Lobby}!Lobby@{Lobby}}
+\index{Lobby@{Lobby}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{Lobby()}{Lobby()}}
+{\footnotesize\ttfamily RType\+::\+Lobby\+::\+Lobby (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ sf\+::\+Render\+Window $>$}]{\+\_\+window }\end{DoxyParamCaption})}
+
+
+
+Construct a new \doxylink{classRType_1_1Lobby}{Lobby} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+window} & The window to display the \doxylink{classRType_1_1Lobby}{Lobby} on. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Lobby_abf026e5553596929ce02fe216efcfcba}\label{classRType_1_1Lobby_abf026e5553596929ce02fe216efcfcba} 
+\index{RType::Lobby@{RType::Lobby}!````~Lobby@{\texorpdfstring{$\sim$}{\string~}Lobby}}
+\index{````~Lobby@{\texorpdfstring{$\sim$}{\string~}Lobby}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}Lobby()}{\string~Lobby()}}
+{\footnotesize\ttfamily RType\+::\+Lobby\+::\texorpdfstring{$\sim$}{\string~}\+Lobby (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Destroy the \doxylink{classRType_1_1Lobby}{Lobby} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1Lobby_afa37f45f05cc91158e7e59c4ba8707a6}\label{classRType_1_1Lobby_afa37f45f05cc91158e7e59c4ba8707a6} 
+\index{RType::Lobby@{RType::Lobby}!adjustVolume@{adjustVolume}}
+\index{adjustVolume@{adjustVolume}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{adjustVolume()}{adjustVolume()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::adjust\+Volume (\begin{DoxyParamCaption}\item[{bool}]{increase }\end{DoxyParamCaption})}
+
+
+
+Adjusts the volume of the background music. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em increase} & Whether to increase or decrease the volume. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Lobby_a19e980b1cf704fbdf06cfb8977c25a02}\label{classRType_1_1Lobby_a19e980b1cf704fbdf06cfb8977c25a02} 
+\index{RType::Lobby@{RType::Lobby}!displayLobby@{displayLobby}}
+\index{displayLobby@{displayLobby}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{displayLobby()}{displayLobby()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::display\+Lobby (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the menu. 
+
+\Hypertarget{classRType_1_1Lobby_aaae5e016098a38696d6777b6a93268de}\label{classRType_1_1Lobby_aaae5e016098a38696d6777b6a93268de} 
+\index{RType::Lobby@{RType::Lobby}!displaySound@{displaySound}}
+\index{displaySound@{displaySound}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{displaySound()}{displaySound()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::display\+Sound (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the sound of the lobby. 
+
+\Hypertarget{classRType_1_1Lobby_ad377791faed3d8782731c4d1a3c3611a}\label{classRType_1_1Lobby_ad377791faed3d8782731c4d1a3c3611a} 
+\index{RType::Lobby@{RType::Lobby}!displaySubtitles@{displaySubtitles}}
+\index{displaySubtitles@{displaySubtitles}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{displaySubtitles()}{displaySubtitles()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::display\+Subtitles (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays the subtitles of the lobby. 
+
+\Hypertarget{classRType_1_1Lobby_a465eeedc6662d6812834180b0469ec2b}\label{classRType_1_1Lobby_a465eeedc6662d6812834180b0469ec2b} 
+\index{RType::Lobby@{RType::Lobby}!getSelectedOption@{getSelectedOption}}
+\index{getSelectedOption@{getSelectedOption}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{getSelectedOption()}{getSelectedOption()}}
+{\footnotesize\ttfamily int RType\+::\+Lobby\+::get\+Selected\+Option (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the selected option. 
+
+\begin{DoxyReturn}{Returns}
+int The selected option. 
+\end{DoxyReturn}
+\Hypertarget{classRType_1_1Lobby_a0e76186e82512383fb8bdef42e1dd3a1}\label{classRType_1_1Lobby_a0e76186e82512383fb8bdef42e1dd3a1} 
+\index{RType::Lobby@{RType::Lobby}!handleKeyPress@{handleKeyPress}}
+\index{handleKeyPress@{handleKeyPress}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{handleKeyPress()}{handleKeyPress()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::handle\+Key\+Press (\begin{DoxyParamCaption}\item[{const sf\+::\+Event \&}]{event }\end{DoxyParamCaption})}
+
+
+
+Handles key press events for volume adjustment. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The SFML event to handle. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Lobby_aba90d48eff361575483f153a10a7f5a5}\label{classRType_1_1Lobby_aba90d48eff361575483f153a10a7f5a5} 
+\index{RType::Lobby@{RType::Lobby}!moveLeft@{moveLeft}}
+\index{moveLeft@{moveLeft}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{moveLeft()}{moveLeft()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::move\+Left (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Moves the selection left. 
+
+\Hypertarget{classRType_1_1Lobby_a9a4fb44bdeeefbe0c28e19336cf94378}\label{classRType_1_1Lobby_a9a4fb44bdeeefbe0c28e19336cf94378} 
+\index{RType::Lobby@{RType::Lobby}!moveRight@{moveRight}}
+\index{moveRight@{moveRight}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{moveRight()}{moveRight()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::move\+Right (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Moves the selection right. 
+
+\Hypertarget{classRType_1_1Lobby_aa61f4853be1fd94b9e1fb699a1a2e2ea}\label{classRType_1_1Lobby_aa61f4853be1fd94b9e1fb699a1a2e2ea} 
+\index{RType::Lobby@{RType::Lobby}!setCamera@{setCamera}}
+\index{setCamera@{setCamera}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{setCamera()}{setCamera()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::set\+Camera (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$}]{camera }\end{DoxyParamCaption})}
+
+
+
+Set the camera to display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em camera} & the camera to set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Lobby_a0fda53e65b484ce4527aa724bb09b4b6}\label{classRType_1_1Lobby_a0fda53e65b484ce4527aa724bb09b4b6} 
+\index{RType::Lobby@{RType::Lobby}!setMediator@{setMediator}}
+\index{setMediator@{setMediator}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{setMediator()}{setMediator()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::set\+Mediator (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$}]{mediator }\end{DoxyParamCaption})}
+
+
+
+Sets the mediator, it will be used to communicate with the rendering engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mediator} & The mediator to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1Lobby_a26b947ed7b5110ef45dbb1b5fd9067b0}\label{classRType_1_1Lobby_a26b947ed7b5110ef45dbb1b5fd9067b0} 
+\index{RType::Lobby@{RType::Lobby}!setMutex@{setMutex}}
+\index{setMutex@{setMutex}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{setMutex()}{setMutex()}}
+{\footnotesize\ttfamily void RType\+::\+Lobby\+::set\+Mutex (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ std\+::mutex $>$}]{mutex }\end{DoxyParamCaption})}
+
+
+
+Set the mutex. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & the mutex to set \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1Lobby_a1be10e26c504b929f421cbfc8a23af35}\label{classRType_1_1Lobby_a1be10e26c504b929f421cbfc8a23af35} 
+\index{RType::Lobby@{RType::Lobby}!\_camera@{\_camera}}
+\index{\_camera@{\_camera}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{\_camera}{\_camera}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}}$>$ RType\+::\+Lobby\+::\+\_\+camera\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_ab364f061050e6fc70659b8c956851108}\label{classRType_1_1Lobby_ab364f061050e6fc70659b8c956851108} 
+\index{RType::Lobby@{RType::Lobby}!\_logger@{\_logger}}
+\index{\_logger@{\_logger}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{\_logger}{\_logger}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRType_1_1Logger}{Logger}} RType\+::\+Lobby\+::\+\_\+logger\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1Lobby_aef19db6d163985c90a18b39d3d1536a4}\label{classRType_1_1Lobby_aef19db6d163985c90a18b39d3d1536a4} 
+\index{RType::Lobby@{RType::Lobby}!\_mediator@{\_mediator}}
+\index{\_mediator@{\_mediator}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{\_mediator}{\_mediator}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1IMediator}{IMediator}}$>$ RType\+::\+Lobby\+::\+\_\+mediator}
+
+\Hypertarget{classRType_1_1Lobby_a516d351b21bcb3488639c5952c419bd7}\label{classRType_1_1Lobby_a516d351b21bcb3488639c5952c419bd7} 
+\index{RType::Lobby@{RType::Lobby}!\_mutex@{\_mutex}}
+\index{\_mutex@{\_mutex}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{\_mutex}{\_mutex}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$std\+::mutex$>$ RType\+::\+Lobby\+::\+\_\+mutex\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a942c342a9b84f9c6cf5551b1bec845c5}\label{classRType_1_1Lobby_a942c342a9b84f9c6cf5551b1bec845c5} 
+\index{RType::Lobby@{RType::Lobby}!\_registry@{\_registry}}
+\index{\_registry@{\_registry}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{\_registry}{\_registry}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRegistry}{Registry}} RType\+::\+Lobby\+::\+\_\+registry\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a237d9a90c7fee51fefc1874459955ae6}\label{classRType_1_1Lobby_a237d9a90c7fee51fefc1874459955ae6} 
+\index{RType::Lobby@{RType::Lobby}!\_systems@{\_systems}}
+\index{\_systems@{\_systems}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{\_systems}{\_systems}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSystems}{Systems}} RType\+::\+Lobby\+::\+\_\+systems\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_ae93a47c3c0674e7b0382d4340aaeca11}\label{classRType_1_1Lobby_ae93a47c3c0674e7b0382d4340aaeca11} 
+\index{RType::Lobby@{RType::Lobby}!background@{background}}
+\index{background@{background}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{background}{background}}
+{\footnotesize\ttfamily sf\+::\+Rectangle\+Shape RType\+::\+Lobby\+::background\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a855a533f8381a75485560c887f2cb0a5}\label{classRType_1_1Lobby_a855a533f8381a75485560c887f2cb0a5} 
+\index{RType::Lobby@{RType::Lobby}!backgroundBuffer@{backgroundBuffer}}
+\index{backgroundBuffer@{backgroundBuffer}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{backgroundBuffer}{backgroundBuffer}}
+{\footnotesize\ttfamily sf\+::\+Sound\+Buffer RType\+::\+Lobby\+::background\+Buffer\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_aec5c6baeff97255e032b85e536ea2e06}\label{classRType_1_1Lobby_aec5c6baeff97255e032b85e536ea2e06} 
+\index{RType::Lobby@{RType::Lobby}!backgroundMusic@{backgroundMusic}}
+\index{backgroundMusic@{backgroundMusic}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{backgroundMusic}{backgroundMusic}}
+{\footnotesize\ttfamily sf\+::\+Sound RType\+::\+Lobby\+::background\+Music\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a49466ba0f35e5839cb5d9e90e6f99e17}\label{classRType_1_1Lobby_a49466ba0f35e5839cb5d9e90e6f99e17} 
+\index{RType::Lobby@{RType::Lobby}!backgroundTexture@{backgroundTexture}}
+\index{backgroundTexture@{backgroundTexture}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{backgroundTexture}{backgroundTexture}}
+{\footnotesize\ttfamily sf\+::\+Texture RType\+::\+Lobby\+::background\+Texture\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a2ea18503f15341c203fa9e7d6ff8db88}\label{classRType_1_1Lobby_a2ea18503f15341c203fa9e7d6ff8db88} 
+\index{RType::Lobby@{RType::Lobby}!font@{font}}
+\index{font@{font}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{font}{font}}
+{\footnotesize\ttfamily sf\+::\+Font RType\+::\+Lobby\+::font\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_adbd1adb965054d9e064e4d4a728b2e76}\label{classRType_1_1Lobby_adbd1adb965054d9e064e4d4a728b2e76} 
+\index{RType::Lobby@{RType::Lobby}!games@{games}}
+\index{games@{games}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{games}{games}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1Game}{Game}}$>$ RType\+::\+Lobby\+::games\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_ae0b9d4563445d5b3dd4a9371180501e2}\label{classRType_1_1Lobby_ae0b9d4563445d5b3dd4a9371180501e2} 
+\index{RType::Lobby@{RType::Lobby}!logoSprite@{logoSprite}}
+\index{logoSprite@{logoSprite}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{logoSprite}{logoSprite}}
+{\footnotesize\ttfamily sf\+::\+Sprite RType\+::\+Lobby\+::logo\+Sprite\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_aafda4cfc9f4a56c883c68760c12fe867}\label{classRType_1_1Lobby_aafda4cfc9f4a56c883c68760c12fe867} 
+\index{RType::Lobby@{RType::Lobby}!logoTexture@{logoTexture}}
+\index{logoTexture@{logoTexture}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{logoTexture}{logoTexture}}
+{\footnotesize\ttfamily sf\+::\+Texture RType\+::\+Lobby\+::logo\+Texture\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a4fd85f7ef6943b6a7263ff5a92e89e09}\label{classRType_1_1Lobby_a4fd85f7ef6943b6a7263ff5a92e89e09} 
+\index{RType::Lobby@{RType::Lobby}!menuOptions@{menuOptions}}
+\index{menuOptions@{menuOptions}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{menuOptions}{menuOptions}}
+{\footnotesize\ttfamily sf\+::\+Text RType\+::\+Lobby\+::menu\+Options\mbox{[}3\mbox{]}\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a6d4365b1e1049e2ec0d909e5d4a97b35}\label{classRType_1_1Lobby_a6d4365b1e1049e2ec0d909e5d4a97b35} 
+\index{RType::Lobby@{RType::Lobby}!playersNames@{playersNames}}
+\index{playersNames@{playersNames}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{playersNames}{playersNames}}
+{\footnotesize\ttfamily sf\+::\+Text RType\+::\+Lobby\+::players\+Names\mbox{[}5\mbox{]}\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a56d339f73bb7a50a0ad8c59883b9cec7}\label{classRType_1_1Lobby_a56d339f73bb7a50a0ad8c59883b9cec7} 
+\index{RType::Lobby@{RType::Lobby}!playerSprites@{playerSprites}}
+\index{playerSprites@{playerSprites}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{playerSprites}{playerSprites}}
+{\footnotesize\ttfamily std\+::vector$<$sf\+::\+Sprite$>$ RType\+::\+Lobby\+::player\+Sprites\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_aa29085b5a1b19a94ca8b9ae13f9da4e6}\label{classRType_1_1Lobby_aa29085b5a1b19a94ca8b9ae13f9da4e6} 
+\index{RType::Lobby@{RType::Lobby}!playerTextures@{playerTextures}}
+\index{playerTextures@{playerTextures}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{playerTextures}{playerTextures}}
+{\footnotesize\ttfamily std\+::vector$<$sf\+::\+Texture$>$ RType\+::\+Lobby\+::player\+Textures\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a12411c66f2f65fc7f99684c48208d306}\label{classRType_1_1Lobby_a12411c66f2f65fc7f99684c48208d306} 
+\index{RType::Lobby@{RType::Lobby}!selectBuffer@{selectBuffer}}
+\index{selectBuffer@{selectBuffer}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{selectBuffer}{selectBuffer}}
+{\footnotesize\ttfamily sf\+::\+Sound\+Buffer RType\+::\+Lobby\+::select\+Buffer\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_ac44c8d80f120c2c3ec37d98c085c15d1}\label{classRType_1_1Lobby_ac44c8d80f120c2c3ec37d98c085c15d1} 
+\index{RType::Lobby@{RType::Lobby}!selectedOption@{selectedOption}}
+\index{selectedOption@{selectedOption}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{selectedOption}{selectedOption}}
+{\footnotesize\ttfamily int RType\+::\+Lobby\+::selected\+Option\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a8bb5cd6bb43bd2f52c348fc535430cc1}\label{classRType_1_1Lobby_a8bb5cd6bb43bd2f52c348fc535430cc1} 
+\index{RType::Lobby@{RType::Lobby}!selectSound@{selectSound}}
+\index{selectSound@{selectSound}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{selectSound}{selectSound}}
+{\footnotesize\ttfamily sf\+::\+Sound RType\+::\+Lobby\+::select\+Sound\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_a271abe4213ba0050ad1379154dd3ec4c}\label{classRType_1_1Lobby_a271abe4213ba0050ad1379154dd3ec4c} 
+\index{RType::Lobby@{RType::Lobby}!settings@{settings}}
+\index{settings@{settings}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{settings}{settings}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classSettings}{Settings}}$>$ RType\+::\+Lobby\+::settings\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classRType_1_1Lobby_aea5e0a587c807b12726b1be546afdfb8}\label{classRType_1_1Lobby_aea5e0a587c807b12726b1be546afdfb8} 
+\index{RType::Lobby@{RType::Lobby}!window@{window}}
+\index{window@{window}!RType::Lobby@{RType::Lobby}}
+\doxysubsubsection{\texorpdfstring{window}{window}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$sf\+::\+Render\+Window$>$ RType\+::\+Lobby\+::window\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Render\+Engine/\+Menu/\mbox{\hyperlink{Lobby_8hpp}{Lobby.\+hpp}}\item 
+src/client/\+Render\+Engine/\+Menu/\mbox{\hyperlink{Lobby_8cpp}{Lobby.\+cpp}}\end{DoxyCompactItemize}

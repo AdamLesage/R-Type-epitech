@@ -1,0 +1,285 @@
+\doxysection{Registry Class Reference}
+\hypertarget{classRegistry}{}\label{classRegistry}\index{Registry@{Registry}}
+
+
+{\ttfamily \#include $<$Registry.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Component $>$ }\\\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::reference\+\_\+type \mbox{\hyperlink{classRegistry_a876f497e5d5948f43c95207a12ca981f}{add\+\_\+component}} (\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&to, Component \&\&c)
+\begin{DoxyCompactList}\small\item\em Adds a new component to a specific entity. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class... Components, typename Function $>$ }\\void \mbox{\hyperlink{classRegistry_a9c58e66fce8160965de26356ef3a23e1}{add\+\_\+system}} (Function \&\&f)
+\item 
+{\footnotesize template$<$typename Component , typename... Params$>$ }\\\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::reference\+\_\+type \mbox{\hyperlink{classRegistry_affe65ba1b8a5cd7de47bd02a669124ec}{emplace\+\_\+component}} (\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&to, Params \&\&... p)
+\begin{DoxyCompactList}\small\item\em Constructs and adds a new component in-\/place for a specific entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} \mbox{\hyperlink{classRegistry_ae3d78ea7cd7bfddf1f54e5bdf8eb72a9}{entity\+\_\+from\+\_\+index}} (std\+::size\+\_\+t idx) const
+\begin{DoxyCompactList}\small\item\em Retrieves an entity ID from its index. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Component $>$ }\\\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& \mbox{\hyperlink{classRegistry_ab8ff3522b765d882b46262ad345db07b}{get\+\_\+components}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the sparse array of a specific component type. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Component $>$ }\\const \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& \mbox{\hyperlink{classRegistry_a07ea84ee3f8789b4e2ba7a8e4571716b}{get\+\_\+components}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the constant sparse array of a specific component type. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRegistry_ae1bc4e1ff64aac0d4657386dade88dca}{kill\+\_\+entity}} (\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&e)
+\begin{DoxyCompactList}\small\item\em Marks an entity as dead, allowing its ID to be reused. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Component $>$ }\\\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& \mbox{\hyperlink{classRegistry_aa8cac092875e25acfa7feb45d295331c}{register\+\_\+component}} ()
+\begin{DoxyCompactList}\small\item\em Registers a component type by creating a new sparse array for it. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Component $>$ }\\void \mbox{\hyperlink{classRegistry_a8af690a38f4982d9479401e7c69c33d2}{remove\+\_\+component}} (\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&from)
+\begin{DoxyCompactList}\small\item\em Removes a component from a specific entity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRegistry_a15a6de78dc2259220850e60b540148aa}{run\+\_\+systems}} ()
+\item 
+\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} \mbox{\hyperlink{classRegistry_ad81bdeebc99ce487b6a2b667d4e49674}{spawn\+\_\+entity}} ()
+\begin{DoxyCompactList}\small\item\em Creates a new entity, reusing a dead entity ID if available. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::type\+\_\+index, std\+::function$<$ void(\mbox{\hyperlink{classRegistry}{Registry}} \&, \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const  \&)$>$ \mbox{\hyperlink{classRegistry_a25fde65884ff1ab92215b529c1879798}{\+\_\+component\+\_\+erasers}} )
+\item 
+std\+::unordered\+\_\+map$<$ std\+::type\+\_\+index, std\+::any $>$ \mbox{\hyperlink{classRegistry_a3125d6a89a2474702c4d6b4ae9c6cd69}{\+\_\+components\+\_\+arrays}}
+\item 
+std\+::queue$<$ \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} $>$ \mbox{\hyperlink{classRegistry_a4bcfa239698c7e887e3faf9f7f35f03b}{\+\_\+dead\+\_\+entities}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} $>$ \mbox{\hyperlink{classRegistry_a63960fed2c1cfb9fdc6b07661c382e3e}{\+\_\+entities}}
+\item 
+\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} \mbox{\hyperlink{classRegistry_a5023e1c1db1f3d8a06916406034b2bbc}{\+\_\+next\+\_\+entity\+\_\+id}} = 0
+\item 
+std\+::vector$<$ std\+::function$<$ void()$>$ $>$ \mbox{\hyperlink{classRegistry_a6b2862e504936b655c38493a5914e8d3}{\+\_\+systems}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRegistry_a876f497e5d5948f43c95207a12ca981f}\label{classRegistry_a876f497e5d5948f43c95207a12ca981f} 
+\index{Registry@{Registry}!add\_component@{add\_component}}
+\index{add\_component@{add\_component}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{add\_component()}{add\_component()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::reference\+\_\+type Registry\+::add\+\_\+component (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&}]{to,  }\item[{Component \&\&}]{c }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a new component to a specific entity. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & The type of the component. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em to} & The entity to which the component will be added. \\
+\hline
+{\em c} & The component to be added. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+typename \doxylink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{Sparse\+Array$<$\+Component$>$\+::reference\+\_\+type} Reference to the newly added component. 
+\end{DoxyReturn}
+\Hypertarget{classRegistry_a9c58e66fce8160965de26356ef3a23e1}\label{classRegistry_a9c58e66fce8160965de26356ef3a23e1} 
+\index{Registry@{Registry}!add\_system@{add\_system}}
+\index{add\_system@{add\_system}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{add\_system()}{add\_system()}}
+{\footnotesize\ttfamily template$<$class... Components, typename Function $>$ \\
+void Registry\+::add\+\_\+system (\begin{DoxyParamCaption}\item[{Function \&\&}]{f }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classRegistry_affe65ba1b8a5cd7de47bd02a669124ec}\label{classRegistry_affe65ba1b8a5cd7de47bd02a669124ec} 
+\index{Registry@{Registry}!emplace\_component@{emplace\_component}}
+\index{emplace\_component@{emplace\_component}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{emplace\_component()}{emplace\_component()}}
+{\footnotesize\ttfamily template$<$typename Component , typename... Params$>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::reference\+\_\+type Registry\+::emplace\+\_\+component (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&}]{to,  }\item[{Params \&\&...}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructs and adds a new component in-\/place for a specific entity. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & The type of the component. \\
+\hline
+{\em Params} & Variadic template parameters for the component constructor. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em to} & The entity to which the component will be added. \\
+\hline
+{\em p} & The parameters to forward to the component constructor. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+typename \doxylink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{Sparse\+Array$<$\+Component$>$\+::reference\+\_\+type} Reference to the newly emplaced component. 
+\end{DoxyReturn}
+\Hypertarget{classRegistry_ae3d78ea7cd7bfddf1f54e5bdf8eb72a9}\label{classRegistry_ae3d78ea7cd7bfddf1f54e5bdf8eb72a9} 
+\index{Registry@{Registry}!entity\_from\_index@{entity\_from\_index}}
+\index{entity\_from\_index@{entity\_from\_index}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{entity\_from\_index()}{entity\_from\_index()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} Registry\+::entity\+\_\+from\+\_\+index (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{idx }\end{DoxyParamCaption}) const}
+
+
+
+Retrieves an entity ID from its index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em idx} & The index of the entity in the internal vector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+entity\+\_\+t The entity ID corresponding to the given index. 
+\end{DoxyReturn}
+\Hypertarget{classRegistry_ab8ff3522b765d882b46262ad345db07b}\label{classRegistry_ab8ff3522b765d882b46262ad345db07b} 
+\index{Registry@{Registry}!get\_components@{get\_components}}
+\index{get\_components@{get\_components}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{get\_components()}{get\_components()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& Registry\+::get\+\_\+components (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the sparse array of a specific component type. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & The type of the component. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+Sparse\+Array$<$\+Component$>$\& Reference to the sparse array of the specified component type. 
+\end{DoxyReturn}
+\Hypertarget{classRegistry_a07ea84ee3f8789b4e2ba7a8e4571716b}\label{classRegistry_a07ea84ee3f8789b4e2ba7a8e4571716b} 
+\index{Registry@{Registry}!get\_components@{get\_components}}
+\index{get\_components@{get\_components}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{get\_components()}{get\_components()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class Component $>$ \\
+const \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& Registry\+::get\+\_\+components (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the constant sparse array of a specific component type. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & The type of the component. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+const Sparse\+Array$<$\+Component$>$\& Constant reference to the sparse array of the specified component type. 
+\end{DoxyReturn}
+\Hypertarget{classRegistry_ae1bc4e1ff64aac0d4657386dade88dca}\label{classRegistry_ae1bc4e1ff64aac0d4657386dade88dca} 
+\index{Registry@{Registry}!kill\_entity@{kill\_entity}}
+\index{kill\_entity@{kill\_entity}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{kill\_entity()}{kill\_entity()}}
+{\footnotesize\ttfamily void Registry\+::kill\+\_\+entity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&}]{e }\end{DoxyParamCaption})}
+
+
+
+Marks an entity as dead, allowing its ID to be reused. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & The ID of the entity to kill. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRegistry_aa8cac092875e25acfa7feb45d295331c}\label{classRegistry_aa8cac092875e25acfa7feb45d295331c} 
+\index{Registry@{Registry}!register\_component@{register\_component}}
+\index{register\_component@{register\_component}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{register\_component()}{register\_component()}}
+{\footnotesize\ttfamily template$<$class Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& Registry\+::register\+\_\+component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Registers a component type by creating a new sparse array for it. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & The type of the component to register. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+Sparse\+Array$<$\+Component$>$\& Reference to the newly created sparse array for the component type. 
+\end{DoxyReturn}
+\Hypertarget{classRegistry_a8af690a38f4982d9479401e7c69c33d2}\label{classRegistry_a8af690a38f4982d9479401e7c69c33d2} 
+\index{Registry@{Registry}!remove\_component@{remove\_component}}
+\index{remove\_component@{remove\_component}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{remove\_component()}{remove\_component()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+void Registry\+::remove\+\_\+component (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const \&}]{from }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Removes a component from a specific entity. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & The type of the component. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em from} & The entity from which the component will be removed. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRegistry_a15a6de78dc2259220850e60b540148aa}\label{classRegistry_a15a6de78dc2259220850e60b540148aa} 
+\index{Registry@{Registry}!run\_systems@{run\_systems}}
+\index{run\_systems@{run\_systems}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{run\_systems()}{run\_systems()}}
+{\footnotesize\ttfamily void Registry\+::run\+\_\+systems (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classRegistry_ad81bdeebc99ce487b6a2b667d4e49674}\label{classRegistry_ad81bdeebc99ce487b6a2b667d4e49674} 
+\index{Registry@{Registry}!spawn\_entity@{spawn\_entity}}
+\index{spawn\_entity@{spawn\_entity}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{spawn\_entity()}{spawn\_entity()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} Registry\+::spawn\+\_\+entity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a new entity, reusing a dead entity ID if available. 
+
+\begin{DoxyReturn}{Returns}
+entity\+\_\+t The ID of the newly spawned entity. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRegistry_a25fde65884ff1ab92215b529c1879798}\label{classRegistry_a25fde65884ff1ab92215b529c1879798} 
+\index{Registry@{Registry}!\_component\_erasers@{\_component\_erasers}}
+\index{\_component\_erasers@{\_component\_erasers}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{\_component\_erasers}{\_component\_erasers}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::type\+\_\+index, std\+::function$<$void(\mbox{\hyperlink{classRegistry}{Registry}}\&, \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} const\&)$>$ Registry\+::\+\_\+component\+\_\+erasers) \hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRegistry_a3125d6a89a2474702c4d6b4ae9c6cd69}\label{classRegistry_a3125d6a89a2474702c4d6b4ae9c6cd69} 
+\index{Registry@{Registry}!\_components\_arrays@{\_components\_arrays}}
+\index{\_components\_arrays@{\_components\_arrays}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{\_components\_arrays}{\_components\_arrays}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::type\+\_\+index, std\+::any$>$ Registry\+::\+\_\+components\+\_\+arrays\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRegistry_a4bcfa239698c7e887e3faf9f7f35f03b}\label{classRegistry_a4bcfa239698c7e887e3faf9f7f35f03b} 
+\index{Registry@{Registry}!\_dead\_entities@{\_dead\_entities}}
+\index{\_dead\_entities@{\_dead\_entities}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{\_dead\_entities}{\_dead\_entities}}
+{\footnotesize\ttfamily std\+::queue$<$\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}}$>$ Registry\+::\+\_\+dead\+\_\+entities\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRegistry_a63960fed2c1cfb9fdc6b07661c382e3e}\label{classRegistry_a63960fed2c1cfb9fdc6b07661c382e3e} 
+\index{Registry@{Registry}!\_entities@{\_entities}}
+\index{\_entities@{\_entities}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{\_entities}{\_entities}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}}$>$ Registry\+::\+\_\+entities\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRegistry_a5023e1c1db1f3d8a06916406034b2bbc}\label{classRegistry_a5023e1c1db1f3d8a06916406034b2bbc} 
+\index{Registry@{Registry}!\_next\_entity\_id@{\_next\_entity\_id}}
+\index{\_next\_entity\_id@{\_next\_entity\_id}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{\_next\_entity\_id}{\_next\_entity\_id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} Registry\+::\+\_\+next\+\_\+entity\+\_\+id = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRegistry_a6b2862e504936b655c38493a5914e8d3}\label{classRegistry_a6b2862e504936b655c38493a5914e8d3} 
+\index{Registry@{Registry}!\_systems@{\_systems}}
+\index{\_systems@{\_systems}!Registry@{Registry}}
+\doxysubsubsection{\texorpdfstring{\_systems}{\_systems}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::function$<$void()$>$ $>$ Registry\+::\+\_\+systems\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/shared/registry/\mbox{\hyperlink{Registry_8hpp}{Registry.\+hpp}}\item 
+src/shared/registry/\mbox{\hyperlink{Registry_8cpp}{Registry.\+cpp}}\end{DoxyCompactItemize}

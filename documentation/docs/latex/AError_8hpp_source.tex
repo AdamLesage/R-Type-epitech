@@ -1,0 +1,41 @@
+\doxysection{AError.\+hpp}
+\hypertarget{AError_8hpp_source}{}\label{AError_8hpp_source}\index{src/client/Error/AError.hpp@{src/client/Error/AError.hpp}}
+\mbox{\hyperlink{AError_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ AError.hpp}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Error}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ AERROR\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ AERROR\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IError_8hpp}{IError.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceRType}{RType}}\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRType_1_1AError}{AError}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classRType_1_1IError}{IError}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1AError_ad48ec29cf02e438feaa82342759c46b3}{AError}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keyword}{const}\ std::string\&\ location)\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1AError_aa6506deeb9ad06c63b8020839c91dad7}{\_errorMessage}}\ \ =\ message;}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1AError_a117318f2b455b598ba61e6dee19f18c4}{\_errorLocation}}\ =\ location;}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classRType_1_1AError_a8f85c9a04ce9b9eace80389126b00014}{\string~AError}}()\ noexcept\ =\ default;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ const\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{classRType_1_1AError_a47abedef341861eb63be9e2cab55dc49}{what}}()\ const\ noexcept\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{classRType_1_1AError_aa6506deeb9ad06c63b8020839c91dad7}{\_errorMessage}}.c\_str());}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{classRType_1_1AError_acbac147f7e785098d265ccd8ca1a2702}{where}}()\ const\ noexcept\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{classRType_1_1AError_a117318f2b455b598ba61e6dee19f18c4}{\_errorLocation}}.c\_str());}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classRType_1_1AError_aa6506deeb9ad06c63b8020839c91dad7}{\_errorMessage}};}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classRType_1_1AError_a117318f2b455b598ba61e6dee19f18c4}{\_errorLocation}};}
+\DoxyCodeLine{00032\ \ \ \ \ \};}
+\DoxyCodeLine{00033\ \}\ \textcolor{comment}{//\ namespace\ RType}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !AERROR\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

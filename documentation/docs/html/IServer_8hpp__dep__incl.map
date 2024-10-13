@@ -1,0 +1,24 @@
+<map id="src/server/network/IServer.hpp" name="src/server/network/IServer.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="403,5,546,45"/>
+<area shape="rect" id="Node000002" href="$Server_8hpp.html" title=" " alt="" coords="403,93,546,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="477,59,477,93,472,93,472,59"/>
+<area shape="rect" id="Node000003" href="$GameLogique_8hpp.html" title=" " alt="" coords="269,357,449,397"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="496,144,513,180,527,223,530,268,525,290,516,311,502,327,486,340,449,360,447,355,483,336,498,323,511,308,520,289,525,268,522,224,508,182,491,147"/>
+<area shape="rect" id="Node000005" href="$main__server_8cpp.html" title=" " alt="" coords="5,453,203,478"/>
+<area shape="poly" id="edge11_Node000002_Node000005" title=" " alt="" coords="390,122,312,136,227,162,186,181,148,205,115,235,89,271,79,294,74,319,77,371,88,418,101,451,96,453,83,420,71,372,69,319,74,293,84,268,112,232,145,201,183,177,225,157,311,130,389,117"/>
+<area shape="rect" id="Node000006" href="$NetworkSender_8hpp.html" title=" " alt="" coords="257,181,437,221"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="436,144,376,183,374,179,433,139"/>
+<area shape="rect" id="Node000010" href="$Server_8cpp.html" title=" " alt="" coords="577,181,719,221"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="526,137,611,179,609,184,524,142"/>
+<area shape="rect" id="Node000004" href="$GameLogique_8cpp.html" title=" " alt="" coords="269,445,449,485"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="361,411,361,445,356,445,356,411"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="291,404,139,455,137,450,289,399"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="327,234,312,270,309,289,312,309,325,334,341,355,337,359,320,337,307,310,304,290,307,269,323,232"/>
+<area shape="rect" id="Node000007" href="$NetworkSender_8cpp.html" title=" " alt="" coords="321,269,501,309"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="371,231,399,268,394,271,367,234"/>
+<area shape="rect" id="Node000008" href="$server_2systems_2Systems_8hpp.html" title=" " alt="" coords="99,269,245,309"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="297,230,211,272,209,267,295,225"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="226,313,319,355,317,360,224,317"/>
+<area shape="rect" id="Node000009" href="$server_2systems_2Systems_8cpp.html" title=" " alt="" coords="99,357,245,397"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="175,323,175,357,169,357,169,323"/>
+</map>

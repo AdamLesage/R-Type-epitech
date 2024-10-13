@@ -1,0 +1,263 @@
+\doxysection{Network\+Sender Class Reference}
+\hypertarget{classNetworkSender}{}\label{classNetworkSender}\index{NetworkSender@{NetworkSender}}
+
+
+{\ttfamily \#include $<$Network\+Sender.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNetworkSender_a469d575713cd8f290746993776650943}{Network\+Sender}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkLib_1_1Server}{Network\+Lib\+::\+Server}} $>$ network)
+\item 
+void \mbox{\hyperlink{classNetworkSender_a53725a6647dd94744be9e42ada5cfd39}{send\+Create\+Bonus}} (char type, int id, float pos\+\_\+x, float pos\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Sends the creation of a bonus or power-\/up to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a75f5bc6381149fae05892c28553095f3}{send\+Create\+Enemy}} (char type, int id, float pos\+\_\+x, float pos\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Sends the creation of an enemy to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a54ccb7c6c62acd8dadfdbf0147c71b93}{send\+Create\+Player}} (int id, float pos\+\_\+x, float pos\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Sends the creation of a player to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_ab34239ad6938b44e612d8c86952490c5}{send\+Create\+Projectil}} (int id, float pos\+\_\+x, float pos\+\_\+y, int parent\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Sends the creation of a projectile to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a0fd1069e0047f07e19033980967ba3af}{send\+Create\+Reward}} (int id, float pos\+\_\+x, float pos\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Sends the creation of a reward (e.\+g., collectible) to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a160894716811d758c3dad30d6bef57ae}{send\+Create\+Wall}} (int id, float pos\+\_\+x, float pos\+\_\+y, float size\+\_\+x, float size\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Sends the creation of a wall entity to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a851bb43edd7e2ea1fbeb6bf75503037b}{send\+Delete\+Entity}} (int id)
+\begin{DoxyCompactList}\small\item\em Sends a delete command for an entity to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a9e1469e7427260b33b8d7efdc6c68e32}{send\+Health\+Update}} (int id, int hp)
+\begin{DoxyCompactList}\small\item\em Sends a health update for an entity to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a4044acdadf23ab059aa9d62991c2e4dd}{send\+Position\+Update}} (int id, float pos\+\_\+x, float pos\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Sends an update on the position of an entity to all clients. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classNetworkSender_a0c43c5012bfcd84debc352c9936776f8}{send\+Projectil\+Colision}} (int id\+\_\+projectil, int id\+\_\+entity)
+\begin{DoxyCompactList}\small\item\em Sends information about a projectile collision with another entity to all clients. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNetworkSender_aea53f6a7ce915a608088b71544269fc0}{\texorpdfstring{$\sim$}{\string~}\+Network\+Sender}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkLib_1_1Server}{Network\+Lib\+::\+Server}} $>$ \mbox{\hyperlink{classNetworkSender_a62a919dba5812edb38c71bab9029436b}{\+\_\+network}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classNetworkSender_a469d575713cd8f290746993776650943}\label{classNetworkSender_a469d575713cd8f290746993776650943} 
+\index{NetworkSender@{NetworkSender}!NetworkSender@{NetworkSender}}
+\index{NetworkSender@{NetworkSender}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{NetworkSender()}{NetworkSender()}}
+{\footnotesize\ttfamily Network\+Sender\+::\+Network\+Sender (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkLib_1_1Server}{Network\+Lib\+::\+Server}} $>$}]{network }\end{DoxyParamCaption})}
+
+\Hypertarget{classNetworkSender_aea53f6a7ce915a608088b71544269fc0}\label{classNetworkSender_aea53f6a7ce915a608088b71544269fc0} 
+\index{NetworkSender@{NetworkSender}!````~NetworkSender@{\texorpdfstring{$\sim$}{\string~}NetworkSender}}
+\index{````~NetworkSender@{\texorpdfstring{$\sim$}{\string~}NetworkSender}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}NetworkSender()}{\string~NetworkSender()}}
+{\footnotesize\ttfamily Network\+Sender\+::\texorpdfstring{$\sim$}{\string~}\+Network\+Sender (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNetworkSender_a53725a6647dd94744be9e42ada5cfd39}\label{classNetworkSender_a53725a6647dd94744be9e42ada5cfd39} 
+\index{NetworkSender@{NetworkSender}!sendCreateBonus@{sendCreateBonus}}
+\index{sendCreateBonus@{sendCreateBonus}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendCreateBonus()}{sendCreateBonus()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Create\+Bonus (\begin{DoxyParamCaption}\item[{char}]{type,  }\item[{int}]{id,  }\item[{float}]{pos\+\_\+x,  }\item[{float}]{pos\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Sends the creation of a bonus or power-\/up to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & The type or class of the created Bonus. \\
+\hline
+{\em id} & The unique identifier of the created bonus. \\
+\hline
+{\em pos\+\_\+x} & The x-\/coordinate of the bonus\textquotesingle{}s position. \\
+\hline
+{\em pos\+\_\+y} & The y-\/coordinate of the bonus\textquotesingle{}s position. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a75f5bc6381149fae05892c28553095f3}\label{classNetworkSender_a75f5bc6381149fae05892c28553095f3} 
+\index{NetworkSender@{NetworkSender}!sendCreateEnemy@{sendCreateEnemy}}
+\index{sendCreateEnemy@{sendCreateEnemy}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendCreateEnemy()}{sendCreateEnemy()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Create\+Enemy (\begin{DoxyParamCaption}\item[{char}]{type,  }\item[{int}]{id,  }\item[{float}]{pos\+\_\+x,  }\item[{float}]{pos\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Sends the creation of an enemy to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & The type or class of the created enemy. \\
+\hline
+{\em id} & The unique identifier of the created enemy. \\
+\hline
+{\em pos\+\_\+x} & The x-\/coordinate of the enemy\textquotesingle{}s initial position. \\
+\hline
+{\em pos\+\_\+y} & The y-\/coordinate of the enemy\textquotesingle{}s initial position. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a54ccb7c6c62acd8dadfdbf0147c71b93}\label{classNetworkSender_a54ccb7c6c62acd8dadfdbf0147c71b93} 
+\index{NetworkSender@{NetworkSender}!sendCreatePlayer@{sendCreatePlayer}}
+\index{sendCreatePlayer@{sendCreatePlayer}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendCreatePlayer()}{sendCreatePlayer()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Create\+Player (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{float}]{pos\+\_\+x,  }\item[{float}]{pos\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Sends the creation of a player to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique identifier of the created player. \\
+\hline
+{\em pos\+\_\+x} & The x-\/coordinate of the player\textquotesingle{}s initial position. \\
+\hline
+{\em pos\+\_\+y} & The y-\/coordinate of the player\textquotesingle{}s initial position. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_ab34239ad6938b44e612d8c86952490c5}\label{classNetworkSender_ab34239ad6938b44e612d8c86952490c5} 
+\index{NetworkSender@{NetworkSender}!sendCreateProjectil@{sendCreateProjectil}}
+\index{sendCreateProjectil@{sendCreateProjectil}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendCreateProjectil()}{sendCreateProjectil()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Create\+Projectil (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{float}]{pos\+\_\+x,  }\item[{float}]{pos\+\_\+y,  }\item[{int}]{parent\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Sends the creation of a projectile to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique identifier of the created projectile. \\
+\hline
+{\em pos\+\_\+x} & The x-\/coordinate of the projectile\textquotesingle{}s position. \\
+\hline
+{\em pos\+\_\+y} & The y-\/coordinate of the projectile\textquotesingle{}s position. \\
+\hline
+{\em parent\+\_\+id} & The identifier of the entity that created or shot the projectile. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a0fd1069e0047f07e19033980967ba3af}\label{classNetworkSender_a0fd1069e0047f07e19033980967ba3af} 
+\index{NetworkSender@{NetworkSender}!sendCreateReward@{sendCreateReward}}
+\index{sendCreateReward@{sendCreateReward}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendCreateReward()}{sendCreateReward()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Create\+Reward (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{float}]{pos\+\_\+x,  }\item[{float}]{pos\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Sends the creation of a reward (e.\+g., collectible) to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique identifier of the created reward. \\
+\hline
+{\em pos\+\_\+x} & The x-\/coordinate of the reward\textquotesingle{}s position. \\
+\hline
+{\em pos\+\_\+y} & The y-\/coordinate of the reward\textquotesingle{}s position. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a160894716811d758c3dad30d6bef57ae}\label{classNetworkSender_a160894716811d758c3dad30d6bef57ae} 
+\index{NetworkSender@{NetworkSender}!sendCreateWall@{sendCreateWall}}
+\index{sendCreateWall@{sendCreateWall}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendCreateWall()}{sendCreateWall()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Create\+Wall (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{float}]{pos\+\_\+x,  }\item[{float}]{pos\+\_\+y,  }\item[{float}]{size\+\_\+x,  }\item[{float}]{size\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Sends the creation of a wall entity to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique identifier of the created wall. \\
+\hline
+{\em pos\+\_\+x} & The x-\/coordinate of the wall\textquotesingle{}s position. \\
+\hline
+{\em pos\+\_\+y} & The y-\/coordinate of the wall\textquotesingle{}s position. \\
+\hline
+{\em size\+\_\+x} & The width of the wall. \\
+\hline
+{\em size\+\_\+y} & The height of the wall. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a851bb43edd7e2ea1fbeb6bf75503037b}\label{classNetworkSender_a851bb43edd7e2ea1fbeb6bf75503037b} 
+\index{NetworkSender@{NetworkSender}!sendDeleteEntity@{sendDeleteEntity}}
+\index{sendDeleteEntity@{sendDeleteEntity}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendDeleteEntity()}{sendDeleteEntity()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Delete\+Entity (\begin{DoxyParamCaption}\item[{int}]{id }\end{DoxyParamCaption})}
+
+
+
+Sends a delete command for an entity to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique identifier of the entity to be deleted. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a9e1469e7427260b33b8d7efdc6c68e32}\label{classNetworkSender_a9e1469e7427260b33b8d7efdc6c68e32} 
+\index{NetworkSender@{NetworkSender}!sendHealthUpdate@{sendHealthUpdate}}
+\index{sendHealthUpdate@{sendHealthUpdate}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendHealthUpdate()}{sendHealthUpdate()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Health\+Update (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{int}]{hp }\end{DoxyParamCaption})}
+
+
+
+Sends a health update for an entity to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique identifier of the entity whose health is being updated. \\
+\hline
+{\em hp} & The updated health points of the entity. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a4044acdadf23ab059aa9d62991c2e4dd}\label{classNetworkSender_a4044acdadf23ab059aa9d62991c2e4dd} 
+\index{NetworkSender@{NetworkSender}!sendPositionUpdate@{sendPositionUpdate}}
+\index{sendPositionUpdate@{sendPositionUpdate}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendPositionUpdate()}{sendPositionUpdate()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Position\+Update (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{float}]{pos\+\_\+x,  }\item[{float}]{pos\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Sends an update on the position of an entity to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The unique identifier of the entity whose position is being updated. \\
+\hline
+{\em pos\+\_\+x} & The new x-\/coordinate of the entity\textquotesingle{}s position. \\
+\hline
+{\em pos\+\_\+y} & The new y-\/coordinate of the entity\textquotesingle{}s position. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNetworkSender_a0c43c5012bfcd84debc352c9936776f8}\label{classNetworkSender_a0c43c5012bfcd84debc352c9936776f8} 
+\index{NetworkSender@{NetworkSender}!sendProjectilColision@{sendProjectilColision}}
+\index{sendProjectilColision@{sendProjectilColision}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{sendProjectilColision()}{sendProjectilColision()}}
+{\footnotesize\ttfamily void Network\+Sender\+::send\+Projectil\+Colision (\begin{DoxyParamCaption}\item[{int}]{id\+\_\+projectil,  }\item[{int}]{id\+\_\+entity }\end{DoxyParamCaption})}
+
+
+
+Sends information about a projectile collision with another entity to all clients. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+projectil} & The unique identifier of the projectile involved in the collision. \\
+\hline
+{\em id\+\_\+entity} & The unique identifier of the entity hit by the projectile. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classNetworkSender_a62a919dba5812edb38c71bab9029436b}\label{classNetworkSender_a62a919dba5812edb38c71bab9029436b} 
+\index{NetworkSender@{NetworkSender}!\_network@{\_network}}
+\index{\_network@{\_network}!NetworkSender@{NetworkSender}}
+\doxysubsubsection{\texorpdfstring{\_network}{\_network}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classNetworkLib_1_1Server}{Network\+Lib\+::\+Server}}$>$ Network\+Sender\+::\+\_\+network\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/server/\+Game\+Logique/\mbox{\hyperlink{NetworkSender_8hpp}{Network\+Sender.\+hpp}}\item 
+src/server/\+Game\+Logique/\mbox{\hyperlink{NetworkSender_8cpp}{Network\+Sender.\+cpp}}\end{DoxyCompactItemize}

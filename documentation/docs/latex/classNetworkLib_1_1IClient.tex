@@ -1,0 +1,97 @@
+\doxysection{Network\+Lib\+::IClient Class Reference}
+\hypertarget{classNetworkLib_1_1IClient}{}\label{classNetworkLib_1_1IClient}\index{NetworkLib::IClient@{NetworkLib::IClient}}
+
+
+{\ttfamily \#include $<$IClient.\+hpp$>$}
+
+
+
+Inheritance diagram for Network\+Lib\+::IClient\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{classNetworkLib_1_1IClient__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{classNetworkLib_1_1IClient_a47587b04cad36d8a41c073cac9414a01}{has\+Message}} ()=0
+\begin{DoxyCompactList}\small\item\em Check if the client has a message. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{classNetworkLib_1_1IClient_aad0c22fdea3cd1cac5c8596a12fbec3f}{pop\+Message}} ()=0
+\begin{DoxyCompactList}\small\item\em Get the message from the server. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classNetworkLib_1_1IClient_a1f1b5000e9d7a61a6a319e6f3722d68e}{send}} (const std\+::string \&message)=0
+\begin{DoxyCompactList}\small\item\em Send a message to the server. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classNetworkLib_1_1IClient_ae283200f812645fb1dbb5ea7614527e0}{\texorpdfstring{$\sim$}{\string~}\+IClient}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classNetworkLib_1_1IClient_ae283200f812645fb1dbb5ea7614527e0}\label{classNetworkLib_1_1IClient_ae283200f812645fb1dbb5ea7614527e0} 
+\index{NetworkLib::IClient@{NetworkLib::IClient}!````~IClient@{\texorpdfstring{$\sim$}{\string~}IClient}}
+\index{````~IClient@{\texorpdfstring{$\sim$}{\string~}IClient}!NetworkLib::IClient@{NetworkLib::IClient}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}IClient()}{\string~IClient()}}
+{\footnotesize\ttfamily virtual Network\+Lib\+::\+IClient\+::\texorpdfstring{$\sim$}{\string~}\+IClient (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNetworkLib_1_1IClient_a47587b04cad36d8a41c073cac9414a01}\label{classNetworkLib_1_1IClient_a47587b04cad36d8a41c073cac9414a01} 
+\index{NetworkLib::IClient@{NetworkLib::IClient}!hasMessage@{hasMessage}}
+\index{hasMessage@{hasMessage}!NetworkLib::IClient@{NetworkLib::IClient}}
+\doxysubsubsection{\texorpdfstring{hasMessage()}{hasMessage()}}
+{\footnotesize\ttfamily virtual bool Network\+Lib\+::\+IClient\+::has\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Check if the client has a message. 
+
+\begin{DoxyReturn}{Returns}
+true if the client has a message 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Client_ac5054f38d2f68e8322756b05fa0cead7}{Network\+Lib\+::\+Client}}.
+
+\Hypertarget{classNetworkLib_1_1IClient_aad0c22fdea3cd1cac5c8596a12fbec3f}\label{classNetworkLib_1_1IClient_aad0c22fdea3cd1cac5c8596a12fbec3f} 
+\index{NetworkLib::IClient@{NetworkLib::IClient}!popMessage@{popMessage}}
+\index{popMessage@{popMessage}!NetworkLib::IClient@{NetworkLib::IClient}}
+\doxysubsubsection{\texorpdfstring{popMessage()}{popMessage()}}
+{\footnotesize\ttfamily virtual std\+::string Network\+Lib\+::\+IClient\+::pop\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the message from the server. 
+
+\begin{DoxyReturn}{Returns}
+the message from the server 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Client_a9460f7b5b2969964bdd95a89559c63de}{Network\+Lib\+::\+Client}}.
+
+\Hypertarget{classNetworkLib_1_1IClient_a1f1b5000e9d7a61a6a319e6f3722d68e}\label{classNetworkLib_1_1IClient_a1f1b5000e9d7a61a6a319e6f3722d68e} 
+\index{NetworkLib::IClient@{NetworkLib::IClient}!send@{send}}
+\index{send@{send}!NetworkLib::IClient@{NetworkLib::IClient}}
+\doxysubsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily virtual void Network\+Lib\+::\+IClient\+::send (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Send a message to the server. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & the message to send \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Client_accb455b7127ec10ea29319aa779a99f3}{Network\+Lib\+::\+Client}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Network\+Engine/\mbox{\hyperlink{IClient_8hpp}{IClient.\+hpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,51 @@
+\doxysection{Rendering\+Engine.\+hpp}
+\hypertarget{RenderingEngine_8hpp_source}{}\label{RenderingEngine_8hpp_source}\index{src/client/RenderEngine/RenderingEngine.hpp@{src/client/RenderEngine/RenderingEngine.hpp}}
+\mbox{\hyperlink{RenderingEngine_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ RenderingEngine}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ RENDERINGENGINE\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ RENDERINGENGINE\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{AEngine_8hpp}{../AEngine.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IMediator_8hpp}{../Mediator/IMediator.hpp}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Logger_8hpp}{../../shared/utils/Logger.hpp}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Menu_8hpp}{Menu/Menu.hpp}}"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Game_8hpp}{Menu/Game.hpp}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Settings_8hpp}{Menu/Settings.hpp}}"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Lobby_8hpp}{Menu/Lobby.hpp}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Camera_8hpp}{../Camera.hpp}}"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceRType}{RType}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRType_1_1RenderingEngine}{RenderingEngine}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classRType_1_1AEngine}{AEngine}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1RenderingEngine_a52d4204cad8b014be9dd98b5cbf673d9}{RenderingEngine}}();}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1RenderingEngine_ac0568e01eae9feecb4b5a4055839a9d7}{\string~RenderingEngine}}();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a3564e7658de04f52ff11c04c096b4a2e}{run}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a8557934de657fe865ce9fdbd07f3f721}{setMediator}}(std::shared\_ptr<IMediator>\ mediator)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a7e6b5d1c4de648ab3266eac41d9a6328}{setCamera}}(std::shared\_ptr<Camera>\&\ \mbox{\hyperlink{structCamera__s}{Camera}});}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a50ab4397bf6ada4f69328c5a81d813dd}{setMutex}}(std::shared\_ptr<std::mutex>\ mutex);}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Menu>\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a366543d36b58c8b74d1d9efaec1ad82c}{\_menu}};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<sf::RenderWindow>\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a85b0a813c7a814457257402987000b87}{window}};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Game>\ \mbox{\hyperlink{classRType_1_1RenderingEngine_ab4fec2543aa357b26a925de0e2f86c65}{games}};}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Settings>\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a3adc84a9d36e9293a5e6a4485e985de1}{settings}};}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Lobby>\ \mbox{\hyperlink{classRType_1_1RenderingEngine_af2caa9d3149079e6492da45b92435d99}{lobby}};}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Camera>\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a7a456c6b8c1db7caa6b8097fec95d940}{\_camera}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<std::mutex>\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a096077c72a536af7f0fe043d9938c007}{\_mutex}};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\ \mbox{\hyperlink{classRType_1_1RenderingEngine_a2831a900a1345baf18bc8a56fe0a08d9}{logger}};}
+\DoxyCodeLine{00060\ \ \ \ \ \};}
+\DoxyCodeLine{00061\ \}\ \textcolor{comment}{//\ namespace\ RType}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !RENDERINGENGINE\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

@@ -1,0 +1,261 @@
+\doxysection{RType\+::Game\+Engine Class Reference}
+\hypertarget{classRType_1_1GameEngine}{}\label{classRType_1_1GameEngine}\index{RType::GameEngine@{RType::GameEngine}}
+
+
+{\ttfamily \#include $<$Game\+Engine.\+hpp$>$}
+
+
+
+Inheritance diagram for RType\+::Game\+Engine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{classRType_1_1GameEngine__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for RType\+::Game\+Engine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{classRType_1_1GameEngine__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1GameEngine_a4caca358bc6b2c2a43e4f9041eab21e1}{Game\+Engine}} ()
+\item 
+void \mbox{\hyperlink{classRType_1_1GameEngine_a899510f5dc417598a412810503159c05}{handle\+Server\+Data}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em Handle the server data, received from the \doxylink{classRType_1_1Mediator}{Mediator} notified by the \doxylink{classRType_1_1NetworkEngine}{Network\+Engine}. It will update the registry and the systems. Such as create entities, update entities, delete entities, etc. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1GameEngine_a952730610ef775d0a472047960367496}{run}} () override
+\begin{DoxyCompactList}\small\item\em Run current instance of the engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1GameEngine_a2402cfc74c1aee7d07af091e73538647}{send}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em Send a message to the network, it will call the mediator to send the message to the network engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1GameEngine_a1452b3569cb81d0d8a006cac40176439}{set\+Engines}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}} $>$ network\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$ rendering\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}} $>$ physic\+Engine, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}} $>$ audio\+Engine)
+\begin{DoxyCompactList}\small\item\em Set the engines for the game engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1GameEngine_a2f7a0b0b1f99dd48a6664b278817b090}{set\+Mediator}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator) override
+\begin{DoxyCompactList}\small\item\em Set the mediator of the engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRType_1_1GameEngine_ac47462791148933028b6acb8175b30cb}{update\+Camera}} ()
+\begin{DoxyCompactList}\small\item\em Update the Camera with the \+\_\+registery info and send change to Render\+Engine. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classRType_1_1GameEngine_a75646bd676da2a924a7dd20fc4684756}{\texorpdfstring{$\sim$}{\string~}\+Game\+Engine}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1AEngine}{RType\+::\+AEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_ad9170d8096a08f20f5f1fb16563aae35}{AEngine}} ()=default
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_a1c1bf96c081fbdcc94c08215ea3e9915}{AEngine}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator)
+\item 
+\mbox{\hyperlink{classRType_1_1AEngine_abe04c83551ef423bc1f70c3947eb9dea}{\texorpdfstring{$\sim$}{\string~}\+AEngine}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classRType_1_1IEngine}{RType\+::\+IEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classRType_1_1IEngine_ae6e489807eebe1f9f8c9a58ef23c75a9}{\texorpdfstring{$\sim$}{\string~}\+IEngine}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1GameEngine_ae296ca11e2405b88507c79de3abf91cf}{\+\_\+audio\+Engine}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}} $>$ \mbox{\hyperlink{classRType_1_1GameEngine_a9521e4dfbadb88344e76637256f4c4ac}{\+\_\+camera}}
+\item 
+std\+::shared\+\_\+ptr$<$ std\+::mutex $>$ \mbox{\hyperlink{classRType_1_1GameEngine_a4db8656343fd1d699888fac9f04506c9}{\+\_\+mutex}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1GameEngine_a706ba4d3a3da57d191e70314bf8eb2be}{\+\_\+network\+Engine}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1GameEngine_a514e310ffac4395e3dd3a45594eec78a}{\+\_\+physic\+Engine}}
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1ProtocolParsing}{RType\+::\+Protocol\+Parsing}} $>$ \mbox{\hyperlink{classRType_1_1GameEngine_ae9346dd3311ecf09e97729d63037bfe5}{\+\_\+protocol\+Parsing}}
+\item 
+\mbox{\hyperlink{classRegistry}{Registry}} \mbox{\hyperlink{classRType_1_1GameEngine_a507186c0da5ffd61824cf8eddc3cb9c9}{\+\_\+registry}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$ \mbox{\hyperlink{classRType_1_1GameEngine_a45c77015504d19bd4bad502a7e982067}{\+\_\+rendering\+Engine}}
+\item 
+\mbox{\hyperlink{classSystems}{Systems}} \mbox{\hyperlink{classRType_1_1GameEngine_ad14a0824863c8362f7742b1e716beb6e}{\+\_\+systems}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classRType_1_1AEngine}{RType\+::\+AEngine}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ \mbox{\hyperlink{classRType_1_1AEngine_a21ce6a304197b6980c0cfc6b2a0327f5}{\+\_\+mediator}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1GameEngine_a4caca358bc6b2c2a43e4f9041eab21e1}\label{classRType_1_1GameEngine_a4caca358bc6b2c2a43e4f9041eab21e1} 
+\index{RType::GameEngine@{RType::GameEngine}!GameEngine@{GameEngine}}
+\index{GameEngine@{GameEngine}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{GameEngine()}{GameEngine()}}
+{\footnotesize\ttfamily RType\+::\+Game\+Engine\+::\+Game\+Engine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\Hypertarget{classRType_1_1GameEngine_a75646bd676da2a924a7dd20fc4684756}\label{classRType_1_1GameEngine_a75646bd676da2a924a7dd20fc4684756} 
+\index{RType::GameEngine@{RType::GameEngine}!````~GameEngine@{\texorpdfstring{$\sim$}{\string~}GameEngine}}
+\index{````~GameEngine@{\texorpdfstring{$\sim$}{\string~}GameEngine}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}GameEngine()}{\string~GameEngine()}}
+{\footnotesize\ttfamily RType\+::\+Game\+Engine\+::\texorpdfstring{$\sim$}{\string~}\+Game\+Engine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1GameEngine_a899510f5dc417598a412810503159c05}\label{classRType_1_1GameEngine_a899510f5dc417598a412810503159c05} 
+\index{RType::GameEngine@{RType::GameEngine}!handleServerData@{handleServerData}}
+\index{handleServerData@{handleServerData}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{handleServerData()}{handleServerData()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+Engine\+::handle\+Server\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message }\end{DoxyParamCaption})}
+
+
+
+Handle the server data, received from the \doxylink{classRType_1_1Mediator}{Mediator} notified by the \doxylink{classRType_1_1NetworkEngine}{Network\+Engine}. It will update the registry and the systems. Such as create entities, update entities, delete entities, etc. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & The message received from the server. Need to be parsed. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1GameEngine_a952730610ef775d0a472047960367496}\label{classRType_1_1GameEngine_a952730610ef775d0a472047960367496} 
+\index{RType::GameEngine@{RType::GameEngine}!run@{run}}
+\index{run@{run}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+Engine\+::run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Run current instance of the engine. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classRType_1_1AEngine_a563ab86b6c77395ee4e145eda107e098}{RType\+::\+AEngine}}.
+
+\Hypertarget{classRType_1_1GameEngine_a2402cfc74c1aee7d07af091e73538647}\label{classRType_1_1GameEngine_a2402cfc74c1aee7d07af091e73538647} 
+\index{RType::GameEngine@{RType::GameEngine}!send@{send}}
+\index{send@{send}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{send()}{send()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+Engine\+::send (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message }\end{DoxyParamCaption})}
+
+
+
+Send a message to the network, it will call the mediator to send the message to the network engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & The message to send. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1GameEngine_a1452b3569cb81d0d8a006cac40176439}\label{classRType_1_1GameEngine_a1452b3569cb81d0d8a006cac40176439} 
+\index{RType::GameEngine@{RType::GameEngine}!setEngines@{setEngines}}
+\index{setEngines@{setEngines}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{setEngines()}{setEngines()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+Engine\+::set\+Engines (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}} $>$}]{network\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}} $>$}]{rendering\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}} $>$}]{physic\+Engine,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}} $>$}]{audio\+Engine }\end{DoxyParamCaption})}
+
+
+
+Set the engines for the game engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em network\+Engine} & The network engine. \\
+\hline
+{\em rendering\+Engine} & The rendering engine. \\
+\hline
+{\em physic\+Engine} & The physic engine. \\
+\hline
+{\em audio\+Engine} & The audio engine. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRType_1_1GameEngine_a2f7a0b0b1f99dd48a6664b278817b090}\label{classRType_1_1GameEngine_a2f7a0b0b1f99dd48a6664b278817b090} 
+\index{RType::GameEngine@{RType::GameEngine}!setMediator@{setMediator}}
+\index{setMediator@{setMediator}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{setMediator()}{setMediator()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+Engine\+::set\+Mediator (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$}]{mediator }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the mediator of the engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mediator} & The mediator to set. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{classRType_1_1AEngine_a50753867e2ec1b0942aa2d43195baa17}{RType\+::\+AEngine}}.
+
+\Hypertarget{classRType_1_1GameEngine_ac47462791148933028b6acb8175b30cb}\label{classRType_1_1GameEngine_ac47462791148933028b6acb8175b30cb} 
+\index{RType::GameEngine@{RType::GameEngine}!updateCamera@{updateCamera}}
+\index{updateCamera@{updateCamera}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{updateCamera()}{updateCamera()}}
+{\footnotesize\ttfamily void RType\+::\+Game\+Engine\+::update\+Camera (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Update the Camera with the \+\_\+registery info and send change to Render\+Engine. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRType_1_1GameEngine_ae296ca11e2405b88507c79de3abf91cf}\label{classRType_1_1GameEngine_ae296ca11e2405b88507c79de3abf91cf} 
+\index{RType::GameEngine@{RType::GameEngine}!\_audioEngine@{\_audioEngine}}
+\index{\_audioEngine@{\_audioEngine}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_audioEngine}{\_audioEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1AudioEngine}{Audio\+Engine}}$>$ RType\+::\+Game\+Engine\+::\+\_\+audio\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_a9521e4dfbadb88344e76637256f4c4ac}\label{classRType_1_1GameEngine_a9521e4dfbadb88344e76637256f4c4ac} 
+\index{RType::GameEngine@{RType::GameEngine}!\_camera@{\_camera}}
+\index{\_camera@{\_camera}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_camera}{\_camera}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{Camera_8hpp_a276fe42672bb1e37d29c704c231ff44d}{Camera}}$>$ RType\+::\+Game\+Engine\+::\+\_\+camera\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_a4db8656343fd1d699888fac9f04506c9}\label{classRType_1_1GameEngine_a4db8656343fd1d699888fac9f04506c9} 
+\index{RType::GameEngine@{RType::GameEngine}!\_mutex@{\_mutex}}
+\index{\_mutex@{\_mutex}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_mutex}{\_mutex}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$std\+::mutex$>$ RType\+::\+Game\+Engine\+::\+\_\+mutex\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_a706ba4d3a3da57d191e70314bf8eb2be}\label{classRType_1_1GameEngine_a706ba4d3a3da57d191e70314bf8eb2be} 
+\index{RType::GameEngine@{RType::GameEngine}!\_networkEngine@{\_networkEngine}}
+\index{\_networkEngine@{\_networkEngine}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_networkEngine}{\_networkEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1NetworkEngine}{Network\+Engine}}$>$ RType\+::\+Game\+Engine\+::\+\_\+network\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_a514e310ffac4395e3dd3a45594eec78a}\label{classRType_1_1GameEngine_a514e310ffac4395e3dd3a45594eec78a} 
+\index{RType::GameEngine@{RType::GameEngine}!\_physicEngine@{\_physicEngine}}
+\index{\_physicEngine@{\_physicEngine}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_physicEngine}{\_physicEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1PhysicEngine}{Physic\+Engine}}$>$ RType\+::\+Game\+Engine\+::\+\_\+physic\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_ae9346dd3311ecf09e97729d63037bfe5}\label{classRType_1_1GameEngine_ae9346dd3311ecf09e97729d63037bfe5} 
+\index{RType::GameEngine@{RType::GameEngine}!\_protocolParsing@{\_protocolParsing}}
+\index{\_protocolParsing@{\_protocolParsing}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_protocolParsing}{\_protocolParsing}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1ProtocolParsing}{RType\+::\+Protocol\+Parsing}}$>$ RType\+::\+Game\+Engine\+::\+\_\+protocol\+Parsing\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_a507186c0da5ffd61824cf8eddc3cb9c9}\label{classRType_1_1GameEngine_a507186c0da5ffd61824cf8eddc3cb9c9} 
+\index{RType::GameEngine@{RType::GameEngine}!\_registry@{\_registry}}
+\index{\_registry@{\_registry}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_registry}{\_registry}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRegistry}{Registry}} RType\+::\+Game\+Engine\+::\+\_\+registry\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_a45c77015504d19bd4bad502a7e982067}\label{classRType_1_1GameEngine_a45c77015504d19bd4bad502a7e982067} 
+\index{RType::GameEngine@{RType::GameEngine}!\_renderingEngine@{\_renderingEngine}}
+\index{\_renderingEngine@{\_renderingEngine}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_renderingEngine}{\_renderingEngine}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classRType_1_1RenderingEngine}{Rendering\+Engine}}$>$ RType\+::\+Game\+Engine\+::\+\_\+rendering\+Engine\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classRType_1_1GameEngine_ad14a0824863c8362f7742b1e716beb6e}\label{classRType_1_1GameEngine_ad14a0824863c8362f7742b1e716beb6e} 
+\index{RType::GameEngine@{RType::GameEngine}!\_systems@{\_systems}}
+\index{\_systems@{\_systems}!RType::GameEngine@{RType::GameEngine}}
+\doxysubsubsection{\texorpdfstring{\_systems}{\_systems}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSystems}{Systems}} RType\+::\+Game\+Engine\+::\+\_\+systems\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\+Game\+Engine/\mbox{\hyperlink{GameEngine_8hpp}{Game\+Engine.\+hpp}}\item 
+src/client/\+Game\+Engine/\mbox{\hyperlink{GameEngine_8cpp}{Game\+Engine.\+cpp}}\end{DoxyCompactItemize}

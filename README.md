@@ -50,6 +50,16 @@ For **Windows** users:
 
 more details on the installation, check the documentation file: `./documentation/WINDOWS_INSTALL.md`.
 
+## See more documentation
+
+1. [Technical Comparative Study](documentation/TECHNICAL_COMPARATIVE_STUDY.md) (see doc: `./documentation/TECHNICAL_COMPARATIVE_STUDY.md`)
+2. [Protocol](documentation/PROTOCOL.md) (see doc: `./documentation/PROTOCOL.md`)
+3. [Workflow](documentation/WORKFLOW.md) (see doc: `./documentation/WORKFLOW.md`)
+4. [Contributing](CONTRIBUTING.md) (see doc: `./CONTRIBUTING.md`)
+5. [Windows Installation](documentation/WINDOWS_INSTALL.md) (see doc: `./documentation/WINDOWS_INSTALL.md`)
+
+To have a clear representation of the project, you can check the file `./documentation/docs/html/index.html` which is the doxygen documentation of the project.
+
 ## Developing
 
 This section is already mentioned above under development mode. For more details, refer to the `start_project.sh` or follow the manual build process using `make`.

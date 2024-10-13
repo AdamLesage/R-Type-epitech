@@ -1,0 +1,75 @@
+\doxysection{RType\+::IEngine Class Reference}
+\hypertarget{classRType_1_1IEngine}{}\label{classRType_1_1IEngine}\index{RType::IEngine@{RType::IEngine}}
+
+
+{\ttfamily \#include $<$IEngine.\+hpp$>$}
+
+
+
+Inheritance diagram for RType\+::IEngine\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classRType_1_1IEngine__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classRType_1_1IEngine_a299351797141ec67f8a7faf39c70079b}{run}} ()=0
+\begin{DoxyCompactList}\small\item\em Run current instance of the engine. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classRType_1_1IEngine_a3ffde8b167f5f4eaf63a596623b1222a}{set\+Mediator}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$ mediator)=0
+\begin{DoxyCompactList}\small\item\em Set the mediator of the engine. \end{DoxyCompactList}\item 
+virtual \mbox{\hyperlink{classRType_1_1IEngine_ae6e489807eebe1f9f8c9a58ef23c75a9}{\texorpdfstring{$\sim$}{\string~}\+IEngine}} ()=default
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRType_1_1IEngine_ae6e489807eebe1f9f8c9a58ef23c75a9}\label{classRType_1_1IEngine_ae6e489807eebe1f9f8c9a58ef23c75a9} 
+\index{RType::IEngine@{RType::IEngine}!````~IEngine@{\texorpdfstring{$\sim$}{\string~}IEngine}}
+\index{````~IEngine@{\texorpdfstring{$\sim$}{\string~}IEngine}!RType::IEngine@{RType::IEngine}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}IEngine()}{\string~IEngine()}}
+{\footnotesize\ttfamily virtual RType\+::\+IEngine\+::\texorpdfstring{$\sim$}{\string~}\+IEngine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRType_1_1IEngine_a299351797141ec67f8a7faf39c70079b}\label{classRType_1_1IEngine_a299351797141ec67f8a7faf39c70079b} 
+\index{RType::IEngine@{RType::IEngine}!run@{run}}
+\index{run@{run}!RType::IEngine@{RType::IEngine}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily virtual void RType\+::\+IEngine\+::run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Run current instance of the engine. 
+
+
+
+Implemented in \mbox{\hyperlink{classRType_1_1AEngine_a563ab86b6c77395ee4e145eda107e098}{RType\+::\+AEngine}}, \mbox{\hyperlink{classRType_1_1AudioEngine_a4b060d8523655c386c56bbeba20dfa48}{RType\+::\+Audio\+Engine}}, \mbox{\hyperlink{classRType_1_1GameEngine_a952730610ef775d0a472047960367496}{RType\+::\+Game\+Engine}}, \mbox{\hyperlink{classRType_1_1NetworkEngine_a3d9b3f700aaf9dd2949f38d972f0ae1d}{RType\+::\+Network\+Engine}}, \mbox{\hyperlink{classRType_1_1PhysicEngine_a0758367acd050d1c67e934a6ea4c8deb}{RType\+::\+Physic\+Engine}}, and \mbox{\hyperlink{classRType_1_1RenderingEngine_a3564e7658de04f52ff11c04c096b4a2e}{RType\+::\+Rendering\+Engine}}.
+
+\Hypertarget{classRType_1_1IEngine_a3ffde8b167f5f4eaf63a596623b1222a}\label{classRType_1_1IEngine_a3ffde8b167f5f4eaf63a596623b1222a} 
+\index{RType::IEngine@{RType::IEngine}!setMediator@{setMediator}}
+\index{setMediator@{setMediator}!RType::IEngine@{RType::IEngine}}
+\doxysubsubsection{\texorpdfstring{setMediator()}{setMediator()}}
+{\footnotesize\ttfamily virtual void RType\+::\+IEngine\+::set\+Mediator (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{IMediator}} $>$}]{mediator }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Set the mediator of the engine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mediator} & The mediator to set. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classRType_1_1AEngine_a50753867e2ec1b0942aa2d43195baa17}{RType\+::\+AEngine}}, \mbox{\hyperlink{classRType_1_1AudioEngine_ac4fa6bb1b8956d430b63a60e38e4d6bb}{RType\+::\+Audio\+Engine}}, \mbox{\hyperlink{classRType_1_1GameEngine_a2f7a0b0b1f99dd48a6664b278817b090}{RType\+::\+Game\+Engine}}, \mbox{\hyperlink{classRType_1_1NetworkEngine_a225d4ffcbd7059fa15b5b79f2b26ca74}{RType\+::\+Network\+Engine}}, \mbox{\hyperlink{classRType_1_1PhysicEngine_a3e39f6b526e3637e08d48479791859c9}{RType\+::\+Physic\+Engine}}, and \mbox{\hyperlink{classRType_1_1RenderingEngine_a8557934de657fe865ce9fdbd07f3f721}{RType\+::\+Rendering\+Engine}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/client/\mbox{\hyperlink{IEngine_8hpp}{IEngine.\+hpp}}\end{DoxyCompactItemize}

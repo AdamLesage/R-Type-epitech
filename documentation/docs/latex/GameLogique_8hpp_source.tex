@@ -1,0 +1,60 @@
+\doxysection{Game\+Logique.\+hpp}
+\hypertarget{GameLogique_8hpp_source}{}\label{GameLogique_8hpp_source}\index{src/server/GameLogique/GameLogique.hpp@{src/server/GameLogique/GameLogique.hpp}}
+\mbox{\hyperlink{GameLogique_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ GameLogique}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ GAMELOGIQUE\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ GAMELOGIQUE\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Registry_8hpp}{../../shared/registry/Registry.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{server_2systems_2Systems_8hpp}{../systems/Systems.hpp}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Server_8hpp}{../network/Server.hpp}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Tag_8hpp}{../../shared/components/Tag.hpp}}"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Position_8hpp}{../../shared/components/Position.hpp}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Velocity_8hpp}{../../shared/components/Velocity.hpp}}"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Shoot_8hpp}{../../shared/components/Shoot.hpp}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{ShootingSpeed_8hpp}{../../shared/components/ShootingSpeed.hpp}}"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{NetworkSender_8hpp}{./NetworkSender.hpp}}"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Logger_8hpp}{../../shared/utils/Logger.hpp}}"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}\(\backslash\)\(\backslash\)"{}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}/"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGameLogique}{GameLogique}}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGameLogique_a37165fb2fa577943edcaeb2534a9f79d}{GameLogique}}(\textcolor{keywordtype}{size\_t}\ port,\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classGameLogique_a5e7ba7a3d647646b7138dd491d95a87e}{frequency}}\ =\ 200);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGameLogique_a914f02cde59e76fa0ae94ec962f2dee6}{\string~GameLogique}}();}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGameLogique_ad89e0f79b7247dbaef0794960ac006bc}{runGame}}();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRegistry}{Registry}}\ \mbox{\hyperlink{classGameLogique_a2e39eb59ada9885cc5e8dadc77136c73}{reg}};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSystems}{Systems}}\ \mbox{\hyperlink{classGameLogique_a4e6b4dc53f857b46f15ff1dbf8874b1e}{sys}};}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::shared\_ptr<NetworkLib::Server>\ \mbox{\hyperlink{classGameLogique_a369311db90a0e936fd0b638f84da4f07}{network}};}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::unique\_ptr<NetworkSender>\ \mbox{\hyperlink{classGameLogique_aec1d5faf48337de3c2590caf6639b6c7}{\_networkSender}};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ std::thread\ \mbox{\hyperlink{classGameLogique_a59d6de1b01a20b28900c5204f41ff65c}{receiverThread}};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classGameLogique_a5e7ba7a3d647646b7138dd491d95a87e}{frequency}};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\ \mbox{\hyperlink{classGameLogique_a9904137faa104becf10b0cf27cbb4543}{logger}};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classGameLogique_ab434e6203100a5c1742746ffc8838962}{running}};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ std::mutex\ \mbox{\hyperlink{classGameLogique_a578904e3a0773002765df82221898d3d}{\_mutex}};}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGameLogique_a50fdfe6584509b4a7ec9c98f9888f18c}{handleRecieve}}();}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGameLogique_a40567a8ad53cc9f5d7899369ca819170}{startGame}}();}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGameLogique_ab13988a299b6137f26268865e029f5a8}{spawnEnnemy}}(\textcolor{keywordtype}{char}\ type,\ \textcolor{keywordtype}{float}\ position\_x,\ \textcolor{keywordtype}{float}\ position\_y);}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGameLogique_a238fc59d2e3155b7ba066347c06e027a}{handleClientInput}}(std::pair<std::string,\ uint32\_t>\ message);}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ std::array<char,\ 6>\ \mbox{\hyperlink{classGameLogique_a1f9f4eb7bfda700ef71a73ba11c72b0c}{retrieveInputKeys}}();}
+\DoxyCodeLine{00087\ \};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !GAMELOGIQUE\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

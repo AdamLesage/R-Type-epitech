@@ -1,0 +1,68 @@
+\doxysection{Network\+Lib\+::Locked\+Queue\texorpdfstring{$<$}{<} \+\_\+T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classNetworkLib_1_1LockedQueue}{}\label{classNetworkLib_1_1LockedQueue}\index{NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}}
+
+
+{\ttfamily \#include $<$Locked\+Queue.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{bool}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a78201547c85f721e62e468c5ff5755bc}{empty}} ()
+\item 
+\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a49b5e3a13757c9e62c3b06579d9a6dd4}{pop}} ()
+\item 
+\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{void}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a67fb52aad4d04cd56f515e37d68eacb5}{push}} (\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{value}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::mutex \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a8772164d563bf3769c839522920a67ad}{mutex}}
+\item 
+std\+::queue$<$ \+\_\+T $>$ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{queue}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNetworkLib_1_1LockedQueue_a78201547c85f721e62e468c5ff5755bc}\label{classNetworkLib_1_1LockedQueue_a78201547c85f721e62e468c5ff5755bc} 
+\index{NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}!empty@{empty}}
+\index{empty@{empty}!NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}}
+\doxysubsubsection{\texorpdfstring{empty()}{empty()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{typename}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$ \\
+\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{bool}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{Network\+Lib\+::\+Locked\+Queue}}$<$ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$\+::empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classNetworkLib_1_1LockedQueue_a49b5e3a13757c9e62c3b06579d9a6dd4}\label{classNetworkLib_1_1LockedQueue_a49b5e3a13757c9e62c3b06579d9a6dd4} 
+\index{NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}!pop@{pop}}
+\index{pop@{pop}!NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}}
+\doxysubsubsection{\texorpdfstring{pop()}{pop()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{typename}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$ \\
+\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{Network\+Lib\+::\+Locked\+Queue}}$<$ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$\+::pop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{classNetworkLib_1_1LockedQueue_a67fb52aad4d04cd56f515e37d68eacb5}\label{classNetworkLib_1_1LockedQueue_a67fb52aad4d04cd56f515e37d68eacb5} 
+\index{NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}!push@{push}}
+\index{push@{push}!NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}}
+\doxysubsubsection{\texorpdfstring{push()}{push()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{typename}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$ \\
+\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{void}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{Network\+Lib\+::\+Locked\+Queue}}$<$ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$\+::push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}}}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classNetworkLib_1_1LockedQueue_a8772164d563bf3769c839522920a67ad}\label{classNetworkLib_1_1LockedQueue_a8772164d563bf3769c839522920a67ad} 
+\index{NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}!mutex@{mutex}}
+\index{mutex@{mutex}!NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}}
+\doxysubsubsection{\texorpdfstring{mutex}{mutex}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{typename}} \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$ \\
+std\+::mutex \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{Network\+Lib\+::\+Locked\+Queue}}$<$ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}{\+\_\+T}} $>$\+::mutex\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5}\label{classNetworkLib_1_1LockedQueue_a377d1d476512714b11bf7ac3545adfe5} 
+\index{NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}!queue@{queue}}
+\index{queue@{queue}!NetworkLib::LockedQueue$<$ \_T $>$@{NetworkLib::LockedQueue$<$ \_T $>$}}
+\doxysubsubsection{\texorpdfstring{queue}{queue}}
+{\footnotesize\ttfamily template$<$typename \+\_\+T $>$ \\
+std\+::queue$<$\+\_\+T$>$ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{Network\+Lib\+::\+Locked\+Queue}}$<$ \+\_\+T $>$\+::queue\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/shared/network/\mbox{\hyperlink{LockedQueue_8hpp}{Locked\+Queue.\+hpp}}\end{DoxyCompactItemize}

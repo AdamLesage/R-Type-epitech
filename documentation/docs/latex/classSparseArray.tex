@@ -1,0 +1,504 @@
+\doxysection{Sparse\+Array\texorpdfstring{$<$}{<} Component \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classSparseArray}{}\label{classSparseArray}\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+
+
+{\ttfamily \#include $<$Sparse\+Array.\+hpp$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} = typename container\+\_\+t\+::const\+\_\+iterator
+\begin{DoxyCompactList}\small\item\em Alias for the constant iterator type of the container. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{classSparseArray_a9f5b718cd0a338c1edd5eb1ac04d6aba}{const\+\_\+reference\+\_\+type}} = const \mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}}\&
+\begin{DoxyCompactList}\small\item\em Alias for a constant reference to the component type. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{classSparseArray_ac6aa04f2286e3c30b57caac22fe9fbf9}{container\+\_\+t}} = std\+::vector$<$\mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}}$>$
+\begin{DoxyCompactList}\small\item\em Alias for the underlying container type, a constant reference to std\+::vector. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{classSparseArray_a5df346cfb3a5ac7182685050c512b6da}{iterator}} = typename container\+\_\+t\+::iterator
+\begin{DoxyCompactList}\small\item\em Alias for the iterator type of the container. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} = \mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}}\&
+\begin{DoxyCompactList}\small\item\em Alias for a reference to the component type. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} = typename container\+\_\+t\+::size\+\_\+type
+\begin{DoxyCompactList}\small\item\em Alias for the size type of the container. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}} = std\+::optional$<$Component$>$
+\begin{DoxyCompactList}\small\item\em Alias for the optional component type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSparseArray_a5df346cfb3a5ac7182685050c512b6da}{iterator}} \mbox{\hyperlink{classSparseArray_a1ed9d2b182b52ed5cd6b544107ef8af4}{begin}} ()
+\begin{DoxyCompactList}\small\item\em Returns an iterator to the beginning of the array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray_a7fa6228501432328b3b7e5f3142829c7}{begin}} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant iterator to the beginning of the array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray_a151cffafe878041d1be19fc1f651b3fe}{cbegin}} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant iterator to the beginning of the array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray_a5765bcd8d4357cce3cace1be2a656d78}{cend}} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant iterator to the end of the array. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class... Params$>$ }\\\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray_a1194caee814e6ad4f195ca06f4bde390}{emplace\+\_\+at}} (\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} pos, Params \&\&... params)
+\begin{DoxyCompactList}\small\item\em Constructs a component in-\/place at the specified position. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a5df346cfb3a5ac7182685050c512b6da}{iterator}} \mbox{\hyperlink{classSparseArray_a4d32f10955bedd6229eba1da50e79bea}{end}} ()
+\begin{DoxyCompactList}\small\item\em Returns an iterator to the end of the array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray_a9b75ec5365af5f139019f5acdc80854e}{end}} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant iterator to the end of the array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSparseArray_ab00e54b0c21ac9380db0f5c493138da0}{erase}} (\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} pos)
+\begin{DoxyCompactList}\small\item\em Erases the component at the specified position. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} \mbox{\hyperlink{classSparseArray_a59255d71b66a538f8499d14e911a0aa8}{get\+Index}} (\mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}} const \&component) const
+\begin{DoxyCompactList}\small\item\em Retrieves the index of a specific component. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray_a0afb3d2c268cbd6af0b8cfbcccdf2884}{insert\+\_\+at}} (\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} pos, Component \&\&component)
+\begin{DoxyCompactList}\small\item\em Inserts a component at the specified position using move semantics. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray_a36068befff1d6372a5fa5296adef1488}{insert\+\_\+at}} (\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} pos, Component const \&component)
+\begin{DoxyCompactList}\small\item\em Inserts a component at the specified position. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \& \mbox{\hyperlink{classSparseArray_aadc59d0625bd2f477bdc16823f63bc66}{operator=}} (\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \&\&other) noexcept
+\begin{DoxyCompactList}\small\item\em Move assignment operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \& \mbox{\hyperlink{classSparseArray_aea8cd7086c30b74d8a54ef1cde26a2fb}{operator=}} (\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} const \&other)
+\begin{DoxyCompactList}\small\item\em Copy assignment operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray_ab334a2bac1735530e4209a2c2ad2d2a2}{operator\mbox{[}$\,$\mbox{]}}} (size\+\_\+t index)
+\begin{DoxyCompactList}\small\item\em Access operator for modifying an element. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a9f5b718cd0a338c1edd5eb1ac04d6aba}{const\+\_\+reference\+\_\+type}} \mbox{\hyperlink{classSparseArray_a1a971d038b8b52a828f5f62fb90d9e61}{operator\mbox{[}$\,$\mbox{]}}} (size\+\_\+t index) const
+\begin{DoxyCompactList}\small\item\em Access operator for reading an element. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} \mbox{\hyperlink{classSparseArray_a3b485311dcd6c7e4f3bffee764297b42}{size}} () const
+\begin{DoxyCompactList}\small\item\em Returns the size of the sparse array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a98795bd6dead1b0dbe65892f67164135}{Sparse\+Array}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor for \doxylink{classSparseArray}{Sparse\+Array}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_ab64bce1e1c570e57f57b80ce591b37a8}{Sparse\+Array}} (\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \&\&other) noexcept
+\begin{DoxyCompactList}\small\item\em Move constructor for \doxylink{classSparseArray}{Sparse\+Array}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a006175c7b6c84308e380ced28933c817}{Sparse\+Array}} (\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} const \&other)
+\begin{DoxyCompactList}\small\item\em Copy constructor for \doxylink{classSparseArray}{Sparse\+Array}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSparseArray_a8892b6b5daee6410a49ce2697e7254d1}{\texorpdfstring{$\sim$}{\string~}\+Sparse\+Array}} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classSparseArray}{Sparse\+Array}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSparseArray_ac6aa04f2286e3c30b57caac22fe9fbf9}{container\+\_\+t}} \mbox{\hyperlink{classSparseArray_a5c48ee2ff531f97b466048d258d43340}{\+\_\+data}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}\label{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!const\_iterator@{const\_iterator}}
+\index{const\_iterator@{const\_iterator}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{const\_iterator}{const\_iterator}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::const\+\_\+iterator = typename container\+\_\+t\+::const\+\_\+iterator}
+
+
+
+Alias for the constant iterator type of the container. 
+
+\Hypertarget{classSparseArray_a9f5b718cd0a338c1edd5eb1ac04d6aba}\label{classSparseArray_a9f5b718cd0a338c1edd5eb1ac04d6aba} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!const\_reference\_type@{const\_reference\_type}}
+\index{const\_reference\_type@{const\_reference\_type}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{const\_reference\_type}{const\_reference\_type}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::const\+\_\+reference\+\_\+type = const \mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}}\&}
+
+
+
+Alias for a constant reference to the component type. 
+
+\Hypertarget{classSparseArray_ac6aa04f2286e3c30b57caac22fe9fbf9}\label{classSparseArray_ac6aa04f2286e3c30b57caac22fe9fbf9} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!container\_t@{container\_t}}
+\index{container\_t@{container\_t}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{container\_t}{container\_t}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::container\+\_\+t = std\+::vector$<$\mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}}$>$}
+
+
+
+Alias for the underlying container type, a constant reference to std\+::vector. 
+
+\Hypertarget{classSparseArray_a5df346cfb3a5ac7182685050c512b6da}\label{classSparseArray_a5df346cfb3a5ac7182685050c512b6da} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!iterator@{iterator}}
+\index{iterator@{iterator}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{iterator}{iterator}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::iterator = typename container\+\_\+t\+::iterator}
+
+
+
+Alias for the iterator type of the container. 
+
+\Hypertarget{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}\label{classSparseArray_a9cbffafb49835b943c8029340d5ea75e} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!reference\_type@{reference\_type}}
+\index{reference\_type@{reference\_type}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{reference\_type}{reference\_type}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::reference\+\_\+type = \mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}}\&}
+
+
+
+Alias for a reference to the component type. 
+
+\Hypertarget{classSparseArray_af315b9a433ded046bcbc5750664a29f5}\label{classSparseArray_af315b9a433ded046bcbc5750664a29f5} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!size\_type@{size\_type}}
+\index{size\_type@{size\_type}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{size\_type}{size\_type}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::size\+\_\+type = typename container\+\_\+t\+::size\+\_\+type}
+
+
+
+Alias for the size type of the container. 
+
+\Hypertarget{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}\label{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!value\_type@{value\_type}}
+\index{value\_type@{value\_type}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{value\_type}{value\_type}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::value\+\_\+type = std\+::optional$<$Component$>$}
+
+
+
+Alias for the optional component type. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classSparseArray_a98795bd6dead1b0dbe65892f67164135}\label{classSparseArray_a98795bd6dead1b0dbe65892f67164135} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!SparseArray@{SparseArray}}
+\index{SparseArray@{SparseArray}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{SparseArray()}{SparseArray()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\mbox{\hyperlink{classSparseArray}{\+::\+Sparse\+Array}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Default constructor for \doxylink{classSparseArray}{Sparse\+Array}. 
+
+\Hypertarget{classSparseArray_a006175c7b6c84308e380ced28933c817}\label{classSparseArray_a006175c7b6c84308e380ced28933c817} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!SparseArray@{SparseArray}}
+\index{SparseArray@{SparseArray}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{SparseArray()}{SparseArray()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\mbox{\hyperlink{classSparseArray}{\+::\+Sparse\+Array}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ const \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Copy constructor for \doxylink{classSparseArray}{Sparse\+Array}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & The \doxylink{classSparseArray}{Sparse\+Array} instance to copy from. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSparseArray_ab64bce1e1c570e57f57b80ce591b37a8}\label{classSparseArray_ab64bce1e1c570e57f57b80ce591b37a8} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!SparseArray@{SparseArray}}
+\index{SparseArray@{SparseArray}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{SparseArray()}{SparseArray()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\mbox{\hyperlink{classSparseArray}{\+::\+Sparse\+Array}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \&\&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Move constructor for \doxylink{classSparseArray}{Sparse\+Array}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & The \doxylink{classSparseArray}{Sparse\+Array} instance to move from. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSparseArray_a8892b6b5daee6410a49ce2697e7254d1}\label{classSparseArray_a8892b6b5daee6410a49ce2697e7254d1} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!````~SparseArray@{\texorpdfstring{$\sim$}{\string~}SparseArray}}
+\index{````~SparseArray@{\texorpdfstring{$\sim$}{\string~}SparseArray}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}SparseArray()}{\string~SparseArray()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::\texorpdfstring{$\sim$}{\string~}\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destructor for \doxylink{classSparseArray}{Sparse\+Array}. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classSparseArray_a1ed9d2b182b52ed5cd6b544107ef8af4}\label{classSparseArray_a1ed9d2b182b52ed5cd6b544107ef8af4} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!begin@{begin}}
+\index{begin@{begin}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_a5df346cfb3a5ac7182685050c512b6da}{iterator}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns an iterator to the beginning of the array. 
+
+\begin{DoxyReturn}{Returns}
+An iterator to the beginning. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a7fa6228501432328b3b7e5f3142829c7}\label{classSparseArray_a7fa6228501432328b3b7e5f3142829c7} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!begin@{begin}}
+\index{begin@{begin}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns a constant iterator to the beginning of the array. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator to the beginning. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a151cffafe878041d1be19fc1f651b3fe}\label{classSparseArray_a151cffafe878041d1be19fc1f651b3fe} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!cbegin@{cbegin}}
+\index{cbegin@{cbegin}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{cbegin()}{cbegin()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::cbegin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns a constant iterator to the beginning of the array. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator to the beginning. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a5765bcd8d4357cce3cace1be2a656d78}\label{classSparseArray_a5765bcd8d4357cce3cace1be2a656d78} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!cend@{cend}}
+\index{cend@{cend}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{cend()}{cend()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::cend (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns a constant iterator to the end of the array. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator to the end. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a1194caee814e6ad4f195ca06f4bde390}\label{classSparseArray_a1194caee814e6ad4f195ca06f4bde390} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!emplace\_at@{emplace\_at}}
+\index{emplace\_at@{emplace\_at}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{emplace\_at()}{emplace\_at()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+template$<$class... Params$>$ \\
+\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::emplace\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}}}]{pos,  }\item[{Params \&\&...}]{params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructs a component in-\/place at the specified position. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Params} & Parameter pack for the constructor of the component. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position to emplace the component at. \\
+\hline
+{\em params} & Parameters for constructing the component. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the emplaced component. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a4d32f10955bedd6229eba1da50e79bea}\label{classSparseArray_a4d32f10955bedd6229eba1da50e79bea} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!end@{end}}
+\index{end@{end}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_a5df346cfb3a5ac7182685050c512b6da}{iterator}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns an iterator to the end of the array. 
+
+\begin{DoxyReturn}{Returns}
+An iterator to the end. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a9b75ec5365af5f139019f5acdc80854e}\label{classSparseArray_a9b75ec5365af5f139019f5acdc80854e} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!end@{end}}
+\index{end@{end}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_ab88682c1d0a7279be42e5ed2923987b9}{const\+\_\+iterator}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns a constant iterator to the end of the array. 
+
+\begin{DoxyReturn}{Returns}
+A constant iterator to the end. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_ab00e54b0c21ac9380db0f5c493138da0}\label{classSparseArray_ab00e54b0c21ac9380db0f5c493138da0} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!erase@{erase}}
+\index{erase@{erase}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{erase()}{erase()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+void \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::erase (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}}}]{pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Erases the component at the specified position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position of the component to erase. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSparseArray_a59255d71b66a538f8499d14e911a0aa8}\label{classSparseArray_a59255d71b66a538f8499d14e911a0aa8} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::get\+Index (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray_a21b5eeb2dc5c80e6ef211a4f465a0b18}{value\+\_\+type}} const \&}]{component }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the index of a specific component. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em component} & The component to search for. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the component. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a0afb3d2c268cbd6af0b8cfbcccdf2884}\label{classSparseArray_a0afb3d2c268cbd6af0b8cfbcccdf2884} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!insert\_at@{insert\_at}}
+\index{insert\_at@{insert\_at}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{insert\_at()}{insert\_at()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::insert\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}}}]{pos,  }\item[{Component \&\&}]{component }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Inserts a component at the specified position using move semantics. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position to insert the component at. \\
+\hline
+{\em component} & The component to insert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the inserted component. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a36068befff1d6372a5fa5296adef1488}\label{classSparseArray_a36068befff1d6372a5fa5296adef1488} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!insert\_at@{insert\_at}}
+\index{insert\_at@{insert\_at}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{insert\_at()}{insert\_at()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::insert\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}}}]{pos,  }\item[{Component const \&}]{component }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Inserts a component at the specified position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position to insert the component at. \\
+\hline
+{\em component} & The component to insert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the inserted component. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_aadc59d0625bd2f477bdc16823f63bc66}\label{classSparseArray_aadc59d0625bd2f477bdc16823f63bc66} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \& \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \&\&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Move assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & The \doxylink{classSparseArray}{Sparse\+Array} instance to move from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the current object. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_aea8cd7086c30b74d8a54ef1cde26a2fb}\label{classSparseArray_aea8cd7086c30b74d8a54ef1cde26a2fb} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \& \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ const \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Copy assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & The \doxylink{classSparseArray}{Sparse\+Array} instance to copy from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the current object. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_ab334a2bac1735530e4209a2c2ad2d2a2}\label{classSparseArray_ab334a2bac1735530e4209a2c2ad2d2a2} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_a9cbffafb49835b943c8029340d5ea75e}{reference\+\_\+type}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Access operator for modifying an element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The index of the element to access. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the element at the specified index. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a1a971d038b8b52a828f5f62fb90d9e61}\label{classSparseArray_a1a971d038b8b52a828f5f62fb90d9e61} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_a9f5b718cd0a338c1edd5eb1ac04d6aba}{const\+\_\+reference\+\_\+type}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Access operator for reading an element. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The index of the element to access. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Constant reference to the element at the specified index. 
+\end{DoxyReturn}
+\Hypertarget{classSparseArray_a3b485311dcd6c7e4f3bffee764297b42}\label{classSparseArray_a3b485311dcd6c7e4f3bffee764297b42} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!size@{size}}
+\index{size@{size}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_af315b9a433ded046bcbc5750664a29f5}{size\+\_\+type}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the size of the sparse array. 
+
+\begin{DoxyReturn}{Returns}
+The size of the array. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classSparseArray_a5c48ee2ff531f97b466048d258d43340}\label{classSparseArray_a5c48ee2ff531f97b466048d258d43340} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!\_data@{\_data}}
+\index{\_data@{\_data}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{\_data}{\_data}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+\mbox{\hyperlink{classSparseArray_ac6aa04f2286e3c30b57caac22fe9fbf9}{container\+\_\+t}} \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::\+\_\+data\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/shared/sparse\+\_\+array/\mbox{\hyperlink{SparseArray_8hpp}{Sparse\+Array.\+hpp}}\end{DoxyCompactItemize}

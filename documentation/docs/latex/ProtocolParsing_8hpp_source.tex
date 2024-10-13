@@ -1,0 +1,87 @@
+\doxysection{Protocol\+Parsing.\+hpp}
+\hypertarget{ProtocolParsing_8hpp_source}{}\label{ProtocolParsing_8hpp_source}\index{src/client/GameEngine/ProtocolParsing.hpp@{src/client/GameEngine/ProtocolParsing.hpp}}
+\mbox{\hyperlink{ProtocolParsing_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type-\/epitech}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ ProtocolParsing}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ PROTOCOLPARSING\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ PROTOCOLPARSING\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <libconfig.h++>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Registry_8hpp}{../../shared/registry/Registry.hpp}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Entity_8hpp}{../../shared/entities/Entity.hpp}}"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{shared_2systems_2Systems_8hpp}{../../shared/systems/Systems.hpp}}"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Size_8hpp}{../../shared/components/Size.hpp}}"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Sprite_8hpp}{../../shared/components/Sprite.hpp}}"{}}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#if\ defined(\_WIN32)\ ||\ defined(\_WIN64)}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}\(\backslash\)\(\backslash\)"{}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ PATH\_SEPARATOR\ "{}/"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceRType}{RType}}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRType_1_1ProtocolParsing}{ProtocolParsing}}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1ProtocolParsing_aec249d53168435b4b5e67a2ad36fd8ec}{ProtocolParsing}}(std::string\ protocolPath,\ \mbox{\hyperlink{classRegistry}{Registry}}\&\ registry);}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a8968969202f7d08cc77113314f1039d5}{\string~ProtocolParsing}}();}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a07127a027dfcbbcb5c6e4514dcddb946}{parsePlayerCreation}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a758af63ccecaa4f80726b2e333360594}{parseProjectileCreation}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a9fc77ddc89c013878ad7a3cfe1a781c4}{parseEnemyCreation}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_af7971fe1e8e9aae13fc3560475c68bb4}{parseBonusCreation}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_ae1dc35d3d3e63115e89dad11d8ff9c3d}{parseWallCreation}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a595dc90018d9ef3266c0717768fd6b82}{parseRewardCreation}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_aefe7d3b5a482e9162b4fc49ea15727fd}{parseEntityDeletion}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_af17b34b32e928d88b638ef2ece910e13}{parsePositionUpdate}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_adc282cceeb98b8b49d963df942ea3789}{parseHealthUpdate}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a43ad9a20ea41e7ed127ecd8c270c5dd9}{parseDirectionUpdate}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a1ad1a355eba7385048a04f8ba2c3d789}{parseObjectCollection}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_afdd088c41ea895a683bfb9390d23dc8f}{parseProjectileFiring}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_af40b7f18e47ce880966cbf117ed1063e}{parseProjectileCollision}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a7da5466eb9495ae66cd7c8cfaf642917}{parseScoreUpdate}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a6754a0d0fb7f1678989aadc73c1ed4d7}{parseStateChange}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_abbe6cb5ef0047a257d4632eb9e4d3835}{parseData}}(\textcolor{keyword}{const}\ std::string\&\ message);}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a2e5199e0373546c36a57db8dc6c0a72d}{checkMessageType}}(\textcolor{keyword}{const}\ std::string\&\ messageType,\ \textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a36d0008f35d0f08e489e5e4eed68c4f8}{updateIndexFromBinaryData}}(\textcolor{keyword}{const}\ std::string\&\ message,\ \textcolor{keywordtype}{int}\&\ index);}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Variables}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_ad1ddb4914316768ffb70bbae0efe3a97}{\_protocolPath}};}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ libconfig::Config\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a8ef42c11b95f92dcd743c4c565f51002}{\_cfg}};}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ std::map<std::string,\ std::pair<int,\ std::string>>\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_a51586da4447d7b0de5cbb5d4a7238326}{\_messageTypeMap}};}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRegistry}{Registry}}\&\ \mbox{\hyperlink{classRType_1_1ProtocolParsing_ad7d9d5e71f03be65a299d39325490ced}{\_registry}};\ \textcolor{comment}{//\ Will\ be\ used\ to\ update\ the\ game\ engine\ data}}
+\DoxyCodeLine{00203\ \ \ \ \ \};}
+\DoxyCodeLine{00204\ \}\ \textcolor{comment}{//\ namespace\ RType}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !PROTOCOLPARSING\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

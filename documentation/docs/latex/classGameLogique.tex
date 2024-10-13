@@ -1,0 +1,233 @@
+\doxysection{Game\+Logique Class Reference}
+\hypertarget{classGameLogique}{}\label{classGameLogique}\index{GameLogique@{GameLogique}}
+
+
+{\ttfamily \#include $<$Game\+Logique.\+hpp$>$}
+
+
+
+Collaboration diagram for Game\+Logique\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=317pt]{classGameLogique__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGameLogique_a37165fb2fa577943edcaeb2534a9f79d}{Game\+Logique}} (size\+\_\+t port, int \mbox{\hyperlink{classGameLogique_a5e7ba7a3d647646b7138dd491d95a87e}{frequency}}=200)
+\begin{DoxyCompactList}\small\item\em manage the game logique with client input \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGameLogique_ad89e0f79b7247dbaef0794960ac006bc}{run\+Game}} ()
+\begin{DoxyCompactList}\small\item\em update entity every 1 / frequency second \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classGameLogique_a914f02cde59e76fa0ae94ec962f2dee6}{\texorpdfstring{$\sim$}{\string~}\+Game\+Logique}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classGameLogique_a238fc59d2e3155b7ba066347c06e027a}{handle\+Client\+Input}} (std\+::pair$<$ std\+::string, uint32\+\_\+t $>$ message)
+\begin{DoxyCompactList}\small\item\em handle the Inpute of the client \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGameLogique_a50fdfe6584509b4a7ec9c98f9888f18c}{handle\+Recieve}} ()
+\begin{DoxyCompactList}\small\item\em listen to the server socket to manage client input \end{DoxyCompactList}\item 
+std\+::array$<$ char, 6 $>$ \mbox{\hyperlink{classGameLogique_a1f9f4eb7bfda700ef71a73ba11c72b0c}{retrieve\+Input\+Keys}} ()
+\begin{DoxyCompactList}\small\item\em handle the Inpute of the client \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGameLogique_ab13988a299b6137f26268865e029f5a8}{spawn\+Ennemy}} (char type, float position\+\_\+x, float position\+\_\+y)
+\begin{DoxyCompactList}\small\item\em add a Enemy on the registry and send a notification to connected client \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGameLogique_a40567a8ad53cc9f5d7899369ca819170}{start\+Game}} ()
+\begin{DoxyCompactList}\small\item\em lunch a game with connected player \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::mutex \mbox{\hyperlink{classGameLogique_a578904e3a0773002765df82221898d3d}{\+\_\+mutex}}
+\item 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \mbox{\hyperlink{classGameLogique_aec1d5faf48337de3c2590caf6639b6c7}{\+\_\+network\+Sender}}
+\item 
+int \mbox{\hyperlink{classGameLogique_a5e7ba7a3d647646b7138dd491d95a87e}{frequency}}
+\item 
+\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \mbox{\hyperlink{classGameLogique_a9904137faa104becf10b0cf27cbb4543}{logger}}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkLib_1_1Server}{Network\+Lib\+::\+Server}} $>$ \mbox{\hyperlink{classGameLogique_a369311db90a0e936fd0b638f84da4f07}{network}}
+\item 
+std\+::thread \mbox{\hyperlink{classGameLogique_a59d6de1b01a20b28900c5204f41ff65c}{receiver\+Thread}}
+\item 
+\mbox{\hyperlink{classRegistry}{Registry}} \mbox{\hyperlink{classGameLogique_a2e39eb59ada9885cc5e8dadc77136c73}{reg}}
+\item 
+bool \mbox{\hyperlink{classGameLogique_ab434e6203100a5c1742746ffc8838962}{running}}
+\item 
+\mbox{\hyperlink{classSystems}{Systems}} \mbox{\hyperlink{classGameLogique_a4e6b4dc53f857b46f15ff1dbf8874b1e}{sys}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classGameLogique_a37165fb2fa577943edcaeb2534a9f79d}\label{classGameLogique_a37165fb2fa577943edcaeb2534a9f79d} 
+\index{GameLogique@{GameLogique}!GameLogique@{GameLogique}}
+\index{GameLogique@{GameLogique}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{GameLogique()}{GameLogique()}}
+{\footnotesize\ttfamily Game\+Logique\+::\+Game\+Logique (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{port,  }\item[{int}]{frequency = {\ttfamily 200} }\end{DoxyParamCaption})}
+
+
+
+manage the game logique with client input 
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & the port which the server is connected \\
+\hline
+{\em frequency} & the frequency of the game \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classGameLogique_a914f02cde59e76fa0ae94ec962f2dee6}\label{classGameLogique_a914f02cde59e76fa0ae94ec962f2dee6} 
+\index{GameLogique@{GameLogique}!````~GameLogique@{\texorpdfstring{$\sim$}{\string~}GameLogique}}
+\index{````~GameLogique@{\texorpdfstring{$\sim$}{\string~}GameLogique}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}GameLogique()}{\string~GameLogique()}}
+{\footnotesize\ttfamily Game\+Logique\+::\texorpdfstring{$\sim$}{\string~}\+Game\+Logique (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classGameLogique_a238fc59d2e3155b7ba066347c06e027a}\label{classGameLogique_a238fc59d2e3155b7ba066347c06e027a} 
+\index{GameLogique@{GameLogique}!handleClientInput@{handleClientInput}}
+\index{handleClientInput@{handleClientInput}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{handleClientInput()}{handleClientInput()}}
+{\footnotesize\ttfamily void Game\+Logique\+::handle\+Client\+Input (\begin{DoxyParamCaption}\item[{std\+::pair$<$ std\+::string, uint32\+\_\+t $>$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+handle the Inpute of the client 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & the message send by the client \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classGameLogique_a50fdfe6584509b4a7ec9c98f9888f18c}\label{classGameLogique_a50fdfe6584509b4a7ec9c98f9888f18c} 
+\index{GameLogique@{GameLogique}!handleRecieve@{handleRecieve}}
+\index{handleRecieve@{handleRecieve}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{handleRecieve()}{handleRecieve()}}
+{\footnotesize\ttfamily void Game\+Logique\+::handle\+Recieve (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+listen to the server socket to manage client input 
+
+\Hypertarget{classGameLogique_a1f9f4eb7bfda700ef71a73ba11c72b0c}\label{classGameLogique_a1f9f4eb7bfda700ef71a73ba11c72b0c} 
+\index{GameLogique@{GameLogique}!retrieveInputKeys@{retrieveInputKeys}}
+\index{retrieveInputKeys@{retrieveInputKeys}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{retrieveInputKeys()}{retrieveInputKeys()}}
+{\footnotesize\ttfamily std\+::array$<$ char, 6 $>$ Game\+Logique\+::retrieve\+Input\+Keys (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+handle the Inpute of the client 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & the message send by the client \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$char$>$ the array with the input key in the order\+: \mbox{[}up, down, left, right, shoot\mbox{]} 
+\end{DoxyReturn}
+\Hypertarget{classGameLogique_ad89e0f79b7247dbaef0794960ac006bc}\label{classGameLogique_ad89e0f79b7247dbaef0794960ac006bc} 
+\index{GameLogique@{GameLogique}!runGame@{runGame}}
+\index{runGame@{runGame}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{runGame()}{runGame()}}
+{\footnotesize\ttfamily void Game\+Logique\+::run\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+update entity every 1 / frequency second 
+
+\Hypertarget{classGameLogique_ab13988a299b6137f26268865e029f5a8}\label{classGameLogique_ab13988a299b6137f26268865e029f5a8} 
+\index{GameLogique@{GameLogique}!spawnEnnemy@{spawnEnnemy}}
+\index{spawnEnnemy@{spawnEnnemy}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{spawnEnnemy()}{spawnEnnemy()}}
+{\footnotesize\ttfamily void Game\+Logique\+::spawn\+Ennemy (\begin{DoxyParamCaption}\item[{char}]{type,  }\item[{float}]{position\+\_\+x,  }\item[{float}]{position\+\_\+y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+add a Enemy on the registry and send a notification to connected client 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the type off ennemy \\
+\hline
+{\em position\+\_\+x} & the x position of the ennemy \\
+\hline
+{\em position\+\_\+y} & the y position of the ennemy \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classGameLogique_a40567a8ad53cc9f5d7899369ca819170}\label{classGameLogique_a40567a8ad53cc9f5d7899369ca819170} 
+\index{GameLogique@{GameLogique}!startGame@{startGame}}
+\index{startGame@{startGame}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{startGame()}{startGame()}}
+{\footnotesize\ttfamily void Game\+Logique\+::start\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+lunch a game with connected player 
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classGameLogique_a578904e3a0773002765df82221898d3d}\label{classGameLogique_a578904e3a0773002765df82221898d3d} 
+\index{GameLogique@{GameLogique}!\_mutex@{\_mutex}}
+\index{\_mutex@{\_mutex}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{\_mutex}{\_mutex}}
+{\footnotesize\ttfamily std\+::mutex Game\+Logique\+::\+\_\+mutex\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_aec1d5faf48337de3c2590caf6639b6c7}\label{classGameLogique_aec1d5faf48337de3c2590caf6639b6c7} 
+\index{GameLogique@{GameLogique}!\_networkSender@{\_networkSender}}
+\index{\_networkSender@{\_networkSender}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{\_networkSender}{\_networkSender}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classNetworkSender}{Network\+Sender}}$>$ Game\+Logique\+::\+\_\+network\+Sender\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_a5e7ba7a3d647646b7138dd491d95a87e}\label{classGameLogique_a5e7ba7a3d647646b7138dd491d95a87e} 
+\index{GameLogique@{GameLogique}!frequency@{frequency}}
+\index{frequency@{frequency}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{frequency}{frequency}}
+{\footnotesize\ttfamily int Game\+Logique\+::frequency\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_a9904137faa104becf10b0cf27cbb4543}\label{classGameLogique_a9904137faa104becf10b0cf27cbb4543} 
+\index{GameLogique@{GameLogique}!logger@{logger}}
+\index{logger@{logger}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{logger}{logger}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} Game\+Logique\+::logger\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_a369311db90a0e936fd0b638f84da4f07}\label{classGameLogique_a369311db90a0e936fd0b638f84da4f07} 
+\index{GameLogique@{GameLogique}!network@{network}}
+\index{network@{network}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{network}{network}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{classNetworkLib_1_1Server}{Network\+Lib\+::\+Server}}$>$ Game\+Logique\+::network\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_a59d6de1b01a20b28900c5204f41ff65c}\label{classGameLogique_a59d6de1b01a20b28900c5204f41ff65c} 
+\index{GameLogique@{GameLogique}!receiverThread@{receiverThread}}
+\index{receiverThread@{receiverThread}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{receiverThread}{receiverThread}}
+{\footnotesize\ttfamily std\+::thread Game\+Logique\+::receiver\+Thread\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_a2e39eb59ada9885cc5e8dadc77136c73}\label{classGameLogique_a2e39eb59ada9885cc5e8dadc77136c73} 
+\index{GameLogique@{GameLogique}!reg@{reg}}
+\index{reg@{reg}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{reg}{reg}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classRegistry}{Registry}} Game\+Logique\+::reg\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_ab434e6203100a5c1742746ffc8838962}\label{classGameLogique_ab434e6203100a5c1742746ffc8838962} 
+\index{GameLogique@{GameLogique}!running@{running}}
+\index{running@{running}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{running}{running}}
+{\footnotesize\ttfamily bool Game\+Logique\+::running\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{classGameLogique_a4e6b4dc53f857b46f15ff1dbf8874b1e}\label{classGameLogique_a4e6b4dc53f857b46f15ff1dbf8874b1e} 
+\index{GameLogique@{GameLogique}!sys@{sys}}
+\index{sys@{sys}!GameLogique@{GameLogique}}
+\doxysubsubsection{\texorpdfstring{sys}{sys}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSystems}{Systems}} Game\+Logique\+::sys\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/server/\+Game\+Logique/\mbox{\hyperlink{GameLogique_8hpp}{Game\+Logique.\+hpp}}\item 
+src/server/\+Game\+Logique/\mbox{\hyperlink{GameLogique_8cpp}{Game\+Logique.\+cpp}}\end{DoxyCompactItemize}

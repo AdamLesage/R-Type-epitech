@@ -1,0 +1,532 @@
+\doxysection{Systems Class Reference}
+\hypertarget{classSystems}{}\label{classSystems}\index{Systems@{Systems}}
+
+
+{\ttfamily \#include $<$Systems.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classSystems_a9fd5e7c4746285e015c83fe6b8578e08}{collision\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, sf\+::\+Render\+Window \&window)
+\begin{DoxyCompactList}\small\item\em Update the position of all entities based on their velocity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a36b7e556b1a5277b0e0afd3dd0d37757}{collision\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, std\+::pair$<$ size\+\_\+t, size\+\_\+t $>$ Map\+Size, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&network\+Sender, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\item 
+void \mbox{\hyperlink{classSystems_a3610e24c0863c6b59f66393174811685}{control\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, bool up, bool down, bool left, bool right, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\begin{DoxyCompactList}\small\item\em Update entity\textquotesingle{}s velocity based on user input. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a9208400eaa9881a3ad7e3e8d7639cf1e}{control\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, sf\+::\+Render\+Window \&window, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{RType\+::\+IMediator}} $>$ mediator, std\+::function$<$ void()$>$ shoot\+Sound)
+\begin{DoxyCompactList}\small\item\em Update entity\textquotesingle{}s velocity based on user input. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_ae5f687a91108acc210db906c10afd248}{death\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\begin{DoxyCompactList}\small\item\em Handle the death of entities. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a001a6064ddcf6bc06b4ea136beb5addf}{direction\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg)
+\begin{DoxyCompactList}\small\item\em Update the direction of all entities based on their velocity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a4b1e12820a116b1fd1aad5a131871afe}{draw\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, sf\+::\+Render\+Window \&window)
+\begin{DoxyCompactList}\small\item\em Draw all entities with a position and a drawable component. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a024418f680bed2146fd5da3eaa3081c1}{draw\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, sf\+::\+Render\+Window \&window, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\begin{DoxyCompactList}\small\item\em Draw all entities with a position and a drawable component. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a34c12cc97287c7fe1b0d5ac48896f07e}{health\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg)
+\begin{DoxyCompactList}\small\item\em Update the health of all entities based on the damages / regeneration / healing they receive. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a7406833bdf06fcf4d06a42303e9ed0c7}{logging\+\_\+system}} (\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ \mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} $>$ const \&positions, \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ \mbox{\hyperlink{structVelocity__s}{Velocity\+\_\+s}} $>$ const \&velocities, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\begin{DoxyCompactList}\small\item\em Log the position and velocity of all entities. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_ae4da57e750620f8b91f41f26063c5f57}{player\+\_\+following\+\_\+pattern\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg)
+\begin{DoxyCompactList}\small\item\em Update the movement based on the closest player. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_aaa2d87ef6b2d62277ea94b2814ddccfe}{position\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg)
+\begin{DoxyCompactList}\small\item\em Update entity\textquotesingle{}s position based on its velocity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a775197fd612072c1259eda4f5c1f3670}{position\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&network, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\begin{DoxyCompactList}\small\item\em Update entity\textquotesingle{}s position based on its velocity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a47618fb35cede5ad08488080aabeef2e}{score\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg)
+\begin{DoxyCompactList}\small\item\em Handle the save of the score of the player. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_ae8e503be3a1136a85762f7fea4472981}{shoot\+\_\+player\+\_\+pattern\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&network\+Sender)
+\begin{DoxyCompactList}\small\item\em Fire an projectill every x seconds to the player. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a9976dac12dd12c4fda9da8fccb7c38ec}{shoot\+\_\+straight\+\_\+pattern\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&network\+Sender)
+\begin{DoxyCompactList}\small\item\em Fire an projectill every x seconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a7505bc2f8ce971dc2232c9973d653caa}{shoot\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, \mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}} player\+Id, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&network\+Sender, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\begin{DoxyCompactList}\small\item\em Handles the shoot for the entities. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_ad04861719062fb00cf4548ed3b766c4c}{Straight\+\_\+line\+\_\+pattern\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg)
+\begin{DoxyCompactList}\small\item\em Update the movement for a straight ligne pattern. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a6b747a9200cc2b1d588be196f029ef20}{wave\+\_\+pattern\+\_\+system}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, float total\+Time, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger)
+\begin{DoxyCompactList}\small\item\em Update the position for a wave patten. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classSystems_a1347863e13fb7877cb47d73545125639}{check\+\_\+borders\+\_\+collisions}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, size\+\_\+t entity\+Id, \mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} \texorpdfstring{$\ast$}{*}position, \mbox{\hyperlink{structSize__s}{Size\+\_\+s}} \texorpdfstring{$\ast$}{*}size, \mbox{\hyperlink{structType__s}{Type\+\_\+s}} \texorpdfstring{$\ast$}{*}type, std\+::pair$<$ size\+\_\+t, size\+\_\+t $>$ Map\+Size, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&network\+Sender)
+\begin{DoxyCompactList}\small\item\em Check if an entity is colliding with the borders of the map. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_aed75ccedfe0706436bd161f5c94c3162}{check\+\_\+entities\+\_\+collisions}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, size\+\_\+t entity\+Id1, \mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} \texorpdfstring{$\ast$}{*}position1, \mbox{\hyperlink{structSize__s}{Size\+\_\+s}} \texorpdfstring{$\ast$}{*}size1, size\+\_\+t entity\+Id2, \mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} \texorpdfstring{$\ast$}{*}position2, \mbox{\hyperlink{structSize__s}{Size\+\_\+s}} \texorpdfstring{$\ast$}{*}size2, \mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&logger, std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&network\+Sender, \mbox{\hyperlink{structType__s}{Type\+\_\+s}} \texorpdfstring{$\ast$}{*}entity\+Type1, \mbox{\hyperlink{structType__s}{Type\+\_\+s}} \texorpdfstring{$\ast$}{*}entity\+Type2)
+\begin{DoxyCompactList}\small\item\em Check if 2 entities are colliding. \end{DoxyCompactList}\item 
+std\+::array$<$ float, 2 $>$ \mbox{\hyperlink{classSystems_acd14cffb2b6b579cf461f7a078886a70}{find\+\_\+closest\+\_\+player}} (\mbox{\hyperlink{classRegistry}{Registry}} \&reg, \mbox{\hyperlink{Position_8hpp_a914352882bc89719adfa7e8a2716a2c3}{Position}} \texorpdfstring{$\ast$}{*}position\+\_\+entity)
+\begin{DoxyCompactList}\small\item\em find the pos of the closest player \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classSystems_ac82e6ceedbce2fe2092fe8a4c041ed3b}{read\+\_\+scores\+\_\+file}} (libconfig\+::\+Config \&cfg, const std\+::string \&config\+Path)
+\begin{DoxyCompactList}\small\item\em Read the file that contains the scores history. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSystems_a59a7aadf30c7a592489d0120950a16e8}{update\+\_\+scores}} (libconfig\+::\+Config \&cfg, const std\+::string \&player\+Names, size\+\_\+t total\+Score)
+\begin{DoxyCompactList}\small\item\em Handle the update of the scores history, fetch the kast 10 scores and insert the new one. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classSystems_a9934da042f123d154eb1dac2d89c5659}{write\+\_\+to\+\_\+scores\+\_\+file}} (libconfig\+::\+Config \&cfg, const std\+::string \&config\+Path)
+\begin{DoxyCompactList}\small\item\em Save the scores history to the file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classSystems_a1347863e13fb7877cb47d73545125639}\label{classSystems_a1347863e13fb7877cb47d73545125639} 
+\index{Systems@{Systems}!check\_borders\_collisions@{check\_borders\_collisions}}
+\index{check\_borders\_collisions@{check\_borders\_collisions}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{check\_borders\_collisions()}{check\_borders\_collisions()}}
+{\footnotesize\ttfamily void Systems\+::check\+\_\+borders\+\_\+collisions (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{size\+\_\+t}]{entity\+Id,  }\item[{\mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{position,  }\item[{\mbox{\hyperlink{structSize__s}{Size\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{size,  }\item[{\mbox{\hyperlink{structType__s}{Type\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{type,  }\item[{std\+::pair$<$ size\+\_\+t, size\+\_\+t $>$}]{Map\+Size,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&}]{network\+Sender }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Check if an entity is colliding with the borders of the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em entity\+Id} & The id of the entity to check. \\
+\hline
+{\em position} & The position of the entity. \\
+\hline
+{\em size} & The size of the entity. \\
+\hline
+{\em type} & The type of the entity. \\
+\hline
+{\em Map\+Size} & The size of the map. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\Hypertarget{classSystems_aed75ccedfe0706436bd161f5c94c3162}\label{classSystems_aed75ccedfe0706436bd161f5c94c3162} 
+\index{Systems@{Systems}!check\_entities\_collisions@{check\_entities\_collisions}}
+\index{check\_entities\_collisions@{check\_entities\_collisions}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{check\_entities\_collisions()}{check\_entities\_collisions()}}
+{\footnotesize\ttfamily void Systems\+::check\+\_\+entities\+\_\+collisions (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{size\+\_\+t}]{entity\+Id1,  }\item[{\mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{position1,  }\item[{\mbox{\hyperlink{structSize__s}{Size\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{size1,  }\item[{size\+\_\+t}]{entity\+Id2,  }\item[{\mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{position2,  }\item[{\mbox{\hyperlink{structSize__s}{Size\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{size2,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&}]{network\+Sender,  }\item[{\mbox{\hyperlink{structType__s}{Type\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{entity\+Type1,  }\item[{\mbox{\hyperlink{structType__s}{Type\+\_\+s}} \texorpdfstring{$\ast$}{*}}]{entity\+Type2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Check if 2 entities are colliding. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em entity\+Id1} & The id of the first entity. \\
+\hline
+{\em position1} & The position of the first entity. \\
+\hline
+{\em size1} & The size of the first entity. \\
+\hline
+{\em entity\+Id2} & The id of the second entity. \\
+\hline
+{\em position2} & The position of the second entity. \\
+\hline
+{\em size2} & The size of the second entity. \\
+\hline
+{\em logger} & The logger to log the events. \\
+\hline
+{\em network\+Sender} & The class for sending. \\
+\hline
+{\em entity\+Type1} & The type of the first entity. \\
+\hline
+{\em entity\+Type2} & The type of the second entity. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a9fd5e7c4746285e015c83fe6b8578e08}\label{classSystems_a9fd5e7c4746285e015c83fe6b8578e08} 
+\index{Systems@{Systems}!collision\_system@{collision\_system}}
+\index{collision\_system@{collision\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{collision\_system()}{collision\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Systems\+::collision\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{sf\+::\+Render\+Window \&}]{window }\end{DoxyParamCaption})}
+
+
+
+Update the position of all entities based on their velocity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a36b7e556b1a5277b0e0afd3dd0d37757}\label{classSystems_a36b7e556b1a5277b0e0afd3dd0d37757} 
+\index{Systems@{Systems}!collision\_system@{collision\_system}}
+\index{collision\_system@{collision\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{collision\_system()}{collision\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Systems\+::collision\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{std\+::pair$<$ size\+\_\+t, size\+\_\+t $>$}]{Map\+Size,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&}]{network\+Sender,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+@brief\+Handle the collisions between entities.
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a3610e24c0863c6b59f66393174811685}\label{classSystems_a3610e24c0863c6b59f66393174811685} 
+\index{Systems@{Systems}!control\_system@{control\_system}}
+\index{control\_system@{control\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{control\_system()}{control\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Systems\+::control\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{bool}]{up,  }\item[{bool}]{down,  }\item[{bool}]{left,  }\item[{bool}]{right,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+
+
+Update entity\textquotesingle{}s velocity based on user input. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em window} & The window to get the input from. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a9208400eaa9881a3ad7e3e8d7639cf1e}\label{classSystems_a9208400eaa9881a3ad7e3e8d7639cf1e} 
+\index{Systems@{Systems}!control\_system@{control\_system}}
+\index{control\_system@{control\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{control\_system()}{control\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Systems\+::control\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{sf\+::\+Render\+Window \&}]{window,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classRType_1_1IMediator}{RType\+::\+IMediator}} $>$}]{mediator,  }\item[{std\+::function$<$ void()$>$}]{shoot\+Sound }\end{DoxyParamCaption})}
+
+
+
+Update entity\textquotesingle{}s velocity based on user input. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em window} & The window to get the input from. \\
+\hline
+{\em mediator} & The mediator to notify the game engine. \\
+\hline
+{\em shoot\+Sound} & The function to play the shoot sound. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_ae5f687a91108acc210db906c10afd248}\label{classSystems_ae5f687a91108acc210db906c10afd248} 
+\index{Systems@{Systems}!death\_system@{death\_system}}
+\index{death\_system@{death\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{death\_system()}{death\_system()}}
+{\footnotesize\ttfamily void Systems\+::death\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+
+
+Handle the death of entities. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a001a6064ddcf6bc06b4ea136beb5addf}\label{classSystems_a001a6064ddcf6bc06b4ea136beb5addf} 
+\index{Systems@{Systems}!direction\_system@{direction\_system}}
+\index{direction\_system@{direction\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{direction\_system()}{direction\_system()}}
+{\footnotesize\ttfamily void Systems\+::direction\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg }\end{DoxyParamCaption})}
+
+
+
+Update the direction of all entities based on their velocity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a4b1e12820a116b1fd1aad5a131871afe}\label{classSystems_a4b1e12820a116b1fd1aad5a131871afe} 
+\index{Systems@{Systems}!draw\_system@{draw\_system}}
+\index{draw\_system@{draw\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{draw\_system()}{draw\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Systems\+::draw\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{sf\+::\+Render\+Window \&}]{window }\end{DoxyParamCaption})}
+
+
+
+Draw all entities with a position and a drawable component. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em window} & The window to draw the entities on. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a024418f680bed2146fd5da3eaa3081c1}\label{classSystems_a024418f680bed2146fd5da3eaa3081c1} 
+\index{Systems@{Systems}!draw\_system@{draw\_system}}
+\index{draw\_system@{draw\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{draw\_system()}{draw\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Systems\+::draw\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{sf\+::\+Render\+Window \&}]{window,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+
+
+Draw all entities with a position and a drawable component. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em window} & The window to draw the entities on. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_acd14cffb2b6b579cf461f7a078886a70}\label{classSystems_acd14cffb2b6b579cf461f7a078886a70} 
+\index{Systems@{Systems}!find\_closest\_player@{find\_closest\_player}}
+\index{find\_closest\_player@{find\_closest\_player}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{find\_closest\_player()}{find\_closest\_player()}}
+{\footnotesize\ttfamily std\+::array$<$ float, 2 $>$ Systems\+::find\+\_\+closest\+\_\+player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{\mbox{\hyperlink{Position_8hpp_a914352882bc89719adfa7e8a2716a2c3}{Position}} \texorpdfstring{$\ast$}{*}}]{position\+\_\+entity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+find the pos of the closest player 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em position\+\_\+entity} & the position of the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+return the pos of the closest player 
+\end{DoxyReturn}
+\Hypertarget{classSystems_a34c12cc97287c7fe1b0d5ac48896f07e}\label{classSystems_a34c12cc97287c7fe1b0d5ac48896f07e} 
+\index{Systems@{Systems}!health\_system@{health\_system}}
+\index{health\_system@{health\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{health\_system()}{health\_system()}}
+{\footnotesize\ttfamily void Systems\+::health\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg }\end{DoxyParamCaption})}
+
+
+
+Update the health of all entities based on the damages / regeneration / healing they receive. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a7406833bdf06fcf4d06a42303e9ed0c7}\label{classSystems_a7406833bdf06fcf4d06a42303e9ed0c7} 
+\index{Systems@{Systems}!logging\_system@{logging\_system}}
+\index{logging\_system@{logging\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{logging\_system()}{logging\_system()}}
+{\footnotesize\ttfamily void Systems\+::logging\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ \mbox{\hyperlink{structPosition__s}{Position\+\_\+s}} $>$ const \&}]{positions,  }\item[{\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ \mbox{\hyperlink{structVelocity__s}{Velocity\+\_\+s}} $>$ const \&}]{velocities,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+
+
+Log the position and velocity of all entities. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em positions} & The sparse array containing the positions. \\
+\hline
+{\em velocities} & The sparse array containing the velocities. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_ae4da57e750620f8b91f41f26063c5f57}\label{classSystems_ae4da57e750620f8b91f41f26063c5f57} 
+\index{Systems@{Systems}!player\_following\_pattern\_system@{player\_following\_pattern\_system}}
+\index{player\_following\_pattern\_system@{player\_following\_pattern\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{player\_following\_pattern\_system()}{player\_following\_pattern\_system()}}
+{\footnotesize\ttfamily void Systems\+::player\+\_\+following\+\_\+pattern\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg }\end{DoxyParamCaption})}
+
+
+
+Update the movement based on the closest player. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_aaa2d87ef6b2d62277ea94b2814ddccfe}\label{classSystems_aaa2d87ef6b2d62277ea94b2814ddccfe} 
+\index{Systems@{Systems}!position\_system@{position\_system}}
+\index{position\_system@{position\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{position\_system()}{position\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Systems\+::position\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg }\end{DoxyParamCaption})}
+
+
+
+Update entity\textquotesingle{}s position based on its velocity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a775197fd612072c1259eda4f5c1f3670}\label{classSystems_a775197fd612072c1259eda4f5c1f3670} 
+\index{Systems@{Systems}!position\_system@{position\_system}}
+\index{position\_system@{position\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{position\_system()}{position\_system()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Systems\+::position\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&}]{network,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+
+
+Update entity\textquotesingle{}s position based on its velocity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em network} & The class for sending data to client \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_ac82e6ceedbce2fe2092fe8a4c041ed3b}\label{classSystems_ac82e6ceedbce2fe2092fe8a4c041ed3b} 
+\index{Systems@{Systems}!read\_scores\_file@{read\_scores\_file}}
+\index{read\_scores\_file@{read\_scores\_file}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{read\_scores\_file()}{read\_scores\_file()}}
+{\footnotesize\ttfamily bool Systems\+::read\+\_\+scores\+\_\+file (\begin{DoxyParamCaption}\item[{libconfig\+::\+Config \&}]{cfg,  }\item[{const std\+::string \&}]{config\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Read the file that contains the scores history. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & The libconfig config object \\
+\hline
+{\em config\+Path} & The path to the file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true The file was read successfully 
+
+false An error occurred while reading the file 
+\end{DoxyReturn}
+\Hypertarget{classSystems_a47618fb35cede5ad08488080aabeef2e}\label{classSystems_a47618fb35cede5ad08488080aabeef2e} 
+\index{Systems@{Systems}!score\_system@{score\_system}}
+\index{score\_system@{score\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{score\_system()}{score\_system()}}
+{\footnotesize\ttfamily void Systems\+::score\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg }\end{DoxyParamCaption})}
+
+
+
+Handle the save of the score of the player. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_ae8e503be3a1136a85762f7fea4472981}\label{classSystems_ae8e503be3a1136a85762f7fea4472981} 
+\index{Systems@{Systems}!shoot\_player\_pattern\_system@{shoot\_player\_pattern\_system}}
+\index{shoot\_player\_pattern\_system@{shoot\_player\_pattern\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{shoot\_player\_pattern\_system()}{shoot\_player\_pattern\_system()}}
+{\footnotesize\ttfamily void Systems\+::shoot\+\_\+player\+\_\+pattern\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&}]{network\+Sender }\end{DoxyParamCaption})}
+
+
+
+Fire an projectill every x seconds to the player. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em network} & The class for sending data to client \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a9976dac12dd12c4fda9da8fccb7c38ec}\label{classSystems_a9976dac12dd12c4fda9da8fccb7c38ec} 
+\index{Systems@{Systems}!shoot\_straight\_pattern\_system@{shoot\_straight\_pattern\_system}}
+\index{shoot\_straight\_pattern\_system@{shoot\_straight\_pattern\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{shoot\_straight\_pattern\_system()}{shoot\_straight\_pattern\_system()}}
+{\footnotesize\ttfamily void Systems\+::shoot\+\_\+straight\+\_\+pattern\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&}]{network\+Sender }\end{DoxyParamCaption})}
+
+
+
+Fire an projectill every x seconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em network} & The class for sending data to client \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a7505bc2f8ce971dc2232c9973d653caa}\label{classSystems_a7505bc2f8ce971dc2232c9973d653caa} 
+\index{Systems@{Systems}!shoot\_system@{shoot\_system}}
+\index{shoot\_system@{shoot\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{shoot\_system()}{shoot\_system()}}
+{\footnotesize\ttfamily void Systems\+::shoot\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{\mbox{\hyperlink{Registry_8hpp_a003433b9e1a580bdeb6a9193c6866f86}{entity\+\_\+t}}}]{player\+Id,  }\item[{std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classNetworkSender}{Network\+Sender}} $>$ \&}]{network\+Sender,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+
+
+Handles the shoot for the entities. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em player\+Id} & played\+Id The id of the player. \\
+\hline
+{\em network} & The class for sending data to client \\
+\hline
+{\em logger} & The logger to log the events \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_ad04861719062fb00cf4548ed3b766c4c}\label{classSystems_ad04861719062fb00cf4548ed3b766c4c} 
+\index{Systems@{Systems}!Straight\_line\_pattern\_system@{Straight\_line\_pattern\_system}}
+\index{Straight\_line\_pattern\_system@{Straight\_line\_pattern\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{Straight\_line\_pattern\_system()}{Straight\_line\_pattern\_system()}}
+{\footnotesize\ttfamily void Systems\+::\+Straight\+\_\+line\+\_\+pattern\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg }\end{DoxyParamCaption})}
+
+
+
+Update the movement for a straight ligne pattern. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a59a7aadf30c7a592489d0120950a16e8}\label{classSystems_a59a7aadf30c7a592489d0120950a16e8} 
+\index{Systems@{Systems}!update\_scores@{update\_scores}}
+\index{update\_scores@{update\_scores}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{update\_scores()}{update\_scores()}}
+{\footnotesize\ttfamily void Systems\+::update\+\_\+scores (\begin{DoxyParamCaption}\item[{libconfig\+::\+Config \&}]{cfg,  }\item[{const std\+::string \&}]{player\+Names,  }\item[{size\+\_\+t}]{total\+Score }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handle the update of the scores history, fetch the kast 10 scores and insert the new one. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & The libconfig config object \\
+\hline
+{\em player\+Names} & The names of the players \\
+\hline
+{\em total\+Score} & The total score of the players (sum of all players) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a6b747a9200cc2b1d588be196f029ef20}\label{classSystems_a6b747a9200cc2b1d588be196f029ef20} 
+\index{Systems@{Systems}!wave\_pattern\_system@{wave\_pattern\_system}}
+\index{wave\_pattern\_system@{wave\_pattern\_system}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{wave\_pattern\_system()}{wave\_pattern\_system()}}
+{\footnotesize\ttfamily void Systems\+::wave\+\_\+pattern\+\_\+system (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classRegistry}{Registry}} \&}]{reg,  }\item[{float}]{total\+Time,  }\item[{\mbox{\hyperlink{classRType_1_1Logger}{RType\+::\+Logger}} \&}]{logger }\end{DoxyParamCaption})}
+
+
+
+Update the position for a wave patten. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The registry containing the components. \\
+\hline
+{\em total\+Time} & The count since the start. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classSystems_a9934da042f123d154eb1dac2d89c5659}\label{classSystems_a9934da042f123d154eb1dac2d89c5659} 
+\index{Systems@{Systems}!write\_to\_scores\_file@{write\_to\_scores\_file}}
+\index{write\_to\_scores\_file@{write\_to\_scores\_file}!Systems@{Systems}}
+\doxysubsubsection{\texorpdfstring{write\_to\_scores\_file()}{write\_to\_scores\_file()}}
+{\footnotesize\ttfamily bool Systems\+::write\+\_\+to\+\_\+scores\+\_\+file (\begin{DoxyParamCaption}\item[{libconfig\+::\+Config \&}]{cfg,  }\item[{const std\+::string \&}]{config\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Save the scores history to the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & The libconfig config object \\
+\hline
+{\em config\+Path} & The path to the file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true The file was written successfully 
+
+false An error occurred while writing the file 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/server/systems/\mbox{\hyperlink{server_2systems_2Systems_8hpp}{Systems.\+hpp}}\item 
+src/shared/systems/\mbox{\hyperlink{shared_2systems_2Systems_8hpp}{Systems.\+hpp}}\item 
+src/server/systems/\mbox{\hyperlink{server_2systems_2Systems_8cpp}{Systems.\+cpp}}\item 
+src/shared/systems/\mbox{\hyperlink{shared_2systems_2Systems_8cpp}{Systems.\+cpp}}\end{DoxyCompactItemize}

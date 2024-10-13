@@ -1,0 +1,62 @@
+\doxysection{Client.\+hpp}
+\hypertarget{Client_8hpp_source}{}\label{Client_8hpp_source}\index{src/client/NetworkEngine/Client.hpp@{src/client/NetworkEngine/Client.hpp}}
+\mbox{\hyperlink{Client_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ NetworkLib}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Client}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ CLIENT\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ CLIENT\_HPP\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Constants_8hpp}{../../shared/network/Constants.hpp}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{LockedQueue_8hpp}{../../shared/network/LockedQueue.hpp}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Logger_8hpp}{../../shared/utils/Logger.hpp}}"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <boost/asio.hpp>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{IClient_8hpp}{IClient.hpp}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceNetworkLib}{NetworkLib}}\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNetworkLib_1_1Client}{Client}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classNetworkLib_1_1IClient}{IClient}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1Client_ab71eaac593b89e8bbb13a17af5e99d8f}{Client}}(std::string\ host,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ server\_port,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ local\_port\ =\ 0);}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1Client_afb280be925bf419b4cf1da86172cffbd}{\string~Client}}();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Client_accb455b7127ec10ea29319aa779a99f3}{send}}(\textcolor{keyword}{const}\ std::string\&\ message)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNetworkLib_1_1Client_ac5054f38d2f68e8322756b05fa0cead7}{hasMessage}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNetworkLib_1_1Client_a9460f7b5b2969964bdd95a89559c63de}{popMessage}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Network\ send/receive\ stuff}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::io\_service\ \mbox{\hyperlink{classNetworkLib_1_1Client_aec921ec8bfb29b009f52011dc0e9fcd5}{io\_service}};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::ip::udp::socket\ \mbox{\hyperlink{classNetworkLib_1_1Client_ab68afeb097e9e0b641cc615edcbfd740}{socket}};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::ip::udp::endpoint\ \mbox{\hyperlink{classNetworkLib_1_1Client_a004ddcee6391e0da41ab5bbd2a4bc87e}{server\_endpoint}};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ boost::asio::ip::udp::endpoint\ \mbox{\hyperlink{classNetworkLib_1_1Client_a358f37c7494d998c64cc091c9371de87}{remote\_endpoint}};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ std::array<char,\ NetworkBufferSize>\ \mbox{\hyperlink{classNetworkLib_1_1Client_a8f3a6fda69e1206c55145a1173ede6f7}{recv\_buffer}};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ std::thread\ \mbox{\hyperlink{classNetworkLib_1_1Client_a762ab55678461a27e05ed13583542030}{service\_thread}};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Queues\ for\ messages}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1LockedQueue}{LockedQueue<std::string>}}\ \mbox{\hyperlink{classNetworkLib_1_1Client_ab5b8b3bccd88b874a50c99b91698967d}{incomingMessages}};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Client_a451070acad659aa365543cec22f5be61}{start\_receive}}();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Client_aedb40dec7883c872d2125589b8912b5b}{handle\_receive}}(\textcolor{keyword}{const}\ std::error\_code\&\ error,\ std::size\_t\ bytes\_transferred);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNetworkLib_1_1Client_a5f080e4a5b3f4f675e4987fd64ae3fd4}{run\_service}}();}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNetworkLib_1_1Client_aa1d8a1a7caca7f005cdaba60f63ca0ee}{Client}}(\mbox{\hyperlink{classNetworkLib_1_1Client}{Client}}\&);\ \textcolor{comment}{//\ block\ default\ copy\ constructor}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classRType_1_1Logger}{RType::Logger}}\ \mbox{\hyperlink{classNetworkLib_1_1Client_a4777cdb5bcf854a41159e3f95a8bbf66}{\_logger}};}
+\DoxyCodeLine{00080\ \ \ \ \ \};}
+\DoxyCodeLine{00081\ \}\ \textcolor{comment}{//\ namespace\ NetworkLib}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !CLIENT\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

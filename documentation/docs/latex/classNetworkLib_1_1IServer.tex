@@ -1,0 +1,98 @@
+\doxysection{Network\+Lib\+::IServer Class Reference}
+\hypertarget{classNetworkLib_1_1IServer}{}\label{classNetworkLib_1_1IServer}\index{NetworkLib::IServer@{NetworkLib::IServer}}
+
+
+{\ttfamily \#include $<$IServer.\+hpp$>$}
+
+
+
+Inheritance diagram for Network\+Lib\+::IServer\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{classNetworkLib_1_1IServer__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual size\+\_\+t \mbox{\hyperlink{classNetworkLib_1_1IServer_acbca3359b36115dfa2869fb485d5d1c2}{get\+Client\+Count}} ()=0
+\item 
+virtual uint32\+\_\+t \mbox{\hyperlink{classNetworkLib_1_1IServer_ab514c479436b8bd4e121319e36b09ecf}{get\+Client\+Id\+By\+Index}} (size\+\_\+t)=0
+\item 
+virtual bool \mbox{\hyperlink{classNetworkLib_1_1IServer_a0b53a5afb8d77fdf58453d20c58e9bae}{has\+Messages}} ()=0
+\item 
+virtual std\+::pair$<$ std\+::string, uint32\+\_\+t $>$ \mbox{\hyperlink{classNetworkLib_1_1IServer_a3172e755d63c7a698ef345868a1ef750}{pop\+Message}} ()=0
+\item 
+virtual void \mbox{\hyperlink{classNetworkLib_1_1IServer_aa7304b252f731f937bc4b0375b198505}{send\+To\+Client}} (const char \texorpdfstring{$\ast$}{*}message, size\+\_\+t size, uint32\+\_\+t client\+ID)=0
+\item 
+virtual \mbox{\hyperlink{classNetworkLib_1_1IServer_ac3a569beaee2823eb9da9b0df1d8a920}{\texorpdfstring{$\sim$}{\string~}\+IServer}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classNetworkLib_1_1IServer_ac3a569beaee2823eb9da9b0df1d8a920}\label{classNetworkLib_1_1IServer_ac3a569beaee2823eb9da9b0df1d8a920} 
+\index{NetworkLib::IServer@{NetworkLib::IServer}!````~IServer@{\texorpdfstring{$\sim$}{\string~}IServer}}
+\index{````~IServer@{\texorpdfstring{$\sim$}{\string~}IServer}!NetworkLib::IServer@{NetworkLib::IServer}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}IServer()}{\string~IServer()}}
+{\footnotesize\ttfamily virtual Network\+Lib\+::\+IServer\+::\texorpdfstring{$\sim$}{\string~}\+IServer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNetworkLib_1_1IServer_acbca3359b36115dfa2869fb485d5d1c2}\label{classNetworkLib_1_1IServer_acbca3359b36115dfa2869fb485d5d1c2} 
+\index{NetworkLib::IServer@{NetworkLib::IServer}!getClientCount@{getClientCount}}
+\index{getClientCount@{getClientCount}!NetworkLib::IServer@{NetworkLib::IServer}}
+\doxysubsubsection{\texorpdfstring{getClientCount()}{getClientCount()}}
+{\footnotesize\ttfamily virtual size\+\_\+t Network\+Lib\+::\+IServer\+::get\+Client\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Server_ac8510127828867b407a0ec105a6d8c21}{Network\+Lib\+::\+Server}}.
+
+\Hypertarget{classNetworkLib_1_1IServer_ab514c479436b8bd4e121319e36b09ecf}\label{classNetworkLib_1_1IServer_ab514c479436b8bd4e121319e36b09ecf} 
+\index{NetworkLib::IServer@{NetworkLib::IServer}!getClientIdByIndex@{getClientIdByIndex}}
+\index{getClientIdByIndex@{getClientIdByIndex}!NetworkLib::IServer@{NetworkLib::IServer}}
+\doxysubsubsection{\texorpdfstring{getClientIdByIndex()}{getClientIdByIndex()}}
+{\footnotesize\ttfamily virtual uint32\+\_\+t Network\+Lib\+::\+IServer\+::get\+Client\+Id\+By\+Index (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Server_a803a38791ee912988a5ea0a3cdb6044a}{Network\+Lib\+::\+Server}}.
+
+\Hypertarget{classNetworkLib_1_1IServer_a0b53a5afb8d77fdf58453d20c58e9bae}\label{classNetworkLib_1_1IServer_a0b53a5afb8d77fdf58453d20c58e9bae} 
+\index{NetworkLib::IServer@{NetworkLib::IServer}!hasMessages@{hasMessages}}
+\index{hasMessages@{hasMessages}!NetworkLib::IServer@{NetworkLib::IServer}}
+\doxysubsubsection{\texorpdfstring{hasMessages()}{hasMessages()}}
+{\footnotesize\ttfamily virtual bool Network\+Lib\+::\+IServer\+::has\+Messages (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Server_a0d2ee751a46b553413f7e379a0eb84ee}{Network\+Lib\+::\+Server}}.
+
+\Hypertarget{classNetworkLib_1_1IServer_a3172e755d63c7a698ef345868a1ef750}\label{classNetworkLib_1_1IServer_a3172e755d63c7a698ef345868a1ef750} 
+\index{NetworkLib::IServer@{NetworkLib::IServer}!popMessage@{popMessage}}
+\index{popMessage@{popMessage}!NetworkLib::IServer@{NetworkLib::IServer}}
+\doxysubsubsection{\texorpdfstring{popMessage()}{popMessage()}}
+{\footnotesize\ttfamily virtual std\+::pair$<$ std\+::string, uint32\+\_\+t $>$ Network\+Lib\+::\+IServer\+::pop\+Message (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Server_a93ce18bc28a39b5ad433a4bc6e60b4af}{Network\+Lib\+::\+Server}}.
+
+\Hypertarget{classNetworkLib_1_1IServer_aa7304b252f731f937bc4b0375b198505}\label{classNetworkLib_1_1IServer_aa7304b252f731f937bc4b0375b198505} 
+\index{NetworkLib::IServer@{NetworkLib::IServer}!sendToClient@{sendToClient}}
+\index{sendToClient@{sendToClient}!NetworkLib::IServer@{NetworkLib::IServer}}
+\doxysubsubsection{\texorpdfstring{sendToClient()}{sendToClient()}}
+{\footnotesize\ttfamily virtual void Network\+Lib\+::\+IServer\+::send\+To\+Client (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{message,  }\item[{size\+\_\+t}]{size,  }\item[{uint32\+\_\+t}]{client\+ID }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classNetworkLib_1_1Server_a96c2446a41b26797549dd60a99da76c6}{Network\+Lib\+::\+Server}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/server/network/\mbox{\hyperlink{IServer_8hpp}{IServer.\+hpp}}\end{DoxyCompactItemize}
