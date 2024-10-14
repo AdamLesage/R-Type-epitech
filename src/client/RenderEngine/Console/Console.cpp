@@ -26,6 +26,15 @@ void RType::Console::displayDeveloperConsole(sf::RenderWindow& window)
     this->displayCloseContainerButton(window);
 }
 
+void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& event)
+{
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::T) {
+            this->toggleDeveloperConsole();
+        }
+    }
+}
+
 void RType::Console::displayContainer(sf::RenderWindow &window)
 {
     // Display the container of the console at the bottom left of the window
@@ -125,6 +134,7 @@ int main() {
                 sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
                 window.setView(sf::View(visibleArea));
             }
+            console.toggleDeveloperConsoleFromEvent(event);
         }
 
         window.clear();

@@ -30,6 +30,15 @@ namespace RType {
             void toggleDeveloperConsole() { _showDeveloperConsole = !_showDeveloperConsole; }
 
             /**
+             * @brief Toggle the developer console visibility from an event
+             * 
+             * This function will toggle the developer console visibility if the event is a key press
+             * 
+             * @param event The event to check
+             */
+            void toggleDeveloperConsoleFromEvent(sf::Event &event);
+
+            /**
              * @brief Display the developer console
              * 
              * This function will display the developer console thanks to SFML
