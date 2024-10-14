@@ -35,6 +35,13 @@ namespace RType {
              * This function will display the developer console thanks to SFML
              */
             void displayDeveloperConsole(sf::RenderWindow &window);
+
+            /**
+             * @brief Display the close container button
+             * 
+             * This function will display a close button at the top right of the container
+             */
+            void displayCloseContainerButton(sf::RenderWindow &window);
         protected:
             bool _showDeveloperConsole;
         private:

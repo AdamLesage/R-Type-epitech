@@ -16,13 +16,14 @@ RType::Console::~Console()
 {
 }
 
-void RType::Console::displayDeveloperConsole(sf::RenderWindow &window)
+void RType::Console::displayDeveloperConsole(sf::RenderWindow& window)
 {
     if (_showDeveloperConsole == false) // Do not display the console if it's hidden
         return;
 
     // Display the console
     this->displayContainer(window);
+    this->displayCloseContainerButton(window);
 }
 
 void RType::Console::displayContainer(sf::RenderWindow &window)
@@ -59,11 +60,55 @@ void RType::Console::displayContainer(sf::RenderWindow &window)
     window.draw(container);
 }
 
-
-// To compile this snippet, you can use the following command:
-// g++ -o test Console.cpp -lsfml-graphics -lsfml-window -lsfml-system
-int main()
+void RType::Console::displayCloseContainerButton(sf::RenderWindow &window)
 {
+    // Display the close button at the top right of the container
+    unsigned int width = window.getSize().x;
+    unsigned int height = window.getSize().y;
+
+    // If width is smaller than 800 or height is smaller than 600, do not display the console
+    if (width < 800 || height < 600)
+        return;
+
+    // Console width = 50% of the window width
+    // Console height = 40% of the window height
+    unsigned int consoleWidth = width * 0.5;
+    unsigned int consoleHeight = height * 0.4;
+
+    // Console position = bottom left of the window
+    unsigned int consolePosX = 0;
+    unsigned int consolePosY = height - consoleHeight;
+
+    // Close button size = 20x20
+    unsigned int closeBtnSize = 20;
+
+    // Close button position = top right of the container
+    unsigned int closeBtnPosX = consolePosX + consoleWidth - closeBtnSize;
+    unsigned int closeBtnPosY = consolePosY;
+
+    // Create the close button
+    sf::RectangleShape closeBtn(sf::Vector2f(closeBtnSize, closeBtnSize));
+    closeBtn.setPosition(closeBtnPosX, closeBtnPosY);
+    closeBtn.setOutlineColor(sf::Color::White);
+    closeBtn.setOutlineThickness(2);
+    sf::Uint8 alpha = 128; // 50% opacity
+
+    closeBtn.setFillColor(sf::Color(255, 0, 0, alpha));
+
+    // Display the close button
+    window.draw(closeBtn);
+
+    // Handle click on the close button
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (closeBtn.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+            this->toggleDeveloperConsole();
+            return;
+        }
+    }
+}
+
+int main() {
     // Temp main function to test the Console class
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "R-Type");
     RType::Console console;
@@ -72,11 +117,17 @@ int main()
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            if (event.type == sf::Event::Closed) window.close();
+
+            // Recalculate display if the window is resized
+            if (event.type == sf::Event::Resized) {
+                // Optionally adjust the view if needed
+                sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+                window.setView(sf::View(visibleArea));
+            }
         }
 
-        window.clear(sf::Color::Red); // Set the background color to red
+        window.clear();
         console.displayDeveloperConsole(window);
         window.display();
     }
