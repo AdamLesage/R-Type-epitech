@@ -47,6 +47,7 @@ void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::F8) {
             this->toggleDeveloperConsole();
+            _typing = true;
         }
     }
 }
@@ -91,6 +92,19 @@ void RType::Console::checkClick()
     }
 }
 
+bool RType::Console::isCommand()
+{
+    if (_input == "clear") {
+        History.clear();
+        return true;
+    }
+    if (_input == "quit") {
+        window->close();
+        return true;
+    }
+    return false;
+}
+
 bool RType::Console::checkInput()
 {
     checkClick();  // Check if the user clicked inside the input box
@@ -105,18 +119,38 @@ bool RType::Console::checkInput()
                     }
                 }
                 if (event.text.unicode == 13) {
-                    if (!_input.empty()) {
-                        if (History.size() < 12) {
-                            _inputText.setPosition(0, 30 * History.size());
-                        } else {
-                            History.erase(History.begin());
-                            for (int i = 0; i < History.size(); i++) {
-                                History[i].setPosition(0, 30 * i);
+                    if (isCommand()) {
+                        if (!_input.empty()) {
+                            if (History.size() < 12) {
+                                _inputText.setPosition(0, 30 * History.size());
+                            } else {
+                                History.erase(History.begin());
+                                for (int i = 0; i < History.size(); i++) {
+                                    History[i].setPosition(0, 30 * i);
+                                }
+                                _inputText.setPosition(0, 30 * History.size());
                             }
-                            _inputText.setPosition(0, 30 * History.size());
+                            History.push_back(_inputText);
+                            _input.clear();
                         }
-                        History.push_back(_inputText);
-                        _input.clear();
+                    } else {
+                        if (!_input.empty()) {
+                            if (History.size() < 12) {
+                                _inputText.setPosition(0, 30 * History.size());
+                            } else {
+                                History.erase(History.begin());
+                                History.erase(History.begin());
+                                for (int i = 0; i < History.size(); i++) {
+                                    History[i].setPosition(0, 30 * i);
+                                }
+                                _inputText.setPosition(0, 30 * History.size());
+                            }
+                            History.push_back(_inputText);
+                            _inputText.setString("  Command not found");
+                            _inputText.setPosition(0, 30 * History.size());
+                            History.push_back(_inputText);
+                            _input.clear();
+                        }
                     }
                 }
                 else if (event.text.unicode >= 32 && event.text.unicode <= 126) {

@@ -67,6 +67,14 @@ namespace RType {
              * This function will check if the user want to type something in the console
              */
             void checkClick();
+            /**
+             * @brief Check he text of the user is command or not
+             * 
+             * @return bool Return true if the text is a command and false if not
+             * 
+             * Verify if the text is an existing command
+             */
+            bool isCommand();
         protected:
             bool _showDeveloperConsole;
         private:
