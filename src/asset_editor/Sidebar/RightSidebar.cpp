@@ -117,10 +117,8 @@ void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
 {
     int gap = 10;
     int padding = 20;
-    float assetsTextPosX = window.getSize().x * 0.75 + 150;
-    float assetsTextPosY = 0;
-    float componentsTextPosX = assetsTextPosX + 100 + gap;
-    float componentsTextPosY = 0;
+    float startX = window.getSize().x * 0.75 + 75;
+    float startY = 0;
 
     sf::Font font;
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
@@ -129,64 +127,50 @@ void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
         return;
     }
 
-    sf::Text assetsText;
-    assetsText.setFont(font);
-    assetsText.setString("Assets");
-    assetsText.setCharacterSize(30);
-    assetsText.setFillColor(sf::Color::White);
-    assetsText.setPosition(assetsTextPosX, assetsTextPosY);
+    // Browse each element of _sidebarSelections
+    float currentX = startX;
+    for (size_t i = 0; i < _sidebarSelections.size(); ++i) {
+        sf::Text text;
+        text.setFont(font);
+        text.setString(_sidebarSelections[i]);
+        text.setCharacterSize(30);
+        text.setFillColor(sf::Color::White);
+        text.setPosition(currentX, startY);
 
-    // create background rectangle around "Assets"
-    sf::FloatRect assetsBounds = assetsText.getGlobalBounds();
-    sf::RectangleShape assetsBackground(sf::Vector2f(assetsBounds.width + padding, assetsBounds.height + padding));
-    assetsBackground.setPosition(assetsBounds.left - padding / 2, assetsBounds.top - padding / 2);
-    if (_currentSidebarSelection == "Assets") assetsBackground.setFillColor(sf::Color(125, 125, 125));
-    else assetsBackground.setFillColor(sf::Color(50, 50, 50));
+        // Create a background rectangle for the text
+        sf::FloatRect textBounds = text.getGlobalBounds();
+        sf::RectangleShape background(sf::Vector2f(textBounds.width + padding, textBounds.height + padding));
+        background.setPosition(textBounds.left - padding / 2, textBounds.top - padding / 2);
 
-    sf::Text componentsText;
-    componentsText.setFont(font);
-    componentsText.setString("Components");
-    componentsText.setCharacterSize(30);
-    componentsText.setFillColor(sf::Color::White);
-    componentsText.setPosition(componentsTextPosX, componentsTextPosY);
-
-    // Ajuster le rectangle autour de "Components"
-    sf::FloatRect componentsBounds = componentsText.getGlobalBounds();
-    sf::RectangleShape componentsBackground(sf::Vector2f(componentsBounds.width + padding, componentsBounds.height + padding));
-    componentsBackground.setPosition(componentsBounds.left - padding / 2, componentsBounds.top - padding / 2);
-    if (_currentSidebarSelection == "Components") componentsBackground.setFillColor(sf::Color(125, 125, 125));
-    else componentsBackground.setFillColor(sf::Color(50, 50, 50));
-
-    // Vérifier la position de la souris
-    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
-    // Mettre en surbrillance le fond si la souris passe dessus
-    if (mousePos.x >= assetsBackground.getPosition().x && mousePos.x <= assetsBackground.getPosition().x + assetsBackground.getSize().x
-        && mousePos.y >= assetsBackground.getPosition().y && mousePos.y <= assetsBackground.getPosition().y + assetsBackground.getSize().y) {
-        assetsBackground.setFillColor(sf::Color(100, 100, 100));  // Couleur survolée
-        // Vérifier le clic sur "Assets"
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            this->setCurrentSidebarSelection("Assets");
-            assetsBackground.setFillColor(sf::Color(175, 175, 175));
+        // Set the background color to gray if the current selection is the same as the current element
+        if (_currentSidebarSelection == _sidebarSelections[i]) {
+            background.setFillColor(sf::Color(125, 125, 125));
+        } else {
+            background.setFillColor(sf::Color(50, 50, 50));
         }
-    }
 
-    if (mousePos.x >= componentsBackground.getPosition().x && mousePos.x <= componentsBackground.getPosition().x + componentsBackground.getSize().x
-        && mousePos.y >= componentsBackground.getPosition().y && mousePos.y <= componentsBackground.getPosition().y + componentsBackground.getSize().y) {
-        componentsBackground.setFillColor(sf::Color(100, 100, 100));  // Couleur survolée
-        // Vérifier le clic sur "Components"
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            this->setCurrentSidebarSelection("Components");
-            componentsBackground.setFillColor(sf::Color(175, 175, 175));
+        // Check if the mouse is over the current element
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (mousePos.x >= background.getPosition().x && mousePos.x <= background.getPosition().x + background.getSize().x &&
+            mousePos.y >= background.getPosition().y && mousePos.y <= background.getPosition().y + background.getSize().y) {
+            background.setFillColor(sf::Color(100, 100, 100));  // Couleur survolée
+
+            // If the mouse is over the current element and the left button is pressed, set the current selection to the current element
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                this->setCurrentSidebarSelection(_sidebarSelections[i]);
+                background.setFillColor(sf::Color(175, 175, 175));
+            }
         }
-    }
 
-    // Dessiner les rectangles de fond et les textes
-    window.draw(assetsBackground);
-    window.draw(assetsText);
-    window.draw(componentsBackground);
-    window.draw(componentsText);
+        // Draw the background and the text
+        window.draw(background);
+        window.draw(text);
+
+        // Update the currentX position for the next element
+        currentX += textBounds.width + padding + gap;
+    }
 }
+
 
 
 void Edition::RightSidebar::draw(sf::RenderWindow &window)
