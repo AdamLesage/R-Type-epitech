@@ -103,7 +103,7 @@ void Edition::RightSidebar::drawCloseContainer(sf::RenderWindow &window)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (mousePos.x >= closeButtonX && mousePos.x <= closeButtonX + closeSize
-            && mousePos.y >= 0 && mousePos.y <= closeSize) {
+            && mousePos.y >= 0 && (unsigned int)mousePos.y <= closeSize) {
             this->toggleSidebar();
             return;
         }

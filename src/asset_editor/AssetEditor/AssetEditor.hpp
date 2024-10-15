@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include "../Sidebar/RightSidebar.hpp"
+#include "../Sidebar/Toolbar.hpp"
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -34,7 +35,8 @@ namespace Edition {
         protected:
         private:
             sf::RenderWindow _window;
-            std::shared_ptr<RightSidebar> _rightSidebar;
+            RightSidebar _rightSidebar;
+            Toolbar _toolbar;
     };
 }
 
