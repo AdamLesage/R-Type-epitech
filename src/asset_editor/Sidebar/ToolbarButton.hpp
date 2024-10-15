@@ -36,6 +36,14 @@ namespace Edition {
             ~ToolbarButton();
 
             /**
+             * @brief Update the button with hover and click events
+             * 
+             * @param window The window of the Asset Editor
+             * @return true if the button is hovered, false otherwise
+             */
+            bool update(sf::RenderWindow& window);
+
+            /**
              * @brief Draw the button
              * 
              * @param window The window of the Asset Editor

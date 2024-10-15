@@ -32,8 +32,8 @@ Edition::Toolbar::Toolbar()
     _toolbarButtons.push_back(ToolbarButton(savePath, sf::Vector2f(120, 5)));
     _toolbarButtons.push_back(ToolbarButton(deletePath, sf::Vector2f(170, 5)));
     _toolbarButtons.push_back(ToolbarButton(movePath, sf::Vector2f(220, 5)));
-    _toolbarButtons.push_back(ToolbarButton(zoomPath, sf::Vector2f(270, 5)));
     _toolbarButtons.push_back(ToolbarButton(dezoomPath, sf::Vector2f(320, 5)));
+    _toolbarButtons.push_back(ToolbarButton(zoomPath, sf::Vector2f(270, 5)));
 }
 
 
@@ -43,8 +43,20 @@ Edition::Toolbar::~Toolbar()
 
 void Edition::Toolbar::displayToolbarButtons(sf::RenderWindow &window)
 {
+    bool anyButtonUpdated = false;
+    sf::Cursor cursor;
+
     for (auto &button : _toolbarButtons) {
+        if (button.update(window)) {
+            anyButtonUpdated = true;
+        }
         button.draw(window);
+    }
+
+    if (!anyButtonUpdated) {
+        if (cursor.loadFromSystem(sf::Cursor::Arrow)) {
+            window.setMouseCursor(cursor);
+        }
     }
 }
 

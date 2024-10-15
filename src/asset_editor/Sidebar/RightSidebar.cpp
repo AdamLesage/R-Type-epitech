@@ -153,7 +153,7 @@ void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (mousePos.x >= background.getPosition().x && mousePos.x <= background.getPosition().x + background.getSize().x &&
             mousePos.y >= background.getPosition().y && mousePos.y <= background.getPosition().y + background.getSize().y) {
-            background.setFillColor(sf::Color(100, 100, 100));  // Couleur survolée
+            background.setFillColor(sf::Color(100, 100, 100));  // Hover effect
 
             // If the mouse is over the current element and the left button is pressed, set the current selection to the current element
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
