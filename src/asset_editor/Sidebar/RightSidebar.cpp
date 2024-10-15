@@ -127,7 +127,7 @@ void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
         return;
     }
 
-    // Parcourir chaque élément de _sidebarSelections
+    // Browse each element of _sidebarSelections
     float currentX = startX;
     for (size_t i = 0; i < _sidebarSelections.size(); ++i) {
         sf::Text text;
@@ -137,36 +137,36 @@ void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
         text.setFillColor(sf::Color::White);
         text.setPosition(currentX, startY);
 
-        // Créer le rectangle de fond autour du texte
+        // Create a background rectangle for the text
         sf::FloatRect textBounds = text.getGlobalBounds();
         sf::RectangleShape background(sf::Vector2f(textBounds.width + padding, textBounds.height + padding));
         background.setPosition(textBounds.left - padding / 2, textBounds.top - padding / 2);
 
-        // Définir la couleur de fond selon la sélection courante
+        // Set the background color to gray if the current selection is the same as the current element
         if (_currentSidebarSelection == _sidebarSelections[i]) {
             background.setFillColor(sf::Color(125, 125, 125));
         } else {
             background.setFillColor(sf::Color(50, 50, 50));
         }
 
-        // Vérifier la position de la souris
+        // Check if the mouse is over the current element
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (mousePos.x >= background.getPosition().x && mousePos.x <= background.getPosition().x + background.getSize().x &&
             mousePos.y >= background.getPosition().y && mousePos.y <= background.getPosition().y + background.getSize().y) {
             background.setFillColor(sf::Color(100, 100, 100));  // Couleur survolée
 
-            // Vérifier le clic sur cet élément
+            // If the mouse is over the current element and the left button is pressed, set the current selection to the current element
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 this->setCurrentSidebarSelection(_sidebarSelections[i]);
                 background.setFillColor(sf::Color(175, 175, 175));
             }
         }
 
-        // Dessiner le rectangle de fond et le texte
+        // Draw the background and the text
         window.draw(background);
         window.draw(text);
 
-        // Mettre à jour la position X pour le prochain élément avec l'ajout de la largeur du texte + l'espace
+        // Update the currentX position for the next element
         currentX += textBounds.width + padding + gap;
     }
 }
