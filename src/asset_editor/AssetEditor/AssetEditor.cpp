@@ -10,7 +10,7 @@
 Edition::AssetEditor::AssetEditor()
 {
     _window.create(sf::VideoMode(1920, 1080), "Asset Editor");
-    _rightSidebar = std::make_shared<RightSidebar>(_window);
+    _rightSidebar = std::make_shared<RightSidebar>();
 }
 
 Edition::AssetEditor::~AssetEditor()
@@ -26,6 +26,7 @@ void Edition::AssetEditor::run()
                 _window.close();
         }
         _window.clear();
+        _rightSidebar->draw(_window);
         _window.display();
     }
 }

@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <chrono>
 
 
 namespace Edition {
@@ -24,23 +25,67 @@ namespace Edition {
         public:
             /**
              * @brief Construct a new Right Sidebar object
-             * 
-             * @param window  The window of the Asset Editor
              */
-            RightSidebar(sf::RenderWindow &window);
+            RightSidebar();
 
             /**
              * @brief Destroy the Right Sidebar object
              */
             ~RightSidebar();
 
-            void draw();
+            /**
+             * @brief Draw the sidebar
+             * 
+             * @param window The window of the Asset Editor
+             */
+            void drawContainer(sf::RenderWindow &window);
+
+            /**
+             * @brief Draw the close button of the sidebar
+             * 
+             * @param window The window of the Asset Editor
+             */
+            void drawCloseContainer(sf::RenderWindow &window);
+
+            /**
+             * @brief Draw the sidebar
+             * 
+             * @param window The window of the Asset Editor
+             */
+            void draw(sf::RenderWindow &window);
+
+            /**
+             * @brief Set the current sidebar selection
+             * 
+             * @param selection The selection to set
+             */
+            void setCurrentSidebarSelection(const std::string &selection) { _currentSidebarSelection = selection; }
+
+            /**
+             * @brief Get the current sidebar selection
+             * 
+             * @return std::string The current selection
+             */
+            std::string getCurrentSidebarSelection() const { return _currentSidebarSelection; }
+
+            /**
+             * @brief Displat tabs selections in the sidebar
+             * 
+             * @param window The window of the Asset Editor
+             */
+            void displayTabSelections(sf::RenderWindow &window);
 
         protected:
+            /**
+             * @brief The current selection in the sidebar: "Assets", "Components"
+             */
+            std::string _currentSidebarSelection;
+            bool _isSidebarOpen;
         private:
-            sf::RenderWindow &_window;
-            bool my_tool_active;
-            float *_color;
+            /**
+             * @brief Toggle the sidebar open or close
+             */
+            void toggleSidebar();
     };
 }
 
