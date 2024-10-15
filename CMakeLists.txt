@@ -50,6 +50,7 @@ if(WIN32)
 
     file(GLOB_RECURSE SRC_CLIENT "src/client/*.cpp" "src/shared/*.cpp")
     file(GLOB_RECURSE SRC_SERVER "src/server/*.cpp" "src/shared/*.cpp")
+    file(GLOB_RECURSE SRC_ASSET_EDITOR "src/asset_editor/*.cpp" "src/shared/*.cpp")
 
     add_library(NetworkEngine SHARED ${SRC_CLIENT})
     add_library(GameEngine SHARED ${SRC_CLIENT})
@@ -71,6 +72,9 @@ if(WIN32)
 
     target_link_libraries(r-type_server NetworkEngine GameEngine PhysicEngine AudioEngine RenderingEngine ${Boost_LIBRARIES} sfml-system sfml-window sfml-graphics sfml-network sfml-audio libconfig::libconfig++)
 
+    add_executable(r-type_asset_editor ${SRC_ASSET_EDITOR})
+
+    target_link_libraries(r-type_asset_editor NetworkEngine GameEngine PhysicEngine AudioEngine RenderingEngine ${Boost_LIBRARIES} sfml-system sfml-window sfml-graphics sfml-network sfml-audio libconfig::libconfig++)
 else()
     # Project name
     project(r-type)
@@ -94,6 +98,7 @@ else()
     # Recursively find source files for each binary
     file(GLOB_RECURSE SRC_CLIENT "src/client/*.cpp" "src/shared/*.cpp")
     file(GLOB_RECURSE SRC_SERVER "src/server/*.cpp" "src/shared/*.cpp")
+    file(GLOB_RECURSE SRC_ASSET_EDITOR "src/asset_editor/*.cpp" "src/shared/*.cpp")
 
     # Create shared libraries
     add_library(NetworkEngine SHARED ${SRC_CLIENT})
@@ -117,4 +122,10 @@ else()
 
     # Linkage for SFML and Boost libraries
     target_link_libraries(r-type_server sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
+
+    # Create the asset editor executable
+    add_executable(r-type_asset_editor ${SRC_ASSET_EDITOR})
+
+    # Linkage for SFML and Boost libraries
+    target_link_libraries(r-type_asset_editor sfml-system sfml-window sfml-graphics sfml-network sfml-audio -lconfig++ ${Boost_LIBRARIES})
 endif()
