@@ -32,10 +32,10 @@ void Edition::RightSidebar::toggleSidebar()
     }
 }
 
-void Edition::RightSidebar::drawContainer(sf::RenderWindow &window)
+void Edition::RightSidebar::drawContainer(std::shared_ptr<sf::RenderWindow> window)
 {
-    static float currentWidth = window.getSize().x * 0.25;
-    float targetWidth = _isSidebarOpen ? window.getSize().x * 0.25 : 0;
+    static float currentWidth = window->getSize().x * 0.25;
+    float targetWidth = _isSidebarOpen ? window->getSize().x * 0.25 : 0;
     float transitionSpeed = 10.0f; // Adjust this value for faster/slower transition
 
     if (currentWidth != targetWidth) {
@@ -48,25 +48,25 @@ void Edition::RightSidebar::drawContainer(sf::RenderWindow &window)
         }
     }
 
-    unsigned int sidebarHeight = window.getSize().y;
+    unsigned int sidebarHeight = window->getSize().y;
 
     sf::RectangleShape sidebar(sf::Vector2f(currentWidth, sidebarHeight));
     sidebar.setFillColor(sf::Color(50, 50, 50));
-    sidebar.setPosition(window.getSize().x - currentWidth, 0);
+    sidebar.setPosition(window->getSize().x - currentWidth, 0);
 
     // Set border
     sidebar.setOutlineThickness(1);
     sidebar.setOutlineColor(sf::Color::White);
 
-    window.draw(sidebar);
+    window->draw(sidebar);
 }
 
-void Edition::RightSidebar::drawCloseContainer(sf::RenderWindow &window)
+void Edition::RightSidebar::drawCloseContainer(std::shared_ptr<sf::RenderWindow> window)
 {
     // Display a close button at the top left of the sidebar with a size of 20x20
     unsigned int closeSize = 40;
-    static float closeButtonX = window.getSize().x * 0.75;
-    float targetX = _isSidebarOpen ? window.getSize().x * 0.75 : window.getSize().x - closeSize;
+    static float closeButtonX = window->getSize().x * 0.75;
+    float targetX = _isSidebarOpen ? window->getSize().x * 0.75 : window->getSize().x - closeSize;
     float transitionSpeed = 10.0f; // Adjust this value for faster/slower transition
 
     if (closeButtonX != targetX) {
@@ -101,7 +101,7 @@ void Edition::RightSidebar::drawCloseContainer(sf::RenderWindow &window)
 
     // If the close button is clicked, toggle the sidebar
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
         if (mousePos.x >= closeButtonX && mousePos.x <= closeButtonX + closeSize
             && mousePos.y >= 0 && mousePos.y <= closeSize) {
             this->toggleSidebar();
@@ -109,15 +109,15 @@ void Edition::RightSidebar::drawCloseContainer(sf::RenderWindow &window)
         }
     }
 
-    window.draw(close);
-    window.draw(closeText);
+    window->draw(close);
+    window->draw(closeText);
 }
 
-void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
+void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindow> window)
 {
     int gap = 10;
     int padding = 20;
-    float startX = window.getSize().x * 0.75 + 75;
+    float startX = window->getSize().x * 0.75 + 75;
     float startY = 0;
 
     sf::Font font;
@@ -150,7 +150,7 @@ void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
         }
 
         // Check if the mouse is over the current element
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
         if (mousePos.x >= background.getPosition().x && mousePos.x <= background.getPosition().x + background.getSize().x &&
             mousePos.y >= background.getPosition().y && mousePos.y <= background.getPosition().y + background.getSize().y) {
             background.setFillColor(sf::Color(100, 100, 100));  // Couleur survolée
@@ -163,19 +163,27 @@ void Edition::RightSidebar::displayTabSelections(sf::RenderWindow &window)
         }
 
         // Draw the background and the text
-        window.draw(background);
-        window.draw(text);
+        window->draw(background);
+        window->draw(text);
 
         // Update the currentX position for the next element
         currentX += textBounds.width + padding + gap;
     }
+    if (_currentSidebarSelection == _sidebarSelections[0]) {
+        this->assetSelector.display(window);
+    }
 }
 
-
-
-void Edition::RightSidebar::draw(sf::RenderWindow &window)
+void Edition::RightSidebar::handleEvent(const sf::Event& event)
 {
-    this->drawContainer(window);
+    this->assetSelector.handleEvent(event);
+}
+
+void Edition::RightSidebar::draw(std::shared_ptr<sf::RenderWindow> window)
+{
+    if (_isSidebarOpen == true) {
+        this->drawContainer(window);
+        this->displayTabSelections(window);
+    }
     this->drawCloseContainer(window);
-    this->displayTabSelections(window);
 }

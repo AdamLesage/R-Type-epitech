@@ -23,13 +23,12 @@ void Edition::AssetEditor::run()
     while (_window->isOpen()) {
         sf::Event event;
         while (_window->pollEvent(event)) {
-            this->assetSelector.handleEvent(event);
+            this->_rightSidebar->handleEvent(event);
             if (event.type == sf::Event::Closed)
                 _window->close();
         }
         _window->clear();
-        _rightSidebar->draw(*_window.get());
-        // assetSelector.display(_window);
+        _rightSidebar->draw(_window);
         _window->display();
     }
 }

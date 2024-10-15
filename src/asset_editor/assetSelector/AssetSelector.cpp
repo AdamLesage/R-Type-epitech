@@ -21,13 +21,8 @@ Edition::AssetSelector::~AssetSelector()
 void Edition::AssetSelector::display(std::shared_ptr<sf::RenderWindow> window)
 {
     std::vector<sf::RectangleShape> elements;
-    int Posx = window->getSize().x * 0.75;
-    int Posy = 100 + scrollOffset;
-
-    sf::RectangleShape shape2(sf::Vector2f(window->getSize().x * 0.25, 1080));
-    shape2.setPosition(sf::Vector2f(Posx, 0));
-    shape2.setFillColor(sf::Color::White);
-    window->draw(shape2);
+    int Posx = window->getSize().x * 0.775;
+    int Posy = 50 + scrollOffset;
 
     float totalHeight = 0;
     for (auto& it: this->assetMap["assets/game_launch"]) {
@@ -38,7 +33,7 @@ void Edition::AssetSelector::display(std::shared_ptr<sf::RenderWindow> window)
     maxScrollOffset = viewHeight - totalHeight;
 
     for (auto& it: this->assetMap["assets/game_launch"]) {
-        sf::RectangleShape shape(sf::Vector2f(window->getSize().x * 0.25, 100));
+        sf::RectangleShape shape(sf::Vector2f(window->getSize().x * 0.20, 100));
         shape.setPosition(sf::Vector2f(Posx, Posy));
         shape.setTexture(it.second);
         elements.push_back(shape);

@@ -12,7 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <array>
-
+#include "../assetSelector/AssetSelector.hpp"
 
 namespace Edition {
     /**
@@ -39,21 +39,21 @@ namespace Edition {
              * 
              * @param window The window of the Asset Editor
              */
-            void drawContainer(sf::RenderWindow &window);
+            void drawContainer(std::shared_ptr<sf::RenderWindow> window);
 
             /**
              * @brief Draw the close button of the sidebar
              * 
              * @param window The window of the Asset Editor
              */
-            void drawCloseContainer(sf::RenderWindow &window);
+            void drawCloseContainer(std::shared_ptr<sf::RenderWindow> window);
 
             /**
              * @brief Draw the sidebar
              * 
              * @param window The window of the Asset Editor
              */
-            void draw(sf::RenderWindow &window);
+            void draw(std::shared_ptr<sf::RenderWindow> window);
 
             /**
              * @brief Set the current sidebar selection
@@ -74,8 +74,14 @@ namespace Edition {
              * 
              * @param window The window of the Asset Editor
              */
-            void displayTabSelections(sf::RenderWindow &window);
+            void displayTabSelections(std::shared_ptr<sf::RenderWindow> window);
 
+            /**
+             * @brief handle the scroll on the RightSideBar;
+             * 
+             * @param event the event of the window
+             */
+            void handleEvent(const sf::Event& event);
         protected:
             /**
              * @brief The current selection in the sidebar: "Assets", "Components"
@@ -88,6 +94,7 @@ namespace Edition {
              * @brief Toggle the sidebar open or close
              */
             void toggleSidebar();
+            AssetSelector assetSelector;
     };
 }
 

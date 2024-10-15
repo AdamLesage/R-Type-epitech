@@ -11,7 +11,6 @@
 #include <iostream>
 #include "../Sidebar/RightSidebar.hpp"
 #include <SFML/Graphics.hpp>
-#include "../assetSelector/AssetSelector.hpp"
 #include <memory>
 
 namespace Edition {
@@ -35,7 +34,6 @@ namespace Edition {
         protected:
         private:
             std::shared_ptr<sf::RenderWindow> _window;
-            AssetSelector assetSelector;
             std::shared_ptr<RightSidebar> _rightSidebar;
     };
 }
