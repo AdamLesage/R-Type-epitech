@@ -7,110 +7,149 @@
 
 #include "Console.hpp"
 
-RType::Console::Console()
-{
+RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _event) {
     _showDeveloperConsole = false;
+
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
+        throw std::runtime_error("Error loading font");
+    }
+    this->_typing = false;
+    this->window  = _window;
+    _inputText.setString(">");
+    _inputText.setFont(font);
+    _inputText.setFillColor(sf::Color::White);
+    _inputText.setPosition(5, window->getSize().y * 0.35);
+    for (int i = 0; i < History.size(); i++) {
+        History[i].setFont(font);
+        History[i].setFillColor(sf::Color::White);
+        History[i].setPosition(0, 0);
+    }
+    secondContainer.setOutlineColor(sf::Color(150, 150, 150));
+    secondContainer.setOutlineThickness(3);
+    secondContainer.setFillColor(sf::Color(20, 20, 20, 180)); // Same fill color
+    container.setFillColor(sf::Color(20, 20, 20, 180));
 }
 
-RType::Console::~Console()
-{
+RType::Console::~Console() {
 }
 
-void RType::Console::displayDeveloperConsole(sf::RenderWindow& window)
-{
+void RType::Console::displayDeveloperConsole() {
     if (_showDeveloperConsole == false) // Do not display the console if it's hidden
         return;
 
     // Display the console
-    this->displayContainer(window);
-    this->displayCloseContainerButton(window);
+    this->displayContainer();
+    this->displayCloseContainerButton();
 }
 
-void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& event)
-{
+void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::T) {
+        if (event.key.code == sf::Keyboard::F8) {
             this->toggleDeveloperConsole();
         }
     }
 }
 
-void RType::Console::displayContainer(sf::RenderWindow &window)
-{
-    // Display the container of the console at the bottom left of the window
-    unsigned int width = window.getSize().x;
-    unsigned int height = window.getSize().y;
+void RType::Console::displayContainer() {
+    unsigned int width  = window->getSize().x;
+    unsigned int height = window->getSize().y;
 
-    // If width is smaller than 800 or height is smaller than 600, do not display the console
-    if (width < 800 || height < 600)
-        return;
+    if (width < 900 || height < 800) return;
 
-    // Console width = 50% of the window width
-    // Console height = 40% of the window height
-    unsigned int consoleWidth = width * 0.5;
-    unsigned int consoleHeight = height * 0.4;
+    unsigned int consoleWidth  = width;
+    unsigned int consoleHeight = height * 0.36;
+    unsigned int secondContainerHeight = consoleHeight * 0.11;
 
-    // Console position = bottom left of the window
-    unsigned int consolePosX = 0;
-    unsigned int consolePosY = height - consoleHeight;
+    container.setSize(sf::Vector2f(consoleWidth, consoleHeight));
+    container.setPosition(0, 0);
+    secondContainer.setSize(sf::Vector2f(consoleWidth, secondContainerHeight));
+    secondContainer.setPosition(0, consoleHeight);
+    _inputText.setPosition(10, consoleHeight);
 
-    // Create the container
-    sf::RectangleShape container(sf::Vector2f(consoleWidth, consoleHeight));
-    container.setPosition(consolePosX, consolePosY);
-    container.setOutlineColor(sf::Color::White);
-    container.setOutlineThickness(2);
-    sf::Uint8 alpha = 128; // 50% opacity
-    sf::Uint8 red = 46;
-    sf::Uint8 green = 46;
-    sf::Uint8 blue = 46;
-    container.setFillColor(sf::Color(red, green, blue, alpha));
-
-    // Display the container
-    window.draw(container);
+    window->draw(container);
+    window->draw(secondContainer);
+    window->draw(_inputText);
+    for (int i = 0; i < History.size(); i++) {
+        window->draw(History[i]);
+    }
 }
 
-void RType::Console::displayCloseContainerButton(sf::RenderWindow &window)
+
+void RType::Console::checkClick()
 {
-    // Display the close button at the top right of the container
-    unsigned int width = window.getSize().x;
-    unsigned int height = window.getSize().y;
+    sf::Mouse mouse;
+    sf::Vector2f mousPos;
+    mousPos.x = mouse.getPosition(*this->window.get()).x;
+    mousPos.y = mouse.getPosition(*this->window.get()).y;
+    if (mouse.isButtonPressed(sf::Mouse::Button::Left)) {
+        if (this->secondContainer.getGlobalBounds().contains(mousPos)) {
+            this->_typing = true;
+        } else {
+            this->_typing = false;
+        }
+    }
+}
 
-    // If width is smaller than 800 or height is smaller than 600, do not display the console
-    if (width < 800 || height < 600)
-        return;
+bool RType::Console::checkInput()
+{
+    checkClick();  // Check if the user clicked inside the input box
+    if (this->_typing == true) {
+        while (this->window.get()->pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window->close();
+            if (event.type == sf::Event::TextEntered) {
+                if (event.text.unicode == 8) {
+                    if (!_input.empty()) {
+                        _input.pop_back();
+                    }
+                }
+                if (event.text.unicode == 13) {
+                    if (!_input.empty()) {
+                        if (History.size() < 12) {
+                            _inputText.setPosition(0, 30 * History.size());
+                        } else {
+                            History.erase(History.begin());
+                            for (int i = 0; i < History.size(); i++) {
+                                History[i].setPosition(0, 30 * i);
+                            }
+                            _inputText.setPosition(0, 30 * History.size());
+                        }
+                        History.push_back(_inputText);
+                        _input.clear();
+                    }
+                }
+                else if (event.text.unicode >= 32 && event.text.unicode <= 126) {
+                    _input.push_back(static_cast<char>(event.text.unicode));
+                }
+                _inputText.setString("> " + _input);
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-    // Console width = 50% of the window width
-    // Console height = 40% of the window height
-    unsigned int consoleWidth = width * 0.5;
+
+void RType::Console::displayCloseContainerButton() {
+    unsigned int width  = window->getSize().x;
+    unsigned int height = window->getSize().y;
+    if (width < 800 || height < 600) return;
+    unsigned int consoleWidth  = width;
     unsigned int consoleHeight = height * 0.4;
-
-    // Console position = bottom left of the window
-    unsigned int consolePosX = 0;
-    unsigned int consolePosY = height - consoleHeight;
-
-    // Close button size = 20x20
     unsigned int closeBtnSize = 20;
-
-    // Close button position = top right of the container
-    unsigned int closeBtnPosX = consolePosX + consoleWidth - closeBtnSize;
-    unsigned int closeBtnPosY = consolePosY;
-
-    // Create the close button
+    unsigned int closeBtnPosX = consoleWidth - closeBtnSize;
     sf::RectangleShape closeBtn(sf::Vector2f(closeBtnSize, closeBtnSize));
-    closeBtn.setPosition(closeBtnPosX, closeBtnPosY);
     closeBtn.setOutlineColor(sf::Color::White);
     closeBtn.setOutlineThickness(2);
-    sf::Uint8 alpha = 128; // 50% opacity
+    closeBtn.setFillColor(sf::Color(255, 0, 0, 128));
 
-    closeBtn.setFillColor(sf::Color(255, 0, 0, alpha));
-
-    // Display the close button
-    window.draw(closeBtn);
-
-    // Handle click on the close button
+    closeBtn.setPosition(closeBtnPosX - 2, 2);
+    window->draw(closeBtn);
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        if (closeBtn.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
+        if (closeBtn.getGlobalBounds().contains(static_cast<float>(mousePos.x),
+                                                static_cast<float>(mousePos.y))) {
             this->toggleDeveloperConsole();
             return;
         }
@@ -118,27 +157,25 @@ void RType::Console::displayCloseContainerButton(sf::RenderWindow &window)
 }
 
 int main() {
-    // Temp main function to test the Console class
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "R-Type");
-    RType::Console console;
+    std::shared_ptr<sf::RenderWindow> window;
+    sf::Event event;
+    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
+    RType::Console console(window, event);
 
     console.toggleDeveloperConsole();
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window.close();
+    while (window->isOpen()) {
+        while (window->pollEvent(event)) {
+            if (event.type == sf::Event::Closed) window->close();
 
-            // Recalculate display if the window is resized
             if (event.type == sf::Event::Resized) {
-                // Optionally adjust the view if needed
                 sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-                window.setView(sf::View(visibleArea));
+                window->setView(sf::View(visibleArea));
             }
             console.toggleDeveloperConsoleFromEvent(event);
+            console.checkInput();
         }
-
-        window.clear();
-        console.displayDeveloperConsole(window);
-        window.display();
+        window->clear(sf::Color::White);
+        console.displayDeveloperConsole();
+        window->display();
     }
 }

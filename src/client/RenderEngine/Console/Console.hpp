@@ -10,11 +10,15 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
+#include <memory>
+#define PATH_SEPARATOR "/"
 
 namespace RType {
     class Console {
         public:
-            Console();
+            Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _event);
             ~Console();
 
             /**
@@ -43,14 +47,26 @@ namespace RType {
              * 
              * This function will display the developer console thanks to SFML
              */
-            void displayDeveloperConsole(sf::RenderWindow &window);
+            void displayDeveloperConsole();
 
             /**
              * @brief Display the close container button
              * 
              * This function will display a close button at the top right of the container
              */
-            void displayCloseContainerButton(sf::RenderWindow &window);
+            void displayCloseContainerButton();
+            /**
+             * @brief Check Input of user
+             * 
+             * This function will check if the user want to type something in the console
+             */
+            bool checkInput();
+            /**
+             * @brief Check Input of user
+             * 
+             * This function will check if the user want to type something in the console
+             */
+            void checkClick();
         protected:
             bool _showDeveloperConsole;
         private:
@@ -59,7 +75,16 @@ namespace RType {
              * 
              * Container is a black rectangle that contains the console with a specific size and opacity to make it visible
              */
-            void displayContainer(sf::RenderWindow &window);
+            void displayContainer();
+            sf::Event event;
+            std::shared_ptr<sf::RenderWindow> window;
+            std::vector<sf::Text> History;
+            sf::Text _inputText;
+            sf::Font font;
+            bool _typing;
+            sf::RectangleShape container;
+            sf::RectangleShape secondContainer;
+            std::string _input;
     };
 }
 
