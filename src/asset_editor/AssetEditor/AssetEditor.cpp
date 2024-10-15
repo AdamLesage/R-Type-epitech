@@ -10,6 +10,7 @@
 Edition::AssetEditor::AssetEditor()
 {
     _window.create(sf::VideoMode(1920, 1080), "Asset Editor");
+    _rightSidebar = std::make_shared<RightSidebar>(_window);
 }
 
 Edition::AssetEditor::~AssetEditor()

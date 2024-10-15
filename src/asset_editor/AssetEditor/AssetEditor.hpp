@@ -9,7 +9,9 @@
 #define ASSETEDITOR_HPP_
 
 #include <iostream>
+#include "../Sidebar/RightSidebar.hpp"
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 namespace Edition {
     class AssetEditor {
@@ -32,6 +34,7 @@ namespace Edition {
         protected:
         private:
             sf::RenderWindow _window;
+            std::shared_ptr<RightSidebar> _rightSidebar;
     };
 }
 
