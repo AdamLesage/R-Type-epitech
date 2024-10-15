@@ -22,7 +22,7 @@ all:
 	@echo "$(RUNNING) Starting project build"
 	@mkdir -p build
 	@cd build && cmake .. && make
-	@cp build/r-type_server build/r-type_client ./
+	@cp build/r-type_server build/r-type_asset_editor build/r-type_client ./
 	@cp build/libNetworkEngine.so build/libGameEngine.so build/libRenderingEngine.so build/libPhysicEngine.so build/libAudioEngine.so lib/
 	@echo "$(SUCCESS) Project compiled successfully"
 
