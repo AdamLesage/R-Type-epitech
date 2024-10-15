@@ -14,9 +14,8 @@ RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _ev
     if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
     }
-    this->_typing = false;
+    this->_typing = true;
     this->window  = _window;
-    _inputText.setString(">");
     _inputText.setFont(font);
     _inputText.setFillColor(sf::Color::White);
     _inputText.setPosition(5, window->getSize().y * 0.35);
@@ -38,7 +37,12 @@ void RType::Console::displayDeveloperConsole() {
     if (_showDeveloperConsole == false) // Do not display the console if it's hidden
         return;
 
-    // Display the console
+    if (_typing) {
+    _inputText.setString("> " + _input + "|");
+    } else {
+        _inputText.setString("> " + _input);
+    }
+
     this->displayContainer();
     this->displayCloseContainerButton();
 }
@@ -121,7 +125,7 @@ bool RType::Console::checkInput()
                 if (event.text.unicode == 13) {
                     if (isCommand()) {
                         if (!_input.empty()) {
-                            if (History.size() < 12) {
+                            if (History.size() < 11) {
                                 _inputText.setPosition(0, 30 * History.size());
                             } else {
                                 History.erase(History.begin());
@@ -130,12 +134,13 @@ bool RType::Console::checkInput()
                                 }
                                 _inputText.setPosition(0, 30 * History.size());
                             }
+                            _inputText.setString("  " + _input);
                             History.push_back(_inputText);
                             _input.clear();
                         }
                     } else {
                         if (!_input.empty()) {
-                            if (History.size() < 12) {
+                            if (History.size() < 11) {
                                 _inputText.setPosition(0, 30 * History.size());
                             } else {
                                 History.erase(History.begin());
@@ -145,6 +150,7 @@ bool RType::Console::checkInput()
                                 }
                                 _inputText.setPosition(0, 30 * History.size());
                             }
+                            _inputText.setString("> " + _input);
                             History.push_back(_inputText);
                             _inputText.setString("  Command not found");
                             _inputText.setPosition(0, 30 * History.size());
@@ -156,7 +162,11 @@ bool RType::Console::checkInput()
                 else if (event.text.unicode >= 32 && event.text.unicode <= 126) {
                     _input.push_back(static_cast<char>(event.text.unicode));
                 }
-                _inputText.setString("> " + _input);
+                if (_typing) {
+                    _inputText.setString("> " + _input + " |");
+                } else {
+                    _inputText.setString("> " + _input);
+                }
                 return true;
             }
         }
