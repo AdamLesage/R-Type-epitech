@@ -5,12 +5,17 @@
 ** main
 */
 
-#include "assetSelector/AssetSelector.hpp"
+#include "AssetEditor/AssetEditor.hpp"
 
-int main(int ac, char **av)
+int main()
 {
-    (void)ac;
-    (void)av;
-    AssetSelector assetSelector;
-    return 0;
+    Edition::AssetEditor assetEditor;
+
+    try  {
+        assetEditor.run();
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return (84);
+    }
+    return (0);
 }
