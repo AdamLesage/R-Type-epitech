@@ -11,6 +11,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <chrono>
+#include <array>
 
 
 namespace Edition {
@@ -81,6 +82,7 @@ namespace Edition {
              */
             std::string _currentSidebarSelection;
             bool _isSidebarOpen;
+            std::array<std::string, 2> _sidebarSelections = {"Assets", "Components"};
         private:
             /**
              * @brief Toggle the sidebar open or close
