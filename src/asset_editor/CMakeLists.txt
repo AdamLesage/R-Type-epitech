@@ -14,6 +14,7 @@ set(SOURCES
     main.cpp
     Sidebar/RightSidebar.cpp
     Sidebar/Toolbar.cpp
+    Sidebar/ToolbarButton.cpp
     AssetEditor/AssetEditor.cpp
 )
 

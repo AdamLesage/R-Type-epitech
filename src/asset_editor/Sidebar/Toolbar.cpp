@@ -7,47 +7,45 @@
 
 #include "Toolbar.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+    #include <windows.h>
+    #define LIB_EXTENSION ".dll"
+    #define PATH_SEPARATOR "\\"
+#else
+    #include <dlfcn.h>
+    #define LIB_EXTENSION ".so"
+    #define PATH_SEPARATOR "/"
+#endif
+
 Edition::Toolbar::Toolbar()
 {
+    std::string undoPath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "undo.png";
+    std::string redoPath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "redo.png";
+    std::string savePath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "save.png";
+    std::string deletePath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "delete.png";
+    std::string movePath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "move.png";
+    std::string zoomPath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "zoom.png";
+    std::string dezoomPath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "dezoom.png";
+
+    _toolbarButtons.push_back(ToolbarButton(undoPath, sf::Vector2f(20, 5)));
+    _toolbarButtons.push_back(ToolbarButton(redoPath, sf::Vector2f(70, 5)));
+    _toolbarButtons.push_back(ToolbarButton(savePath, sf::Vector2f(120, 5)));
+    _toolbarButtons.push_back(ToolbarButton(deletePath, sf::Vector2f(170, 5)));
+    _toolbarButtons.push_back(ToolbarButton(movePath, sf::Vector2f(220, 5)));
+    _toolbarButtons.push_back(ToolbarButton(zoomPath, sf::Vector2f(270, 5)));
+    _toolbarButtons.push_back(ToolbarButton(dezoomPath, sf::Vector2f(320, 5)));
 }
+
 
 Edition::Toolbar::~Toolbar()
 {
 }
 
-void Edition::Toolbar::displayUndoButton(sf::RenderWindow &window)
+void Edition::Toolbar::displayToolbarButtons(sf::RenderWindow &window)
 {
-    (void)window;
-}
-
-void Edition::Toolbar::displayRedoButton(sf::RenderWindow &window)
-{
-    (void)window;
-}
-
-void Edition::Toolbar::displaySaveButton(sf::RenderWindow &window)
-{
-    (void)window;
-}
-
-void Edition::Toolbar::displayDeleteButton(sf::RenderWindow &window)
-{
-    (void)window;
-}
-
-void Edition::Toolbar::displayMoveButton(sf::RenderWindow &window)
-{
-    (void)window;
-}
-
-void Edition::Toolbar::displayZoomButton(sf::RenderWindow &window)
-{
-    (void)window;
-}
-
-void Edition::Toolbar::displayDezoomButton(sf::RenderWindow &window)
-{
-    (void)window;
+    for (auto &button : _toolbarButtons) {
+        button.draw(window);
+    }
 }
 
 void Edition::Toolbar::displayToolbarContainer(sf::RenderWindow &window)
@@ -82,11 +80,5 @@ void Edition::Toolbar::displayToolbarContainer(sf::RenderWindow &window)
 void Edition::Toolbar::draw(sf::RenderWindow &window)
 {
     this->displayToolbarContainer(window);
-    this->displayUndoButton(window);
-    this->displayRedoButton(window);
-    this->displaySaveButton(window);
-    this->displayDeleteButton(window);
-    this->displayMoveButton(window);
-    this->displayZoomButton(window);
-    this->displayDezoomButton(window);
+    this->displayToolbarButtons(window);
 }

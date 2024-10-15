@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "ToolbarButton.hpp"
+#include <string>
 
 namespace Edition {
     /**
@@ -32,53 +34,14 @@ namespace Edition {
             ~Toolbar();
 
             /**
-             * @brief Display the undo button
+             * @brief Display every toolbar buttons
+             * 
+             * This will display every toolbar buttons that are in the toolbar
              * 
              * @param window The window of the Asset Editor
              */
-            void displayUndoButton(sf::RenderWindow &window);
+            void displayToolbarButtons(sf::RenderWindow &window);
 
-            /**
-             * @brief Display the redo button
-             * 
-             * @param window The window of the Asset Editor
-             */
-            void displayRedoButton(sf::RenderWindow &window);
-
-            /**
-             * @brief Display the save button
-             * 
-             * @param window The window of the Asset Editor
-             */
-            void displaySaveButton(sf::RenderWindow &window);
-
-            /**
-             * @brief Display the delete button
-             * 
-             * @param window The window of the Asset Editor
-             */
-            void displayDeleteButton(sf::RenderWindow &window);
-            
-            /**
-             * @brief Display the move button
-             * 
-             * @param window The window of the Asset Editor
-             */
-            void displayMoveButton(sf::RenderWindow &window);
-
-            /**
-             * @brief Display the zoom button
-             * 
-             * @param window The window of the Asset Editor
-             */
-            void displayZoomButton(sf::RenderWindow &window);
-            
-            /**
-             * @brief Display the dezoom button
-             * 
-             * @param window The window of the Asset Editor
-             */
-            void displayDezoomButton(sf::RenderWindow &window);
 
             /**
              * @brief Display the toolbar container
@@ -97,6 +60,7 @@ namespace Edition {
             void draw(sf::RenderWindow &window);
         protected:
         private:
+            std::vector<ToolbarButton> _toolbarButtons;
     };
 }
 
