@@ -86,6 +86,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
         players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
     }
 
+    showMetrics = false;
     settings = std::make_shared<Settings>(window);
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
@@ -146,10 +147,14 @@ void RType::Game::play() {
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window->close();
+            if (event.type == sf::Event::Closed)
+                window->close();
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Escape) {
                     settings->displaySettings(true);
+                }
+                if (event.key.code == sf::Keyboard::F3) {
+                    showMetrics = !showMetrics;
                 }
             }
         }
@@ -181,6 +186,9 @@ void RType::Game::play() {
         if (piou) {
             displayPiou();
             piou = false;
+        }
+        if (showMetrics) {
+            metrics.displayFPS(*window);
         }
         window->display();
     }

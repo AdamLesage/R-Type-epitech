@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include "../../GameMetrics/GameMetrics.hpp"
 #include "../../../shared/entities/Entity.hpp"
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
@@ -105,6 +106,8 @@ namespace RType {
                 _mediator; // Public attribute to be able to access it from the derived class.
         private:
             std::shared_ptr<sf::RenderWindow> window;
+            GameMetrics metrics;
+            bool showMetrics;
             int currentFrame;
             float frameDuration;
             sf::Clock BackgroundClock;
