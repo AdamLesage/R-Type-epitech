@@ -9,8 +9,10 @@
 #define ASSETEDITOR_HPP_
 
 #include <iostream>
+#include "../Sidebar/RightSidebar.hpp"
 #include <SFML/Graphics.hpp>
 #include "../assetSelector/AssetSelector.hpp"
+#include <memory>
 
 namespace Edition {
     class AssetEditor {
@@ -34,6 +36,7 @@ namespace Edition {
         private:
             std::shared_ptr<sf::RenderWindow> _window;
             AssetSelector assetSelector;
+            std::shared_ptr<RightSidebar> _rightSidebar;
     };
 }
 
