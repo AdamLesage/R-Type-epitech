@@ -28,11 +28,19 @@ class ToolBar {
          */
         void open();
 
+        /**
+         * @brief Handles the events of the toolbar.
+         */
+        void handleEvent(const sf::Event& event, sf::RenderWindow& window);
+
     private:
         bool isVisible;
         sf::RectangleShape toolbarShape;
         sf::Font font;
         sf::Text text;
+        sf::RectangleShape dropdownShape;
+        bool dropdownOpen;
+        std::map<std::string, sf::Text> menuOptions;
 };
 
 #endif /* !TOOLBAR_HPP_ */

@@ -155,6 +155,7 @@ void RType::Game::play() {
                     toolbar.open();
                 }
             }
+            toolbar.handleEvent(event, *window);
         }
 
         _systems.control_system(_registry, *window.get(), _mediator,
