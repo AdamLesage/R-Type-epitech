@@ -151,6 +151,9 @@ void RType::Game::play() {
                 if (event.key.code == sf::Keyboard::Escape) {
                     settings->displaySettings(true);
                 }
+                if (event.key.code == sf::Keyboard::F3) {
+                    toolbar.open();
+                }
             }
         }
 
@@ -182,6 +185,7 @@ void RType::Game::play() {
             displayPiou();
             piou = false;
         }
+        toolbar.draw(*window);
         window->display();
     }
 }

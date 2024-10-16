@@ -8,6 +8,7 @@
 #include "../../../shared/systems/Systems.hpp"
 #include "../../Mediator/IMediator.hpp"
 #include "Settings.hpp"
+#include "ToolBar.hpp"
 #include "../../Camera.hpp"
 #include <mutex>
 #include <libconfig.h++>
@@ -105,6 +106,7 @@ namespace RType {
                 _mediator; // Public attribute to be able to access it from the derived class.
         private:
             std::shared_ptr<sf::RenderWindow> window;
+            ToolBar toolbar;
             int currentFrame;
             float frameDuration;
             sf::Clock BackgroundClock;
