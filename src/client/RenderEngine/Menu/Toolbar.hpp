@@ -13,13 +13,15 @@
 #include <map>
 #include <string>
 
-class ToolBar {
+class Toolbar {
     public:
-        ToolBar();
-        ~ToolBar();
+        Toolbar();
+        ~Toolbar();
 
         /**
          * @brief Draw the toolbar.
+         * 
+         * @param window window to draw-in.
          */
         void draw(sf::RenderWindow& window);
 
@@ -30,8 +32,16 @@ class ToolBar {
 
         /**
          * @brief Handles the events of the toolbar.
+         * 
+         * @param event event informations.
+         * @param window window to interact with.
          */
         void handleEvent(const sf::Event& event, sf::RenderWindow& window);
+
+        /**
+         * @brief Initialize options to display in Overlay dropdown menu.
+         */
+        void initializeMenuOptions();
 
     private:
         bool isVisible;
@@ -40,6 +50,7 @@ class ToolBar {
         sf::Text text;
         sf::RectangleShape dropdownShape;
         bool dropdownOpen;
+        std::map<std::string, bool> optionSelected;
         std::map<std::string, sf::Text> menuOptions;
 };
 
