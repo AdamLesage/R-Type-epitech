@@ -59,8 +59,23 @@ void Toolbar::open()
     isVisible = !isVisible;
 }
 
+void Toolbar::updateHoveredOption(sf::RenderWindow& window)
+{
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+    hoveredOpt.clear();
+    for (auto& [optionName, textOption] : menuOptions) {
+        if (textOption.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+            hoveredOpt = optionName;
+        }
+    }
+}
+
 void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window)
 {
+    if (event.type == sf::Event::MouseMoved) {
+        updateHoveredOption(window);
+    }
     if (event.type == sf::Event::MouseButtonPressed) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (text.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
@@ -85,8 +100,13 @@ void Toolbar::draw(sf::RenderWindow& window)
     }
     if (dropdownOpen) {
         window.draw(dropdownShape);
-        for (const auto& [name, textoption] : menuOptions) {
-            window.draw(textoption);
+        for (auto& [name, textOption] : menuOptions) {
+            if (name == hoveredOpt) {
+                textOption.setFillColor(sf::Color::Yellow);
+            } else {
+                textOption.setFillColor(sf::Color::White);
+            }
+            window.draw(textOption);
         }
     }
 }

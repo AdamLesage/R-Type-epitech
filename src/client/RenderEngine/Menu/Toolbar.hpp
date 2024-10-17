@@ -43,6 +43,13 @@ class Toolbar {
          */
         void initializeMenuOptions();
 
+        /**
+         * @brief Update the option hovered by the mouse
+         * 
+         * @param window window to interact with.
+         */
+        void updateHoveredOption(sf::RenderWindow& window);
+
     private:
         bool isVisible;
         sf::RectangleShape toolbarShape;
@@ -50,6 +57,7 @@ class Toolbar {
         sf::Text text;
         sf::RectangleShape dropdownShape;
         bool dropdownOpen;
+        std::string hoveredOpt;
         std::map<std::string, bool> optionSelected;
         std::map<std::string, sf::Text> menuOptions;
 };
