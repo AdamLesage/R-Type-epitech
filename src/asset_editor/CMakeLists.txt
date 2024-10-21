@@ -13,7 +13,15 @@ find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 set(SOURCES
     main.cpp
     Sidebar/RightSidebar.cpp
+    Sidebar/Toolbar.cpp
+    Sidebar/ToolbarButton.cpp
     AssetEditor/AssetEditor.cpp
+    EditionScreen/EditionScreen.cpp
+    history/Asset.cpp
+    history/AddAsset.cpp
+    history/RemoveAsset.cpp
+    history/MoveAsset.cpp
+    history/CommandManager.cpp
     Sidebar/selectBar/SelectBar.cpp
     assetSelector/AssetSelector.cpp
 )

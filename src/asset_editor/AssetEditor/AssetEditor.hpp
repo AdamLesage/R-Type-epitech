@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include "../Sidebar/RightSidebar.hpp"
+#include "../Sidebar/Toolbar.hpp"
+#include "../EditionScreen/EditionScreen.hpp"
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -51,6 +53,8 @@ namespace Edition {
             std::unique_ptr<sf::Texture> mouseTexture;
             std::string mousePathTexture;
             std::unique_ptr<sf::RectangleShape> mousePickRect;
+            Toolbar _toolbar;
+            EditionScreen _editionScreen;
     };
 }
 

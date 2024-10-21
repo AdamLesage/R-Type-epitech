@@ -12,6 +12,8 @@ Edition::AssetEditor::AssetEditor()
     _window = std::make_shared<sf::RenderWindow>();
     _window->create(sf::VideoMode(1920, 1080), "Asset Editor");
     _rightSidebar = std::make_shared<RightSidebar>();
+    _toolbar = Toolbar();
+    _editionScreen = EditionScreen();
 }
 
 Edition::AssetEditor::~AssetEditor()
@@ -27,7 +29,9 @@ void Edition::AssetEditor::run()
             manageDragAndDrop(event, texture);
         }
         _window->clear();
+        _toolbar.draw(*_window.get());
         _rightSidebar->draw(_window);
+        _editionScreen.draw(*_window.get());
         if (mouseTexture != nullptr) {
             _window->draw(*mousePickRect.get());
         }
