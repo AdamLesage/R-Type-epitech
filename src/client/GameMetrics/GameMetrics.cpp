@@ -25,7 +25,8 @@ void GameMetrics::displayFPS(sf::RenderWindow& window)
     static sf::Font font;
 
     frameCnt += 1;
-    if (!font.loadFromFile("./assets/r-type.ttf")) {
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
         std::cerr << "Failed to load font" << std::endl;
     }
     if (clock.getElapsedTime().asSeconds() >= 1.0f) {
@@ -45,7 +46,8 @@ void GameMetrics::displayMemory(sf::RenderWindow& window)
     sf::Text text;
     static sf::Font font;
 
-    if (!font.loadFromFile("./assets/r-type.ttf")) {
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
         std::cerr << "Failed to load font" << std::endl;
         return;
     }
