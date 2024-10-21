@@ -14,6 +14,7 @@ Edition::RightSidebar::RightSidebar()
 {
     _currentSidebarSelection = "Assets";
     _isSidebarOpen = true;
+    this->componentsEditor = std::make_unique<ComponentsEditor>();
 }
 
 Edition::RightSidebar::~RightSidebar()
@@ -180,6 +181,11 @@ std::string Edition::RightSidebar::handleEvent(const sf::Event& event)
 {
     this->assetSelector->handleEvent(event);
     return this->assetSelector->handlePickSprite(event);
+}
+
+void Edition::RightSidebar::updateSelectedEntity(std::shared_ptr<Edition::Asset> asset)
+{
+    this->componentsEditor->updateSelectedEntity(asset);
 }
 
 void Edition::RightSidebar::draw(std::shared_ptr<sf::RenderWindow> window)

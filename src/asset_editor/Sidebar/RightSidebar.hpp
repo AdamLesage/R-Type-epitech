@@ -12,7 +12,9 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <array>
-#include "../assetSelector/AssetSelector.hpp"
+#include "./assetSelector/AssetSelector.hpp"
+#include "../history/Asset.hpp"
+#include "./componentsEditor/ComponentsEditor.hpp"
 
 namespace Edition {
     /**
@@ -82,6 +84,13 @@ namespace Edition {
              * @param event the event of the window
              */
             std::string handleEvent(const sf::Event& event);
+
+            /**
+             * @brief Updates the currently selected asset with new attributes.
+             * 
+             * @param asset The asset to be modified.
+             */
+            void updateSelectedEntity(std::shared_ptr<Edition::Asset> asset);
         protected:
             /**
              * @brief The current selection in the sidebar: "Assets", "Components"
@@ -95,6 +104,7 @@ namespace Edition {
              */
             void toggleSidebar();
             std::unique_ptr<AssetSelector> assetSelector;
+            std::unique_ptr<ComponentsEditor> componentsEditor;
     };
 }
 

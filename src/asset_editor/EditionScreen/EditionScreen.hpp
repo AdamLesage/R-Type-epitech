@@ -52,8 +52,12 @@ namespace Edition {
              * 
              * @param event The event to handle
              */
-            void handleEvent(const sf::Event &event);
+            std::shared_ptr<Edition::Asset> handleEvent(const sf::Event &event);
 
+            /**
+             * @brief The command manager
+             */
+            CommandManager commandManager;
         private:
             sf::RectangleShape _centralArea;
 
@@ -62,10 +66,6 @@ namespace Edition {
              */
             std::vector<std::shared_ptr<Edition::Asset>> _assets;
 
-            /**
-             * @brief The command manager
-             */
-            CommandManager commandManager;
     };
 }
 

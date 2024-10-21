@@ -15,6 +15,9 @@ set(SOURCES
     Sidebar/RightSidebar.cpp
     Sidebar/Toolbar.cpp
     Sidebar/ToolbarButton.cpp
+    Sidebar/assetSelector/AssetSelector.cpp
+    Sidebar/componentsEditor/ComponentsEditor.cpp
+    Sidebar/selectBar/SelectBar.cpp
     AssetEditor/AssetEditor.cpp
     EditionScreen/EditionScreen.cpp
     history/Asset.cpp
@@ -22,8 +25,6 @@ set(SOURCES
     history/RemoveAsset.cpp
     history/MoveAsset.cpp
     history/CommandManager.cpp
-    Sidebar/selectBar/SelectBar.cpp
-    assetSelector/AssetSelector.cpp
 )
 
 # Create executable

@@ -27,6 +27,10 @@ void Edition::AssetEditor::run()
         while (_window->pollEvent(event)) {
             std::string texture = this->_rightSidebar->handleEvent(event);
             manageDragAndDrop(event, texture);
+            std::shared_ptr<Edition::Asset> asset = this->_editionScreen.handleEvent(event);
+            if (asset != nullptr) {
+                _rightSidebar->updateSelectedEntity(asset);
+            }
         }
         _window->clear();
         _toolbar.draw(*_window.get());
@@ -42,7 +46,6 @@ void Edition::AssetEditor::run()
 void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &texturPath)
 {
     if (!texturPath.empty() && !mouseTexture) {
-        printf("test");
         mousePickRect = std::make_unique<sf::RectangleShape>(sf::Vector2f(_window->getSize().x * 0.20f, 100.f));
         mousePathTexture = texturPath;
 

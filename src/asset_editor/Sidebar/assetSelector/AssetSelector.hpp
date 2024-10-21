@@ -20,7 +20,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include "../Sidebar/selectBar/SelectBar.hpp"
+#include "../selectBar/SelectBar.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
