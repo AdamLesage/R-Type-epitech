@@ -9,6 +9,7 @@
 #define ASSET_HPP_
 
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 namespace Edition {
     /**
@@ -37,6 +38,13 @@ namespace Edition {
              * @param dy The y offset
              */
             void move(int dx, int dy);
+
+            /**
+             * @brief Draw the asset
+             * 
+             * @param window The window of the Asset Editor
+             */
+            void draw(sf::RenderWindow &window);
 
         private:
             /**

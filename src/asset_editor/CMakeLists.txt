@@ -18,6 +18,10 @@ set(SOURCES
     AssetEditor/AssetEditor.cpp
     EditionScreen/EditionScreen.cpp
     history/Asset.cpp
+    history/AddAsset.cpp
+    history/RemoveAsset.cpp
+    history/MoveAsset.cpp
+    history/CommandManager.cpp
 )
 
 # Create executable

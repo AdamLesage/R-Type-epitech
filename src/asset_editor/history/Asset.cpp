@@ -23,3 +23,8 @@ void Edition::Asset::move(int dx, int dy)
     _x += dx;
     _y += dy;
 }
+
+void Edition::Asset::draw(sf::RenderWindow &window)
+{
+    (void)window;
+}

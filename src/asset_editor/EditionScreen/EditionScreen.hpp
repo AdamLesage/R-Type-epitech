@@ -8,9 +8,12 @@
 #ifndef EDITIONSCREEN_HPP_
 #define EDITIONSCREEN_HPP_
 
+#include "../history/Asset.hpp"
+
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <memory>
 
 namespace Edition {
 
@@ -48,11 +51,12 @@ namespace Edition {
             void handleEvent(const sf::Event &event);
 
         private:
-            sf::RectangleShape _centralArea; // Zone centrale pour le drag and drop
-            std::vector<sf::Sprite> _assets; // Les assets en cours de drag and drop
-            bool _isDragging; // Indique si un asset est en cours de drag
-            sf::Vector2f _dragOffset; // Offset pour le déplacement d'un asset
-            int _selectedAssetIndex; // Index de l'asset sélectionné
+            sf::RectangleShape _centralArea;
+
+            /**
+             * @brief The assets of the scene
+             */
+            std::vector<std::shared_ptr<Edition::Asset>> _assets;
     };
 }
 

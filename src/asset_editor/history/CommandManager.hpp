@@ -55,12 +55,12 @@ namespace Edition {
             /**
              * @brief Stack of commands
              */
-            std::stack<std::unique_ptr<ICommand>> undoStack;
+            std::stack<std::shared_ptr<ICommand>> undoStack;
 
             /**
              * @brief Stack of commands
              */
-            std::stack<std::unique_ptr<ICommand>> redoStack;
+            std::stack<std::shared_ptr<ICommand>> redoStack;
     };
 }
 

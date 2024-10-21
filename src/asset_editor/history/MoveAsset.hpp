@@ -29,7 +29,7 @@ namespace Edition {
              * @param dx The x offset
              * @param dy The y offset
              */
-            MoveAssetCommand(std::shared_ptr<Asset> asset, int dx, int dy);
+            MoveAsset(std::shared_ptr<Asset> asset, int dx, int dy);
 
             /**
              * @brief Destroy the Move Asset object
