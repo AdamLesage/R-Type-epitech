@@ -73,6 +73,15 @@ void Toolbar::updateHoveredOption(sf::RenderWindow& window)
 
 void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window)
 {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F3) {
+        if (dropdownOpen) {
+            dropdownOpen = false;
+            hoveredOpt.clear();
+        } else {
+            dropdownOpen = true;
+            dropdownOpen = false;
+        }
+    }
     if (event.type == sf::Event::MouseMoved) {
         updateHoveredOption(window);
     }
@@ -80,6 +89,11 @@ void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window)
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (text.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
             dropdownOpen = !dropdownOpen;
+            if (dropdownOpen) {
+                hoveredOpt.clear();
+            } else {
+                dropdownOpen = false;
+            }
         }
         if (dropdownOpen) {
             for (auto& [optionName, optionText] : menuOptions) {
