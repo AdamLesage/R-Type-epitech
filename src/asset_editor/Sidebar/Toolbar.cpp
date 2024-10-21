@@ -47,9 +47,15 @@ void Edition::Toolbar::displayToolbarButtons(sf::RenderWindow &window)
 {
     sf::Cursor cursor;
     std::string iconPath;
+    bool isHovered = false;
 
     for (auto &button : _toolbarButtons) {
         iconPath = button.update(window, _currentSelection);
+        if (iconPath == "hovered") {
+            isHovered = true;
+        }
+
+        // Check the icon path to set the current selection
         if (!iconPath.empty() && iconPath != "hovered") {
             std::string selectionStr = iconPath.substr(iconPath.find_last_of(PATH_SEPARATOR) + 1);
             if (selectionStr == "undo.png") this->setCurrentSelection(CurrentSelection::UNDO);
@@ -63,12 +69,19 @@ void Edition::Toolbar::displayToolbarButtons(sf::RenderWindow &window)
         button.draw(window);
     }
 
-    if (iconPath == "hovered") {
+    // Set the hand cursor if a button is hovered
+    if (isHovered) {
+        if (cursor.loadFromSystem(sf::Cursor::Hand)) {
+            window.setMouseCursor(cursor);
+        }
+    } else {
+        // Set the arrow cursor if no button is hovered
         if (cursor.loadFromSystem(sf::Cursor::Arrow)) {
             window.setMouseCursor(cursor);
         }
     }
 }
+
 
 void Edition::Toolbar::displayToolbarContainer(sf::RenderWindow &window)
 {
