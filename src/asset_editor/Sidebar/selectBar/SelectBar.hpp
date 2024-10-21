@@ -80,7 +80,7 @@ namespace Edition
              * 
              * @param event SFML event to be processed (keyboard, mouse, etc.).
              */
-            void handleEvent(const sf::Event event);
+            bool handleEvent(const sf::Event event);
         private:
             /**
              * @brief A vector containing the list of available options as strings in the selection bar.

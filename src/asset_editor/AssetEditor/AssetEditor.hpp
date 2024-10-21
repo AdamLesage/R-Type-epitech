@@ -31,10 +31,26 @@ namespace Edition {
              */
             void run();
 
+
+
         protected:
         private:
+            /**
+             * @brief Handles drag-and-drop events for textures.
+             * 
+             * Updates the rectangle shape position based on mouse events 
+             * and manages the texture loading and unloading.
+             * 
+             * @param event The SFML event to process.
+             * @param texturePath The path of the texture to be dragged.
+             */
+            void manageDragAndDrop(sf::Event &event, std::string &texturPath);
+
             std::shared_ptr<sf::RenderWindow> _window;
             std::shared_ptr<RightSidebar> _rightSidebar;
+            std::unique_ptr<sf::Texture> mouseTexture;
+            std::string mousePathTexture;
+            std::unique_ptr<sf::RectangleShape> mousePickRect;
     };
 }
 

@@ -174,9 +174,10 @@ void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindo
     }
 }
 
-void Edition::RightSidebar::handleEvent(const sf::Event& event)
+std::string Edition::RightSidebar::handleEvent(const sf::Event& event)
 {
     this->assetSelector->handleEvent(event);
+    return this->assetSelector->handlePickSprite(event);
 }
 
 void Edition::RightSidebar::draw(std::shared_ptr<sf::RenderWindow> window)

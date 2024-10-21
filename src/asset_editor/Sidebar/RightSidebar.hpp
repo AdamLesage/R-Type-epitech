@@ -81,7 +81,7 @@ namespace Edition {
              * 
              * @param event the event of the window
              */
-            void handleEvent(const sf::Event& event);
+            std::string handleEvent(const sf::Event& event);
         protected:
             /**
              * @brief The current selection in the sidebar: "Assets", "Components"

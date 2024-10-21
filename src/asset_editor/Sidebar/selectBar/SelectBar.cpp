@@ -78,38 +78,29 @@ std::string Edition::SelectBar::findSelectedOption()
     return (this->_selectionOption[this->selectedOptionIndex]);
 }
 
-void Edition::SelectBar::handleEvent(const sf::Event event) {
+bool Edition::SelectBar::handleEvent(const sf::Event event) {
     if (event.type == sf::Event::MouseMoved) {
-        // Parcourir chaque bouton
         for (size_t i = 0; i < _selectionButton.size(); i++) {
             sf::RectangleShape& button = _selectionButton[i];
 
-            // Utiliser la position de la souris depuis l'événement MouseMoved
             if (button.getGlobalBounds().contains(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y))) {
-                // Changer la couleur du bouton lorsqu'il est survolé
-                button.setFillColor(sf::Color(100, 100, 100));  // Couleur survolée
+                button.setFillColor(sf::Color(100, 100, 100));
             } else {
-                // Remettre à la couleur par défaut si la souris n'est plus dessus
-                button.setFillColor(sf::Color::Transparent);  // Couleur par défaut
+                button.setFillColor(sf::Color::Transparent);
             }
         }
-
     }
 
-    // Gérer l'événement de clic de la souris
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-        // Parcourir chaque bouton
         for (size_t i = 0; i < _selectionButton.size(); i++) {
             sf::RectangleShape& button = _selectionButton[i];
 
-            // Utiliser la position de la souris depuis l'événement MouseButtonPressed
             if (button.getGlobalBounds().contains((event.mouseButton.x), (event.mouseButton.y))) {
-                // Changer la couleur du bouton lorsqu'il est cliqué
-                button.setFillColor(sf::Color(175, 175, 175));  // Couleur en cliquant
-
-                // Mettre à jour l'index de l'option sélectionnée
+                button.setFillColor(sf::Color(175, 175, 175));
                 selectedOptionIndex = i;
+                return true;
             }
         }
     }
+    return false;
 }
