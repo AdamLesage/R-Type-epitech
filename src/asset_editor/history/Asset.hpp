@@ -24,12 +24,34 @@ namespace Edition {
              * @param assetPath The path to the asset
              */
             Asset(int x, int y, std::string assetPath);
+
+            /**
+             * @brief Destroy the Asset object
+             */
             ~Asset();
+
+            /**
+             * @brief Move the asset
+             * 
+             * @param dx The x offset
+             * @param dy The y offset
+             */
             void move(int dx, int dy);
 
         private:
+            /**
+             * @brief The x position of the asset
+             */
             int _x;
+
+            /**
+             * @brief The y position of the asset
+             */
             int _y;
+
+            /**
+             * @brief The path to the asset
+             */
             std::string _assetPath;
     }; // class Asset
 } // namespace Edition

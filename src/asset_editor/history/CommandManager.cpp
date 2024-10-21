@@ -49,3 +49,31 @@ void Edition::CommandManager::redo()
     command->execute();
     undoStack.push(std::move(command));
 }
+
+/* Example of use
+int main() {
+    std::vector<std::shared_ptr<Asset>> assets;
+    CommandManager commandManager;
+
+    auto asset1 = std::make_shared<Asset>(0, 0);
+    commandManager.executeCommand(std::make_unique<AddAssetCommand>(assets, asset1));
+
+    asset1->print();
+
+    commandManager.executeCommand(std::make_unique<MoveAssetCommand>(asset1, 5, 5));
+    asset1->print();
+
+    commandManager.undo();
+    asset1->print();
+
+    commandManager.redo();
+    asset1->print();
+
+    commandManager.executeCommand(std::make_unique<RemoveAssetCommand>(assets));
+
+    commandManager.undo();
+    asset1->print();
+
+    return 0;
+}
+*/
