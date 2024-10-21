@@ -217,6 +217,13 @@ void GameLogique::handleRecieve() {
             case 0x40:
                 handleClientInput(message);
                 break;
+            case 0x42: {
+                int pos_x, pos_y;
+                std::memcpy(&pos_x, &message.first[2], sizeof(int));
+                std::memcpy(&pos_y, &message.first[6], sizeof(int));
+                spawnEnnemy(message.first[1], static_cast<float>(pos_x), static_cast<float>(pos_y));
+                break;
+            }
             default:
                 std::cout << "unknowCommand" << std::endl;
                 break;
