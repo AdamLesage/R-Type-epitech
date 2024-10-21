@@ -14,6 +14,7 @@
 #include <string>
 
 namespace Edition {
+
     /**
      * @brief Toolbar of the Asset Editor
      * 
@@ -58,9 +59,17 @@ namespace Edition {
              * @param window The window of the Asset Editor
              */
             void draw(sf::RenderWindow &window);
+
+            /**
+             * @brief Set the current selection
+             * 
+             * @param selection The current selection
+             */
+            void setCurrentSelection(CurrentSelection selection) { _currentSelection = selection; }
         protected:
         private:
             std::vector<ToolbarButton> _toolbarButtons;
+            CurrentSelection _currentSelection;
     };
 }
 

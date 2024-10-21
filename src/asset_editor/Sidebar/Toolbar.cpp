@@ -34,6 +34,8 @@ Edition::Toolbar::Toolbar()
     _toolbarButtons.push_back(ToolbarButton(movePath, sf::Vector2f(220, 5)));
     _toolbarButtons.push_back(ToolbarButton(dezoomPath, sf::Vector2f(320, 5)));
     _toolbarButtons.push_back(ToolbarButton(zoomPath, sf::Vector2f(270, 5)));
+
+    _currentSelection = MOVE;
 }
 
 
@@ -43,17 +45,25 @@ Edition::Toolbar::~Toolbar()
 
 void Edition::Toolbar::displayToolbarButtons(sf::RenderWindow &window)
 {
-    bool anyButtonUpdated = false;
     sf::Cursor cursor;
+    std::string iconPath;
 
     for (auto &button : _toolbarButtons) {
-        if (button.update(window)) {
-            anyButtonUpdated = true;
+        iconPath = button.update(window, _currentSelection);
+        if (!iconPath.empty() && iconPath != "hovered") {
+            std::string selectionStr = iconPath.substr(iconPath.find_last_of(PATH_SEPARATOR) + 1);
+            if (selectionStr == "undo.png") this->setCurrentSelection(CurrentSelection::UNDO);
+            else if (selectionStr == "redo.png") this->setCurrentSelection(CurrentSelection::REDO);
+            else if (selectionStr == "save.png") this->setCurrentSelection(CurrentSelection::SAVE);
+            else if (selectionStr == "delete.png") this->setCurrentSelection(CurrentSelection::DELETE);
+            else if (selectionStr == "move.png") this->setCurrentSelection(CurrentSelection::MOVE);
+            else if (selectionStr == "zoom.png") this->setCurrentSelection(CurrentSelection::ZOOM);
+            else if (selectionStr == "dezoom.png") this->setCurrentSelection(CurrentSelection::DEZOOM);
         }
         button.draw(window);
     }
 
-    if (!anyButtonUpdated) {
+    if (iconPath == "hovered") {
         if (cursor.loadFromSystem(sf::Cursor::Arrow)) {
             window.setMouseCursor(cursor);
         }

@@ -5,6 +5,16 @@
 ** ToolbarButton
 */
 
+#if defined(_WIN32) || defined(_WIN64)
+    #include <windows.h>
+    #define LIB_EXTENSION ".dll"
+    #define PATH_SEPARATOR "\\"
+#else
+    #include <dlfcn.h>
+    #define LIB_EXTENSION ".so"
+    #define PATH_SEPARATOR "/"
+#endif
+
 #include "ToolbarButton.hpp"
 
 Edition::ToolbarButton::ToolbarButton(std::string buttonIconAssetPath, sf::Vector2f position) {
@@ -44,11 +54,10 @@ Edition::ToolbarButton::ToolbarButton(std::string buttonIconAssetPath, sf::Vecto
         backgroundBounds.top + (backgroundBounds.height - iconBounds.height * scaleY) / 2);
 }
 
-bool Edition::ToolbarButton::update(sf::RenderWindow& window)
-{
+std::string Edition::ToolbarButton::update(sf::RenderWindow& window, CurrentSelection &currentSelection) {
     static sf::Clock clickCooldownClock;
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-    sf::FloatRect bounds = _backgroundRectangle.getGlobalBounds();
+    sf::FloatRect bounds       = _backgroundRectangle.getGlobalBounds();
     sf::Cursor cursor;
 
     // Check if the mouse is hovering over the button
@@ -61,21 +70,28 @@ bool Edition::ToolbarButton::update(sf::RenderWindow& window)
         }
 
         // Check if the mouse button is pressed while hovering and cooldown has passed
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickCooldownClock.getElapsedTime().asSeconds() > 0.1f) {
-            std::cout << "Button " << _buttonIconAssetPath << " clicked!" << std::endl;
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)
+            && clickCooldownClock.getElapsedTime().asSeconds() > 0.1f) {
             _backgroundRectangle.setFillColor(sf::Color(175, 175, 175));
             clickCooldownClock.restart();
+            return _buttonIconAssetPath;
         }
-        return true;
+        return "hovered";
     } else {
-        _backgroundRectangle.setFillColor(_backgroundColor);
-        return false;
+        std::string selectionStr = _buttonIconAssetPath.substr(_buttonIconAssetPath.find_last_of(PATH_SEPARATOR) + 1);
+        if (selectionStr == "undo.png" && currentSelection == UNDO) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "redo.png" && currentSelection == REDO) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "save.png" && currentSelection == SAVE) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "delete.png" && currentSelection == DELETE) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "move.png" && currentSelection == MOVE) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "zoom.png" && currentSelection == ZOOM) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "dezoom.png" && currentSelection == DEZOOM) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else _backgroundRectangle.setFillColor(_backgroundColor);
     }
-    return false;
+    return "";
 }
 
-void Edition::ToolbarButton::draw(sf::RenderWindow& window)
-{
+void Edition::ToolbarButton::draw(sf::RenderWindow& window) {
     window.draw(_backgroundRectangle);
     window.draw(_buttonIconSprite);
 }

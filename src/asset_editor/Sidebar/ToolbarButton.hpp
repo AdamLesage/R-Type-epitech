@@ -14,6 +14,13 @@
 
 namespace Edition {
     /**
+     * @brief Current selection of the toolbar
+     * 
+     * This will be used to know which tool is currently selected
+     */
+    enum CurrentSelection { UNDO, REDO, SAVE, DELETE, MOVE, ZOOM, DEZOOM };
+
+    /**
      * @brief Toolbar Button of the Asset Editor
      * 
      * This button will be used to display different buttons in the toolbar
@@ -39,9 +46,9 @@ namespace Edition {
              * @brief Update the button with hover and click events
              * 
              * @param window The window of the Asset Editor
-             * @return true if the button is hovered, false otherwise
+             * @return icon path if the button is hovered, empty string otherwise
              */
-            bool update(sf::RenderWindow& window);
+            std::string update(sf::RenderWindow& window, CurrentSelection &currentSelection);
 
             /**
              * @brief Draw the button
