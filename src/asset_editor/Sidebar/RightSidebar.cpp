@@ -174,12 +174,15 @@ void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindo
     }
     if (_currentSidebarSelection == _sidebarSelections[0]) {
         this->assetSelector->display();
+    } else {
+        this->componentsEditor->display(window);
     }
 }
 
 std::string Edition::RightSidebar::handleEvent(const sf::Event& event)
 {
     this->assetSelector->handleEvent(event);
+    this->componentsEditor->handleInput(event);
     return this->assetSelector->handlePickSprite(event);
 }
 

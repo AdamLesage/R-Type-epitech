@@ -46,6 +46,7 @@ namespace Edition {
              */
             void draw(sf::RenderWindow &window);
 
+            sf::FloatRect getGlobalBounds();
         private:
             /**
              * @brief The x position of the asset
@@ -61,7 +62,9 @@ namespace Edition {
              * @brief The path to the asset
              */
             std::string _assetPath;
-    }; // class Asset
-} // namespace Edition
+            sf::Texture _spriteTexture;
+            sf::Sprite _sprite;
+    };
+}; // namespace Edition
 
 #endif /* !ASSET_HPP_ */

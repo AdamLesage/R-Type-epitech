@@ -27,3 +27,8 @@ void Edition::MoveAsset::undo()
 {
     _asset->move(-_dx, -_dy);
 }
+
+void Edition::MoveAsset::redo()
+{
+    _asset->move(_dx, _dy);
+}

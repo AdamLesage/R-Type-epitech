@@ -50,6 +50,13 @@ namespace Edition {
              */
             void undo() override;
 
+            /**
+             * @brief Redo the command
+             * 
+             * This will move the asset again
+             */
+            void redo() override;
+
         protected:
         private:
             /**

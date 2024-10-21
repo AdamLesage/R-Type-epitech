@@ -17,6 +17,8 @@ set(SOURCES
     Sidebar/ToolbarButton.cpp
     Sidebar/assetSelector/AssetSelector.cpp
     Sidebar/componentsEditor/ComponentsEditor.cpp
+    Sidebar/componentsEditor/Input.cpp
+    Sidebar/componentsEditor/InputNumber.cpp
     Sidebar/selectBar/SelectBar.cpp
     AssetEditor/AssetEditor.cpp
     EditionScreen/EditionScreen.cpp

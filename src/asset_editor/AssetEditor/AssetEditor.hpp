@@ -8,10 +8,15 @@
 #ifndef ASSETEDITOR_HPP_
 #define ASSETEDITOR_HPP_
 
-#include <iostream>
 #include "../Sidebar/RightSidebar.hpp"
 #include "../Sidebar/Toolbar.hpp"
 #include "../EditionScreen/EditionScreen.hpp"
+#include "../history/CommandManager.hpp"
+#include "../history/AddAsset.hpp"
+#include "../history/RemoveAsset.hpp"
+#include "../history/MoveAsset.hpp"
+
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -32,8 +37,6 @@ namespace Edition {
              * @brief Run the Asset Editor
              */
             void run();
-
-
 
         protected:
         private:

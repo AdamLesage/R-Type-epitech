@@ -26,3 +26,8 @@ void Edition::AddAsset::undo()
 {
     _assets.pop_back();
 }
+
+void Edition::AddAsset::redo()
+{
+    _assets.push_back(_asset);
+}

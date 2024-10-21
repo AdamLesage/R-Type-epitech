@@ -15,6 +15,8 @@ Edition::EditionScreen::EditionScreen()
     _centralArea.setFillColor(sf::Color(50, 50, 50));
     _centralArea.setOutlineThickness(1);
     _centralArea.setOutlineColor(sf::Color::White);
+
+    commandManager = CommandManager();
 }
 
 Edition::EditionScreen::~EditionScreen()
@@ -34,9 +36,9 @@ std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Ev
 {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         for (auto& it: _assets) {
-            // if (it->getGlobalBounds().contains((event.mouseButton.x), (event.mouseButton.y))) {
-            //     return (it);
-            // }
+            if (it->getGlobalBounds().contains((event.mouseButton.x), (event.mouseButton.y))) {
+                return (it);
+            }
         }
     }
     return nullptr;
