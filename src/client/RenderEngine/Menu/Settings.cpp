@@ -6,10 +6,6 @@
 */
 
 #include "Settings.hpp"
-#include <iostream>
-#include <string>
-#include <cstring>
-
 Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     this->window = _window;
     if (!font.loadFromFile("assets/r-type.ttf")) {

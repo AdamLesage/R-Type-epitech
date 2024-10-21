@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <cstring>
 #include "Button.hpp"
 #include <libconfig.h++>
 #include <string>
