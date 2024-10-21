@@ -74,6 +74,35 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         std::memcpy(&data[1], &player_id, sizeof(int));
         std::string data_str(data, sizeof(data));
         this->_networkEngine->_client->send(data_str);
+        return;
+    }
+    if (event.find("create_entity ") == 0) { // Create an entity 
+        std::string numbers_str = event.substr(14);
+        std::istringstream iss(numbers_str);
+        int entity_type, pos_x, pos_y;
+        if (!(iss >> entity_type >> pos_x >> pos_y)) {
+            std::cerr << "Erreur: le format du message est incorrect !" << std::endl;
+            return;
+        }
+        char data[10];
+        data[0] = 0x42;  // Create entity in protocol
+        char entity_c;
+        if (entity_type == 1)
+            entity_c = 0x03;
+        else if (entity_type == 2)
+            entity_c = 0x04;
+        else if (entity_type == 3)
+            entity_c = 0x05;
+        else if (entity_type == 4)
+            entity_c = 0x06;
+        else 
+            entity_c = 0x03;
+        std::memcpy(&data[1], &entity_c, sizeof(int));
+        std::memcpy(&data[2], &pos_x, sizeof(int));
+        std::memcpy(&data[6], &pos_y, sizeof(int));
+        std::string data_str(data, sizeof(data));
+        this->_networkEngine->_client->send(data_str);
+        return;
     }
 }
 
