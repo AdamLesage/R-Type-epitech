@@ -9,6 +9,10 @@
 #define EDITIONSCREEN_HPP_
 
 #include "../history/Asset.hpp"
+#include "../history/MoveAsset.hpp"
+#include "../history/AddAsset.hpp"
+#include "../history/RemoveAsset.hpp"
+#include "../history/CommandManager.hpp"
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -57,6 +61,11 @@ namespace Edition {
              * @brief The assets of the scene
              */
             std::vector<std::shared_ptr<Edition::Asset>> _assets;
+
+            /**
+             * @brief The command manager
+             */
+            CommandManager commandManager;
     };
 }
 
