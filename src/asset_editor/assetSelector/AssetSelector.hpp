@@ -19,6 +19,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include "../Sidebar/selectBar/SelectBar.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -32,14 +33,14 @@ namespace Edition {
      */
     class AssetSelector {
         public:
-            AssetSelector();
+            AssetSelector(std::shared_ptr<sf::RenderWindow> window);
             ~AssetSelector();
             /**
              * @brief display the AssetSelector on the window
              * 
              * @param window the window of the assetEditor
              */
-            void display(std::shared_ptr<sf::RenderWindow> window);
+            void display();
             /**
              * @brief handle the scroll on the AssetSelector;
              * @param event the event of the window
@@ -57,9 +58,11 @@ namespace Edition {
             std::unordered_map<std::string, std::unordered_map<std::string, sf::Texture*>> assetMap;
             std::array<std::string, 3> extensions = {".png", ".jpg", ".jpeg"};
             sf::View AssetSelectorView;
-            float scrollOffset = 0; // Décalage pour le scroll
-            const float scrollSpeed = 20; // Vitesse de scroll (modifiable)
+            float scrollOffset = 0;
+            const float scrollSpeed = 20;
             float maxScrollOffset = 0;
+            std::unique_ptr<SelectBar> selectBar;
+            std::shared_ptr<sf::RenderWindow> _window;
     };
 }
 

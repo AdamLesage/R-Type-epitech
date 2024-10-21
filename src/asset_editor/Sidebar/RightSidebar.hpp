@@ -94,7 +94,7 @@ namespace Edition {
              * @brief Toggle the sidebar open or close
              */
             void toggleSidebar();
-            AssetSelector assetSelector;
+            std::unique_ptr<AssetSelector> assetSelector;
     };
 }
 

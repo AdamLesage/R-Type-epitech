@@ -170,17 +170,20 @@ void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindo
         currentX += textBounds.width + padding + gap;
     }
     if (_currentSidebarSelection == _sidebarSelections[0]) {
-        this->assetSelector.display(window);
+        this->assetSelector->display();
     }
 }
 
 void Edition::RightSidebar::handleEvent(const sf::Event& event)
 {
-    this->assetSelector.handleEvent(event);
+    this->assetSelector->handleEvent(event);
 }
 
 void Edition::RightSidebar::draw(std::shared_ptr<sf::RenderWindow> window)
 {
+    if (this->assetSelector.get() == nullptr) {
+        assetSelector.reset(new AssetSelector(window));
+    }
     if (_isSidebarOpen == true) {
         this->drawContainer(window);
         this->displayTabSelections(window);

@@ -7,46 +7,63 @@
 
 #include "AssetSelector.hpp"
 
-Edition::AssetSelector::AssetSelector()
+Edition::AssetSelector::AssetSelector(std::shared_ptr<sf::RenderWindow> window)
 {
+    _window = window;
     std::string assetPath = std::string("assets");
     AssetSelectorView = sf::View(sf::FloatRect(500, 0, 500, 1100));
     findAndLoadAsset(assetPath);
+    std::vector<std::string> directory;
+    directory.reserve(this->assetMap.size());
+    for (auto it : this->assetMap) {
+        directory.push_back(it.first);
+    }
+    this->selectBar = std::make_unique<Edition::SelectBar>(directory, _window->getSize().x * 0.775, 50, _window->getSize().x - _window->getSize().x * 0.775);
 }
 
 Edition::AssetSelector::~AssetSelector()
 {
 }
 
-void Edition::AssetSelector::display(std::shared_ptr<sf::RenderWindow> window)
+void Edition::AssetSelector::display()
 {
+    sf::Event event;
+    selectBar->handleEvent(event);
     std::vector<sf::RectangleShape> elements;
-    int Posx = window->getSize().x * 0.775;
-    int Posy = 50 + scrollOffset;
+    int Posx = _window->getSize().x * 0.775;
+    int Posy = this->selectBar->getHeightSelectBar() + scrollOffset;
+    std::string category = this->selectBar->findSelectedOption();
+
 
     float totalHeight = 0;
-    for (auto& it: this->assetMap["assets/game_launch"]) {
+    for (auto& it: this->assetMap[category]) {
         totalHeight += 150;
     }
 
-    float viewHeight = window->getSize().y;
+    float viewHeight = _window->getSize().y;
     maxScrollOffset = viewHeight - totalHeight;
 
-    for (auto& it: this->assetMap["assets/game_launch"]) {
-        sf::RectangleShape shape(sf::Vector2f(window->getSize().x * 0.20, 100));
-        shape.setPosition(sf::Vector2f(Posx, Posy));
-        shape.setTexture(it.second);
-        elements.push_back(shape);
+    for (auto& it: this->assetMap[category]) {
+        if (Posy > this->selectBar->getHeightSelectBar()) {
+            sf::RectangleShape shape(sf::Vector2f(_window->getSize().x * 0.20, 100));
+            shape.setPosition(sf::Vector2f(Posx, Posy));
+            shape.setTexture(it.second);
+            elements.push_back(shape);
+        }
         Posy += 150;
     }
 
     for (auto& it: elements) {
-        window->draw(it);
+        _window->draw(it);
     }
+    this->selectBar->display(_window);
 }
 
 void Edition::AssetSelector::handleEvent(const sf::Event& event)
 {
+    if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed) {
+        selectBar->handleEvent(event);
+    }
     if (event.type == sf::Event::MouseWheelScrolled) {
         if (event.mouseWheelScroll.delta > 0) {
             scrollOffset += scrollSpeed;
@@ -54,7 +71,7 @@ void Edition::AssetSelector::handleEvent(const sf::Event& event)
             scrollOffset -= scrollSpeed;
         }
     
-        scrollOffset = std::clamp(scrollOffset, maxScrollOffset, 0.0f);
+        scrollOffset = std::clamp(scrollOffset, maxScrollOffset - this->selectBar->getHeightSelectBar(), 0.0f);
     }
 }
 
@@ -74,7 +91,10 @@ void Edition::AssetSelector::findAndLoadAsset(const std::string &assetPath)
                 if (!texture->loadFromFile(entry.path())) {
                     std::cout << "fail to load: " << entry.path() << std::endl;
                 }
-                this->assetMap[assetPath][entry.path()] = texture;
+                size_t found = 0;
+                found = folder.find_last_of("/\\");
+                std::string file = folder.substr(found+1);
+                this->assetMap[file][entry.path()] = texture;
             }
         }
     }
