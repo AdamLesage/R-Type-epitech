@@ -13,6 +13,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <memory>
+#include "../../Mediator/IMediator.hpp"
 #define PATH_SEPARATOR "/"
 
 namespace RType {
@@ -75,6 +76,15 @@ namespace RType {
              * Verify if the text is an existing command
              */
             bool isCommand();
+            /**
+             * @brief Print the FPS
+             * 
+             * Print the FPS
+             */
+            void displayFPS();
+
+            std::shared_ptr<IMediator> _mediator;
+
         protected:
             bool _showDeveloperConsole;
         private:
@@ -87,12 +97,17 @@ namespace RType {
             sf::Event event;
             std::shared_ptr<sf::RenderWindow> window;
             std::vector<sf::Text> History;
+            std::vector<sf::Text> CommandHistory;
             sf::Text _inputText;
             sf::Font font;
             bool _typing;
             sf::RectangleShape container;
             sf::RectangleShape secondContainer;
             std::string _input;
+            sf::Clock clock;  // Pour mesurer le temps écoulé entre chaque frame
+            float fps;
+            sf::Text FPS;
+            bool show_fps;
     };
 }
 

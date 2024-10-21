@@ -6,6 +6,8 @@
 */
 
 #include "Console.hpp"
+#include <sstream>
+#include <regex>
 
 RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _event) {
     _showDeveloperConsole = false;
@@ -28,9 +30,24 @@ RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _ev
     secondContainer.setOutlineThickness(3);
     secondContainer.setFillColor(sf::Color(20, 20, 20, 180)); // Same fill color
     container.setFillColor(sf::Color(20, 20, 20, 180));
+    fps = 0;
+    FPS.setFillColor(sf::Color::White);
+    FPS.setOutlineColor(sf::Color::Black);
+    FPS.setOutlineThickness(2);
+    FPS.setFont(font);
+    FPS.setPosition(5, 5);
+    show_fps = false;
 }
 
 RType::Console::~Console() {
+}
+
+void RType::Console::displayFPS()
+{
+    float deltaTime = clock.restart().asSeconds();
+    fps = 1.0f / deltaTime;  // Calcul des FPS
+    FPS.setString(std::to_string(fps));
+    window->draw(FPS);
 }
 
 void RType::Console::displayDeveloperConsole() {
@@ -45,6 +62,8 @@ void RType::Console::displayDeveloperConsole() {
 
     this->displayContainer();
     this->displayCloseContainerButton();
+    if (show_fps)
+        displayFPS();
 }
 
 void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& event) {
@@ -96,6 +115,30 @@ void RType::Console::checkClick()
     }
 }
 
+
+bool processEdit(const std::string& _input) {
+    std::regex pattern("^edit_entity\\s+\\d+\\s+\\d+$");
+
+    if (std::regex_match(_input, pattern)) {
+        std::istringstream iss(_input);
+        std::string command;
+        int entityNum1, entityNum2;
+
+        iss >> command >> entityNum1 >> entityNum2;
+
+        std::cout << "Changing skin of entity " << entityNum1 << " whith skin " << entityNum2 << std::endl;
+            // entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
+            // entity[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
+            //                                      _camera->listEntityToDisplay[i].sprite.rectPos[1],
+            //                                      _camera->listEntityToDisplay[i].sprite.rectSize[0],
+            //                                      _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+
+        return true;
+    }
+
+    return false;
+}
+
 bool RType::Console::isCommand()
 {
     if (_input == "clear") {
@@ -104,6 +147,20 @@ bool RType::Console::isCommand()
     }
     if (_input == "quit") {
         window->close();
+        return true;
+    }
+    if (_input.find("create_entity ") == 0) {
+        _mediator->notify("RenderingEngine", _input);
+        return true;
+    }
+    if (_input == "delete_entity") {
+        // delete_entity
+        return true;
+    }
+    if (processEdit(_input))
+        return true;
+    if (_input == "show_fps") {
+        show_fps = true;
         return true;
     }
     return false;
@@ -150,7 +207,7 @@ bool RType::Console::checkInput()
                                 }
                                 _inputText.setPosition(0, 30 * History.size());
                             }
-                            _inputText.setString("> " + _input);
+                            _inputText.setString("  " + _input);
                             History.push_back(_inputText);
                             _inputText.setString("  Command not found");
                             _inputText.setPosition(0, 30 * History.size());
@@ -205,7 +262,6 @@ int main() {
     sf::Event event;
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     RType::Console console(window, event);
-
     console.toggleDeveloperConsole();
     while (window->isOpen()) {
         while (window->pollEvent(event)) {
