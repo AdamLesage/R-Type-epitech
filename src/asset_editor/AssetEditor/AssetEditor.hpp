@@ -11,6 +11,7 @@
 #include <iostream>
 #include "../Sidebar/RightSidebar.hpp"
 #include "../Sidebar/Toolbar.hpp"
+#include "../EditionScreen/EditionScreen.hpp"
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -37,6 +38,8 @@ namespace Edition {
             sf::RenderWindow _window;
             RightSidebar _rightSidebar;
             Toolbar _toolbar;
+            EditionScreen _editionScreen;
+
     };
 }
 

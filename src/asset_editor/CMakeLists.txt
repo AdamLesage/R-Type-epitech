@@ -16,6 +16,7 @@ set(SOURCES
     Sidebar/Toolbar.cpp
     Sidebar/ToolbarButton.cpp
     AssetEditor/AssetEditor.cpp
+    EditionScreen/EditionScreen.cpp
 )
 
 # Create executable
