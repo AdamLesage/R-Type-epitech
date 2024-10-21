@@ -26,5 +26,13 @@ void Edition::Asset::move(int dx, int dy)
 
 void Edition::Asset::draw(sf::RenderWindow &window)
 {
-    (void)window;
+    sf::Texture texture;
+    if (!texture.loadFromFile(_assetPath)) {
+        std::cerr << "Failed to load texture from " << _assetPath << std::endl;
+        return;
+    }
+
+    sf::Sprite sprite(texture);
+    sprite.setPosition(_x, _y);
+    window.draw(sprite);
 }

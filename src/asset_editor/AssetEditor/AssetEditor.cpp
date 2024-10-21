@@ -62,6 +62,12 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
         _window->close();
     }
     if (event.type == sf::Event::MouseButtonReleased) {
+        std::shared_ptr<Asset> asset = std::make_shared<Asset>(event.mouseButton.x, event.mouseButton.y, mousePathTexture);
+        if (mousePickRect != nullptr) {
+            this->_editionScreen._assets.push_back(asset);
+            this->_editionScreen.commandManager.executeCommand(std::make_shared<AddAsset>(_editionScreen._assets, asset));
+        }
+
         mousePathTexture.clear();
         mouseTexture.reset();
     }

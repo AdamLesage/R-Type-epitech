@@ -54,18 +54,17 @@ namespace Edition {
              */
             void handleEvent(const sf::Event &event);
 
-        private:
-            sf::RectangleShape _centralArea;
+            /**
+             * @brief The command manager
+             */
+            CommandManager commandManager;
 
             /**
              * @brief The assets of the scene
              */
             std::vector<std::shared_ptr<Edition::Asset>> _assets;
-
-            /**
-             * @brief The command manager
-             */
-            CommandManager commandManager;
+        private:
+            sf::RectangleShape _centralArea;
     };
 }
 

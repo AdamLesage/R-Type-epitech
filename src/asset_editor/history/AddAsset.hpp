@@ -50,6 +50,11 @@ namespace Edition {
              */
             void undo() override;
 
+            /**
+             * @brief Redo the command
+             */
+            void redo() override;
+
         protected:
         private:
             /**

@@ -15,6 +15,8 @@ Edition::EditionScreen::EditionScreen()
     _centralArea.setFillColor(sf::Color(50, 50, 50));
     _centralArea.setOutlineThickness(1);
     _centralArea.setOutlineColor(sf::Color::White);
+
+    commandManager = CommandManager();
 }
 
 Edition::EditionScreen::~EditionScreen()
@@ -25,6 +27,7 @@ void Edition::EditionScreen::draw(sf::RenderWindow &window)
 {
     window.draw(_centralArea);
 
+    std::cout << "len assets: " << _assets.size() << std::endl;
     for (const auto &asset : _assets) {
         asset->draw(window);
     }
