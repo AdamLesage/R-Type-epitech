@@ -189,6 +189,7 @@ void RType::Game::play() {
         }
         if (showMetrics) {
             metrics.displayFPS(*window);
+            metrics.displayMemory(*window);
         }
         window->display();
     }

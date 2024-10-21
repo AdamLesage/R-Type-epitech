@@ -6,9 +6,19 @@
 */
 
 #ifndef GAMEMETRICS_HPP_
-#define GAMEMETRICS_HPP_
+    #define GAMEMETRICS_HPP_
 
-#include <SFML/Graphics.hpp>
+    #include <SFML/Graphics.hpp>
+    #include <iostream>
+    #include <fstream>
+    #include <string>
+    #ifdef _WIN32
+        #include <windows.h>
+        #include <psapi.h>
+    #elif __linux__
+        #include <sys/resource.h>
+        #include <sys/sysinfo.h>
+    #endif
 
 class GameMetrics {
     public:
@@ -35,7 +45,7 @@ class GameMetrics {
         /**
          * @brief Display Memory used 
          */
-        void displayMemory();
+        void displayMemory(sf::RenderWindow& window);
 
         /**
          * @brief Display player position
@@ -43,6 +53,7 @@ class GameMetrics {
         void displayPlayerPosition();
 
     private:
+        std::size_t getMemoryUsage();
 };
 
 #endif /* !GAMEMETRICS_HPP_ */
