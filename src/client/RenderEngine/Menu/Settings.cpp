@@ -6,6 +6,9 @@
 */
 
 #include "Settings.hpp"
+#include <iostream>
+#include <string>
+#include <cstring>
 
 Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     this->window = _window;
@@ -52,9 +55,13 @@ const char* Settings::get_key_value(libconfig::Config &cfg, const char* key_name
 int Settings::set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value) {
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
-
+    if (strcmp(path, "Keys.Keys8.value") == 0) {
+        strcpy(path, "Keys.Keys7.value");
+    }
+    if (strcmp(key_name, "Keys8") == 0) {
+        key_name = "Keys7";
+    }
     libconfig::Setting &setting = cfg.lookup(path);
-
     try {
         if (cfg.exists(path)) {
             setting = new_value;
