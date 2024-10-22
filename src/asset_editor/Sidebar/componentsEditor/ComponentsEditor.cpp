@@ -72,7 +72,7 @@ void Edition::ComponentsEditor::displayHealth(std::shared_ptr<sf::RenderWindow> 
 {
     if (this->healthDisplay != nullptr) {
         displayCategoryTitle(window, "Health", window->getSize().x * 0.76, posY);
-        this->healthDisplay->health->setPosition({1500, posY + 50});
+        this->healthDisplay->health->setPosition({1500, static_cast<float>(posY) + 50});
         posY += 100;
         this->healthDisplay->health->displayInput(window);
     }
@@ -82,9 +82,9 @@ void Edition::ComponentsEditor::displayShootStraightPatternDisplay(std::shared_p
 {
     if (this->shootStraightPatternDisplay != nullptr) {
         displayCategoryTitle(window, "Pattern Shoot Straight", window->getSize().x * 0.76, posY);
-        this->shootStraightPatternDisplay->projectileSpeed->setPosition({1500, posY + 50});
+        this->shootStraightPatternDisplay->projectileSpeed->setPosition({1500, static_cast<float>(posY) + 50});
         this->shootStraightPatternDisplay->projectileSpeed->displayInput(window);
-        this->shootStraightPatternDisplay->shootCooldown->setPosition({1500, posY + 100});
+        this->shootStraightPatternDisplay->shootCooldown->setPosition({1500, static_cast<float>(posY) + 100});
         this->shootStraightPatternDisplay->shootCooldown->displayInput(window);
         posY += 150;
     }
@@ -94,9 +94,9 @@ void Edition::ComponentsEditor::displayShootPlayerPatternDisplay(std::shared_ptr
 {
     if (this->shootPlayerPatternDisplay != nullptr) {
         displayCategoryTitle(window, "Pattern Shoot Player", window->getSize().x * 0.76, posY);
-        this->shootPlayerPatternDisplay->projectileSpeed->setPosition({1500, posY + 50});
+        this->shootPlayerPatternDisplay->projectileSpeed->setPosition({1500, static_cast<float>(posY) + 50});
         this->shootPlayerPatternDisplay->projectileSpeed->displayInput(window);
-        this->shootPlayerPatternDisplay->shootCooldown->setPosition({1500, posY + 100});
+        this->shootPlayerPatternDisplay->shootCooldown->setPosition({1500, static_cast<float>(posY) + 100});
         this->shootPlayerPatternDisplay->shootCooldown->displayInput(window);
         posY += 150;
     }
@@ -106,7 +106,7 @@ void Edition::ComponentsEditor::displayPlayerFollowingPatternDisplay(std::shared
 {
     if (this->playerFollowingPatternDisplay != nullptr) {
         displayCategoryTitle(window, "Player Following Pattern", window->getSize().x * 0.76, posY);
-        this->playerFollowingPatternDisplay->speed->setPosition({1500, posY + 50});
+        this->playerFollowingPatternDisplay->speed->setPosition({1500, static_cast<float>(posY) + 50});
         this->playerFollowingPatternDisplay->speed->displayInput(window);
         posY += 100;
     }
@@ -116,7 +116,7 @@ void Edition::ComponentsEditor::displayStraightLinePatternDisplay(std::shared_pt
 {
     if (this->straightLinePatternDisplay != nullptr) {
         displayCategoryTitle(window, "Straight Line Pattern", window->getSize().x * 0.76, posY);
-        this->straightLinePatternDisplay->speed->setPosition({1500, posY + 50});
+        this->straightLinePatternDisplay->speed->setPosition({1500, static_cast<float>(posY) + 50});
         this->straightLinePatternDisplay->speed->displayInput(window);
         posY += 100;
     }
@@ -126,9 +126,9 @@ void Edition::ComponentsEditor::displayWavePatternDisplay(std::shared_ptr<sf::Re
 {
     if (this->wavePatternDisplay != nullptr) {
         displayCategoryTitle(window, "Wave Pattern", window->getSize().x * 0.76, posY);
-        this->wavePatternDisplay->amplitude->setPosition({1500, posY + 50});
+        this->wavePatternDisplay->amplitude->setPosition({1500, static_cast<float>(posY) + 50});
         this->wavePatternDisplay->amplitude->displayInput(window);
-        this->wavePatternDisplay->frequency->setPosition({1500, posY + 100});
+        this->wavePatternDisplay->frequency->setPosition({1500, static_cast<float>(posY) + 100});
         this->wavePatternDisplay->frequency->displayInput(window);
         posY += 150;
     }
@@ -138,7 +138,7 @@ void Edition::ComponentsEditor::displayTypeDisplay(std::shared_ptr<sf::RenderWin
 {
     if (this->typeDisplay != nullptr) {
         displayCategoryTitle(window, "Type", window->getSize().x * 0.76, posY);
-        this->typeDisplay->type->setPosition({1500, posY + 50});
+        this->typeDisplay->type->setPosition({1500, static_cast<float>(posY) + 50});
         this->typeDisplay->type->display(*window.get());
         posY += 150;
     }
@@ -147,24 +147,24 @@ void Edition::ComponentsEditor::displayTypeDisplay(std::shared_ptr<sf::RenderWin
 void Edition::ComponentsEditor::display(std::shared_ptr<sf::RenderWindow> window)
 {
     currentPosY = 80 + this->scrollOffset;
-    label->setPosition({1460, currentPosY});
+    label->setPosition({1460, static_cast<float>(currentPosY)});
     label->displayInput(window);
     currentPosY += 50;
-    displayCategoryTitle(window, "Position", window->getSize().x * 0.76, currentPosY);
+    displayCategoryTitle(window, "Position", window->getSize().x * 0.76, static_cast<float>(currentPosY));
     currentPosY += 50;
-    posX->setPosition({1460, currentPosY});
+    posX->setPosition({1460, static_cast<float>(currentPosY)});
     posX->displayInput(window);
-    posY->setPosition({1460 + 115, currentPosY});
+    posY->setPosition({1460 + 115, static_cast<float>(currentPosY)});
     posY->displayInput(window);
     currentPosY += 50;
-    displayCategoryTitle(window, "Size", window->getSize().x * 0.76, currentPosY);
+    displayCategoryTitle(window, "Size", window->getSize().x * 0.76, static_cast<float>(currentPosY));
     currentPosY += 50;
-    sizeX->setPosition({1460, currentPosY});
+    sizeX->setPosition({1460, static_cast<float>(currentPosY)});
     sizeX->displayInput(window);
-    sizeY->setPosition({1460 + 115, currentPosY});
+    sizeY->setPosition({1460 + 115, static_cast<float>(currentPosY)});
     sizeY->displayInput(window);
     currentPosY += 50;
-    rotation->setPosition({1460, currentPosY});
+    rotation->setPosition({1460, static_cast<float>(currentPosY)});
     rotation->displayInput(window);
     currentPosY += 50;
     displayHealth(window, currentPosY);
@@ -181,6 +181,69 @@ void Edition::ComponentsEditor::display(std::shared_ptr<sf::RenderWindow> window
 void Edition::ComponentsEditor::updateSelectedEntity(std::shared_ptr<Edition::Asset> asset)
 {
     _asset = asset;
+    this->playerFollowingPatternDisplay.reset();
+    this->shootStraightPatternDisplay.reset();
+    this->shootPlayerPatternDisplay.reset();
+    this->healthDisplay.reset();
+    this->wavePatternDisplay.reset();
+    this->typeDisplay.reset();
+
+    try {
+        auto &health = this->_asset->getComponent<Health>();
+        this->healthDisplay = std::make_unique<HealthDisplay>();
+        this->healthDisplay->initialize(health.health);
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    try {
+        auto &pattern = this->_asset->getComponent<PlayerFollowingPattern>();
+        this->playerFollowingPatternDisplay = std::make_unique<PlayerFollowingPatternDisplay>();
+        this->playerFollowingPatternDisplay->initialize(pattern.speed);
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    try {
+        auto &pattern = this->_asset->getComponent<ShootStraightPattern>();
+        this->shootStraightPatternDisplay = std::make_unique<ShootStraightPatternDisplay>();
+        this->shootStraightPatternDisplay->initialize(pattern.projectileSpeed, pattern.shootCooldown);
+    }
+    catch(const std::exception& e) {
+    }
+    try {
+        auto &pattern = this->_asset->getComponent<ShootPlayerPattern>();
+        this->shootPlayerPatternDisplay = std::make_unique<ShootPlayerPatternDisplay>();
+        this->shootPlayerPatternDisplay->initialize(pattern.projectileSpeed, pattern.shootCooldown);
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    try {
+        auto &pattern = this->_asset->getComponent<StraightLinePattern>();
+        this->straightLinePatternDisplay = std::make_unique<StraightLinePatternDisplay>();
+        this->straightLinePatternDisplay->initialize(pattern.speed);
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    try {
+        auto &pattern = this->_asset->getComponent<Wave_pattern>();
+        this->wavePatternDisplay = std::make_unique<Wave_patternDisplay>();
+        this->wavePatternDisplay->initialize(pattern.amplitude, pattern.frequency);
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    try {
+        this->_asset->getComponent<Type>();
+        this->typeDisplay = std::make_unique<TypeDisplay>();
+        this->typeDisplay->initialize();
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    
     this->posX->setInput(std::to_string(static_cast<int>(_asset->getGlobalBounds().left)));
     this->posY->setInput(std::to_string(static_cast<int>(_asset->getGlobalBounds().top)));
     this->sizeX->setInput(std::to_string(static_cast<int>(_asset->getGlobalBounds().width)));
@@ -235,9 +298,9 @@ void Edition::ComponentsEditor::handleHealthInput(const sf::Event &event)
         if (this->healthDisplay->health->checkInput(event)) {
             std::string input =  this->healthDisplay->health->getInput();
             if (input.empty())
-                this->_asset->addComponent<Health>(Health{0});
+                this->_asset->addComponent<Health>(Health{0, 100, false, true});
             else
-                this->_asset->addComponent<Health>(Health{std::stoul(input)});
+                this->_asset->addComponent<Health>(Health{std::stoul(input), std::stoul(input), false, true});
         }
     }
 }
@@ -248,13 +311,13 @@ void Edition::ComponentsEditor::handleShootStraightPatternInput(const sf::Event 
         if (this->shootStraightPatternDisplay->projectileSpeed->checkInput(event)) {
             std::string input = this->shootStraightPatternDisplay->projectileSpeed->getInput();
             if (!input.empty())
-                this->_asset->addComponent<ShootStraightPattern>(ShootStraightPattern{std::stof(input), this->_asset->getComponent<ShootStraightPattern>().shootCooldown});
+                this->_asset->addComponent<ShootStraightPattern>(ShootStraightPattern{std::stof(input), this->_asset->getComponent<ShootStraightPattern>().shootCooldown, std::chrono::steady_clock::now()});
         }
 
         if (this->shootStraightPatternDisplay->shootCooldown->checkInput(event)) {
             std::string input = this->shootStraightPatternDisplay->shootCooldown->getInput();
             if (!input.empty())
-                this->_asset->addComponent<ShootStraightPattern>(ShootStraightPattern{this->_asset->getComponent<ShootStraightPattern>().projectileSpeed, std::stof(input)});
+                this->_asset->addComponent<ShootStraightPattern>(ShootStraightPattern{this->_asset->getComponent<ShootStraightPattern>().projectileSpeed, std::stof(input), std::chrono::steady_clock::now()});
         }
     }
 }
@@ -265,13 +328,13 @@ void Edition::ComponentsEditor::handleShootPlayerPatternInput(const sf::Event &e
         if (this->shootPlayerPatternDisplay->projectileSpeed->checkInput(event)) {
             std::string input = this->shootPlayerPatternDisplay->projectileSpeed->getInput();
             if (!input.empty())
-                this->_asset->addComponent<ShootPlayerPattern>(ShootPlayerPattern{std::stof(input), this->_asset->getComponent<ShootPlayerPattern>().shootCooldown});
+                this->_asset->addComponent<ShootPlayerPattern>(ShootPlayerPattern{std::stof(input), this->_asset->getComponent<ShootPlayerPattern>().shootCooldown, std::chrono::steady_clock::now()});
         }
 
         if (this->shootPlayerPatternDisplay->shootCooldown->checkInput(event)) {
             std::string input = this->shootPlayerPatternDisplay->shootCooldown->getInput();
             if (!input.empty())
-                this->_asset->addComponent<ShootPlayerPattern>(ShootPlayerPattern{this->_asset->getComponent<ShootPlayerPattern>().projectileSpeed, std::stof(input)});
+                this->_asset->addComponent<ShootPlayerPattern>(ShootPlayerPattern{this->_asset->getComponent<ShootPlayerPattern>().projectileSpeed, std::stof(input), std::chrono::steady_clock::now()});
         }
     }
 }
