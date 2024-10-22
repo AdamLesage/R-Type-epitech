@@ -97,7 +97,7 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
             entity_c = 0x06;
         else 
             entity_c = 0x03;
-        std::memcpy(&data[1], &entity_c, sizeof(int));
+        data[1] = entity_c;
         std::memcpy(&data[2], &pos_x, sizeof(int));
         std::memcpy(&data[6], &pos_y, sizeof(int));
         std::string data_str(data, sizeof(data));

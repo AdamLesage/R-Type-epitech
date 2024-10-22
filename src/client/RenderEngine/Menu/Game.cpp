@@ -91,7 +91,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
     _registry.register_component<Velocity_s>();
     _registry.register_component<Drawable_s>();
     _registry.register_component<Controllable_s>();
-    console = std::make_shared<Console>(window, event);
+    console = std::make_shared<Console>(window);
     BackgroundClock.restart();
 }
 
@@ -272,11 +272,11 @@ void RType::Game::displayGame() {
 }
 
 void RType::Game::handleEvents() {
-    sf::Event event;
-    while (window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) window->close();
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Space) {
+    sf::Event _event;
+    while (window->pollEvent(_event)) {
+        if (_event.type == sf::Event::Closed) window->close();
+        if (_event.type == sf::Event::KeyPressed) {
+            if (_event.key.code == sf::Keyboard::Space) {
                 animationComplete = true;
             }
         }

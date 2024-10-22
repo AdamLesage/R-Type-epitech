@@ -9,7 +9,7 @@
 #include <sstream>
 #include <regex>
 
-RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _event) {
+RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window) {
     _showDeveloperConsole = false;
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
@@ -21,7 +21,7 @@ RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _ev
     _inputText.setFont(font);
     _inputText.setFillColor(sf::Color::White);
     _inputText.setPosition(5, window->getSize().y * 0.35);
-    for (int i = 0; i < History.size(); i++) {
+    for (std::size_t i = 0; i < History.size(); i++) {
         History[i].setFont(font);
         History[i].setFillColor(sf::Color::White);
         History[i].setPosition(0, 0);
@@ -70,9 +70,9 @@ void RType::Console::displayDeveloperConsole() {
         displayFPS();
 }
 
-void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& event) {
-    if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::F8) {
+void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& _event) {
+    if (_event.type == sf::Event::KeyPressed) {
+        if (_event.key.code == sf::Keyboard::F8) {
             this->toggleDeveloperConsole();
             _typing = !_typing;
         }
@@ -98,7 +98,7 @@ void RType::Console::displayContainer() {
     window->draw(container);
     window->draw(secondContainer);
     window->draw(_inputText);
-    for (int i = 0; i < History.size(); i++) {
+    for (std::size_t i = 0; i < History.size(); i++) {
         window->draw(History[i]);
     }
 }
@@ -190,7 +190,7 @@ bool RType::Console::checkInput()
                                 _inputText.setPosition(0, 30 * History.size());
                             } else {
                                 History.erase(History.begin());
-                                for (int i = 0; i < History.size(); i++) {
+                                for (std::size_t i = 0; i < History.size(); i++) {
                                     History[i].setPosition(0, 30 * i);
                                 }
                                 _inputText.setPosition(0, 30 * History.size());
@@ -206,7 +206,7 @@ bool RType::Console::checkInput()
                             } else {
                                 History.erase(History.begin());
                                 History.erase(History.begin());
-                                for (int i = 0; i < History.size(); i++) {
+                                for (std::size_t i = 0; i < History.size(); i++) {
                                     History[i].setPosition(0, 30 * i);
                                 }
                                 _inputText.setPosition(0, 30 * History.size());
@@ -241,7 +241,6 @@ void RType::Console::displayCloseContainerButton() {
     unsigned int height = window->getSize().y;
     if (width < 800 || height < 600) return;
     unsigned int consoleWidth  = width;
-    unsigned int consoleHeight = height * 0.4;
     unsigned int closeBtnSize = 20;
     unsigned int closeBtnPosX = consoleWidth - closeBtnSize;
     sf::RectangleShape closeBtn(sf::Vector2f(closeBtnSize, closeBtnSize));

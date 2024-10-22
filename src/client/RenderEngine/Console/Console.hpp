@@ -19,7 +19,7 @@
 namespace RType {
     class Console {
         public:
-            Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _event);
+            Console(std::shared_ptr<sf::RenderWindow> _window);
             ~Console();
 
             /**
