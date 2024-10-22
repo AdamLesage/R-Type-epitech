@@ -13,11 +13,13 @@
 #include "../history/AddAsset.hpp"
 #include "../history/RemoveAsset.hpp"
 #include "../history/CommandManager.hpp"
+#include "SaveScene.hpp"
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
+#include <libconfig.h++>
 
 namespace Edition {
 
@@ -70,11 +72,24 @@ namespace Edition {
             void retrieveInputSaveScene(const sf::Event &event);
 
             /**
+             * @brief Display dialog to delete the scene
+             * 
+             * @param window The window of the Asset Editor
+             * @return true if the user deleted the scene, false if the dialog was closed
+             */
+            bool displayDeleteDialog(std::shared_ptr<sf::RenderWindow> window);
+
+            /**
              * @brief Save the scene in a cfg file with the given name
              * 
              * @param sceneName The name of the scene to load
              */
             void saveScene(const std::string &sceneName);
+
+            /**
+             * @brief Delete every entities in the scene
+             */
+            void deleteEditionScreen();
 
             /**
              * @brief The command manager

@@ -38,7 +38,7 @@ namespace Edition {
              * @param y The y position of the asset
              * @param assetPath The path to the asset
              */
-            Asset(int x, int y, std::string assetPath);
+            Asset(int x, int y, std::string assetPath, size_t entityCode);
 
             /**
              * @brief Destroy the Asset object
@@ -59,6 +59,15 @@ namespace Edition {
              * @param window The window of the Asset Editor
              */
             void draw(sf::RenderWindow &window);
+
+            /**
+             * @brief Get the entity code of the asset
+             * 
+             * Entity code is the code given in PROTOCOL.md for each entity
+             * 
+             * @return The entity code
+             */
+            std::string getEntityCode() const { return _entityCode; }
 
             /**
              * @brief Get the global bounds of the asset.
@@ -116,6 +125,7 @@ namespace Edition {
             sf::Texture *_spriteTexture;
             sf::RectangleShape _sprite;
             std::map<std::type_index, std::any> _components;
+            std::string _entityCode;
     };
 }; // namespace Edition
 

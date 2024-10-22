@@ -23,6 +23,7 @@ set(SOURCES
     Sidebar/selectBar/SelectBar.cpp
     AssetEditor/AssetEditor.cpp
     EditionScreen/EditionScreen.cpp
+    EditionScreen/SaveScene.cpp
     history/Asset.cpp
     history/AddAsset.cpp
     history/RemoveAsset.cpp
@@ -40,6 +41,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     sfml-graphics
     sfml-network
     sfml-audio
+    -lconfig++
 )
 
 # Platform-specific settings

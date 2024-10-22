@@ -7,7 +7,7 @@
 
 #include "Asset.hpp"
 
-Edition::Asset::Asset(int x, int y, std::string assetPath)
+Edition::Asset::Asset(int x, int y, std::string assetPath, size_t entityCode)
 {
     this->_assetPath = assetPath;
     _spriteTexture = new sf::Texture();
@@ -20,6 +20,7 @@ Edition::Asset::Asset(int x, int y, std::string assetPath)
     this->addComponent<Rotation>(Rotation{0});
 
     this->_sprite.setTexture(_spriteTexture);
+    this->_entityCode = "0x" + std::to_string(entityCode);
     this->_sprite.setSize(sf::Vector2f(this->getComponent<Size>().x, this->getComponent<Size>().y));
 }
 

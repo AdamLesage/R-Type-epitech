@@ -14,6 +14,7 @@ Edition::AssetEditor::AssetEditor()
     _rightSidebar = std::make_shared<RightSidebar>();
     _toolbar = Toolbar();
     _editionScreen = EditionScreen();
+    _lastEntityCode = 50; // Starting to 50 to avoid used code in PROTOCOL.md
 }
 
 Edition::AssetEditor::~AssetEditor()
@@ -66,9 +67,10 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
     if (event.type == sf::Event::Closed) {
         _window->close();
     }
-    if (event.type == sf::Event::MouseButtonReleased && !mousePathTexture.empty()) {
-        if (mousePickRect != nullptr && !mousePathTexture.empty()) {
-            std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(event.mouseButton.x, event.mouseButton.y, mousePathTexture);
+    if (event.type == sf::Event::MouseButtonReleased) {
+        if (mousePickRect != nullptr && !mousePathTexture.empty() && _lastEntityCode < 100) { // Limit the number of entities to 100
+            std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(event.mouseButton.x, event.mouseButton.y, mousePathTexture, _lastEntityCode);
+            _lastEntityCode++; // Increment the entity code
             this->_editionScreen.commandManager.createAsset(asset);
         }
 
@@ -87,6 +89,16 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
 
 void Edition::AssetEditor::handleToolbarEvents(const sf::Event &event)
 {
+    // Handle undo and redo from keyboard input
+    if (event.type == sf::Event::KeyPressed) {
+        if ((event.key.code == sf::Keyboard::Z) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
+            this->_toolbar.setCurrentSelection(CurrentSelection::UNDO);
+        }
+        if ((event.key.code == sf::Keyboard::Y) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
+            this->_toolbar.setCurrentSelection(CurrentSelection::REDO);
+        }
+    }
+
     if (this->_toolbar.getCurrentSelection() == CurrentSelection::MOVE) // Client can move on the edition screen without any asset selected
         return;
 
@@ -101,7 +113,7 @@ void Edition::AssetEditor::handleToolbarEvents(const sf::Event &event)
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::LOAD) {
         // this->_editionScreen.load();
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DELETE) {
-        // this->_editionScreen.deleteEditionScreen();
+        // Handle delete
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::ZOOM) {
         // this->_editionScreen.zoomOnEditionScreen();
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DEZOOM) {
@@ -125,7 +137,10 @@ void Edition::AssetEditor::displayToolbarEvents()
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::LOAD) {
         // Display the load cursor
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DELETE) {
-        // Display the delete cursor
+        bool playerActionOnWindow = this->_editionScreen.displayDeleteDialog(_window);
+        if (playerActionOnWindow == false) {
+            this->_toolbar.setCurrentSelection(CurrentSelection::MOVE);
+        }
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::ZOOM) {
         // Display the zoom cursor
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DEZOOM) {
