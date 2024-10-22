@@ -616,11 +616,17 @@ bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& in
 
     auto now = std::chrono::system_clock::now();
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
-    std::tm* localtm = std::localtime(&now_c);
 
-    std::ostringstream oss;
-    oss << std::put_time(localtm, "%d/%H/%M/%S");
-    std::string local_time = oss.str();
+    std::tm localtm;
+#ifdef _WIN32
+    gmtime_s(&localtm, &now_c);
+#else
+    gmtime_r(&now_c, &localtm);
+#endif
+
+    char buffer[100];
+    std::strftime(buffer, sizeof(buffer), "%d/%H/%M/%S", &localtm);
+    std::string local_time(buffer);
 
     std::chrono::duration<double> diff = std::chrono::system_clock::now() - now;
     std::cout << "Ping: " << diff.count() * 1000 << " ms" << std::endl;
