@@ -26,7 +26,7 @@ namespace Edition {
         std::unique_ptr<InputNumber> health;
 
         void initialize(int healthValue) {
-            this->health = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Health: ");
+            this->health = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "hp: ");
             this->health->setInput(std::to_string(healthValue));
         }
     } HealthDisplay;
@@ -151,6 +151,13 @@ namespace Edition {
              * @brief Adds a new component to the entity or object.
              */
             void addComponent();
+            /**
+             * @brief Handles user input for updating health values.
+             * 
+             * @param event The SFML event object representing user input events such as key presses or mouse actions.
+             */
+            void handleHealthInput(const sf::Event &event);
+
             std::shared_ptr<Edition::Asset> _asset;
             sf::Font font;
             std::unique_ptr<Input> label;

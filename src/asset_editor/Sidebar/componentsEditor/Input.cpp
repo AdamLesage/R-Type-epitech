@@ -111,3 +111,13 @@ void Edition::Input::setInput(std::string input)
     this->_input = input;
     this->updateText();
 }
+
+void Edition::Input::setPosition(sf::Vector2f pos) {
+    this->_pos = pos;
+    this->_titleText.setPosition(sf::Vector2f(this->_pos.x, this->_pos.y));
+    if (!this->_titleText.getString().isEmpty()) {
+        this->_pos.x += this->_titleText.getLocalBounds().width;
+    }
+    this->_back->setPosition(this->_pos);
+    updateText();
+}

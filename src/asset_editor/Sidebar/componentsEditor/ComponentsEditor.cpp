@@ -70,9 +70,10 @@ void Edition::ComponentsEditor::displayAddComponent(std::shared_ptr<sf::RenderWi
 void Edition::ComponentsEditor::displayHealth(std::shared_ptr<sf::RenderWindow> window, int &posY)
 {
     if (this->healthDisplay != nullptr) {
-        InputNumber test(sf::Vector2f(70,40), sf::Vector2f(1460, posY), "health: ");
-        posY += 50;
-        test.displayInput(window);
+        displayCategoryTitle(window, "Health", window->getSize().x * 0.76, posY);
+        this->healthDisplay->health->setPosition({1500, posY + 50});
+        posY += 100;
+        this->healthDisplay->health->displayInput(window);
     }
 }
 
@@ -142,6 +143,19 @@ void Edition::ComponentsEditor::addComponent()
     
 }
 
+void Edition::ComponentsEditor::handleHealthInput(const sf::Event &event)
+{
+    if (this->healthDisplay != nullptr && this->_asset != nullptr) {
+        if (this->healthDisplay->health->checkInput(event)) {
+            std::string input =  this->healthDisplay->health->getInput();
+            if (input.empty())
+                this->_asset->addComponent<Health>(Health{0});
+            else
+                this->_asset->addComponent<Health>(Health{std::stoul(input)});
+        }
+    }
+}
+
 void Edition::ComponentsEditor::handleInput(const sf::Event &event)
 {
     if (event.type == sf::Event::TextEntered || event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved) {
@@ -176,6 +190,7 @@ void Edition::ComponentsEditor::handleInput(const sf::Event &event)
             else
                 this->_asset->addComponent<Rotation>(Rotation{std::stof(rotation->getInput())});
         }
+        handleHealthInput(event);
         if (event.type == sf::Event::MouseButtonPressed && _asset != nullptr) {
             sf::Vector2f mousPos;
             mousPos.x = static_cast<float>(event.mouseButton.x);

@@ -73,6 +73,10 @@ namespace Edition {
              */
             void setInput(std::string input);
 
+            /** @brief Set the position of the element.
+             *  @param pos The new position as an sf::Vector2f.
+             */
+            void setPosition(sf::Vector2f pos);
         protected:
             /**
              * @brief Update the displayed text in the input field
