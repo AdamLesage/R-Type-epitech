@@ -14,6 +14,12 @@
 #include <string>
 #include "../../GameMetrics/GameMetrics.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+#define PATH_SEPARATOR "\\"
+#else
+#define PATH_SEPARATOR "/"
+#endif
+
 class Toolbar {
     public:
         Toolbar();
@@ -61,6 +67,7 @@ class Toolbar {
         bool showFps;
         bool showMemory;
         bool showCpu;
+        bool showGpu;
 
     private:
         bool isVisible;

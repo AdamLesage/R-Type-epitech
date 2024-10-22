@@ -8,12 +8,13 @@
 #include "Toolbar.hpp"
 
 Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false),
-    isVisible(false), dropdownOpen(false)
+    showGpu(false), isVisible(false), dropdownOpen(false)
 {
     toolbarShape.setSize({1920, 50});
     toolbarShape.setFillColor(sf::Color(50,50,50));
 
-    if (!font.loadFromFile("./assets/r-type.ttf")) {
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
         std::cerr << "Failed to load font" << std::endl;
     }
 
@@ -118,6 +119,9 @@ void Toolbar::displayMetrics(const std::string optionName)
     }
     if (optionName == "CPU Usage") {
         showCpu = optionSelected[optionName];
+    }
+    if (optionName == "GPU Usage") {
+        showGpu = optionSelected[optionName];
     }
 }
 

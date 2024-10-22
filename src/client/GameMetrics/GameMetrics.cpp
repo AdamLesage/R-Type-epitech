@@ -7,13 +7,31 @@
 
 #include "GameMetrics.hpp"
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 GameMetrics::GameMetrics()
 {
+#ifdef _WIN32
+    if (PdhOpenQuery(NULL, NULL, &cpuQuery) != ERROR_SUCCESS) {
+        std::cerr << "Failed to open PDH query." << std::endl;
+    }
+    
+    if (PdhAddCounter(cpuQuery, "\\Processor(_Total)\\% Processor Time", NULL, &cpuTotal) != ERROR_SUCCESS) {
+        std::cerr << "Failed to add PDH counter." << std::endl;
+    }
+
+    if (PdhCollectQueryData(cpuQuery) != ERROR_SUCCESS) {
+        std::cerr << "Failed to collect PDH query data." << std::endl;
+    }
+#endif
 }
 
 GameMetrics::~GameMetrics()
 {
+#ifdef _WIN32
+    PdhCloseQuery(cpuQuery);
+#endif
 }
 
 void GameMetrics::displayFPS(sf::RenderWindow& window)
@@ -112,7 +130,7 @@ void GameMetrics::displayGpuUsage(sf::RenderWindow& window) {
 #ifdef _WIN32
     text.setString("GPU information is not available on Windows.");
     text.setFillColor(sf::Color::White);
-    text.setPosition(0, 100);
+    text.setPosition(0, 60);
     window.draw(text);
 
 #elif __linux__
@@ -124,7 +142,65 @@ void GameMetrics::displayGpuUsage(sf::RenderWindow& window) {
 
     text.setString(gpuText);
     text.setFillColor(sf::Color::White);
-    text.setPosition(0, 100);
+    text.setPosition(0, 60);
     window.draw(text);
 #endif
+}
+
+void GameMetrics::displayCPU(sf::RenderWindow& window)
+{
+    sf::Text text;
+    static sf::Font font;
+
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
+        std::cerr << "Failed to load font" << std::endl;
+        return;
+    }
+    text.setFont(font);
+
+#ifdef _WIN32
+    PDH_FMT_COUNTERVALUE counterVal;
+
+    if (PdhCollectQueryData(cpuQuery) == ERROR_SUCCESS) {
+        if (PdhGetFormattedCounterValue(cpuTotal, PDH_FMT_DOUBLE, NULL, &counterVal) == ERROR_SUCCESS) {
+             std::stringstream ss;
+            ss << std::fixed << std::setprecision(2) << counterVal.doubleValue;
+            std::string cpuUsage = "CPU Usage: " + ss.str() + " %";
+            text.setString(cpuUSage);
+        }
+    } else {
+        text.setString("Failed to retrieve CPU usage.");
+    }
+
+#elif __linux__
+    FILE* fp = fopen("/proc/stat", "r");
+    if (fp) {
+        long user, nice, system, idle;
+        fscanf(fp, "cpu %ld %ld %ld %ld", &user, &nice, &system, &idle);
+        fclose(fp);
+
+        static long prevUser = 0, prevNice = 0, prevSystem = 0, prevIdle = 0;
+        long deltaUser = user - prevUser;
+        long deltaNice = nice - prevNice;
+        long deltaSystem = system - prevSystem;
+        long deltaIdle = idle - prevIdle;
+        long total = deltaUser + deltaNice + deltaSystem + deltaIdle;
+        float cpuUsage = 100.0f * (deltaUser + deltaNice + deltaSystem) / total;
+        prevUser = user;
+        prevNice = nice;
+        prevSystem = system;
+        prevIdle = idle;
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(2) << cpuUsage;
+        std::string cpuText = "CPU Usage: " + ss.str() + " %";
+        text.setString(cpuText);
+    } else {
+        text.setString("Failed to retrieve CPU usage.");
+    }
+#endif
+
+    text.setFillColor(sf::Color::White);
+    text.setPosition(0, 40);
+    window.draw(text);
 }

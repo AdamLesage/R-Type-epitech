@@ -86,7 +86,6 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
         players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
     }
 
-    showMetrics = false;
     settings = std::make_shared<Settings>(window);
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
@@ -188,13 +187,14 @@ void RType::Game::play() {
             displayPiou();
             piou = false;
         }
-        if (toolbar.showFps) {
+        if (toolbar.showFps)
             metrics.displayFPS(*window);
-            metrics.displayMemory(*window);
-            metrics.displayGpuUsage(*window);
-        }
         if (toolbar.showCpu)
             metrics.displayCPU(*window);
+        if (toolbar.showMemory)
+            metrics.displayMemory(*window);
+        if (toolbar.showGpu)
+            metrics.displayGpuUsage(*window);
         toolbar.draw(*window);
         window->display();
     }
