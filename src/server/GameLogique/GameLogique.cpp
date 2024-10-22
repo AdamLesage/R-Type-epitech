@@ -129,6 +129,7 @@ void GameLogique::runGame() {
                 sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
                                      logger);
                 sys.position_system(reg, this->_networkSender, logger);
+                sys.ping_client()
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
                 this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);

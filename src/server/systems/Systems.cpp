@@ -619,3 +619,18 @@ std::array<float, 2> Systems::find_closest_player(Registry& reg, Position* posit
     }
     return (std::array<float, 2>({target_x, target_y}));
 }
+
+
+void Systems::ping_client(Registry& reg, std::unique_ptr<NetworkSender>& networkSender) {
+    //decalre a new date DD/HH/MM/SS/MS
+    //store it in a new string
+    //send it to the client
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* localtm = std::localtime(&now_c);
+    std::ostringstream oss;
+    oss << std::put_time(localtm, "%d/%H/%M/%S");  // Formate au format DD/HH/MM/MS
+    std::string formatted_time = oss.str();
+
+    
+}
