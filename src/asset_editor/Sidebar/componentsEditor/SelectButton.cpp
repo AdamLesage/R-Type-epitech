@@ -27,7 +27,7 @@ Edition::SelectButton::SelectButton(const sf::Vector2f& position, const sf::Vect
     }
 }
 
-void Edition::SelectButton::handleInput(const sf::Event& event) {
+bool Edition::SelectButton::handleInput(const sf::Event& event) {
     sf::Vector2f mousPos;
     if (event.type == sf::Event::MouseMoved) {
         mousPos.x = static_cast<float>(event.mouseButton.x);
@@ -60,11 +60,13 @@ void Edition::SelectButton::handleInput(const sf::Event& event) {
                     backOptions[i].setFillColor(sf::Color(100, 100, 100));
                     selectedOption = i;
                     isDropdownOpen = false;
+                    return true;
                     break;
                 }
             }
         }
     }
+    return false;
 }
 
 void centerText(sf::RectangleShape &shape, sf::Text &text)

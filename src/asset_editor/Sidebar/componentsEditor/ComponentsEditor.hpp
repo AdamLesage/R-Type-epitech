@@ -14,6 +14,7 @@
 #include "InputNumber.hpp"
 #include "SelectButton.hpp"
 #include <string>
+#include <unordered_map>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -139,6 +140,49 @@ namespace Edition {
              */
             void displayHealth(std::shared_ptr<sf::RenderWindow> window, int &posY);
 
+
+            void displayShootStraightPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+
+            /**
+             * @brief Displays the ShootPlayerPatternDisplay component, including projectile speed and shoot cooldown inputs.
+             * 
+             * @param window Shared pointer to the SFML RenderWindow.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             */
+            void displayShootPlayerPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+
+            /**
+             * @brief Displays the PlayerFollowingPatternDisplay component, including the speed input.
+             * 
+             * @param window Shared pointer to the SFML RenderWindow.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             */
+            void displayPlayerFollowingPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+
+            /**
+             * @brief Displays the StraightLinePatternDisplay component, including the speed input.
+             * 
+             * @param window Shared pointer to the SFML RenderWindow.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             */
+            void displayStraightLinePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+
+            /**
+             * @brief Displays the WavePatternDisplay component, including amplitude and frequency inputs.
+             * 
+             * @param window Shared pointer to the SFML RenderWindow.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             */
+            void displayWavePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+
+            /**
+             * @brief Displays the TypeDisplay component, including a selection for the entity type (PLAYER, ENEMY, etc.).
+             * 
+             * @param window Shared pointer to the SFML RenderWindow.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             */
+            void displayTypeDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+
             /**
              * @brief Displays a UI option to add a component at a specified position.
              * 
@@ -157,6 +201,48 @@ namespace Edition {
              * @param event The SFML event object representing user input events such as key presses or mouse actions.
              */
             void handleHealthInput(const sf::Event &event);
+
+            /**
+             * @brief Handles input for the ShootStraightPattern component, updating the projectile speed and shoot cooldown based on user input.
+             * 
+             * @param event The SFML event capturing user input.
+             */
+            void handleShootStraightPatternInput(const sf::Event &event);
+
+            /**
+             * @brief Handles input for the ShootPlayerPattern component, updating the projectile speed and shoot cooldown based on user input.
+             * 
+             * @param event The SFML event capturing user input.
+             */
+            void handleShootPlayerPatternInput(const sf::Event &event);
+
+            /**
+             * @brief Handles input for the PlayerFollowingPattern component, updating the following speed based on user input.
+             * 
+             * @param event The SFML event capturing user input.
+             */
+            void handlePlayerFollowingPatternInput(const sf::Event &event);
+
+            /**
+             * @brief Handles input for the StraightLinePattern component, updating the movement speed based on user input.
+             * 
+             * @param event The SFML event capturing user input.
+             */
+            void handleStraightLinePatternInput(const sf::Event &event);
+
+            /**
+             * @brief Handles input for the WavePattern component, updating the amplitude and frequency based on user input.
+             * 
+             * @param event The SFML event capturing user input.
+             */
+            void handleWavePatternInput(const sf::Event &event);
+
+            /**
+             * @brief Handles input for the Type component, updating the entity's type (e.g., PLAYER, ENEMY) based on user selection.
+             * 
+             * @param event The SFML event capturing user input.
+             */
+            void handleTypeInput(const sf::Event &event);
 
             std::shared_ptr<Edition::Asset> _asset;
             sf::Font font;

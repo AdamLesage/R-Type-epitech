@@ -77,6 +77,72 @@ void Edition::ComponentsEditor::displayHealth(std::shared_ptr<sf::RenderWindow> 
     }
 }
 
+void Edition::ComponentsEditor::displayShootStraightPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY)
+{
+    if (this->shootStraightPatternDisplay != nullptr) {
+        displayCategoryTitle(window, "Pattern Shoot Straight", window->getSize().x * 0.76, posY);
+        this->shootStraightPatternDisplay->projectileSpeed->setPosition({1500, posY + 50});
+        this->shootStraightPatternDisplay->projectileSpeed->displayInput(window);
+        this->shootStraightPatternDisplay->shootCooldown->setPosition({1500, posY + 100});
+        this->shootStraightPatternDisplay->shootCooldown->displayInput(window);
+        posY += 150;
+    }
+}
+
+void Edition::ComponentsEditor::displayShootPlayerPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY)
+{
+    if (this->shootPlayerPatternDisplay != nullptr) {
+        displayCategoryTitle(window, "Pattern Shoot Player", window->getSize().x * 0.76, posY);
+        this->shootPlayerPatternDisplay->projectileSpeed->setPosition({1500, posY + 50});
+        this->shootPlayerPatternDisplay->projectileSpeed->displayInput(window);
+        this->shootPlayerPatternDisplay->shootCooldown->setPosition({1500, posY + 100});
+        this->shootPlayerPatternDisplay->shootCooldown->displayInput(window);
+        posY += 150;
+    }
+}
+
+void Edition::ComponentsEditor::displayPlayerFollowingPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY)
+{
+    if (this->playerFollowingPatternDisplay != nullptr) {
+        displayCategoryTitle(window, "Player Following Pattern", window->getSize().x * 0.76, posY);
+        this->playerFollowingPatternDisplay->speed->setPosition({1500, posY + 50});
+        this->playerFollowingPatternDisplay->speed->displayInput(window);
+        posY += 100;
+    }
+}
+
+void Edition::ComponentsEditor::displayStraightLinePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY)
+{
+    if (this->straightLinePatternDisplay != nullptr) {
+        displayCategoryTitle(window, "Straight Line Pattern", window->getSize().x * 0.76, posY);
+        this->straightLinePatternDisplay->speed->setPosition({1500, posY + 50});
+        this->straightLinePatternDisplay->speed->displayInput(window);
+        posY += 100;
+    }
+}
+
+void Edition::ComponentsEditor::displayWavePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY)
+{
+    if (this->wavePatternDisplay != nullptr) {
+        displayCategoryTitle(window, "Wave Pattern", window->getSize().x * 0.76, posY);
+        this->wavePatternDisplay->amplitude->setPosition({1500, posY + 50});
+        this->wavePatternDisplay->amplitude->displayInput(window);
+        this->wavePatternDisplay->frequency->setPosition({1500, posY + 100});
+        this->wavePatternDisplay->frequency->displayInput(window);
+        posY += 150;
+    }
+}
+
+void Edition::ComponentsEditor::displayTypeDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY)
+{
+    if (this->typeDisplay != nullptr) {
+        displayCategoryTitle(window, "Type", window->getSize().x * 0.76, posY);
+        this->typeDisplay->type->setPosition({1500, posY + 50});
+        this->typeDisplay->type->display(*window.get());
+        posY += 150;
+    }
+}
+
 void Edition::ComponentsEditor::display(std::shared_ptr<sf::RenderWindow> window)
 {
     label->displayInput(window);
@@ -89,6 +155,12 @@ void Edition::ComponentsEditor::display(std::shared_ptr<sf::RenderWindow> window
     rotation->displayInput(window);
     currentPosY = 400;
     displayHealth(window, currentPosY);
+    displayPlayerFollowingPatternDisplay(window, currentPosY);
+    displayShootPlayerPatternDisplay(window, currentPosY);
+    displayShootStraightPatternDisplay(window, currentPosY);
+    displayStraightLinePatternDisplay(window, currentPosY);
+    displayWavePatternDisplay(window, currentPosY);
+    displayTypeDisplay(window, currentPosY);
     displayAddComponent(window, currentPosY);
 }
 
@@ -156,6 +228,100 @@ void Edition::ComponentsEditor::handleHealthInput(const sf::Event &event)
     }
 }
 
+void Edition::ComponentsEditor::handleShootStraightPatternInput(const sf::Event &event)
+{
+    if (this->shootStraightPatternDisplay != nullptr && this->_asset != nullptr) {
+        if (this->shootStraightPatternDisplay->projectileSpeed->checkInput(event)) {
+            std::string input = this->shootStraightPatternDisplay->projectileSpeed->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<ShootStraightPattern>(ShootStraightPattern{std::stof(input), this->_asset->getComponent<ShootStraightPattern>().shootCooldown});
+        }
+
+        if (this->shootStraightPatternDisplay->shootCooldown->checkInput(event)) {
+            std::string input = this->shootStraightPatternDisplay->shootCooldown->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<ShootStraightPattern>(ShootStraightPattern{this->_asset->getComponent<ShootStraightPattern>().projectileSpeed, std::stof(input)});
+        }
+    }
+}
+
+void Edition::ComponentsEditor::handleShootPlayerPatternInput(const sf::Event &event)
+{
+    if (this->shootPlayerPatternDisplay != nullptr && this->_asset != nullptr) {
+        if (this->shootPlayerPatternDisplay->projectileSpeed->checkInput(event)) {
+            std::string input = this->shootPlayerPatternDisplay->projectileSpeed->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<ShootPlayerPattern>(ShootPlayerPattern{std::stof(input), this->_asset->getComponent<ShootPlayerPattern>().shootCooldown});
+        }
+
+        if (this->shootPlayerPatternDisplay->shootCooldown->checkInput(event)) {
+            std::string input = this->shootPlayerPatternDisplay->shootCooldown->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<ShootPlayerPattern>(ShootPlayerPattern{this->_asset->getComponent<ShootPlayerPattern>().projectileSpeed, std::stof(input)});
+        }
+    }
+}
+
+void Edition::ComponentsEditor::handlePlayerFollowingPatternInput(const sf::Event &event)
+{
+    if (this->playerFollowingPatternDisplay != nullptr && this->_asset != nullptr) {
+        if (this->playerFollowingPatternDisplay->speed->checkInput(event)) {
+            std::string input = this->playerFollowingPatternDisplay->speed->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<PlayerFollowingPattern>(PlayerFollowingPattern{std::stof(input)});
+        }
+    }
+}
+
+void Edition::ComponentsEditor::handleStraightLinePatternInput(const sf::Event &event)
+{
+    if (this->straightLinePatternDisplay != nullptr && this->_asset != nullptr) {
+        if (this->straightLinePatternDisplay->speed->checkInput(event)) {
+            std::string input = this->straightLinePatternDisplay->speed->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<StraightLinePattern>(StraightLinePattern{std::stof(input)});
+        }
+    }
+}
+
+void Edition::ComponentsEditor::handleWavePatternInput(const sf::Event &event)
+{
+    if (this->wavePatternDisplay != nullptr && this->_asset != nullptr) {
+        if (this->wavePatternDisplay->amplitude->checkInput(event)) {
+            std::string input = this->wavePatternDisplay->amplitude->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<Wave_pattern>(Wave_pattern{std::stof(input), this->_asset->getComponent<Wave_pattern>().frequency});
+        }
+
+        if (this->wavePatternDisplay->frequency->checkInput(event)) {
+            std::string input = this->wavePatternDisplay->frequency->getInput();
+            if (!input.empty())
+                this->_asset->addComponent<Wave_pattern>(Wave_pattern{this->_asset->getComponent<Wave_pattern>().amplitude, std::stof(input)});
+        }
+    }
+}
+
+void Edition::ComponentsEditor::handleTypeInput(const sf::Event &event)
+{
+    if (this->typeDisplay != nullptr && this->_asset != nullptr) {
+        if (this->typeDisplay->type->handleInput(event)) {
+            const std::unordered_map<std::string, EntityType> entityMap = {
+                {"PLAYER", PLAYER},
+                {"ENEMY", ENEMY},
+                {"PLAYER_PROJECTILE", PLAYER_PROJECTILE},
+                {"ENEMY_PROJECTILE", ENEMY_PROJECTILE},
+                {"BACKGROUND", BACKGROUND},
+                {"OBSTACLE", OBSTACLE},
+                {"POWERUP", POWERUP}
+            };
+            std::string selectedType = this->typeDisplay->type->getSelectedOption();
+            auto it = entityMap.find(selectedType);
+            this->_asset->addComponent<Type>(Type{it->second});
+        }
+    }
+}
+
+
 void Edition::ComponentsEditor::handleInput(const sf::Event &event)
 {
     if (event.type == sf::Event::TextEntered || event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved) {
@@ -191,6 +357,12 @@ void Edition::ComponentsEditor::handleInput(const sf::Event &event)
                 this->_asset->addComponent<Rotation>(Rotation{std::stof(rotation->getInput())});
         }
         handleHealthInput(event);
+        handlePlayerFollowingPatternInput(event);
+        handleShootPlayerPatternInput(event);
+        handleShootStraightPatternInput(event);
+        handleStraightLinePatternInput(event);
+        handleTypeInput(event);
+        handleWavePatternInput(event);
         if (event.type == sf::Event::MouseButtonPressed && _asset != nullptr) {
             sf::Vector2f mousPos;
             mousPos.x = static_cast<float>(event.mouseButton.x);

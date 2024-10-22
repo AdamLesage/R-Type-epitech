@@ -25,7 +25,7 @@ namespace Edition {
          *  @param event The SFML event to process.
          *  @param window Reference to the render window.
          */
-        void handleInput(const sf::Event& event);
+        bool handleInput(const sf::Event& event);
 
         /** @brief Display the button and its options in the window.
          *  @param window Reference to the render window.
