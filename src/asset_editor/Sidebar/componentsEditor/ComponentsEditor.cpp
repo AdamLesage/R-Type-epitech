@@ -42,7 +42,7 @@ void Edition::ComponentsEditor::displayCategoryTitle(std::shared_ptr<sf::RenderW
     window->draw(text);
 }
 
-void Edition::ComponentsEditor::displayAddComponent(std::shared_ptr<sf::RenderWindow> window, int posY)
+void Edition::ComponentsEditor::displayAddComponent(std::shared_ptr<sf::RenderWindow> window, int &posY)
 {
     componentSelection->setPosition({1460, static_cast<float>(posY)});
     componentSelection->display(*window.get());
@@ -64,7 +64,8 @@ void Edition::ComponentsEditor::displayAddComponent(std::shared_ptr<sf::RenderWi
         addButton.getPosition().y + boxSize.y / 2.0f
     );
     window->draw(addButton);
-    window->draw(addText); 
+    window->draw(addText);
+    posY += 100;
 }
 
 void Edition::ComponentsEditor::displayHealth(std::shared_ptr<sf::RenderWindow> window, int &posY)
@@ -145,15 +146,27 @@ void Edition::ComponentsEditor::displayTypeDisplay(std::shared_ptr<sf::RenderWin
 
 void Edition::ComponentsEditor::display(std::shared_ptr<sf::RenderWindow> window)
 {
+    currentPosY = 80 + this->scrollOffset;
+    label->setPosition({1460, currentPosY});
     label->displayInput(window);
-    displayCategoryTitle(window, "Position", window->getSize().x * 0.76, 150);
+    currentPosY += 50;
+    displayCategoryTitle(window, "Position", window->getSize().x * 0.76, currentPosY);
+    currentPosY += 50;
+    posX->setPosition({1460, currentPosY});
     posX->displayInput(window);
+    posY->setPosition({1460 + 115, currentPosY});
     posY->displayInput(window);
-    displayCategoryTitle(window, "Size", window->getSize().x * 0.76, 250);
+    currentPosY += 50;
+    displayCategoryTitle(window, "Size", window->getSize().x * 0.76, currentPosY);
+    currentPosY += 50;
+    sizeX->setPosition({1460, currentPosY});
     sizeX->displayInput(window);
+    sizeY->setPosition({1460 + 115, currentPosY});
     sizeY->displayInput(window);
+    currentPosY += 50;
+    rotation->setPosition({1460, currentPosY});
     rotation->displayInput(window);
-    currentPosY = 400;
+    currentPosY += 50;
     displayHealth(window, currentPosY);
     displayPlayerFollowingPatternDisplay(window, currentPosY);
     displayShootPlayerPatternDisplay(window, currentPosY);
@@ -162,6 +175,7 @@ void Edition::ComponentsEditor::display(std::shared_ptr<sf::RenderWindow> window
     displayWavePatternDisplay(window, currentPosY);
     displayTypeDisplay(window, currentPosY);
     displayAddComponent(window, currentPosY);
+    maxScrollOffset = (window->getSize().y + (80 + this->scrollOffset - currentPosY));
 }
 
 void Edition::ComponentsEditor::updateSelectedEntity(std::shared_ptr<Edition::Asset> asset)
@@ -372,5 +386,13 @@ void Edition::ComponentsEditor::handleInput(const sf::Event &event)
             }
         }
         componentSelection->handleInput(event);
+    }
+    if (event.type == sf::Event::MouseWheelScrolled) {
+        if (event.mouseWheelScroll.delta > 0) {
+            scrollOffset += scrollSpeed;
+        } else {
+            scrollOffset -= scrollSpeed;
+        }
+        scrollOffset = std::clamp(scrollOffset, maxScrollOffset - (500), 0.0f);
     }
 }

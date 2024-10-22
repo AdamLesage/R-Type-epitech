@@ -189,7 +189,7 @@ namespace Edition {
              * @param window The render window where the "Add Component" option is displayed.
              * @param posY The Y coordinate where the option will be displayed.
              */
-            void displayAddComponent(std::shared_ptr<sf::RenderWindow> window, int posY);
+            void displayAddComponent(std::shared_ptr<sf::RenderWindow> window, int &posY);
 
             /**
              * @brief Adds a new component to the entity or object.
@@ -264,6 +264,10 @@ namespace Edition {
             std::unique_ptr<StraightLinePatternDisplay> straightLinePatternDisplay;
             std::unique_ptr<Wave_patternDisplay> wavePatternDisplay;
             std::unique_ptr<TypeDisplay> typeDisplay;
+
+            float scrollOffset = 0;
+            const float scrollSpeed = 20;
+            float maxScrollOffset = 0;
     };
 }
 
