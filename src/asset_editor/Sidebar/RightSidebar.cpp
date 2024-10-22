@@ -181,9 +181,12 @@ void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindo
 
 std::string Edition::RightSidebar::handleEvent(const sf::Event& event)
 {
-    this->assetSelector->handleEvent(event);
+    if (this->_currentSidebarSelection != "Components") {
+        this->assetSelector->handleEvent(event);
+        return this->assetSelector->handlePickSprite(event);
+    }
     this->componentsEditor->handleInput(event);
-    return this->assetSelector->handlePickSprite(event);
+    return "";
 }
 
 void Edition::RightSidebar::updateSelectedEntity(std::shared_ptr<Edition::Asset> asset)

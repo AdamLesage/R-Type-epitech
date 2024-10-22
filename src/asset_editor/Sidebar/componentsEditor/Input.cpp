@@ -14,7 +14,7 @@ Edition::Input::Input(sf::Vector2f size, sf::Vector2f pos, std::string title)
     this->fontLoaded = false;
     this->_back.reset(new sf::RectangleShape(size));
     this->_back->setFillColor(sf::Color(30, 30, 30));
-    this->_back->setOutlineColor(sf::Color::Transparent);
+    this->_back->setOutlineColor(sf::Color::Black);
     this->_back->setOutlineThickness(1);
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (this->_font.loadFromFile(fontPath)) {

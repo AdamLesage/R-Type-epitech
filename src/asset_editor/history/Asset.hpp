@@ -15,6 +15,15 @@
 #include "../../shared/components/Position.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Rotation.hpp"
+#include "../../shared/components/Health.hpp"
+#include "../../shared/components/PlayerFollowingPattern.hpp"
+#include "../../shared/components/ShootStraightPattern.hpp"
+#include "../../shared/components/ShootPlayerPattern.hpp"
+#include "../../shared/components/StraightPattern.hpp"
+#include "../../shared/components/Wave_Pattern.hpp"
+#include "../../shared/components/Type.hpp"
+#include "../../shared/components/Color.hpp"
+#include "../../shared/components/Sprite.hpp"
 
 namespace Edition {
     /**
@@ -51,12 +60,30 @@ namespace Edition {
              */
             void draw(sf::RenderWindow &window);
 
+            /**
+             * @brief Get the global bounds of the asset.
+             * 
+             * @return The bounding rectangle of the asset as an sf::FloatRect.
+             */
             sf::FloatRect getGlobalBounds();
 
+            /**
+             * @brief Adds a component to the asset.
+             * 
+             * @tparam T The type of the component being added.
+             * @param component The component to be added to the asset.
+             */
             template<typename T>
             void addComponent(T &&component) {
                 _components[std::type_index(typeid(std::decay_t<T>))] = std::forward<T>(component);
             }
+            /**
+             * @brief Retrieves a component of the specified type from the asset.
+             * 
+             * @tparam T The type of the component to retrieve.
+             * @return A reference to the component of the specified type.
+             * @throws std::runtime_error If the component of the specified type is not found.
+             */
             template<typename T>
             T& getComponent() {
                 auto it = _components.find(std::type_index(typeid(std::decay_t<T>)));

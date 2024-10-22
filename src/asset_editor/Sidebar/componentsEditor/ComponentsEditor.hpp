@@ -12,6 +12,7 @@
 #include <memory>
 #include "Input.hpp"
 #include "InputNumber.hpp"
+#include "SelectButton.hpp"
 #include <string>
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -21,6 +22,71 @@
 #endif
 
 namespace Edition {
+    typedef struct HealthDisplay_s {
+        std::unique_ptr<InputNumber> health;
+
+        void initialize(int healthValue) {
+            this->health = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Health: ");
+            this->health->setInput(std::to_string(healthValue));
+        }
+    } HealthDisplay;
+
+    typedef struct ShootStraightPatternDisplay_s {
+        std::unique_ptr<InputNumber> projectileSpeed;
+        std::unique_ptr<InputNumber> shootCooldown;
+        void initialize(int speed, int cooldown) {
+            this->projectileSpeed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+            this->projectileSpeed->setInput(std::to_string(speed));
+            this->shootCooldown = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Cooldown: ");
+            this->shootCooldown->setInput(std::to_string(cooldown));
+        }
+    } ShootStraightPatternDisplay;
+
+    typedef struct ShootPlayerPatternDisplay_s {
+        std::unique_ptr<InputNumber> projectileSpeed;
+        std::unique_ptr<InputNumber> shootCooldown;
+        void initialize(int speed, int cooldown) {
+            this->projectileSpeed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+            this->projectileSpeed->setInput(std::to_string(speed));
+            this->shootCooldown = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Cooldown: ");
+            this->shootCooldown->setInput(std::to_string(cooldown));
+        }
+    } ShootPlayerPatternDisplay;
+
+    typedef struct PlayerFollowingPatternDisplay_s {
+        std::unique_ptr<InputNumber> speed;
+        void initialize(int speedValue) {
+            this->speed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+            this->speed->setInput(std::to_string(speedValue));
+        }
+    } PlayerFollowingPatternDisplay;
+
+    typedef struct StraightLinePatternDisplay_s {
+        std::unique_ptr<InputNumber> speed;
+        void initialize(int speedValue) {
+            this->speed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+            this->speed->setInput(std::to_string(speedValue));
+        }
+    } StraightLinePatternDisplay;
+
+    typedef struct Wave_patternDisplay_s {
+        std::unique_ptr<InputNumber> amplitude;
+        std::unique_ptr<InputNumber> frequency;
+        void initialize(float amp, float freq) {
+            this->amplitude = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "amplitude: ");
+            this->amplitude->setInput(std::to_string(amp));
+            this->frequency = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "fequency: ");
+            this->frequency->setInput(std::to_string(freq));
+        }
+    } Wave_patternDisplay;
+    typedef struct TypeDisplay_s {
+        std::unique_ptr<SelectButton> type;
+
+        void initialize() {
+            std::vector<std::string> option({"PLAYER", "ENEMY", "PLAYER_PROJECTILE", "ENEMY_PROJECTILE", "BACKGROUND", "OBSTACLE", "POWERUP"});
+            this->type = std::make_unique<SelectButton>(sf::Vector2f(1460, 400), sf::Vector2f(300, 50), option);
+        }
+    } TypeDisplay;
     /**
      * @brief A class used for editing the attributes of assets.
      * 
@@ -65,6 +131,26 @@ namespace Edition {
              * @param posY The Y coordinate for the position of the title.
              */
             void displayCategoryTitle(std::shared_ptr<sf::RenderWindow> window, std::string title, float posX, float posY);
+            /**
+             * @brief Displays the health information in the specified position.
+             * 
+             * @param window The render window where the health information is displayed.
+             * @param posY The reference to the Y coordinate where the health will be displayed and updated after rendering.
+             */
+            void displayHealth(std::shared_ptr<sf::RenderWindow> window, int &posY);
+
+            /**
+             * @brief Displays a UI option to add a component at a specified position.
+             * 
+             * @param window The render window where the "Add Component" option is displayed.
+             * @param posY The Y coordinate where the option will be displayed.
+             */
+            void displayAddComponent(std::shared_ptr<sf::RenderWindow> window, int posY);
+
+            /**
+             * @brief Adds a new component to the entity or object.
+             */
+            void addComponent();
             std::shared_ptr<Edition::Asset> _asset;
             sf::Font font;
             std::unique_ptr<Input> label;
@@ -73,6 +159,18 @@ namespace Edition {
             std::unique_ptr<InputNumber> sizeX;
             std::unique_ptr<InputNumber> sizeY;
             std::unique_ptr<InputNumber> rotation;
+            int currentPosY;
+            std::unique_ptr<SelectButton> componentSelection;
+            sf::RectangleShape addButton;
+            std::vector<std::string> options = { "Health", "ShootStraightPattern", "ShootPlayerPattern", "PlayerFollowingPattern" , "StraightLinePattern", "Wave_pattern" ,"Type"};
+
+            std::unique_ptr<HealthDisplay> healthDisplay;
+            std::unique_ptr<ShootStraightPatternDisplay> shootStraightPatternDisplay;
+            std::unique_ptr<ShootPlayerPatternDisplay> shootPlayerPatternDisplay;
+            std::unique_ptr<PlayerFollowingPatternDisplay> playerFollowingPatternDisplay;
+            std::unique_ptr<StraightLinePatternDisplay> straightLinePatternDisplay;
+            std::unique_ptr<Wave_patternDisplay> wavePatternDisplay;
+            std::unique_ptr<TypeDisplay> typeDisplay;
     };
 }
 

@@ -26,16 +26,14 @@ Edition::SelectBar::SelectBar(std::vector<std::string> selectOption, float x, fl
         shape.setPosition(x, y);
         shape.setFillColor(sf::Color::Transparent);
 
-        // Création du texte associé à chaque option
         sf::Text text;
-        text.setFont(font); // Utilisation de la police membre
+        text.setFont(font);
         text.setString(_selectionOption[i]);
         text.setCharacterSize(30);
         text.setFillColor(sf::Color::White);
         text.setPosition(x, y);
         shape.setSize(sf::Vector2f(text.getLocalBounds().width + 5, 55));
 
-        // Centrage du texte par rapport au bouton
         const sf::FloatRect bounds(text.getLocalBounds());
         const sf::Vector2f box(shape.getSize());
         text.setOrigin((bounds.width - box.x) / 2 + bounds.left, (bounds.height - box.y) / 2 + bounds.top);

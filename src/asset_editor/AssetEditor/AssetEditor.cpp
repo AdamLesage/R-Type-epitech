@@ -66,7 +66,7 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
     if (event.type == sf::Event::Closed) {
         _window->close();
     }
-    if (event.type == sf::Event::MouseButtonReleased) {
+    if (event.type == sf::Event::MouseButtonReleased && !mousePathTexture.empty()) {
         if (mousePickRect != nullptr && !mousePathTexture.empty()) {
             std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(event.mouseButton.x, event.mouseButton.y, mousePathTexture);
             this->_editionScreen.commandManager.createAsset(asset);
