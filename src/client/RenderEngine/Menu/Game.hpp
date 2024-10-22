@@ -149,6 +149,8 @@ namespace RType {
             sf::Font font;
             std::shared_ptr<std::mutex> _mutex;
             bool piou = false;
+            sf::RenderTexture RenderTexture;
+            sf::Shader colorblindShader[5];
     };
 } // namespace RType
 
