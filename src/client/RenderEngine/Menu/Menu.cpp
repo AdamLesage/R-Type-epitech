@@ -56,14 +56,35 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
     selectedOption = 0;
     backgroundMusic.play();
     backgroundMusic.setLoop(true);
+        if (!colorblindShader[0].loadFromFile("assets/shaders/Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading deuteranopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[1].loadFromFile("assets/shaders/Protanopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading protanopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[2].loadFromFile("assets/shaders/Tritanopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading tritanopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[3].loadFromFile("assets/shaders/Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading achromatopsia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[4].loadFromFile("assets/shaders/Normal_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading normal shader" << std::endl;
+        return;
+    }
+    RenderTexture.create(1920, 1080);
 }
 
 void RType::Menu::draw() {
-    window->draw(background);
-    window->draw(logoSprite);
+    RenderTexture.draw(background);
+    RenderTexture.draw(logoSprite);
 
     for (int i = 0; i < 3; ++i) {
-        window->draw(menuOptions[i]);
+        RenderTexture.draw(menuOptions[i]);
     }
 }
 
@@ -138,10 +159,10 @@ void RType::Menu::displaySound() {
     volumeTextShadow.setFillColor(sf::Color(0, 0, 0, 150));
     volumeTextShadow.setPosition(volumeText.getPosition().x + 2, volumeText.getPosition().y + 2);
 
-    window->draw(volumeBarBackground);
-    window->draw(volumeBarForeground);
-    window->draw(volumeTextShadow);
-    window->draw(volumeText);
+    RenderTexture.draw(volumeBarBackground);
+    RenderTexture.draw(volumeBarForeground);
+    RenderTexture.draw(volumeTextShadow);
+    RenderTexture.draw(volumeText);
 }
 
 void RType::Menu::displaySubtitles() {
@@ -166,9 +187,9 @@ void RType::Menu::displaySubtitles() {
     backgroundRect.setOrigin(backgroundRect.getSize().x / 2.0f, backgroundRect.getSize().y / 2.0f);
     backgroundRect.setPosition(subtitle.getPosition());
 
-    window->draw(backgroundRect);
-    window->draw(subtitleShadow);
-    window->draw(subtitle);
+    RenderTexture.draw(backgroundRect);
+    RenderTexture.draw(subtitleShadow);
+    RenderTexture.draw(subtitle);
 }
 
 int RType::Menu::displayMenu() {
@@ -220,7 +241,21 @@ int RType::Menu::displayMenu() {
     if (keyValue == "ON") {
         displaySubtitles();
     }
-
+    RenderTexture.display();
+    sf::Sprite sprite(RenderTexture.getTexture());
+        std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    if (colorblind.find("Deuteranopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[0]);
+    } else if (colorblind.find("Protanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[1]);
+    } else if (colorblind.find("Tritanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[2]);
+    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[3]);
+    } else {
+        window->draw(sprite, &colorblindShader[4]);
+    }
+    window->display();
     return (0);
 }
 

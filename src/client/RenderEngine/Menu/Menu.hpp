@@ -106,6 +106,8 @@ namespace RType {
             std::shared_ptr<Lobby> lobby;
             sf::SoundBuffer backgroundBuffer;
             sf::Sound backgroundMusic;
+            sf::RenderTexture RenderTexture;
+            sf::Shader colorblindShader[5];
             // std::shared_ptr<Game> games;
     };
 } // namespace RType

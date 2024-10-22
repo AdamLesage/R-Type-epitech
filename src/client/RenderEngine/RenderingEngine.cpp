@@ -43,7 +43,6 @@ void RType::RenderingEngine::run() {
         } else if (scene == 3) {
             window->close();
         }
-        window->display();
     }
     exit(0);
 }
