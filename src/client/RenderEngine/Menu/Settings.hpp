@@ -101,27 +101,23 @@ class Settings {
         int set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value);
 
     protected:
-        int selectedOption;
-        sf::Sound selectSound;
-        std::shared_ptr<sf::RenderWindow> window;
-        sf::Font font;
-        sf::Text menuOptions[8];
-        sf::Texture logoTexture;
-        sf::Sprite logoSprite;
-        sf::Event event;
-        sf::RectangleShape background;
-        sf::Texture backgroundTexture;
-        sf::Texture ShootInputTexture;
-        sf::Sprite ShootInputSprite;
-        sf::Texture arrowTexture[4];
-        sf::Sprite arrowSprite[4];
-        sf::Texture arrowTexturepressed[4];
-        sf::Sprite arrowSpritepressed[4];
-        sf::Texture ShootInputTexturepressed;
-        sf::Sprite ShootInputSpritepressed;
-        std::string newArrowInput;
-        sf::RenderTexture RenderTexture;
-        sf::Shader colorblindShader[5];
+        int selectedOption; // The selected option
+        sf::Sound selectSound; // The sound played when selecting an option
+        std::shared_ptr<sf::RenderWindow> window; // The window to display the settings on
+        sf::Font font; // The font used for the settings
+        sf::Text menuOptions[8]; // The options of the settings so the keys up, down, left, right, shoot, escape, subtitles and colorblind
+        sf::Texture logoTexture; // The texture of the logo
+        sf::Sprite logoSprite; // The sprite of the logo
+        sf::Event event; // The event of the settings
+        sf::RectangleShape background; // The background of the settings
+        sf::Texture backgroundTexture; // The texture of the background
+        sf::Texture ShootInputTexture; // The texture of the shoot input
+        sf::Sprite ShootInputSprite; // The sprite of the shoot input
+        sf::Texture arrowTexture[4]; // The texture of the arrows up down left right
+        sf::Sprite arrowSprite[4]; // The sprite of the arrows up down left right
+        std::string newArrowInput; // The new input of the arrow
+        sf::RenderTexture RenderTexture; // The render texture of the settings
+        sf::Shader colorblindShader[5]; // The shaders for the colorblind mode (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
 
     private:
 };
