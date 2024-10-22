@@ -15,6 +15,7 @@
 #include "SelectButton.hpp"
 #include <string>
 #include <unordered_map>
+#include <iomanip>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -23,6 +24,25 @@
 #endif
 
 namespace Edition {
+    typedef struct SpriteDisplay_s {
+        std::unique_ptr<InputNumber> rectSizeX;
+        std::unique_ptr<InputNumber> rectSizeY;
+        std::unique_ptr<InputNumber> rectPosX;
+        std::unique_ptr<InputNumber> rectPosY;
+
+        void initialize(std::array<int, 2> rectSize, std::array<int, 2> rectPos) {
+            this->rectSizeX = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Rect Size X: ");
+            this->rectSizeX->setInput(std::to_string(rectSize[0]));
+            this->rectSizeY = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460 + 200, 200), "Y: ");
+            this->rectSizeY->setInput(std::to_string(rectSize[1]));
+
+            this->rectPosX = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Rect pos X: ");
+            this->rectPosX->setInput(std::to_string(rectPos[0]));
+            this->rectPosY = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460 + 200, 200), "Y: ");
+            this->rectPosY->setInput(std::to_string(rectPos[1]));
+        }
+    } SpriteDisplay;
+
     typedef struct HealthDisplay_s {
         std::unique_ptr<InputNumber> health;
 
@@ -75,9 +95,14 @@ namespace Edition {
         std::unique_ptr<InputNumber> frequency;
         void initialize(float amp, float freq) {
             this->amplitude = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "amplitude: ");
-            this->amplitude->setInput(std::to_string(amp));
+            std::ostringstream oss;
+            oss << std::fixed << std::setprecision(2) << amp;
+            this->amplitude->setInput(oss.str(
+            ));
+            oss.str("");
+            oss << std::fixed << std::setprecision(2) << freq;
             this->frequency = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "fequency: ");
-            this->frequency->setInput(std::to_string(freq));
+            this->frequency->setInput(oss.str());
         }
     } Wave_patternDisplay;
     typedef struct TypeDisplay_s {
@@ -132,6 +157,16 @@ namespace Edition {
              * @param posY The Y coordinate for the position of the title.
              */
             void displayCategoryTitle(std::shared_ptr<sf::RenderWindow> window, std::string title, float posX, float posY);
+            /**
+             * @brief Displays sprite properties including rectangle size and position.
+             * 
+             * This function renders input fields for the sprite's rectangle dimensions 
+             * (width and height) and its position (x and y) in the UI.
+             *
+             * @param window A shared pointer to the SFML render window.
+             * @param posY A reference to an integer representing the vertical position for UI placement.
+             */
+            void displaySprite(std::shared_ptr<sf::RenderWindow> window, int &posY);
             /**
              * @brief Displays the health information in the specified position.
              * 
@@ -195,6 +230,14 @@ namespace Edition {
              * @brief Adds a new component to the entity or object.
              */
             void addComponent();
+            /**
+             * @brief Processes input for sprite size and position.
+             * 
+             * Updates sprite properties based on user input events.
+             *
+             * @param event The SFML event to handle.
+             */
+            void handleSpriteInput(const sf::Event &event);
             /**
              * @brief Handles user input for updating health values.
              * 
@@ -264,6 +307,7 @@ namespace Edition {
             std::unique_ptr<StraightLinePatternDisplay> straightLinePatternDisplay;
             std::unique_ptr<Wave_patternDisplay> wavePatternDisplay;
             std::unique_ptr<TypeDisplay> typeDisplay;
+            std::unique_ptr<SpriteDisplay> spriteDisplay;
 
             float scrollOffset = 0;
             const float scrollSpeed = 20;

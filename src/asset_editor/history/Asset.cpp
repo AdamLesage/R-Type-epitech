@@ -18,6 +18,7 @@ Edition::Asset::Asset(int x, int y, std::string assetPath, size_t entityCode)
     this->addComponent<Position>(Position{static_cast<float>(x), static_cast<float>(y)});
     this->addComponent<Size>(Size{_spriteTexture->getSize().x, _spriteTexture->getSize().y});
     this->addComponent<Rotation>(Rotation{0});
+    this->addComponent<Sprite>(Sprite{assetPath, {static_cast<int>(_spriteTexture->getSize().x), static_cast<int>(_spriteTexture->getSize().y)}, {0, 0}});
 
     this->_sprite.setTexture(_spriteTexture);
     this->_entityCode = "0x" + std::to_string(entityCode);
@@ -36,8 +37,13 @@ void Edition::Asset::move(int dx, int dy)
 
 void Edition::Asset::draw(sf::RenderWindow &window)
 {
-    this->_sprite.setPosition(this->getComponent<Position>().x, this->getComponent<Position>().y);
-    this->_sprite.setSize(sf::Vector2f(this->getComponent<Size>().x, this->getComponent<Size>().y));
+    auto &sprite = this->getComponent<Sprite>();
+    auto &size = this->getComponent<Size>();
+    auto &pos = this->getComponent<Position>();
+
+    this->_sprite.setPosition(pos.x, pos.y);
+    this->_sprite.setSize(sf::Vector2f(size.x, size.y));
+    this->_sprite.setTextureRect(sf::IntRect(sprite.rectPos[0], sprite.rectPos[1], sprite.rectSize[0], sprite.rectSize[1]));
     this->_sprite.setRotation(this->getComponent<Rotation>().rotation);
     window.draw(this->_sprite);
 }

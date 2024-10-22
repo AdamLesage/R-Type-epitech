@@ -14,12 +14,12 @@ Edition::ComponentsEditor::ComponentsEditor()
         std::cerr << "Error loading font!" << std::endl;
         return;
     }
-    label.reset(new Input(sf::Vector2f(350, 40), sf::Vector2f(1460, 80), "Label: "));
-    posX.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "X: "));
-    posY.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1460 + 115, 200), "Y: "));
-    sizeX.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1460, 250 + 50), "X: "));
-    sizeY.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1460 + 115,  250 + 50), "Y: "));
-    rotation.reset(new InputNumber(sf::Vector2f(70,40), sf::Vector2f(1460, 350), "Rotation: "));
+    label.reset(new Input(sf::Vector2f(350, 40), sf::Vector2f(1500, 80), "Label: "));
+    posX.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1500, 200), "X: "));
+    posY.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1500 + 115, 200), "Y: "));
+    sizeX.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1500, 250 + 50), "X: "));
+    sizeY.reset(new InputNumber(sf::Vector2f(70, 40), sf::Vector2f(1500 + 115,  250 + 50), "Y: "));
+    rotation.reset(new InputNumber(sf::Vector2f(70,40), sf::Vector2f(1500, 350), "Angle: "));
 
     componentSelection.reset(new SelectButton({1460, 400}, {300, 50}, options));
     addButton = sf::RectangleShape({100, 50});
@@ -66,6 +66,27 @@ void Edition::ComponentsEditor::displayAddComponent(std::shared_ptr<sf::RenderWi
     window->draw(addButton);
     window->draw(addText);
     posY += 100;
+}
+
+void Edition::ComponentsEditor::displaySprite(std::shared_ptr<sf::RenderWindow> window, int &posY)
+{
+    if (this->spriteDisplay != nullptr) {
+        displayCategoryTitle(window, "Sprite Properties", window->getSize().x * 0.76, posY);
+
+        this->spriteDisplay->rectSizeX->setPosition({1500, static_cast<float>(posY) + 50});
+        this->spriteDisplay->rectSizeX->displayInput(window);
+
+        this->spriteDisplay->rectSizeY->setPosition({1500 + 250, static_cast<float>(posY) + 50});
+        this->spriteDisplay->rectSizeY->displayInput(window);
+
+        this->spriteDisplay->rectPosX->setPosition({1500, static_cast<float>(posY) + 100});
+        this->spriteDisplay->rectPosX->displayInput(window);
+
+        this->spriteDisplay->rectPosY->setPosition({1500 + 250, static_cast<float>(posY) + 100});
+        this->spriteDisplay->rectPosY->displayInput(window);
+
+        posY += 150;
+    }
 }
 
 void Edition::ComponentsEditor::displayHealth(std::shared_ptr<sf::RenderWindow> window, int &posY)
@@ -150,21 +171,24 @@ void Edition::ComponentsEditor::display(std::shared_ptr<sf::RenderWindow> window
     label->setPosition({1460, static_cast<float>(currentPosY)});
     label->displayInput(window);
     currentPosY += 50;
+    displaySprite(window, currentPosY);
     displayCategoryTitle(window, "Position", window->getSize().x * 0.76, static_cast<float>(currentPosY));
     currentPosY += 50;
-    posX->setPosition({1460, static_cast<float>(currentPosY)});
+    posX->setPosition({1500, static_cast<float>(currentPosY)});
     posX->displayInput(window);
-    posY->setPosition({1460 + 115, static_cast<float>(currentPosY)});
+    posY->setPosition({1500 + 115, static_cast<float>(currentPosY)});
     posY->displayInput(window);
     currentPosY += 50;
     displayCategoryTitle(window, "Size", window->getSize().x * 0.76, static_cast<float>(currentPosY));
     currentPosY += 50;
-    sizeX->setPosition({1460, static_cast<float>(currentPosY)});
+    sizeX->setPosition({1500, static_cast<float>(currentPosY)});
     sizeX->displayInput(window);
-    sizeY->setPosition({1460 + 115, static_cast<float>(currentPosY)});
+    sizeY->setPosition({1500 + 115, static_cast<float>(currentPosY)});
     sizeY->displayInput(window);
     currentPosY += 50;
-    rotation->setPosition({1460, static_cast<float>(currentPosY)});
+    displayCategoryTitle(window, "Rotation", window->getSize().x * 0.76, static_cast<float>(currentPosY));
+    currentPosY += 50;
+    rotation->setPosition({1500, static_cast<float>(currentPosY)});
     rotation->displayInput(window);
     currentPosY += 50;
     displayHealth(window, currentPosY);
@@ -188,6 +212,9 @@ void Edition::ComponentsEditor::updateSelectedEntity(std::shared_ptr<Edition::As
     this->wavePatternDisplay.reset();
     this->typeDisplay.reset();
 
+    auto &sprite = this->_asset->getComponent<Sprite>();
+    this->spriteDisplay = std::make_unique<SpriteDisplay>();
+    this->spriteDisplay->initialize(sprite.rectSize, sprite.rectPos);
     try {
         auto &health = this->_asset->getComponent<Health>();
         this->healthDisplay = std::make_unique<HealthDisplay>();
@@ -281,8 +308,8 @@ void Edition::ComponentsEditor::addComponent()
     }
     if (selectedComponent == "Wave_pattern") {
         this->wavePatternDisplay = std::make_unique<Wave_patternDisplay>();
-        this->wavePatternDisplay->initialize(1.f, 0.02f);
-        this->_asset->addComponent<Wave_pattern>(Wave_pattern{1.f, 0.02f});
+        this->wavePatternDisplay->initialize(1.0, 0.02);
+        this->_asset->addComponent<Wave_pattern>(Wave_pattern{1.0, 0.02});
     }
     if (selectedComponent == "Type") {
         this->typeDisplay = std::make_unique<TypeDisplay>();
@@ -290,6 +317,41 @@ void Edition::ComponentsEditor::addComponent()
         this->_asset->addComponent<Type>(Type{EntityType::ENEMY});
     }
     
+}
+
+void Edition::ComponentsEditor::handleSpriteInput(const sf::Event &event)
+{
+    if (this->spriteDisplay != nullptr && this->_asset != nullptr) {
+        auto &sprite = this->_asset->getComponent<Sprite>();
+        if (this->spriteDisplay->rectSizeX->checkInput(event)) {
+            std::string input = this->spriteDisplay->rectSizeX->getInput();
+            if (!input.empty()) {
+                int sizeX = std::stoi(input);
+                this->_asset->addComponent<Sprite>(Sprite{sprite.spritePath, {sizeX, sprite.rectSize[1]}, {sprite.rectPos[0], sprite.rectPos[1]}});
+            }
+        }
+        if (this->spriteDisplay->rectSizeY->checkInput(event)) {
+            std::string input = this->spriteDisplay->rectSizeY->getInput();
+            if (!input.empty()) {
+                int sizeY = std::stoi(input);
+                this->_asset->addComponent<Sprite>(Sprite{sprite.spritePath, {sprite.rectSize[0], sizeY}, {sprite.rectPos[0], sprite.rectPos[1]}});
+            }
+        }
+        if (this->spriteDisplay->rectPosX->checkInput(event)) {
+            std::string input = this->spriteDisplay->rectPosX->getInput();
+            if (!input.empty()) {
+                int posX = std::stoi(input);
+                this->_asset->addComponent<Sprite>(Sprite{sprite.spritePath, {sprite.rectSize[0], sprite.rectSize[1]}, {posX, sprite.rectPos[1]}});
+            }
+        }
+        if (this->spriteDisplay->rectPosY->checkInput(event)) {
+            std::string input = this->spriteDisplay->rectPosY->getInput();
+            if (!input.empty()) {
+                int posY = std::stoi(input);
+                this->_asset->addComponent<Sprite>(Sprite{sprite.spritePath, {sprite.rectSize[0], sprite.rectSize[1]}, {sprite.rectPos[0], posY}});
+            }
+        }
+    }
 }
 
 void Edition::ComponentsEditor::handleHealthInput(const sf::Event &event)
@@ -423,9 +485,9 @@ void Edition::ComponentsEditor::handleInput(const sf::Event &event)
         }
         if (sizeY->checkInput(event) && this->_asset != nullptr) {
             if (sizeY->getInput().empty())
-                this->_asset->addComponent<Size>(Size{this->_asset->getComponent<Size>().y, 1});
+                this->_asset->addComponent<Size>(Size{this->_asset->getComponent<Size>().x, 1});
             else
-                this->_asset->addComponent<Size>(Size{this->_asset->getComponent<Size>().y, std::stoul(sizeY->getInput())});
+                this->_asset->addComponent<Size>(Size{this->_asset->getComponent<Size>().x, std::stoul(sizeY->getInput())});
         }
         if (rotation->checkInput(event) && this->_asset != nullptr) {
             if (rotation->getInput().empty())
@@ -433,6 +495,7 @@ void Edition::ComponentsEditor::handleInput(const sf::Event &event)
             else
                 this->_asset->addComponent<Rotation>(Rotation{std::stof(rotation->getInput())});
         }
+        handleSpriteInput(event);
         handleHealthInput(event);
         handlePlayerFollowingPatternInput(event);
         handleShootPlayerPatternInput(event);
