@@ -10,9 +10,9 @@
 
 #include <iostream>
 #include <memory>
-#include <stack>
 
 #include "ICommand.hpp"
+#include "Asset.hpp"
 
 namespace Edition {
 
@@ -38,7 +38,7 @@ namespace Edition {
              * 
              * @param command The command to execute
              */
-            void executeCommand(std::shared_ptr<ICommand> command);
+            void createAsset(std::shared_ptr<Edition::Asset> asset);
 
             /**
              * @brief Undo the last command
@@ -50,17 +50,45 @@ namespace Edition {
              */
             void redo();
 
+            /**
+             * @brief Get the undo vector
+             * 
+             * @return std::vector<std::shared_ptr<ICommand>> The undo vector
+             */
+            std::vector<std::shared_ptr<Edition::Asset>> getUndoAssets() const { return _undoAssets; }
+
+            // /**
+            //  * @brief Get the undo vector as a vector
+            //  * 
+            //  * @return std::vector<std::shared_ptr<ICommand>> The undo vector as a vector
+            //  */
+            // std::vector<std::shared_ptr<Edition::Asset>> getUndoAssetsVector() const;
+
+            // /**
+            //  * @brief Get the redo vector as a vector
+            //  * 
+            //  * @return std::vector<std::shared_ptr<ICommand>> The redo vector as a vector
+            //  */
+            // std::vector<std::shared_ptr<Edition::Asset>> getRedoAssetsVector() const;
+
+            /**
+             * @brief Get the redo vector
+             * 
+             * @return std::vector<std::shared_ptr<ICommand>> The redo vector
+             */
+            std::vector<std::shared_ptr<Edition::Asset>> getRedoAssets() const { return _redoAssets; }
+
         protected:
         private:
             /**
-             * @brief Stack of commands
+             * @brief The assets of the scene
              */
-            std::stack<std::shared_ptr<ICommand>> undoStack;
+            std::vector<std::shared_ptr<Edition::Asset>> _undoAssets;
 
             /**
-             * @brief Stack of commands
+             * @brief The redo assets of the scene
              */
-            std::stack<std::shared_ptr<ICommand>> redoStack;
+            std::vector<std::shared_ptr<Edition::Asset>> _redoAssets;
     };
 }
 

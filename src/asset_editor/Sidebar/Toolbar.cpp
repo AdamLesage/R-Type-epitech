@@ -21,6 +21,7 @@ Edition::Toolbar::Toolbar()
 {
     std::string undoPath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "undo.png";
     std::string redoPath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "redo.png";
+    std::string loadPath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "load.png";
     std::string savePath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "save.png";
     std::string deletePath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "delete.png";
     std::string movePath = "assets" + std::string(PATH_SEPARATOR) + "asset_editor" + std::string(PATH_SEPARATOR) + "move.png";
@@ -30,10 +31,11 @@ Edition::Toolbar::Toolbar()
     _toolbarButtons.push_back(ToolbarButton(undoPath, sf::Vector2f(20, 5)));
     _toolbarButtons.push_back(ToolbarButton(redoPath, sf::Vector2f(70, 5)));
     _toolbarButtons.push_back(ToolbarButton(savePath, sf::Vector2f(120, 5)));
-    _toolbarButtons.push_back(ToolbarButton(deletePath, sf::Vector2f(170, 5)));
-    _toolbarButtons.push_back(ToolbarButton(movePath, sf::Vector2f(220, 5)));
-    _toolbarButtons.push_back(ToolbarButton(dezoomPath, sf::Vector2f(320, 5)));
-    _toolbarButtons.push_back(ToolbarButton(zoomPath, sf::Vector2f(270, 5)));
+    _toolbarButtons.push_back(ToolbarButton(loadPath, sf::Vector2f(170, 5)));
+    _toolbarButtons.push_back(ToolbarButton(deletePath, sf::Vector2f(220, 5)));
+    _toolbarButtons.push_back(ToolbarButton(movePath, sf::Vector2f(270, 5)));
+    _toolbarButtons.push_back(ToolbarButton(zoomPath, sf::Vector2f(320, 5)));
+    _toolbarButtons.push_back(ToolbarButton(dezoomPath, sf::Vector2f(370, 5)));
 
     _currentSelection = MOVE;
 }
@@ -61,6 +63,7 @@ void Edition::Toolbar::displayToolbarButtons(sf::RenderWindow &window)
             if (selectionStr == "undo.png") this->setCurrentSelection(CurrentSelection::UNDO);
             else if (selectionStr == "redo.png") this->setCurrentSelection(CurrentSelection::REDO);
             else if (selectionStr == "save.png") this->setCurrentSelection(CurrentSelection::SAVE);
+            else if (selectionStr == "load.png") this->setCurrentSelection(CurrentSelection::LOAD);
             else if (selectionStr == "delete.png") this->setCurrentSelection(CurrentSelection::DELETE);
             else if (selectionStr == "move.png") this->setCurrentSelection(CurrentSelection::MOVE);
             else if (selectionStr == "zoom.png") this->setCurrentSelection(CurrentSelection::ZOOM);
