@@ -58,11 +58,6 @@ namespace Edition {
              * @brief The command manager
              */
             CommandManager commandManager;
-
-            /**
-             * @brief The assets of the scene
-             */
-            std::vector<std::shared_ptr<Edition::Asset>> _assets;
         private:
             sf::RectangleShape _centralArea;
     };

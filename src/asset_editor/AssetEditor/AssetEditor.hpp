@@ -38,6 +38,13 @@ namespace Edition {
              */
             void run();
 
+            /**
+             * @brief Handles toolbar event such as button clicks
+             * 
+             * This function will handle actions such as undo, redo, save, delete, move, zoom and dezoom
+             */
+            void handleToolbarEvents();
+
         protected:
         private:
             /**

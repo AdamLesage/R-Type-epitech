@@ -11,6 +11,8 @@
 #include <memory>
 #include <iostream>
 
+#include "Asset.hpp"
+
 namespace Edition {
 
     /**
@@ -36,6 +38,13 @@ namespace Edition {
              * @brief Redo the command
              */
             virtual void redo() = 0;
+
+            /**
+             * @brief Get the asset
+             * 
+             * @return std::shared_ptr<Asset> The asset
+             */
+            virtual std::shared_ptr<Asset> getAsset() = 0;
 
         protected:
         private:

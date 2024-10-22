@@ -57,6 +57,13 @@ namespace Edition {
              */
             void redo() override;
 
+            /**
+             * @brief Get the asset
+             * 
+             * @return std::shared_ptr<Asset> The asset
+             */
+            std::shared_ptr<Asset> getAsset() override { return _asset; }
+
         protected:
         private:
             /**

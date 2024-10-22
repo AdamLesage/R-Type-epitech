@@ -27,7 +27,7 @@ void Edition::EditionScreen::draw(sf::RenderWindow &window)
 {
     window.draw(_centralArea);
 
-    for (const auto &asset : _assets) {
+    for (const auto &asset : commandManager.getUndoAssets()) {
         asset->draw(window);
     }
 }
@@ -35,9 +35,9 @@ void Edition::EditionScreen::draw(sf::RenderWindow &window)
 std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Event &event)
 {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-        for (auto& it: _assets) {
-            if (it->getGlobalBounds().contains((event.mouseButton.x), (event.mouseButton.y))) {
-                return (it);
+        for (const auto &asset : commandManager.getUndoAssets()) {
+            if (asset->getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                return asset;
             }
         }
     }
