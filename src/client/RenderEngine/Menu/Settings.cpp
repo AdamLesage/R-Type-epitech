@@ -28,23 +28,23 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
-    if (!colorblindShader[0].loadFromFile("assets/shaders/Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[1].loadFromFile("assets/shaders/Protanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading protanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[2].loadFromFile("assets/shaders/Tritanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading tritanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[3].loadFromFile("assets/shaders/Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading achromatopsia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[4].loadFromFile("assets/shaders/Normal_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }
@@ -221,7 +221,7 @@ void Settings::displayInput()
     }
     std::string shootinput = std::string(get_key_value(cfg, "Keys5"));
     std::transform(shootinput.begin(), shootinput.end(), shootinput.begin(), ::tolower);
-    if (!ShootInputTexture.loadFromFile("assets/input/Keyboard/keyboard_" + shootinput + ".png")) {
+    if (!ShootInputTexture.loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR + "Keyboard" + PATH_SEPARATOR + "keyboard_" + shootinput + ".png")) {
         std::cerr << "Error loading shoot input texture" << std::endl;
         return;
     }
@@ -231,7 +231,7 @@ void Settings::displayInput()
         std::string arrowKey = "Keys" + std::to_string(i + 1);
         std::string arrowInput = std::string(get_key_value(cfg, arrowKey.c_str()));
         std::transform(arrowInput.begin(), arrowInput.end(), arrowInput.begin(), ::tolower);
-        if (!arrowTexture[i].loadFromFile("assets/input/Keyboard/keyboard_" + arrowInput + ".png")) {
+        if (!arrowTexture[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR + "Keyboard" + PATH_SEPARATOR + "keyboard_" + arrowInput + ".png")) {
             std::cerr << "Error loading arrow input texture for " << arrowKey << std::endl;
             return;
         }

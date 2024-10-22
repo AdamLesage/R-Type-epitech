@@ -56,23 +56,24 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
     selectedOption = 0;
     backgroundMusic.play();
     backgroundMusic.setLoop(true);
-        if (!colorblindShader[0].loadFromFile("assets/shaders/Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+    std::string shaderPath = std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR;
+    if (!colorblindShader[0].loadFromFile(shaderPath + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[1].loadFromFile("assets/shaders/Protanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[1].loadFromFile(shaderPath + "Protanopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading protanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[2].loadFromFile("assets/shaders/Tritanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[2].loadFromFile(shaderPath + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading tritanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[3].loadFromFile("assets/shaders/Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[3].loadFromFile(shaderPath + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading achromatopsia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[4].loadFromFile("assets/shaders/Normal_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[4].loadFromFile(shaderPath + "Normal_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }

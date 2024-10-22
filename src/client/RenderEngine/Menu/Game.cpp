@@ -92,23 +92,23 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
     _registry.register_component<Drawable_s>();
     _registry.register_component<Controllable_s>();
     BackgroundClock.restart();
-      if (!colorblindShader[0].loadFromFile("assets/shaders/Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[1].loadFromFile("assets/shaders/Protanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading protanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[2].loadFromFile("assets/shaders/Tritanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading tritanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[3].loadFromFile("assets/shaders/Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading achromatopsia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[4].loadFromFile("assets/shaders/Normal_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }
