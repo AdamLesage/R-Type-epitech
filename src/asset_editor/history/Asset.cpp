@@ -7,7 +7,7 @@
 
 #include "Asset.hpp"
 
-Edition::Asset::Asset(int x, int y, std::string assetPath)
+Edition::Asset::Asset(int x, int y, std::string assetPath, size_t entityCode)
 {
     this->_x = x;
     this->_y = y;
@@ -18,6 +18,7 @@ Edition::Asset::Asset(int x, int y, std::string assetPath)
         return;
     }
     this->_sprite.setTexture(_spriteTexture);
+    this->_entityCode = "0x" + std::to_string(entityCode);
 }
 
 Edition::Asset::~Asset()

@@ -72,6 +72,7 @@ namespace Edition {
             std::unique_ptr<sf::RectangleShape> mousePickRect;
             Toolbar _toolbar;
             EditionScreen _editionScreen;
+            size_t _lastEntityCode;
     };
 }
 

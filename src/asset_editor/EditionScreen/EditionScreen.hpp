@@ -13,11 +13,13 @@
 #include "../history/AddAsset.hpp"
 #include "../history/RemoveAsset.hpp"
 #include "../history/CommandManager.hpp"
+#include "SaveScene.hpp"
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
+#include <libconfig.h++>
 
 namespace Edition {
 

@@ -14,6 +14,7 @@ Edition::AssetEditor::AssetEditor()
     _rightSidebar = std::make_shared<RightSidebar>();
     _toolbar = Toolbar();
     _editionScreen = EditionScreen();
+    _lastEntityCode = 50; // Starting to 50 to avoid used code in PROTOCOL.md
 }
 
 Edition::AssetEditor::~AssetEditor()
@@ -67,8 +68,9 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
         _window->close();
     }
     if (event.type == sf::Event::MouseButtonReleased) {
-        if (mousePickRect != nullptr && !mousePathTexture.empty()) {
-            std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(event.mouseButton.x, event.mouseButton.y, mousePathTexture);
+        if (mousePickRect != nullptr && !mousePathTexture.empty() && _lastEntityCode < 100) { // Limit the number of entities to 100
+            std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(event.mouseButton.x, event.mouseButton.y, mousePathTexture, _lastEntityCode);
+            _lastEntityCode++; // Increment the entity code
             this->_editionScreen.commandManager.createAsset(asset);
         }
 

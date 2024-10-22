@@ -159,7 +159,7 @@ void Edition::EditionScreen::saveScene(const std::string &sceneName)
     // Add prefix and extension to the scene name
     // Fileconfig: "./config" + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg"
     std::string scenePath = std::string("config") + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg";
+    SaveScene saveScene = SaveScene(scenePath, commandManager.getUndoAssets());
 
-    // Save the scene
-    // libconfig::Config cfg;
+    saveScene.save();
 }
