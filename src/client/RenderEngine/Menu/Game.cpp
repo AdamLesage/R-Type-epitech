@@ -85,14 +85,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
         players[i].setPosition(sf::Vector2f(125.f + (125.f * i), 125.f));
         players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
     }
-
-    settings = std::make_shared<Settings>(window);
-    _registry.register_component<Position_s>();
-    _registry.register_component<Velocity_s>();
-    _registry.register_component<Drawable_s>();
-    _registry.register_component<Controllable_s>();
-    BackgroundClock.restart();
-    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+        if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
@@ -112,7 +105,19 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }
-    RenderTexture.create(1920, 1080);
+    sf::RenderTexture *RenderTexture2 = new sf::RenderTexture();
+    RenderTexture2->create(1920, 1080);
+    RenderTexture = std::shared_ptr<sf::RenderTexture>(RenderTexture2);
+    settings = std::make_shared<Settings>(window);
+    _registry.register_component<Position_s>();
+    _registry.register_component<Velocity_s>();
+    _registry.register_component<Drawable_s>();
+    _registry.register_component<Controllable_s>();
+    console = std::make_shared<Console>(window,RenderTexture);
+    BackgroundClock.restart();
+
+
+
 }
 
 RType::Game::~Game() {
@@ -126,7 +131,7 @@ void RType::Game::displayPiou() {
     piouText.setFillColor(sf::Color::White);
     piouText.setStyle(sf::Text::Bold);
     piouText.setPosition(1920 / 2 - 40, 900);
-    RenderTexture.draw(piouText);
+    RenderTexture->draw(piouText);
 }
 
 void RType::Game::ShootSound() {
@@ -160,18 +165,20 @@ void RType::Game::DisplaySkipIntro() {
     skipIntro.setFillColor(sf::Color::White);
     skipIntro.setStyle(sf::Text::Bold);
     skipIntro.setPosition(1920 / 2 - 200, 1080 - 100);
-    RenderTexture.draw(skipIntro);
+    RenderTexture->draw(skipIntro);
 }
 
 void RType::Game::play() {
+    console->setMediator(std::shared_ptr<IMediator>(this->_mediator));
     while (window->isOpen()) {
-        sf::Event event;
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) window->close();
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Escape) {
                     settings->displaySettings(true);
                 }
+                console->toggleDeveloperConsoleFromEvent(event);
+                console->checkInput();
             }
         }
 
@@ -193,11 +200,11 @@ void RType::Game::play() {
         if (backgrounds[2].getPosition().x < -1920) backgrounds[2].setPosition(1920, 0);
         if (backgrounds[3].getPosition().x < -1920) backgrounds[3].setPosition(1920, 0);
         for (int i = 0; i < 4; i++) {
-            RenderTexture.draw(backgrounds[i]);
+            RenderTexture->draw(backgrounds[i]);
         }
         this->set_texture();
         for (int i = 0; i < (int)entity.size(); i++) {
-            RenderTexture.draw(entity[i]);
+            RenderTexture->draw(entity[i]);
         }
         if (piou) {
             displayPiou();
@@ -211,8 +218,8 @@ void RType::Game::play() {
             std::cerr << "I/O error while reading file." << std::endl;
             return;
         }
-        RenderTexture.display();
-        sf::Sprite sprite(RenderTexture.getTexture());
+        RenderTexture->display();
+        sf::Sprite sprite(RenderTexture->getTexture());
         std::string colorblind = settings->get_key_value(cfg, "Keys8");
         if (colorblind.find("Deuteranopia") != std::string::npos) {
             window->draw(sprite, &colorblindShader[0]);
@@ -225,6 +232,7 @@ void RType::Game::play() {
         } else {
             window->draw(sprite, &colorblindShader[4]);
         }
+        console->displayDeveloperConsole();
         window->display();
     }
 }
@@ -299,7 +307,7 @@ void RType::Game::displayGame() {
             game_launch_music.stop();
             play();
         } else {
-            RenderTexture.draw(rectangleshape);
+            RenderTexture->draw(rectangleshape);
             DisplaySkipIntro();
         }
         if (piou) {
@@ -314,8 +322,8 @@ void RType::Game::displayGame() {
             std::cerr << "I/O error while reading file." << std::endl;
             return;
         }
-        RenderTexture.display();
-        sf::Sprite sprite(RenderTexture.getTexture());
+        RenderTexture->display();
+        sf::Sprite sprite(RenderTexture->getTexture());
         std::string colorblind = settings->get_key_value(cfg, "Keys8");
         if (colorblind.find("Deuteranopia") != std::string::npos) {
             window->draw(sprite, &colorblindShader[0]);
@@ -333,11 +341,11 @@ void RType::Game::displayGame() {
 }
 
 void RType::Game::handleEvents() {
-    sf::Event event;
-    while (window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) window->close();
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Space) {
+    sf::Event _event;
+    while (window->pollEvent(_event)) {
+        if (_event.type == sf::Event::Closed) window->close();
+        if (_event.type == sf::Event::KeyPressed) {
+            if (_event.key.code == sf::Keyboard::Space) {
                 animationComplete = true;
             }
         }

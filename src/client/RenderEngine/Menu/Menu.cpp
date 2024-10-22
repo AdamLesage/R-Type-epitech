@@ -8,6 +8,7 @@
 #include "Menu.hpp"
 
 RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator) {
+        std::cout << "RenderingEngine running" << std::endl;
     (void)mediator;
     window = wndw;
     if (!font.loadFromFile("assets/r-type.ttf")) {

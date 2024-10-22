@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech
+** File description:
+** Game
+*/
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
@@ -9,6 +16,7 @@
 #include "../../Mediator/IMediator.hpp"
 #include "Settings.hpp"
 #include "../../Camera.hpp"
+#include "../Console/Console.hpp"
 #include <mutex>
 #include <libconfig.h++>
 
@@ -127,6 +135,7 @@ namespace RType {
             bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
             Registry _registry;
             Systems _systems;
+            std::shared_ptr<Console> console;
             std::shared_ptr<Settings> settings; //the class settings used to display the settings
             std::vector<sf::RectangleShape> backgrounds; // The backgrounds of the game
             std::vector<sf::Texture> backgroundTextures; // The textures of the backgrounds
@@ -149,8 +158,9 @@ namespace RType {
             sf::Font font; // The font used for the game
             std::shared_ptr<std::mutex> _mutex; 
             bool piou = false; // A boolean to know wd need to display the piou sound
-            sf::RenderTexture RenderTexture; // The render texture
+            std::shared_ptr<sf::RenderTexture> RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
+            sf::Event event; // The event of the game
     };
 } // namespace RType
 

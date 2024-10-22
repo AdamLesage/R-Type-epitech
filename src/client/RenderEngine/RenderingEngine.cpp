@@ -18,6 +18,8 @@ void RType::RenderingEngine::run() {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _menu  = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
     logger.log(RType::Logger::LogType::RTYPEINFO, "Menu created");
+    std::cout << "RenderingEngine running" << std::endl;
+
     try {
         settings = std::make_shared<Settings>(window);
         lobby    = std::make_shared<Lobby>(window);
