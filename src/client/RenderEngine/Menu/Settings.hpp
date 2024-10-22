@@ -105,7 +105,7 @@ class Settings {
         sf::Sound selectSound;
         std::shared_ptr<sf::RenderWindow> window;
         sf::Font font;
-        sf::Text menuOptions[7];
+        sf::Text menuOptions[8];
         sf::Texture logoTexture;
         sf::Sprite logoSprite;
         sf::Event event;
@@ -120,6 +120,8 @@ class Settings {
         sf::Texture ShootInputTexturepressed;
         sf::Sprite ShootInputSpritepressed;
         std::string newArrowInput;
+        sf::RenderTexture RenderTexture;
+        sf::Shader colorblindShader[5];
 
     private:
 };

@@ -28,6 +28,27 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
+    if (!colorblindShader[0].loadFromFile("assets/shaders/Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading deuteranopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[1].loadFromFile("assets/shaders/Protanopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading protanopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[2].loadFromFile("assets/shaders/Tritanopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading tritanopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[3].loadFromFile("assets/shaders/Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading achromatopsia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[4].loadFromFile("assets/shaders/Normal_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading normal shader" << std::endl;
+        return;
+    }
+    RenderTexture.create(1920, 1080);
 }
 
 Settings::~Settings() {
@@ -51,12 +72,6 @@ const char* Settings::get_key_value(libconfig::Config &cfg, const char* key_name
 int Settings::set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value) {
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
-    if (strcmp(path, "Keys.Keys8.value") == 0) {
-        strcpy(path, "Keys.Keys7.value");
-    }
-    if (strcmp(key_name, "Keys8") == 0) {
-        key_name = "Keys7";
-    }
     libconfig::Setting &setting = cfg.lookup(path);
     try {
         if (cfg.exists(path)) {
@@ -85,7 +100,7 @@ void Settings::moveUp() {
 }
 
 void Settings::moveDown() {
-    if (selectedOption + 1 < 7) {
+    if (selectedOption + 1 < 8) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
@@ -115,6 +130,27 @@ void Settings::changeKey(std::string key) {
         } else {
             newKey2 = "ON";
         }
+        set_key_value(cfg, "Keys7", newKey2.c_str());
+        try {
+            cfg.writeFile(configPath.c_str());
+        } catch (const libconfig::FileIOException& fioex) {
+            std::cerr << "Error while writing file: " << configPath << std::endl;
+            return;
+        }
+        return;
+    }
+    else if (key.find("COLORBLIND") != std::string::npos) {
+        if (key == "COLORBLIND: Normal") {
+            newKey2 = "Deuteranopia";
+        } else if (key == "COLORBLIND: Deuteranopia") {
+            newKey2 = "Protanopia";
+        } else if (key == "COLORBLIND: Protanopia") {
+            newKey2 = "Tritanopia";
+        } else if (key == "COLORBLIND: Tritanopia") {
+            newKey2 = "Achromatopsia";
+        } else if (key == "COLORBLIND: Achromatopsia") {
+            newKey2 = "Normal";
+        }
         set_key_value(cfg, "Keys8", newKey2.c_str());
         try {
             cfg.writeFile(configPath.c_str());
@@ -125,7 +161,7 @@ void Settings::changeKey(std::string key) {
         return;
     }
     menuOptions[selectedOption].setString("PRESS A KEY");
-
+    RenderTexture.draw(menuOptions[selectedOption]);
     display();
     sf::Event event2 = event;
     bool keyPressed  = false;
@@ -202,51 +238,78 @@ void Settings::displayInput()
         arrowSprite[i].setTexture(arrowTexture[i]);
     }
 
-    window->draw(ShootInputSprite);
+    RenderTexture.draw(ShootInputSprite);
     for (int i = 0; i < 4; ++i) {
-        window->draw(arrowSprite[i]);
+        RenderTexture.draw(arrowSprite[i]);
     }
 }
 
 void Settings::display() {
-    window->draw(background);
-    window->draw(logoSprite);
-    for (int i = 0; i < 7; ++i) {
-        window->draw(menuOptions[i]);
-    }
+    RenderTexture.clear();
+    RenderTexture.draw(background);
+    RenderTexture.draw(logoSprite);
     displayInput();
+
+    for (int i = 0; i < 8; ++i) {
+        RenderTexture.draw(menuOptions[i]);
+    }
+    RenderTexture.display();
+    sf::Sprite sprite(RenderTexture.getTexture());
+        libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    std::string colorblind = std::string(get_key_value(cfg, "Keys8"));
+    if (colorblind.find("Deuteranopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[0]);
+    } else if (colorblind.find("Protanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[1]);
+    } else if (colorblind.find("Tritanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[2]);
+    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[3]);
+    } else {
+        window->draw(sprite, &colorblindShader[4]);
+    }
     window->display();
+
 }
 
 void Settings::initTextAndSprites()
 {
-        libconfig::Config cfg;
-        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-        try {
-            cfg.readFile(configPath.c_str());
-        } catch (const libconfig::FileIOException& fioex) {
-            std::cerr << "I/O error while reading file." << std::endl;
-            return;
-        }
-        std::string optionsText[] = {"UP       : ", "DOWN     : ", "LEFT     : ", "RIGHT    : ",
-                                     "SHOOT    : ", "SETTINGS: ",  "SUBTITLES: "};
-        for (int i = 0; i < 7; i++) {
-            optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)).c_str());
-            menuOptions[i].setFont(font);
-            menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
-            menuOptions[i].setString(optionsText[i]);
-            menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 300 + i * 100));
-        }
-        sf::Vector2f shootInputPosition = menuOptions[4].getPosition();
-        shootInputPosition.x -= 80;
-        shootInputPosition.y -= 10;
-        ShootInputSprite.setPosition(shootInputPosition);
-        for (int i = 0; i < 4; ++i) {
-            sf::Vector2f arrowPosition = menuOptions[i].getPosition();
-            arrowPosition.x -= 80;
-            arrowPosition.y -= 10;
-            arrowSprite[i].setPosition(arrowPosition);
-        }
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    std::string optionsText[] = {"UP         : ", "DOWN       : ", "LEFT       : ", "RIGHT      : ",
+                                 "SHOOT      : ", "SETTINGS   : ",  "SUBTITLES : ", "COLORBLIND : "};
+    for (int i = 0; i < 8; i++) {
+        optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)).c_str());
+        menuOptions[i].setFont(font);
+        menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
+        menuOptions[i].setString(optionsText[i]);
+        menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 200 + i * 100));
+    }
+    sf::Vector2f shootInputPosition = menuOptions[4].getPosition();
+    shootInputPosition.x -= 80;
+    shootInputPosition.y -= 10;
+    ShootInputSprite.setPosition(shootInputPosition);
+
+    for (int i = 0; i < 4; ++i) {
+        sf::Vector2f arrowPosition = menuOptions[i].getPosition();
+        arrowPosition.x -= 80;
+        arrowPosition.y -= 10;
+        arrowSprite[i].setPosition(arrowPosition);
+    }
 }
 
 void Settings::displaySettings(bool ingame) {
@@ -260,7 +323,6 @@ void Settings::displaySettings(bool ingame) {
         while (window->isOpen()) {
             window->clear();
             display();
-            window->display();
             while (window->pollEvent(event)) {
                 if (event.type == sf::Event::Closed) window->close();
 
@@ -302,6 +364,24 @@ void Settings::displaySettings(bool ingame) {
                             } else {
                                 changeKey("SUBTITLES: OFF");
                                 menuOptions[6].setString("SUBTITLES: ON");
+                            }
+                            break;
+                        case 7:
+                            if (menuOptions[7].getString().toAnsiString().find("Normal") != std::string::npos) {
+                                changeKey("COLORBLIND: Normal");
+                                menuOptions[7].setString("COLORBLIND: Deuteranopia");
+                            } else if (menuOptions[7].getString().toAnsiString().find("Deuteranopia") != std::string::npos) {
+                                changeKey("COLORBLIND: Deuteranopia");
+                                menuOptions[7].setString("COLORBLIND: Protanopia");
+                            } else if (menuOptions[7].getString().toAnsiString().find("Protanopia") != std::string::npos) {
+                                changeKey("COLORBLIND: Protanopia");
+                                menuOptions[7].setString("COLORBLIND: Tritanopia");
+                            } else if (menuOptions[7].getString().toAnsiString().find("Tritanopia") != std::string::npos) {
+                                changeKey("COLORBLIND: Tritanopia");
+                                menuOptions[7].setString("COLORBLIND: Achromatopsia");
+                            } else if (menuOptions[7].getString().toAnsiString().find("Achromatopsia") != std::string::npos) {
+                                changeKey("COLORBLIND: Achromatopsia");
+                                menuOptions[7].setString("COLORBLIND: Normal");
                             }
                             break;
                         }
