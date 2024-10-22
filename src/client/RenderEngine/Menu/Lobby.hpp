@@ -131,6 +131,8 @@ namespace RType {
             std::shared_ptr<Game> games;
             std::shared_ptr<Settings> settings;
             std::shared_ptr<std::mutex> _mutex;
+            sf::RenderTexture RenderTexture;
+            sf::Shader colorblindShader[5];
 
         private:
             Logger _logger;
