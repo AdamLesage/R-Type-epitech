@@ -69,6 +69,12 @@ class Settings {
         void changeKey(std::string key);
 
         /**
+         * @brief Displays the input.
+         */
+
+        void displayInput();
+
+        /**
          * @brief Displays the settings.
          */
         void display();
@@ -99,6 +105,15 @@ class Settings {
         sf::Event event;
         sf::RectangleShape background;
         sf::Texture backgroundTexture;
+        sf::Texture ShootInputTexture;
+        sf::Sprite ShootInputSprite;
+        sf::Texture arrowTexture[4];
+        sf::Sprite arrowSprite[4];
+        sf::Texture arrowTexturepressed[4];
+        sf::Sprite arrowSpritepressed[4];
+        sf::Texture ShootInputTexturepressed;
+        sf::Sprite ShootInputSpritepressed;
+        std::string newArrowInput;
 
     private:
 };

@@ -28,6 +28,33 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    std::string shootinput = std::string(get_key_value(cfg, "Keys5"));
+    std::cout << shootinput << std::endl;
+    std::transform(shootinput.begin(), shootinput.end(), shootinput.begin(), ::tolower);
+    if (!ShootInputTexture.loadFromFile("assets/input/Keyboard/keyboard_" + shootinput + ".png")) {
+        std::cerr << "Error loading shoot input texture" << std::endl;
+        return;
+    }
+    ShootInputSprite.setTexture(ShootInputTexture);
+    for (int i = 0; i < 4; ++i) {
+        std::string arrowKey = "Keys" + std::to_string(i + 1);
+        std::string arrowInput = std::string(get_key_value(cfg, arrowKey.c_str()));
+        std::transform(arrowInput.begin(), arrowInput.end(), arrowInput.begin(), ::tolower);
+        if (!arrowTexture[i].loadFromFile("assets/input/Keyboard/keyboard_" + arrowInput + ".png")) {
+            std::cerr << "Error loading arrow input texture for " << arrowKey << std::endl;
+            return;
+        }
+        arrowSprite[i].setTexture(arrowTexture[i]);
+    }
 }
 
 Settings::~Settings() {
@@ -172,12 +199,49 @@ void Settings::changeKey(std::string key) {
     }
 }
 
+void Settings::displayInput()
+{
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    std::string shootinput = std::string(get_key_value(cfg, "Keys5"));
+    std::transform(shootinput.begin(), shootinput.end(), shootinput.begin(), ::tolower);
+    if (!ShootInputTexture.loadFromFile("assets/input/Keyboard/keyboard_" + shootinput + ".png")) {
+        std::cerr << "Error loading shoot input texture" << std::endl;
+        return;
+    }
+    ShootInputSprite.setTexture(ShootInputTexture);
+
+    for (int i = 0; i < 4; ++i) {
+        std::string arrowKey = "Keys" + std::to_string(i + 1);
+        std::string arrowInput = std::string(get_key_value(cfg, arrowKey.c_str()));
+        std::transform(arrowInput.begin(), arrowInput.end(), arrowInput.begin(), ::tolower);
+        if (!arrowTexture[i].loadFromFile("assets/input/Keyboard/keyboard_" + arrowInput + ".png")) {
+            std::cerr << "Error loading arrow input texture for " << arrowKey << std::endl;
+            return;
+        }
+        arrowSprite[i].setTexture(arrowTexture[i]);
+    }
+
+    window->draw(ShootInputSprite);
+    for (int i = 0; i < 4; ++i) {
+        window->draw(arrowSprite[i]);
+    }
+}
+
 void Settings::display() {
     window->draw(background);
     window->draw(logoSprite);
     for (int i = 0; i < 7; ++i) {
         window->draw(menuOptions[i]);
     }
+    displayInput();
     window->display();
 }
 
@@ -204,6 +268,16 @@ void Settings::displaySettings(bool ingame) {
             menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
             menuOptions[i].setString(optionsText[i]);
             menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 300 + i * 100));
+        }
+        sf::Vector2f shootInputPosition = menuOptions[4].getPosition();
+        shootInputPosition.x -= 80;
+        shootInputPosition.y -= 10;
+        ShootInputSprite.setPosition(shootInputPosition);
+        for (int i = 0; i < 4; ++i) {
+            sf::Vector2f arrowPosition = menuOptions[i].getPosition();
+            arrowPosition.x -= 80;
+            arrowPosition.y -= 10;
+            arrowSprite[i].setPosition(arrowPosition);
         }
         while (window->isOpen()) {
             window->clear();
