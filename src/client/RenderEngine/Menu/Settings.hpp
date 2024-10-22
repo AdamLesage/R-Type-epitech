@@ -69,7 +69,13 @@ class Settings {
         void changeKey(std::string key);
 
         /**
-         * @brief Displays the input.
+         * @brief Initializes the text for menu options and the position of the sprites.
+         */
+
+        void initTextAndSprites();
+
+        /**
+         * @brief Displays the input of the settings.
          */
 
         void displayInput();
