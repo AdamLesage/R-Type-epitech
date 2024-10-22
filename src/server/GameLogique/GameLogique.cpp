@@ -229,6 +229,7 @@ void GameLogique::handleRecieve() {
                 std::memcpy(&entityId, &message.first[1], sizeof(int));
                 entity_t entity = reg.entity_from_index(entityId);
                 reg.kill_entity(entity);
+                _networkSender->sendDeleteEntity(entityId);
                 break;
             }
             default:

@@ -14,7 +14,12 @@
 #include <SFML/Window/Event.hpp>
 #include <memory>
 #include "../../Mediator/IMediator.hpp"
+
+#if defined(_WIN32) || defined(_WIN64)
+#define PATH_SEPARATOR "\\"
+#else
 #define PATH_SEPARATOR "/"
+#endif
 
 namespace RType {
     class Console {
@@ -109,7 +114,7 @@ namespace RType {
             sf::RectangleShape container;
             sf::RectangleShape secondContainer;
             std::string _input;
-            sf::Clock clock;  // Pour mesurer le temps écoulé entre chaque frame
+            sf::Clock clock;
             float fps;
             sf::Text FPS;
             bool show_fps;

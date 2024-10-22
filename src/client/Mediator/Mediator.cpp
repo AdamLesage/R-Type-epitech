@@ -109,7 +109,7 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         std::istringstream iss(numbers_str);
         int entity_ID;
         if (!(iss >> entity_ID)) {
-            std::cerr << "Erreur: le format du message est incorrect !" << std::endl;
+            std::cerr << "Error: Bad format of message !" << std::endl;
             return;
         }
         char data[5];

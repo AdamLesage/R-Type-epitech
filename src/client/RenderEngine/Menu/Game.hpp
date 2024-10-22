@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech
+** File description:
+** Game
+*/
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
