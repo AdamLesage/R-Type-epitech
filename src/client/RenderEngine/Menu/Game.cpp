@@ -190,6 +190,8 @@ void RType::Game::play() {
         }
         if (toolbar.showFps) {
             metrics.displayFPS(*window);
+            metrics.displayMemory(*window);
+            metrics.displayGpuUsage(*window);
         }
         if (toolbar.showCpu)
             metrics.displayCPU(*window);
