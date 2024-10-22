@@ -7,7 +7,8 @@
 
 #include "Toolbar.hpp"
 
-Toolbar::Toolbar() : isVisible(false), dropdownOpen(false)
+Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false),
+    isVisible(false), dropdownOpen(false)
 {
     toolbarShape.setSize({1920, 50});
     toolbarShape.setFillColor(sf::Color(50,50,50));
@@ -100,9 +101,23 @@ void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window)
                 if (optionText.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                     optionSelected[optionName] = !optionSelected[optionName];
                     std::cout << optionName << ":" << (optionSelected[optionName] ? "ON" : "OFF") << std::endl;
+                    displayMetrics(optionName);
                 }
             }
         }
+    }
+}
+
+void Toolbar::displayMetrics(const std::string optionName)
+{
+    if (optionName == "FPS") {
+        showFps = optionSelected[optionName];
+    }
+    if (optionName == "RAM") {
+        showMemory = optionSelected[optionName];
+    }
+    if (optionName == "CPU Usage") {
+        showCpu = optionSelected[optionName];
     }
 }
 

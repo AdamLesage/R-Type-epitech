@@ -186,6 +186,11 @@ void RType::Game::play() {
             displayPiou();
             piou = false;
         }
+        if (toolbar.showFps) {
+            metrics.displayFPS(*window);
+        }
+        if (toolbar.showCpu)
+            metrics.displayCPU(*window);
         toolbar.draw(*window);
         window->display();
     }

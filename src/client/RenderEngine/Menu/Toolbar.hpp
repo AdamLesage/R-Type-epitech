@@ -12,6 +12,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include "../../GameMetrics/GameMetrics.hpp"
 
 class Toolbar {
     public:
@@ -49,6 +50,17 @@ class Toolbar {
          * @param window window to interact with.
          */
         void updateHoveredOption(sf::RenderWindow& window);
+
+        /**
+         * @brief Display metrics
+         * 
+         * @param optionName option's name
+         */
+        void displayMetrics(const std::string optionName);
+        
+        bool showFps;
+        bool showMemory;
+        bool showCpu;
 
     private:
         bool isVisible;

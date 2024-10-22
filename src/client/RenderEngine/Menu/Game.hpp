@@ -7,6 +7,7 @@
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
 #include "../../Mediator/IMediator.hpp"
+#include "../../GameMetrics/GameMetrics.hpp"
 #include "Settings.hpp"
 #include "Toolbar.hpp"
 #include "../../Camera.hpp"
@@ -106,6 +107,7 @@ namespace RType {
                 _mediator; // Public attribute to be able to access it from the derived class.
         private:
             std::shared_ptr<sf::RenderWindow> window;
+            GameMetrics metrics;
             Toolbar toolbar;
             int currentFrame;
             float frameDuration;
