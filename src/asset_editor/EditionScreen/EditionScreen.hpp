@@ -55,11 +55,34 @@ namespace Edition {
             std::shared_ptr<Edition::Asset> handleEvent(const sf::Event &event);
 
             /**
+             * @brief Display dialog to save the scene
+             * 
+             * @param window The window of the Asset Editor
+             * @return true if the user saved the scene, false if the dialog was closed
+             */
+            bool displaySaveDialog(std::shared_ptr<sf::RenderWindow> window);
+
+            /**
+             * @brief Save the scene
+             * 
+             * @param event The event to handle
+             */
+            void retrieveInputSaveScene(const sf::Event &event);
+
+            /**
+             * @brief Save the scene in a cfg file with the given name
+             * 
+             * @param sceneName The name of the scene to load
+             */
+            void saveScene(const std::string &sceneName);
+
+            /**
              * @brief The command manager
              */
             CommandManager commandManager;
         private:
             sf::RectangleShape _centralArea;
+            sf::Text _inputSaveText;
     };
 }
 

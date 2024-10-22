@@ -42,8 +42,15 @@ namespace Edition {
              * @brief Handles toolbar event such as button clicks
              * 
              * This function will handle actions such as undo, redo, save, delete, move, zoom and dezoom
+             * 
+             * @param event The SFML event to process.
              */
-            void handleToolbarEvents();
+            void handleToolbarEvents(const sf::Event &event);
+
+            /**
+             * @brief Display toolbar events
+             */
+            void displayToolbarEvents();
 
         protected:
         private:

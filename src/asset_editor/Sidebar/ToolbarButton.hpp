@@ -18,7 +18,7 @@ namespace Edition {
      * 
      * This will be used to know which tool is currently selected
      */
-    enum CurrentSelection { UNDO, REDO, SAVE, DELETE, MOVE, ZOOM, DEZOOM };
+    enum CurrentSelection { UNDO, REDO, SAVE, LOAD, DELETE, MOVE, ZOOM, DEZOOM };
 
     /**
      * @brief Toolbar Button of the Asset Editor
