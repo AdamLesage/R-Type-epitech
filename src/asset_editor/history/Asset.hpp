@@ -10,6 +10,11 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <any>
+#include <typeindex>
+#include "../../shared/components/Position.hpp"
+#include "../../shared/components/Size.hpp"
+#include "../../shared/components/Rotation.hpp"
 
 namespace Edition {
     /**
@@ -47,23 +52,43 @@ namespace Edition {
             void draw(sf::RenderWindow &window);
 
             sf::FloatRect getGlobalBounds();
+
+            template<typename T>
+            void addComponent(T &&component) {
+                _components[std::type_index(typeid(std::decay_t<T>))] = std::forward<T>(component);
+            }
+            template<typename T>
+            T& getComponent() {
+                auto it = _components.find(std::type_index(typeid(std::decay_t<T>)));
+                if (it == _components.end()) {
+                    throw std::runtime_error("Component of this type not found");
+                }
+                return std::any_cast<T&>(it->second);
+            }
         private:
             /**
-             * @brief The x position of the asset
+             * @brief The position of the asset
              */
-            int _x;
+            Position _pos;
 
             /**
-             * @brief The y position of the asset
+             * @brief the size of the asset
              */
-            int _y;
+            Size _size;
+
+            /**
+             * @brief the rotation of the asset
+             */
+            Rotation _rotation;
+
 
             /**
              * @brief The path to the asset
              */
             std::string _assetPath;
-            sf::Texture _spriteTexture;
-            sf::Sprite _sprite;
+            sf::Texture *_spriteTexture;
+            sf::RectangleShape _sprite;
+            std::map<std::type_index, std::any> _components;
     };
 }; // namespace Edition
 
