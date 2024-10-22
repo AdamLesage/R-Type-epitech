@@ -104,6 +104,21 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         this->_networkEngine->_client->send(data_str);
         return;
     }
+    if (event.find("delete_entity ") == 0) { // Delete an entity 
+        std::string numbers_str = event.substr(14);
+        std::istringstream iss(numbers_str);
+        int entity_ID;
+        if (!(iss >> entity_ID)) {
+            std::cerr << "Erreur: le format du message est incorrect !" << std::endl;
+            return;
+        }
+        char data[5];
+        data[0] = 0x43;  // Delete entity in protocol
+        std::memcpy(&data[1], &entity_ID, sizeof(int));
+        std::string data_str(data, sizeof(data));
+        this->_networkEngine->_client->send(data_str);
+        return;
+    }
 }
 
 void RType::Mediator::notifyPhysicEngine(std::string sender, const std::string& event) {
