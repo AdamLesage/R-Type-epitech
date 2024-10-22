@@ -39,8 +39,3 @@ void GameMetrics::displayFPS(sf::RenderWindow& window)
     text.setPosition(0, 0);
     window.draw(text);
 }
-
-void GameMetrics::displayCPU(sf::RenderWindow& window)
-{
-
-}
