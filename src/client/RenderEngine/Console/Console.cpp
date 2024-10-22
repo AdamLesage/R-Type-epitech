@@ -16,7 +16,7 @@ RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _ev
     if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
     }
-    this->_typing = true;
+    this->_typing = false;
     this->window  = _window;
     _inputText.setFont(font);
     _inputText.setFillColor(sf::Color::White);
@@ -40,6 +40,10 @@ RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, sf::Event _ev
 }
 
 RType::Console::~Console() {
+}
+
+void RType::Console::setMediator(std::shared_ptr<IMediator> mediator) {
+    _mediator = mediator;
 }
 
 void RType::Console::displayFPS()
@@ -70,7 +74,7 @@ void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::F8) {
             this->toggleDeveloperConsole();
-            _typing = true;
+            _typing = !_typing;
         }
     }
 }
@@ -153,8 +157,8 @@ bool RType::Console::isCommand()
         _mediator->notify("RenderingEngine", _input);
         return true;
     }
-    if (_input == "delete_entity") {
-        // delete_entity
+    if (_input.find("delete_entity ") == 0) {
+        _mediator->notify("RenderingEngine", _input);
         return true;
     }
     if (processEdit(_input))
@@ -254,28 +258,5 @@ void RType::Console::displayCloseContainerButton() {
             this->toggleDeveloperConsole();
             return;
         }
-    }
-}
-
-int main() {
-    std::shared_ptr<sf::RenderWindow> window;
-    sf::Event event;
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
-    RType::Console console(window, event);
-    console.toggleDeveloperConsole();
-    while (window->isOpen()) {
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window->close();
-
-            if (event.type == sf::Event::Resized) {
-                sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-                window->setView(sf::View(visibleArea));
-            }
-            console.toggleDeveloperConsoleFromEvent(event);
-            console.checkInput();
-        }
-        window->clear(sf::Color::White);
-        console.displayDeveloperConsole();
-        window->display();
     }
 }

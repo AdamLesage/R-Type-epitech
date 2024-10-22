@@ -82,7 +82,12 @@ namespace RType {
              * Print the FPS
              */
             void displayFPS();
-
+            /**
+             * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+             *
+             * @param mediator The mediator to set.
+             */
+            void setMediator(std::shared_ptr<IMediator> mediator);
             std::shared_ptr<IMediator> _mediator;
 
         protected:

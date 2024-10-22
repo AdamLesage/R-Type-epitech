@@ -72,7 +72,7 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
 
     try {
         games = std::make_shared<Game>(window);
-        // games->setMediator(std::shared_ptr<IMediator>(this->_mediator));
+        games->setMediator(std::shared_ptr<IMediator>(this->_mediator));
         settings = std::make_shared<Settings>(window);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;

@@ -9,6 +9,7 @@
 #include "../../Mediator/IMediator.hpp"
 #include "Settings.hpp"
 #include "../../Camera.hpp"
+#include "../Console/Console.hpp"
 #include <mutex>
 #include <libconfig.h++>
 
@@ -127,6 +128,7 @@ namespace RType {
             bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
             Registry _registry;
             Systems _systems;
+            std::shared_ptr<Console> console;
             std::shared_ptr<Settings> settings;
             std::vector<sf::RectangleShape> backgrounds;
             std::vector<sf::Texture> backgroundTextures;
@@ -149,6 +151,7 @@ namespace RType {
             sf::Font font;
             std::shared_ptr<std::mutex> _mutex;
             bool piou = false;
+            sf::Event event;
     };
 } // namespace RType
 
