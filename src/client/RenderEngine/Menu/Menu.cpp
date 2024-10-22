@@ -36,7 +36,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMedia
     std::string optionsText[] = {"1. Lobby", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
         menuOptions[i].setFont(font);
-        menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
+        menuOptions[i].setFillColor(i == 0 ? sf::Color::Red : sf::Color::White);
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
@@ -71,7 +71,7 @@ void RType::Menu::moveUp() {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
-        menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
+        menuOptions[selectedOption].setFillColor(sf::Color::Red);
         selectSound.play();
     }
 }
@@ -80,7 +80,7 @@ void RType::Menu::moveDown() {
     if (selectedOption + 1 < 3) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
-        menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
+        menuOptions[selectedOption].setFillColor(sf::Color::Red);
         selectSound.play();
     }
 }

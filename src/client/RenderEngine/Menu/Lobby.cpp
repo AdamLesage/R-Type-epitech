@@ -61,7 +61,7 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
     std::string optionsText[] = {"1. Play", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
         menuOptions[i].setFont(font);
-        menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
+        menuOptions[i].setFillColor(i == 0 ? sf::Color::Red : sf::Color::White);
         menuOptions[i].setString(optionsText[i]);
 
         float optionWidth    = menuOptions[i].getLocalBounds().width;
@@ -86,7 +86,7 @@ void RType::Lobby::moveRight() {
     if (selectedOption + 1 < 3) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
-        menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
+        menuOptions[selectedOption].setFillColor(sf::Color::Red);
         selectSound.play();
     }
 }
@@ -95,7 +95,7 @@ void RType::Lobby::moveLeft() {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
-        menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
+        menuOptions[selectedOption].setFillColor(sf::Color::Red);
         selectSound.play();
     }
 }

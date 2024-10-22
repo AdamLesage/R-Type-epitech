@@ -94,7 +94,7 @@ void Settings::moveUp() {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
-        menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
+        menuOptions[selectedOption].setFillColor(sf::Color::Red);
         selectSound.play();
     }
 }
@@ -103,7 +103,7 @@ void Settings::moveDown() {
     if (selectedOption + 1 < 8) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
-        menuOptions[selectedOption].setFillColor(sf::Color::Yellow);
+        menuOptions[selectedOption].setFillColor(sf::Color::Red);
         selectSound.play();
     }
 }
@@ -295,7 +295,7 @@ void Settings::initTextAndSprites()
     for (int i = 0; i < 8; i++) {
         optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)).c_str());
         menuOptions[i].setFont(font);
-        menuOptions[i].setFillColor(i == 0 ? sf::Color::Yellow : sf::Color::White);
+        menuOptions[i].setFillColor(i == 0 ? sf::Color::Red : sf::Color::White);
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 200 + i * 100));
     }
