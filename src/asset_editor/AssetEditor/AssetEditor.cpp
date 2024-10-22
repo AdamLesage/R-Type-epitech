@@ -89,6 +89,16 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
 
 void Edition::AssetEditor::handleToolbarEvents(const sf::Event &event)
 {
+    // Handle undo and redo from keyboard input
+    if (event.type == sf::Event::KeyPressed) {
+        if ((event.key.code == sf::Keyboard::Z) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
+            this->_toolbar.setCurrentSelection(CurrentSelection::UNDO);
+        }
+        if ((event.key.code == sf::Keyboard::Y) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
+            this->_toolbar.setCurrentSelection(CurrentSelection::REDO);
+        }
+    }
+
     if (this->_toolbar.getCurrentSelection() == CurrentSelection::MOVE) // Client can move on the edition screen without any asset selected
         return;
 
