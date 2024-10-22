@@ -38,7 +38,6 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
         return;
     }
     std::string shootinput = std::string(get_key_value(cfg, "Keys5"));
-    std::cout << shootinput << std::endl;
     std::transform(shootinput.begin(), shootinput.end(), shootinput.begin(), ::tolower);
     if (!ShootInputTexture.loadFromFile("assets/input/Keyboard/keyboard_" + shootinput + ".png")) {
         std::cerr << "Error loading shoot input texture" << std::endl;
@@ -301,23 +300,18 @@ void Settings::displaySettings(bool ingame) {
                     if (event.key.code == sf::Keyboard::Enter) {
                         switch (getSelectedOption()) {
                         case 0:
-                            std::cout << menuOptions[0].getString().toAnsiString() << std::endl;
                             changeKey(menuOptions[0].getString().toAnsiString());
                             break;
                         case 1:
-                            std::cout << menuOptions[1].getString().toAnsiString() << std::endl;
                             changeKey(menuOptions[1].getString().toAnsiString());
                             break;
                         case 2:
-                            std::cout << menuOptions[2].getString().toAnsiString() << std::endl;
                             changeKey(menuOptions[2].getString().toAnsiString());
                             break;
                         case 3:
-                            std::cout << menuOptions[3].getString().toAnsiString() << std::endl;
                             changeKey(menuOptions[3].getString().toAnsiString());
                             break;
                         case 4:
-                            std::cout << menuOptions[4].getString().toAnsiString() << std::endl;
                             changeKey(menuOptions[4].getString().toAnsiString());
                             break;
                         case 5:
