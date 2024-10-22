@@ -57,19 +57,15 @@ namespace Edition {
              */
             std::vector<std::shared_ptr<Edition::Asset>> getUndoAssets() const { return _undoAssets; }
 
-            // /**
-            //  * @brief Get the undo vector as a vector
-            //  * 
-            //  * @return std::vector<std::shared_ptr<ICommand>> The undo vector as a vector
-            //  */
-            // std::vector<std::shared_ptr<Edition::Asset>> getUndoAssetsVector() const;
+            /**
+             * @brief Clear the redo vector
+             */
+            void clearRedoAssets() { _redoAssets.clear(); }
 
-            // /**
-            //  * @brief Get the redo vector as a vector
-            //  * 
-            //  * @return std::vector<std::shared_ptr<ICommand>> The redo vector as a vector
-            //  */
-            // std::vector<std::shared_ptr<Edition::Asset>> getRedoAssetsVector() const;
+            /**
+             * @brief Clear the undo vector
+             */
+            void clearUndoAssets() { _undoAssets.clear(); }
 
             /**
              * @brief Get the redo vector

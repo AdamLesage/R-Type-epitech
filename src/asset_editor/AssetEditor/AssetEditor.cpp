@@ -113,7 +113,7 @@ void Edition::AssetEditor::handleToolbarEvents(const sf::Event &event)
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::LOAD) {
         // this->_editionScreen.load();
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DELETE) {
-        // this->_editionScreen.deleteEditionScreen();
+        // Handle delete
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::ZOOM) {
         // this->_editionScreen.zoomOnEditionScreen();
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DEZOOM) {
@@ -137,7 +137,10 @@ void Edition::AssetEditor::displayToolbarEvents()
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::LOAD) {
         // Display the load cursor
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DELETE) {
-        // Display the delete cursor
+        bool playerActionOnWindow = this->_editionScreen.displayDeleteDialog(_window);
+        if (playerActionOnWindow == false) {
+            this->_toolbar.setCurrentSelection(CurrentSelection::MOVE);
+        }
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::ZOOM) {
         // Display the zoom cursor
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::DEZOOM) {
