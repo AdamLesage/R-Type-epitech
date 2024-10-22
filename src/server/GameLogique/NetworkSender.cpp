@@ -111,4 +111,6 @@ void NetworkSender::sendPing(std::string timeCode) {
     std::vector<char> data(strlen(timeCode.c_str()) + 1);
     data[0] = 0x99;
     std::memcpy(&data[1], timeCode.c_str(), strlen(timeCode.c_str()));
+    std::memcpy(&data[strlen(timeCode.c_str()) + 1], "\0", 1);
+    this->_network->sendToAll(data.data(), data.size());
 }

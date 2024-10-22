@@ -14,6 +14,7 @@
 #include <map>
 #include <utility>
 #include <cstring>
+#include <iomanip>
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/systems/Systems.hpp"
@@ -175,6 +176,14 @@ namespace RType {
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
             bool parseData(const std::string& message);
+
+            /**
+             * @brief Parse the message to validate and extract information for the corresponding operation.
+             *
+             * @param message The time code to parse.
+             * @param index The index to update.
+             */
+            bool parsePingClient(const std::string& message, int& index);
 
         protected:
             /**
