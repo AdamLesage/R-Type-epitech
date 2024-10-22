@@ -9,16 +9,19 @@
 
 Edition::Asset::Asset(int x, int y, std::string assetPath, size_t entityCode)
 {
-    this->_x = x;
-    this->_y = y;
     this->_assetPath = assetPath;
-    _spriteTexture = sf::Texture();
-    if (!_spriteTexture.loadFromFile(_assetPath)) {
+    _spriteTexture = new sf::Texture();
+    if (!_spriteTexture->loadFromFile(_assetPath)) {
         std::cerr << "Failed to load texture from " << _assetPath << std::endl;
         return;
     }
+    this->addComponent<Position>(Position{static_cast<float>(x), static_cast<float>(y)});
+    this->addComponent<Size>(Size{_spriteTexture->getSize().x, _spriteTexture->getSize().y});
+    this->addComponent<Rotation>(Rotation{0});
+
     this->_sprite.setTexture(_spriteTexture);
     this->_entityCode = "0x" + std::to_string(entityCode);
+    this->_sprite.setSize(sf::Vector2f(this->getComponent<Size>().x, this->getComponent<Size>().y));
 }
 
 Edition::Asset::~Asset()
@@ -27,13 +30,15 @@ Edition::Asset::~Asset()
 
 void Edition::Asset::move(int dx, int dy)
 {
-    _x = dx;
-    _y = dy;
+    this->getComponent<Position>().x = dx;
+    this->getComponent<Position>().y = dy;
 }
 
 void Edition::Asset::draw(sf::RenderWindow &window)
 {
-    this->_sprite.setPosition(_x, _y);
+    this->_sprite.setPosition(this->getComponent<Position>().x, this->getComponent<Position>().y);
+    this->_sprite.setSize(sf::Vector2f(this->getComponent<Size>().x, this->getComponent<Size>().y));
+    this->_sprite.setRotation(this->getComponent<Rotation>().rotation);
     window.draw(this->_sprite);
 }
 
