@@ -86,7 +86,7 @@ namespace RType {
             /**
              * @brief Displays the menu.
              */
-            void displayLobby(float latency);
+            void displayLobby(float& latency);
 
             /**
              * @brief Sets the mediator, it will be used to communicate with the rendering engine.

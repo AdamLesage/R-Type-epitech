@@ -20,7 +20,6 @@
 #include "../../shared/systems/Systems.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Sprite.hpp"
-#include "../GameMetrics/Latency.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"

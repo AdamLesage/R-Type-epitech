@@ -78,9 +78,7 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
     }
     if (event.rfind("LATENCY", 0) == 0) {
         std::string latency = event.substr(8);
-        std::cout << "Before setting: " << this->_renderingEngine->_latency << std::endl;
         this->_renderingEngine->setLatency(std::stof(latency));
-        std::cout << "After setting: " << this->_renderingEngine->_latency << std::endl;
     }
 }
 

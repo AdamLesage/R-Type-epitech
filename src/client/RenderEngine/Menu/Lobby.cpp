@@ -186,7 +186,7 @@ void RType::Lobby::displaySubtitles() {
     window->draw(subtitle);
 }
 
-void RType::Lobby::displayLobby(float latency) {
+void RType::Lobby::displayLobby(float& latency) {
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
         return;

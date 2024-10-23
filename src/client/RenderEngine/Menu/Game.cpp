@@ -143,7 +143,7 @@ void RType::Game::DisplaySkipIntro() {
     window->draw(skipIntro);
 }
 
-void RType::Game::play(float latency) {
+void RType::Game::play(float& latency) {
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -187,11 +187,10 @@ void RType::Game::play(float latency) {
             displayPiou();
             piou = false;
         }
-        std::cout << "latency: " << latency << std::endl; // when the game is launched the value is never updated.
         if (showMetrics) {
             metrics.displayFPS(*window);
             metrics.displayMemory(*window);
-            // metrics.displayLatency(*window, latency)
+            metrics.displayLatency(*window, latency);
         }
         window->display();
     }
@@ -237,7 +236,7 @@ void RType::Game::set_texture() {
     }
 }
 
-void RType::Game::displayGame(float latency) {
+void RType::Game::displayGame(float& latency) {
     sf::RectangleShape rectangleshape;
     sf::Texture texture;
     sf::Clock clock;

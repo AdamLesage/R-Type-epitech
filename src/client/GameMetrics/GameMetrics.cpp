@@ -77,7 +77,7 @@ std::size_t GameMetrics::getMemoryUsage() {
     return 0;
 }
 
-void GameMetrics::displayLatency(sf::RenderWindow& window, float latency) {
+void GameMetrics::displayLatency(sf::RenderWindow& window, float& latency) {
     sf::Text text;
     static sf::Font font;
 
