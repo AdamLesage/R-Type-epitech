@@ -70,6 +70,14 @@ namespace Edition {
              */
             void saveComponentRotation(std::ofstream &outFile, std::shared_ptr<Asset> asset);
 
+            /**
+             * @brief Write the component sprite into the file such as "sprite: "assets/asset_editor/empty.png"",
+             * 
+             * @param outFile The file to write into
+             * @param asset The asset to save
+             */
+            void saveComponentSprite(std::ofstream &outFile, std::shared_ptr<Asset> asset);
+
             std::string _scenePath;
             std::vector<std::shared_ptr<Asset>> _assets;
             libconfig::Config _cfg;

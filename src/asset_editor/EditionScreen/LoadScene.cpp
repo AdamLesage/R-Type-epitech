@@ -53,13 +53,12 @@ std::vector<std::shared_ptr<Edition::Asset>> Edition::LoadScene::load()
             this->loadComponentSize(components, asset);
             this->loadComponentPosition(components, asset);
             this->loadComponentRotation(components, asset);
+            this->loadComponentSprite(components, asset);
             _assets.push_back(asset);
         }
     } catch (const std::exception &e) {
         std::cerr << "Error from LoadScene load: " << e.what() << " for filename " << _scenePath << std::endl;
     }
-
-    std::cout << "Loaded " << _assets.size() << " entities" << std::endl;
 
     return _assets;
 }
@@ -105,7 +104,6 @@ void Edition::LoadScene::loadComponentPosition(libconfig::Setting &components, s
         std::cerr << "Error from LoadScene loadComponentPosition: " << e.what() << std::endl;
     }
 }
-
 void Edition::LoadScene::loadComponentRotation(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset)
 {
     try {
@@ -113,7 +111,25 @@ void Edition::LoadScene::loadComponentRotation(libconfig::Setting &components, s
         int rotationAngle = rotationSetting;
 
         asset->addComponent<Rotation>(Rotation{static_cast<float>(rotationAngle)});
+    } catch (const libconfig::SettingNotFoundException &e) {
+        std::cerr << "Rotation setting not found: " << e.what() << std::endl;
     } catch (const std::exception &e) {
         std::cerr << "Error from LoadScene loadComponentRotation: " << e.what() << std::endl;
+    }
+}
+
+void Edition::LoadScene::loadComponentSprite(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset)
+{
+    try {
+        libconfig::Setting &spriteSettings = components.lookup("sprite");
+        std::string spritePath = spriteSettings.lookup("path");
+        int rectSizeX = spriteSettings.lookup("rectSize")[0];
+        int rectSizeY = spriteSettings.lookup("rectSize")[1];
+        int rectPosX = spriteSettings.lookup("rectPos")[0];
+        int rectPosY = spriteSettings.lookup("rectPos")[1];
+
+        asset->addComponent<Sprite>(Sprite{spritePath, {rectSizeX, rectSizeY}, {rectPosX, rectPosY}});
+    } catch (const std::exception &e) {
+        std::cerr << "Error from LoadScene loadComponentSprite: " << e.what() << std::endl;
     }
 }

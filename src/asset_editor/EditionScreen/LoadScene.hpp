@@ -78,6 +78,14 @@ namespace Edition {
              */
             void loadComponentRotation(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset);
 
+            /**
+             * @brief Load the component sprite
+             * 
+             * @param components The components given from config file
+             * @param asset The asset to load and attach the component
+             */
+            void loadComponentSprite(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset);
+
             std::string _scenePath;
             libconfig::Config _cfg;
             std::vector<std::shared_ptr<Edition::Asset>> _assets;

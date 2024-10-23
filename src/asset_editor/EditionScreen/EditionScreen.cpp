@@ -345,7 +345,13 @@ void Edition::EditionScreen::loadScene(const std::string &sceneName)
             return;
         LoadScene loadScene = LoadScene(scenePath, commandManager.getUndoAssets());
 
-        loadScene.load();
+        std::vector<std::shared_ptr<Edition::Asset>> assetsLoaded = loadScene.load();
+        if (assetsLoaded.size() > 0) {
+            commandManager.clearUndoAssets();
+            commandManager.clearRedoAssets();
+            commandManager.setUndoAssets(assetsLoaded);
+            std::cout << "Loaded " << assetsLoaded.size() << " assets" << std::endl;
+        }
     } catch (const std::exception &e) {
         std::cerr << "Error from loadScene: " << e.what() << std::endl;
     }

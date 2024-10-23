@@ -74,6 +74,13 @@ namespace Edition {
              */
             std::vector<std::shared_ptr<Edition::Asset>> getRedoAssets() const { return _redoAssets; }
 
+            /**
+             * @brief Set the undo vector from another vector (will be called from load scene function)
+             * 
+             * @param undoAssets The undo vector to set
+             */
+            void setUndoAssets(std::vector<std::shared_ptr<Edition::Asset>> undoAssets) { _undoAssets = undoAssets; }
+
         protected:
         private:
             /**
