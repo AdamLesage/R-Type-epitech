@@ -110,7 +110,7 @@ void RType::GameEngine::handleServerData(const std::string& message) {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
     _protocolParsing->parseData(message);
     float latency = _protocolParsing->getLatency();
-    this->_mediator->notify("GameEngine", "LATENCY " + std::to_string(latency));
+    this->_mediator->notify("RenderingEngine", "LATENCY " + std::to_string(latency));
 }
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {

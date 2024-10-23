@@ -630,7 +630,7 @@ bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& in
 
     std::chrono::duration<double> diff = std::chrono::system_clock::now() - now;
 
-    _latency = 6;
+    _latency = diff.count() * 1000;
 
     std::cout << "Latency global: " << g_latency << " ms" << std::endl;
 

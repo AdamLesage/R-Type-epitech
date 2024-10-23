@@ -187,10 +187,10 @@ void RType::Game::play(float latency) {
             displayPiou();
             piou = false;
         }
+        std::cout << "latency: " << latency << std::endl; // when the game is launched the value is never updated.
         if (showMetrics) {
             metrics.displayFPS(*window);
             metrics.displayMemory(*window);
-            std::cout << "latency: " << latency << std::endl;
             // metrics.displayLatency(*window, latency)
         }
         window->display();
