@@ -11,6 +11,7 @@
 #include <thread>
 #include <mutex>
 
+#include "RenderEngine/Menu/ClientConnexionHandling.hpp"
 #include "NetworkEngine/NetworkEngine.hpp"
 #include "RenderEngine/RenderingEngine.hpp"
 #include "GameEngine/GameEngine.hpp"
@@ -97,12 +98,22 @@ std::string getLibraryPath(const std::string& libName) {
     return std::string(".") + PATH_SEPARATOR + "lib" + PATH_SEPARATOR + libName + LIB_EXTENSION;
 }
 
-int main(int ac, char** av) {
-    errorHandling(ac, av);
+bool isNumber(const std::string& s) {
+    return !s.empty() && std::find_if(s.begin(), s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
 
-    std::string host           = av[1];
-    unsigned short server_port = static_cast<unsigned short>(std::stoi(av[2]));
-    unsigned short local_port  = 0;
+int main(int ac, char** av) {
+    // errorHandling(ac, av);
+    (void)ac;
+
+    std::string host           = "";
+    unsigned short server_port = 0;
+
+    if (av[1] != nullptr && av[2] != nullptr && isNumber(av[2])) {
+        host        = av[1];
+        server_port = static_cast<unsigned short>(std::stoi(av[2]));
+    }
+    unsigned short local_port = 0;
     std::shared_ptr<DLLoader> networkEngineLoader;
     std::shared_ptr<DLLoader> renderingEngineLoader;
     std::shared_ptr<DLLoader> gameEngineLoader;
@@ -146,6 +157,16 @@ int main(int ac, char** av) {
         } catch (const RType::DLError& e) {
             std::cerr << e.what() << std::endl;
         }
+
+        // Ask for host and port to client
+        std::shared_ptr<RType::ClientConnexionHandling> clientConnexionHandling =
+            std::make_shared<RType::ClientConnexionHandling>(host, server_port);
+        clientConnexionHandling->displayConnexionWindow();
+        host        = clientConnexionHandling->getHost();
+        server_port = clientConnexionHandling->getServerPort();
+
+        std::cout << "Host: " << host << std::endl;
+        std::cout << "Port: " << server_port << std::endl;
 
         auto networkEngine = loadEngine<RType::NetworkEngine>(networkEngineLoader, "entryPointNetworkEngine");
         networkEngine->setParams(host, server_port, local_port);
