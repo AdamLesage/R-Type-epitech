@@ -43,7 +43,6 @@ void Edition::EditionScreen::draw(sf::RenderWindow &window)
     window.draw(_centralArea);
     window.setView(_centralView);
     for (const auto &asset : commandManager.getUndoAssets()) {
-        auto bounds = asset->getGlobalBounds();
         asset->draw(window);
     }
     window.setView(window.getDefaultView());
