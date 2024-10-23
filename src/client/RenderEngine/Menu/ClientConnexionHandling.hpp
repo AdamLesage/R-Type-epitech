@@ -1,0 +1,91 @@
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech
+** File description:
+** ClientConnexionHandling
+*/
+
+#ifndef CLIENTCONNEXIONHANDLING_HPP_
+#define CLIENTCONNEXIONHANDLING_HPP_
+
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <memory>
+#include <string>
+
+namespace RType {
+    /**
+     * @brief Class will display the window to retrieve the server ip and port
+     */
+    class ClientConnexionHandling {
+        public:
+            /**
+             * @brief Construct a new Client Connexion Handling object
+             */
+            ClientConnexionHandling(std::string host = "", unsigned short server_port = 0);
+
+            /**
+             * @brief Destroy the Client Connexion Handling object
+             */
+            ~ClientConnexionHandling();
+
+            /**
+             * @brief Display the connexion window
+             */
+            void displayConnexionWindow();
+
+            /**
+             * @brief Display the background
+             */
+            void displayBackground();
+
+            /**
+             * @brief Display the input text for the host
+             */
+            void displayInputTextHost();
+
+            /**
+             * @brief Display the input text for the port
+             */
+            void displayInputTextPort();
+
+            /**
+             * @brief Display the submit button
+             */
+            void displaySubmitButton();
+
+            /**
+             * @brief Retrieve the input text for the host
+             */
+            void retrieveInputTextHost(const sf::Event &event);
+
+            /**
+             * @brief Retrieve the input text for the port
+             */
+            void retrieveInputTextPort(const sf::Event &event);
+
+            /**
+             * @brief Get the Host object
+             * 
+             * @return std::string The host
+             */
+            std::string getHost() const { return _inputTextHost.getString(); }
+
+            /**
+             * @brief Get the Server Port object
+             * 
+             * @return unsigned short The server port
+             */
+            unsigned short getServerPort() const { return std::stoi(_inputTextPort.getString().toAnsiString()); }
+        protected:
+        private:
+            std::shared_ptr<sf::RenderWindow> _window;
+            std::string _inputBoxSelected; // Can be "host" or "port"
+
+            sf::Text _inputTextHost;
+            sf::Text _inputTextPort;
+            sf::Font _font;
+    };
+}; // namespace RType
+
+#endif /* !CLIENTCONNEXIONHANDLING_HPP_ */
