@@ -15,9 +15,23 @@
     #ifdef _WIN32
         #include <windows.h>
         #include <psapi.h>
+        #include <comdef.h>
+        #include <Wbemidl.h>
+        #pragma comment(lib, "wbemuuid.lib")
     #elif __linux__
         #include <sys/resource.h>
         #include <sys/sysinfo.h>
+        #include <fstream>
+    #endif
+
+    #ifdef _WIN32
+        #include <pdh.h>
+        #pragma comment(lib, "pdh.lib")
+    #endif
+
+    #ifdef _WIN32
+        PDH_HQUERY cpuQuery;
+        PDH_HCOUNTER cpuTotal;
     #endif
 
     #if defined(_WIN32) || defined(_WIN64)
@@ -29,6 +43,12 @@
 
 class GameMetrics {
     public:
+        struct GpuInfo {
+            std::string model;
+            std::size_t vramUsed;
+            std::size_t vramTotal;
+            float temperature;
+        };
         /**
          * @brief Default constructor
          */
@@ -47,10 +67,12 @@ class GameMetrics {
         /**
          * @brief Display CPU information 
          */
-        void displayCPU();
+        void displayCPU(sf::RenderWindow& window);
 
         /**
-         * @brief Display Memory used 
+         * @brief Display Memory used
+         * 
+         * @param window
          */
         void displayMemory(sf::RenderWindow& window);
 
@@ -60,11 +82,12 @@ class GameMetrics {
         void displayPlayerPosition();
 
         /**
-         * @brief Display the latency between server and clients in MS
-         *
-         * @param sf::RenderWindow& window
-         * @param float latency
+         * @brief Display GPU usage
+         * 
+         * @param window
          */
+        void displayGpuUsage(sf::RenderWindow& window);
+
         void displayLatency(sf::RenderWindow& window, float& latency);
     private:
         std::size_t getMemoryUsage();

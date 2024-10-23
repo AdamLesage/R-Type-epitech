@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech [WSL: Ubuntu]
+** File description:
+** Game
+*/
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
@@ -8,7 +15,9 @@
 #include "../../../shared/registry/Registry.hpp"
 #include "../../../shared/systems/Systems.hpp"
 #include "../../Mediator/IMediator.hpp"
+#include "../../GameMetrics/GameMetrics.hpp"
 #include "Settings.hpp"
+#include "Toolbar.hpp"
 #include "../../Camera.hpp"
 #include <mutex>
 #include <libconfig.h++>
@@ -107,7 +116,7 @@ namespace RType {
         private:
             std::shared_ptr<sf::RenderWindow> window;
             GameMetrics metrics;
-            bool showMetrics;
+            Toolbar toolbar;
             int currentFrame;
             float frameDuration;
             sf::Clock BackgroundClock;
