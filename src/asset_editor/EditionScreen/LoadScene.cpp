@@ -41,12 +41,11 @@ Edition::LoadScene::~LoadScene()
 std::vector<std::shared_ptr<Edition::Asset>> Edition::LoadScene::load()
 {
     std::string emptyAssetPath = std::string("assets") + PATH_SEPARATOR + "asset_editor" + PATH_SEPARATOR + "empty.png";
-    std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(0, 0, emptyAssetPath, 0);
 
     try {
         libconfig::Setting &entities = _cfg.lookup("scene").lookup("entities");
-        std::cout << "There is " << entities.getLength() << " entities to load" << std::endl;
         for (int i = 0; i < entities.getLength(); i++) {
+            std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(0, 0, emptyAssetPath, 0);
             libconfig::Setting &entity = entities[i];
             libconfig::Setting &components = entity.lookup("components");
             this->loadEntityCode(entity, asset);

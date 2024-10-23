@@ -55,7 +55,6 @@ sf::FloatRect Edition::Asset::getGlobalBounds()
 
 void Edition::Asset::setSpriteTexture(std::string assetPath)
 {
-    _spriteTexture = new sf::Texture();
     if (!_spriteTexture->loadFromFile(assetPath)) {
         std::cerr << "Failed to load texture from " << assetPath << std::endl;
         return;

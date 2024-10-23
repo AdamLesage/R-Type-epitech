@@ -73,7 +73,6 @@ bool Edition::EditionScreen::displaySaveDialog(std::shared_ptr<sf::RenderWindow>
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
         if (closeButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-            std::cout << "Close the dialog" << std::endl;
             _inputSaveText.setString("");
             return false;
         }
@@ -187,7 +186,6 @@ bool Edition::EditionScreen::displayDeleteDialog(std::shared_ptr<sf::RenderWindo
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
         if (closeButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-            std::cout << "Close the dialog" << std::endl;
             return false;
         }
     }
@@ -256,7 +254,6 @@ bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow>
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
         if (closeButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-            std::cout << "Close the dialog" << std::endl;
             return false;
         }
     }
@@ -350,7 +347,6 @@ void Edition::EditionScreen::loadScene(const std::string &sceneName)
             commandManager.clearUndoAssets();
             commandManager.clearRedoAssets();
             commandManager.setUndoAssets(assetsLoaded);
-            std::cout << "Loaded " << assetsLoaded.size() << " assets" << std::endl;
         }
     } catch (const std::exception &e) {
         std::cerr << "Error from loadScene: " << e.what() << std::endl;
