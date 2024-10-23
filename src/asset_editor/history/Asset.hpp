@@ -84,6 +84,13 @@ namespace Edition {
             sf::FloatRect getGlobalBounds();
 
             /**
+             * @brief Set the texture of the sprite.
+             * 
+             * @param assetPath The path to the asset.
+             */
+            void setSpriteTexture(std::string assetPath);
+
+            /**
              * @brief Adds a component to the asset.
              * 
              * @tparam T The type of the component being added.

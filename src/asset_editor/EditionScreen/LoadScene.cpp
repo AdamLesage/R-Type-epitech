@@ -128,6 +128,8 @@ void Edition::LoadScene::loadComponentSprite(libconfig::Setting &components, std
         int rectPosX = spriteSettings.lookup("rectPos")[0];
         int rectPosY = spriteSettings.lookup("rectPos")[1];
 
+        asset->setSpriteTexture(spritePath);
+
         asset->addComponent<Sprite>(Sprite{spritePath, {rectSizeX, rectSizeY}, {rectPosX, rectPosY}});
     } catch (const std::exception &e) {
         std::cerr << "Error from LoadScene loadComponentSprite: " << e.what() << std::endl;
