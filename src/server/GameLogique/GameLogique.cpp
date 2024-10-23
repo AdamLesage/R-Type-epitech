@@ -246,14 +246,12 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x45: {
-                int value;
-                std::memcpy(&value, &message.first[1], sizeof(int));
                 auto &playerHealth = reg.get_components<Health_s>()[message.second];
-                if (value == 0) {
-                    playerHealth->isDamageable = true;
-                }
-                if (value == 1) {
+                if (message.first[1] == 0x01) {
                     playerHealth->isDamageable = false;
+                }
+                if (message.first[1] == 0x02) {
+                    playerHealth->isDamageable = true;
                 }
                 break;
             }

@@ -134,9 +134,12 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
             std::cerr << "Error: Bad format of message !" << std::endl;
             return;
         }
-        char data[5];
+        char data[2];
         data[0] = 0x45;  // enable/disable godmode in protocol
-        std::memcpy(&data[1], &value, sizeof(int));
+        if (value == 1)
+            data[1] = 0x01;
+        if (value == 0)
+            data[1] = 0x02;
         std::string data_str(data, sizeof(data));
         this->_networkEngine->_client->send(data_str);
         return;
