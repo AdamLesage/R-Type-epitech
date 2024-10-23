@@ -123,6 +123,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
         _registry.add_component<Direction>(entity, Direction{1, 0});
         std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
                            + std::to_string(entity + 1) + ".png";
+        std::cout << path << std::endl;
         _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception& e) {
@@ -166,8 +167,12 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         auto parentTag = _registry.get_components<Tag>()[parentEntity];
         if (parentTag.has_value() && parentTag.value().tag == "enemy") {
             path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_ennemy.png";
-        } else {
-            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_1.png";
+        }
+        if (parentTag.has_value() && parentTag.value().tag == "player") {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + PATH_SEPARATOR + "missile_" + std::to_string(parentId + 1) + ".png";
+        }
+        else {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_ennemy.png";
         }
 
         _registry.add_component<Sprite>(entity, Sprite{path, {71, 32}, {0, 0}});
