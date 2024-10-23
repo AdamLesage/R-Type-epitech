@@ -15,40 +15,59 @@ Edition::CommandManager::~CommandManager()
 {
 }
 
-void Edition::CommandManager::executeCommand(std::shared_ptr<ICommand> command)
+void Edition::CommandManager::createAsset(std::shared_ptr<Edition::Asset> asset)
 {
-    command->execute();
-    undoStack.push(std::move(command));
+    _undoAssets.push_back(asset);
 
-    // Clear the redo stack
-    while (!redoStack.empty()) {
-        redoStack.pop();
-    }
+    // Clear the redo 
+    _redoAssets.clear();
 }
 
 void Edition::CommandManager::undo()
 {
-    if (undoStack.empty()) { // Nothing to undo
+    if (_undoAssets.empty()) { // Nothing to undo
         return;
     }
 
-    auto command = std::move(undoStack.top());
-    undoStack.pop();
-    command->undo();
-    redoStack.push(std::move(command));
+    auto asset = std::move(_undoAssets.back());
+    _undoAssets.pop_back();
+    _redoAssets.push_back(asset);
 }
 
 void Edition::CommandManager::redo()
 {
-    if (redoStack.empty()) { // Nothing to redo
+    if (_redoAssets.empty()) { // Nothing to redo
         return;
     }
 
-    auto command = std::move(redoStack.top());
-    redoStack.pop();
-    command->execute();
-    undoStack.push(std::move(command));
+    auto asset = std::move(_redoAssets.back());
+    _redoAssets.pop_back();
+    _undoAssets.push_back(asset);
 }
+
+// std::vector<std::shared_ptr<Edition::Asset>> Edition::CommandManager::getUndoAssetsVector() const
+// {
+//     std::vector<std::shared_ptr<Edition::Asset>> assets;
+//     std::stack<std::shared_ptr<Edition::Asset>> tempStack = _undoAssets;
+
+//     while (!tempStack.empty()) {
+//         assets.push_back(tempStack.top());
+//         tempStack.pop();
+//     }
+//     return assets;
+// }
+
+// std::vector<std::shared_ptr<Edition::Asset>> Edition::CommandManager::getRedoAssetsVector() const
+// {
+//     std::vector<std::shared_ptr<Edition::Asset>> assets;
+//     std::stack<std::shared_ptr<Edition::Asset>> tempStack = _redoAssets;
+
+//     while (!tempStack.empty()) {
+//         assets.push_back(tempStack.top());
+//         tempStack.pop();
+//     }
+//     return assets;
+// }
 
 /* Example of use
 int main() {

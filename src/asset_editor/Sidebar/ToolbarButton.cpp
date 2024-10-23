@@ -23,7 +23,7 @@ Edition::ToolbarButton::ToolbarButton(std::string buttonIconAssetPath, sf::Vecto
     // Load the texture of the button icon
     _buttonIconTexture = std::make_shared<sf::Texture>();
     if (!_buttonIconTexture->loadFromFile(buttonIconAssetPath)) {
-        std::cerr << "Erreur lors du chargement de la texture " << buttonIconAssetPath << std::endl;
+        std::cerr << "Error loading texture " << buttonIconAssetPath << std::endl;
         return;
     }
 
@@ -71,7 +71,7 @@ std::string Edition::ToolbarButton::update(sf::RenderWindow& window, CurrentSele
 
         // Check if the mouse button is pressed while hovering and cooldown has passed
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)
-            && clickCooldownClock.getElapsedTime().asSeconds() > 0.1f) {
+            && clickCooldownClock.getElapsedTime().asSeconds() > 0.15f) {
             _backgroundRectangle.setFillColor(sf::Color(175, 175, 175));
             clickCooldownClock.restart();
             return _buttonIconAssetPath;
