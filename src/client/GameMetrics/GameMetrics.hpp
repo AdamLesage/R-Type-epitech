@@ -24,6 +24,16 @@
         #include <fstream>
     #endif
 
+    #ifdef _WIN32
+        #include <pdh.h>
+        #pragma comment(lib, "pdh.lib")
+    #endif
+
+    #ifdef _WIN32
+        PDH_HQUERY cpuQuery;
+        PDH_HCOUNTER cpuTotal;
+    #endif
+
     #if defined(_WIN32) || defined(_WIN64)
         #define PATH_SEPARATOR "\\"
     #else
@@ -57,7 +67,7 @@ class GameMetrics {
         /**
          * @brief Display CPU information 
          */
-        void displayCPU();
+        void displayCPU(sf::RenderWindow& window);
 
         /**
          * @brief Display Memory used
