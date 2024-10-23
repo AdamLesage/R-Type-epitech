@@ -161,16 +161,15 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
     if (event.find("teleport ") == 0) { // Teleport an entity 
         std::string numbers_str = event.substr(9);
         std::istringstream iss(numbers_str);
-        int entity_ID, pos_x, pos_y;
-        if (!(iss >> entity_ID >> pos_x >> pos_y)) {
+        int pos_x, pos_y;
+        if (!(iss >> pos_x >> pos_y)) {
             std::cerr << "Erreur: le format du message est incorrect !" << std::endl;
             return;
         }
-        char data[14];
+        char data[10];
         data[0] = 0x47;  // Teleport entity in protocol
-        data[1] = entity_ID;
-        std::memcpy(&data[5], &pos_x, sizeof(int));
-        std::memcpy(&data[9], &pos_y, sizeof(int));
+        std::memcpy(&data[2], &pos_x, sizeof(int));
+        std::memcpy(&data[6], &pos_y, sizeof(int));
         std::string data_str(data, sizeof(data));
         this->_networkEngine->_client->send(data_str);
         return;
@@ -183,6 +182,7 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
             std::cerr << "Error: Bad format of message !" << std::endl;
             return;
         }
+        value *= 10;
         char data[5];
         data[0] = 0x48;  // set lives of player in protocol
         std::memcpy(&data[1], &value, sizeof(int));

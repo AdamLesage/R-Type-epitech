@@ -265,8 +265,22 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x47: {
+                int pos_x, pos_y;
+                std::memcpy(&pos_x, &message.first[2], sizeof(int));
+                std::memcpy(&pos_y, &message.first[6], sizeof(int));
+                auto& position  = reg.get_components<Position_s>()[message.second];
+                position->x = pos_x;
+                position->y = pos_y;
+                _networkSender->sendPositionUpdate(message.second, pos_x, pos_y);
+                break;
             }
             case 0x48: {
+                int value;
+                std::memcpy(&value, &message.first[1], sizeof(int));
+                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                playerHealth->health = value;
+                
+                break;
             }
             default:
                 std::cout << "unknowCommand" << std::endl;
