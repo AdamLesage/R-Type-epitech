@@ -114,6 +114,15 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     }
 }
 
+void GameLogique::spawnWave()
+{
+    spawnEnnemy(0x03, 1920, 10);
+    spawnEnnemy(0x03, 1920, 160);
+    spawnEnnemy(0x03, 1920, 360);
+    spawnEnnemy(0x03, 1920, 580);
+    spawnEnnemy(0x03, 1920, 920);
+}
+
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
     std::clock_t spawnClock = std::clock();
@@ -231,6 +240,33 @@ void GameLogique::handleRecieve() {
                 reg.kill_entity(entity);
                 _networkSender->sendDeleteEntity(entityId);
                 break;
+            }
+            case 0x44: {
+                spawnWave();
+                break;
+            }
+            case 0x45: {
+                int value;
+                std::memcpy(&value, &message.first[1], sizeof(int));
+                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                if (value == 0) {
+                    playerHealth->isDamageable = true;
+                }
+                if (value == 1) {
+                    playerHealth->isDamageable = false;
+                }
+                break;
+            }
+            case 0x46: {
+                float value;
+                std::memcpy(&value, &message.first[1], sizeof(float));
+                auto& speed  = reg.get_components<ShootingSpeed_s>();
+                speed[message.second]->shooting_speed = value;
+                break;
+            }
+            case 0x47: {
+            }
+            case 0x48: {
             }
             default:
                 std::cout << "unknowCommand" << std::endl;

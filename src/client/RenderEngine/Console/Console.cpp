@@ -167,6 +167,32 @@ bool RType::Console::isCommand()
         show_fps = true;
         return true;
     }
+    if (_input.find("create_wave") == 0) {
+        _mediator->notify("RenderingEngine", _input);
+        return true;
+    }
+    if (_input == "god_mode enabled") {
+        std::string str = "god_mode 1";
+        _mediator->notify("RenderingEngine", str);
+        return true;
+    }
+    if (_input == "god_mode disabled") {
+        std::string str = "god_mode 0";
+        _mediator->notify("RenderingEngine", str);
+        return true;
+    }
+    if (_input.find("shoot_speed ") == 0) {
+        _mediator->notify("RenderingEngine", _input);
+        return true;
+    }
+    if (_input.find("teleport ") == 0) {
+        _mediator->notify("RenderingEngine", _input);
+        return true;
+    }
+    if (_input.find("set_lives ") == 0) {
+        _mediator->notify("RenderingEngine", _input);
+        return true;
+    }
     return false;
 }
 
