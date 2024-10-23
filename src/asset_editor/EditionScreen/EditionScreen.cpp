@@ -303,7 +303,7 @@ bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow>
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
         if (loadButton.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
             // Load the scene
-            // this->loadScene(_inputLoadText.getString());
+            this->loadScene(_inputLoadText.getString());
             _inputLoadText.setString("");
             return false;
         }
@@ -329,6 +329,26 @@ void Edition::EditionScreen::saveScene(const std::string &sceneName)
     SaveScene saveScene = SaveScene(scenePath, commandManager.getUndoAssets());
 
     saveScene.save();
+}
+
+void Edition::EditionScreen::loadScene(const std::string &sceneName)
+{
+    if (sceneName.empty()) {
+        return;
+    }
+
+    // Add prefix and extension to the scene name
+    // Fileconfig: "./config" + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg"
+    try {
+        std::string scenePath = std::string("config") + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg";
+        if (scenePath.empty() == true)
+            return;
+        LoadScene loadScene = LoadScene(scenePath, commandManager.getUndoAssets());
+
+        loadScene.load();
+    } catch (const std::exception &e) {
+        std::cerr << "Error from loadScene: " << e.what() << std::endl;
+    }
 }
 
 void Edition::EditionScreen::deleteEditionScreen()

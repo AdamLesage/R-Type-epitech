@@ -70,6 +70,13 @@ namespace Edition {
             std::string getEntityCode() const { return _entityCode; }
 
             /**
+             * @brief Set the entity code of the asset
+             * 
+             * @param code The entity code to set
+             */
+            void setEntityCode(std::string code) { _entityCode = code; }
+
+            /**
              * @brief Get the global bounds of the asset.
              * 
              * @return The bounding rectangle of the asset as an sf::FloatRect.

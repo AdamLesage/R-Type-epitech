@@ -14,6 +14,7 @@
 #include "../history/RemoveAsset.hpp"
 #include "../history/CommandManager.hpp"
 #include "SaveScene.hpp"
+#include "LoadScene.hpp"
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -105,6 +106,13 @@ namespace Edition {
              * @brief Delete every entities in the scene
              */
             void deleteEditionScreen();
+
+            /**
+             * @brief Load the scene with the given name
+             * 
+             * @param sceneName The name of the scene to load
+             */
+            void loadScene(const std::string &sceneName);
 
             /**
              * @brief The command manager

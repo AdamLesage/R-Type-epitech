@@ -37,12 +37,12 @@ release:
 	@echo "$(SUCCESS) Project compiled successfully (release mode)"
 
 asset_editor:
-	echo "$(RUNNING) Starting asset editor build"
-	mkdir -p src/asset_editor/build
-	cd src/asset_editor/build && cmake .. && make
-	cp src/asset_editor/build/r-type_asset_editor ./
-	rm -rf src/asset_editor/build
-	echo "$(SUCCESS) Asset editor compiled successfully"
+	@echo "$(RUNNING) Starting asset editor build"
+	@mkdir -p src/asset_editor/build
+	@cd src/asset_editor/build && cmake .. && make
+	@cp src/asset_editor/build/r-type_asset_editor ./
+	@rm -rf src/asset_editor/build
+	@echo "$(SUCCESS) Asset editor compiled successfully"
 
 clean:
 	@echo "$(RUNNING) Cleaning build directory"
