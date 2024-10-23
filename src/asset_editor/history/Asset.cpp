@@ -15,7 +15,7 @@ Edition::Asset::Asset(int x, int y, std::string assetPath, size_t entityCode)
         std::cerr << "Failed to load texture from " << _assetPath << std::endl;
         return;
     }
-    this->addComponent<Position>(Position{static_cast<float>(x), static_cast<float>(y)});
+    this->addComponent<Position>(Position{static_cast<float>(x), static_cast<float>(y - 100)});
     this->addComponent<Size>(Size{_spriteTexture->getSize().x, _spriteTexture->getSize().y});
     this->addComponent<Rotation>(Rotation{0});
     this->addComponent<Sprite>(Sprite{assetPath, {static_cast<int>(_spriteTexture->getSize().x), static_cast<int>(_spriteTexture->getSize().y)}, {0, 0}});
@@ -41,7 +41,7 @@ void Edition::Asset::draw(sf::RenderWindow &window)
     auto &size = this->getComponent<Size>();
     auto &pos = this->getComponent<Position>();
 
-    this->_sprite.setPosition(pos.x, pos.y);
+    this->_sprite.setPosition(pos.x, pos.y + 100);
     this->_sprite.setSize(sf::Vector2f(size.x, size.y));
     this->_sprite.setTextureRect(sf::IntRect(sprite.rectPos[0], sprite.rectPos[1], sprite.rectSize[0], sprite.rectSize[1]));
     this->_sprite.setRotation(this->getComponent<Rotation>().rotation);

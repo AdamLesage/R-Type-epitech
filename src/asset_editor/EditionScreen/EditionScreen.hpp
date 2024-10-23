@@ -54,7 +54,7 @@ namespace Edition {
              * 
              * @param event The event to handle
              */
-            std::shared_ptr<Edition::Asset> handleEvent(const sf::Event &event);
+            std::shared_ptr<Edition::Asset> handleEvent(const sf::Event &event, sf::RenderWindow &window);
 
             /**
              * @brief Display dialog to save the scene
@@ -90,7 +90,17 @@ namespace Edition {
              * @brief Delete every entities in the scene
              */
             void deleteEditionScreen();
+            /**
+             * @brief Get the current view of the scene
+             * @return The current sf::View object
+             */
+            sf::View getView();
 
+            /**
+             * @brief Get the left edge of the current view
+             * @return The left edge position of the view as a float
+             */
+            float getViewLeftEdge();
             /**
              * @brief The command manager
              */
@@ -98,6 +108,12 @@ namespace Edition {
         private:
             sf::RectangleShape _centralArea;
             sf::Text _inputSaveText;
+            sf::View _centralView;
+            float _zoomFactor;
+            sf::Vector2f _centralAreaPosition;
+            sf::Vector2f _centralAreaSize;
+            bool _isInArea = false;
+            float _viewLeftEdge = 0;
     };
 }
 
