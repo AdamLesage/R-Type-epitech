@@ -48,6 +48,7 @@ class GameLogique {
         std::shared_ptr<NetworkLib::Server> network;
         std::unique_ptr<NetworkSender> _networkSender;
         std::thread receiverThread;
+        std::thread connectionManagmentThread;
         int frequency;
         RType::Logger logger;
         bool running;
@@ -80,6 +81,11 @@ class GameLogique {
          * @param messsage message of the input
          */
         void handleClientInput(std::pair<std::string, uint32_t> message);
+
+        /**
+         * @brief Handle a new client connection and perform any setup required for the client.
+         */
+        void handleClientConnection();
 
         /**
          * @brief handle the Inpute of the client
