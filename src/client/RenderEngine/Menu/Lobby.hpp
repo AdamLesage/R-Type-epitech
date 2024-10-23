@@ -110,27 +110,29 @@ namespace RType {
             std::shared_ptr<IMediator>
                 _mediator; // Public attribute to be able to access it from the derived class.
         protected:
-            std::shared_ptr<sf::RenderWindow> window;
-            int selectedOption;
-            sf::Font font;
-            sf::Text playersNames[5];
-            sf::Sound backgroundMusic;
-            sf::SoundBuffer backgroundBuffer;
-            sf::Texture backgroundTexture;
-            sf::RectangleShape background;
-            sf::Texture logoTexture;
-            sf::Sprite logoSprite;
+            std::shared_ptr<sf::RenderWindow> window; // The window to display the Lobby on.
+            int selectedOption; // The selected option
+            sf::Font font; // The font used for the Lobby
+            sf::Text playersNames[5]; // The names of the players
+            sf::Sound backgroundMusic; // The background music of the Lobby
+            sf::SoundBuffer backgroundBuffer; // The buffer of the background music
+            sf::Texture backgroundTexture; // The texture of the background
+            sf::RectangleShape background; // The background of the Lobby
+            sf::Texture logoTexture; // The texture of the logo
+            sf::Sprite logoSprite; // The sprite of the logo
             sf::Text menuOptions[3]; // Play, Settings, Quit
-            sf::SoundBuffer selectBuffer;
-            sf::Sound selectSound;
-            std::vector<sf::Texture> playerTextures;
-            std::vector<sf::Sprite> playerSprites;
-            std::shared_ptr<Camera> _camera;
-            Registry _registry;
+            sf::SoundBuffer selectBuffer; // The buffer of the select sound
+            sf::Sound selectSound; // The sound played when selecting an option
+            std::vector<sf::Texture> playerTextures; // The textures of the players
+            std::vector<sf::Sprite> playerSprites; // The sprites of the players
+            std::shared_ptr<Camera> _camera; // The camera to display
+            Registry _registry; 
             Systems _systems;
-            std::shared_ptr<Game> games;
-            std::shared_ptr<Settings> settings;
-            std::shared_ptr<std::mutex> _mutex;
+            std::shared_ptr<Game> games; //the class game used to display the game
+            std::shared_ptr<Settings> settings; //the class settings used to display the settings
+            std::shared_ptr<std::mutex> _mutex; 
+            sf::RenderTexture RenderTexture; // The render texture
+            sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
 
         private:
             Logger _logger;

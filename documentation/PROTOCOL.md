@@ -43,6 +43,17 @@ This document describes the protocol used to communicate between the server and 
 - **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
 #### From 0x03 to 0x20
 
+## Enemy Creation client -> server 
+| Type  | Entity Type  | Position X   | Position Y   |
+|-------|--------------|--------------|--------------|
+| 0x42  |     0x03     | 0x42f60000   | 0x42960000   |
+
+- **Type:** 1 byte (0x43 for "enemy creation").
+- **Entity Type:** 1 byte (0x03 for "basic ennemy").
+- **Position X:** 4 bytes (e.g., 0x42e00000 for X position of 112.0).
+- **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
+#### From 0x03 to 0x20
+
 ## Bonus Creation
 | Type  | Bonus ID     | Position X   | Position Y   |
 |-------|--------------|--------------|--------------|
@@ -90,6 +101,13 @@ This document describes the protocol used to communicate between the server and 
 - **Type:** 1 byte (0x29 for "entity deletion").
 - **Entity ID:** 4 bytes (e.g., 0x00000100 for an entity with this ID).
 
+## Entity Deletion client -> server 
+| Type  | Entity ID    |
+|-------|--------------|
+| 0x43  | 0x00000001   |
+
+- **Type:** 1 byte (0x43 for "entity deletion").
+- **Entity ID:** 4 bytes (e.g., 0x00000100 for an entity with this ID).
 
 ## Position Update
 | Type  | Entity ID    | Position X   | Position Y   |

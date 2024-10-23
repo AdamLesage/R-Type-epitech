@@ -18,7 +18,7 @@ RUNNING = [$(YELLOW)~$(RESET)]
 SUCCESS = [$(GREEN)✔$(RESET)]
 FAILURE = [$(RED)✘$(RESET)]
 
-all:
+all: asset_editor
 	@echo "$(RUNNING) Starting project build"
 	@mkdir -p build
 	@cd build && cmake .. && make
@@ -36,6 +36,14 @@ release:
 	@cp release/build/libNetworkEngine.so release/build/libGameEngine.so release/build/libRenderingEngine.so release/build/libPhysicEngine.so release/build/libAudioEngine.so lib/
 	@echo "$(SUCCESS) Project compiled successfully (release mode)"
 
+asset_editor:
+	echo "$(RUNNING) Starting asset editor build"
+	mkdir -p src/asset_editor/build
+	cd src/asset_editor/build && cmake .. && make
+	cp src/asset_editor/build/r-type_asset_editor ./
+	rm -rf src/asset_editor/build
+	echo "$(SUCCESS) Asset editor compiled successfully"
+
 clean:
 	@echo "$(RUNNING) Cleaning build directory"
 	@rm -rf build release/build
@@ -43,7 +51,7 @@ clean:
 
 fclean: clean
 	@echo "$(RUNNING) Removing binaries and libraries"
-	@rm -f r-type_server r-type_client
+	@rm -f r-type_server r-type_client r-type_asset_editor
 	@rm -f lib/libNetworkEngine.so lib/libGameEngine.so lib/libRenderingEngine.so lib/libPhysicEngine.so lib/libAudioEngine.so
 	@echo "$(SUCCESS) Binaries and libraries removed successfully"
 
