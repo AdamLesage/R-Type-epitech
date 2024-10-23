@@ -141,7 +141,7 @@ void RType::ClientConnexionHandling::displaySubmitButton()
     submitButton.setFont(_font);
     submitButton.setString("Submit");
     submitButton.setCharacterSize(24);
-    submitButton.setFillColor(sf::Color::Yellow);
+    submitButton.setFillColor(sf::Color::Red);
     submitButton.setPosition(
         submitButtonRect.getPosition().x + (submitButtonRect.getSize().x - submitButton.getLocalBounds().width) / 2,
         submitButtonRect.getPosition().y + (submitButtonRect.getSize().y - submitButton.getLocalBounds().height) / 2 - submitButton.getLocalBounds().top

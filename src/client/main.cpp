@@ -107,7 +107,7 @@ int main(int ac, char** av) {
     (void)ac;
 
     std::string host           = "";
-    unsigned short server_port = static_cast<unsigned short>(std::stoi(av[2]));
+    unsigned short server_port = 0;
 
     if (av[1] != nullptr && av[2] != nullptr && isNumber(av[2])) {
         host        = av[1];
