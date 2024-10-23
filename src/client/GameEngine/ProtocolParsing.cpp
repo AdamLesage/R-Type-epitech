@@ -132,7 +132,6 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
 
     return true;
 }
-
 bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message, int& index) {
     if (!checkMessageType("PROJECTILE_CREATION", message, index)) return false;
 
@@ -161,8 +160,16 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
-        std::string path =
-            std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_1.png";
+
+        std::string path;
+        auto parentEntity = _registry.entity_from_index(parentId);
+        auto parentTag = _registry.get_components<Tag>()[parentEntity];
+        if (parentTag.has_value() && parentTag.value().tag == "enemy") {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_ennemy.png";
+        } else {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_1.png";
+        }
+
         _registry.add_component<Sprite>(entity, Sprite{path, {71, 32}, {0, 0}});
         this->updateIndexFromBinaryData("projectile_creation", index);
     } catch (const std::exception& e) {
