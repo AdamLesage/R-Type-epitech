@@ -35,23 +35,9 @@ GameLogique::~GameLogique() {
     connectionManagmentThread.join();
 }
 
-void GameLogique::startGame() {
+void GameLogique::startGame(int idEntity) {
     if (running == false) {
-        std::cout << network->getClientCount() << std::endl;
-        // for (size_t i = 0; i != network->getClientCount(); i++) {
-        //     size_t entity = this->reg.spawn_entity();
-        //     float xPos    = 100.f + (100.f * i);
-        //     float yPos    = 100.f;
-        //     this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
-        //     this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
-        //     this->reg.add_component<Tag>(entity, Tag{"player"});
-        //     this->reg.add_component<Health>(entity, Health{100, 100, true, true});
-        //     this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
-        //     this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
-        //     this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
-        //     this->reg.add_component<Size>(entity, Size{130, 80});
-        //     this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
-        // }
+        this->_networkSender->sendStateChange(idEntity, 0x02);
         this->running = true;
     }
 }
@@ -127,6 +113,7 @@ void GameLogique::spawnWave()
 
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
+    std::clock_t endClock      = std::clock();
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
@@ -145,7 +132,14 @@ void GameLogique::runGame() {
                 this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
+            if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {
+                this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
+                endClock = std::clock();
+                this->_networkSender->sendStateChange(1, 0x03);
+                this->running = false;
+            }
         }
+        endClock = std::clock();
     }
 }
 
@@ -223,7 +217,7 @@ void GameLogique::handleRecieve() {
             std::pair<std::string, uint32_t> message = network->popMessage();
             switch (message.first[0]) {
             case 0x41:
-                startGame();
+                startGame(message.second);
                 break;
             case 0x40:
                 handleClientInput(message);

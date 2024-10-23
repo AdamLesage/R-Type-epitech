@@ -9,20 +9,12 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
 
     playerTextures.resize(5);
     playerSprites.resize(5);
-
+    
     for (int i = 0; i < 5; ++i) {
         playersNames[i].setFont(font);
         playersNames[i].setString("Player " + std::to_string(i + 1));
         playersNames[i].setCharacterSize(24);
         playersNames[i].setFillColor(sf::Color::White);
-        std::string playerPath = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR
-                                 + "player_" + std::to_string(i + 1) + ".png";
-        if (!playerTextures[i].loadFromFile(playerPath)) {
-            throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
-        }
-        playerSprites[i].setTexture(playerTextures[i]);
-        playerSprites[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
-        playerSprites[i].setScale(0.7, 0.7);
     }
 
     float totalHeight      = window->getSize().y;
@@ -207,6 +199,27 @@ void RType::Lobby::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
+void RType::Lobby::displayConnectedPlayer()
+{
+    float totalHeight      = window->getSize().y;
+    float playerAreaHeight = 500;
+    float playerStartY     = (totalHeight - playerAreaHeight) / 2.0f;
+    for (size_t i = 0; _camera->listEntityToDisplay.size() != i; ++i) {
+        if (!playerTextures[i].loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath)) {
+            throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
+        }
+        playerSprites[i].setTexture(playerTextures[i]);
+        playerSprites[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1], _camera->listEntityToDisplay[i].sprite.rectSize[0],  _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+        playerSprites[i].setScale(0.7, 0.7);
+        float verticalSpacing = 100;
+        float currentY = playerStartY + i * verticalSpacing;
+        playersNames[i].setPosition(window->getSize().x / 3.0f, currentY);
+        playerSprites[i].setPosition((window->getSize().x / 3.0f) + 200, currentY - 10);
+        RenderTexture.draw(playersNames[i]);
+        RenderTexture.draw(playerSprites[i]);
+    }
+}
+
 void RType::Lobby::displayLobby() {
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
@@ -242,6 +255,7 @@ void RType::Lobby::displayLobby() {
                         games->setCamera(_camera);
                         games->setMutex(_mutex);
                         games->displayGame();
+                        return;
                         break;
                     case 1:
                         settings->displaySettings(false);
@@ -265,11 +279,7 @@ void RType::Lobby::displayLobby() {
         for (const auto& option : menuOptions) {
             RenderTexture.draw(option);
         }
-
-        for (int i = 0; i < 5; ++i) {
-            RenderTexture.draw(playersNames[i]);
-            RenderTexture.draw(playerSprites[i]);
-        }
+        displayConnectedPlayer();
         displaySound();
         libconfig::Config cfg;
         std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";

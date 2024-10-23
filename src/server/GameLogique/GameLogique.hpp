@@ -60,7 +60,7 @@ class GameLogique {
         /**
          * @brief lunch a game with connected player
          */
-        void startGame();
+        void startGame(int idEntity);
         /**
          * @brief add a Enemy on the registry and send a notification to connected client
          *

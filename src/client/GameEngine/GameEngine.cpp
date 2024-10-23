@@ -112,6 +112,7 @@ void RType::GameEngine::handleServerData(const std::string& message) {
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
+    this->_protocolParsing->setMediator(mediator);
 }
 
 void RType::GameEngine::updateCamera() {

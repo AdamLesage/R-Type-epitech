@@ -205,10 +205,21 @@ void RType::Mediator::notifyAudioEngine(std::string sender, const std::string& e
     if (sender != "AudioEngine") return;
 }
 
+void RType::Mediator::notifyProtocolParsing(std::string sender, const std::string& event) {
+    (void)event;
+    if (sender != "ProtocolParsing") return;
+    if (event.find("GameState") == 0) {
+        std::string numberString = event.substr(10);
+        int number = std::stoi(numberString);
+        this->_renderingEngine->setStateGame(number);
+    }
+}
+
 void RType::Mediator::notify(std::string sender, const std::string& event) {
     this->notifyGameEngine(sender, event);
     this->notifyNetworkEngine(sender, event);
     this->notifyRenderingEngine(sender, event);
     this->notifyPhysicEngine(sender, event);
     this->notifyAudioEngine(sender, event);
+    this->notifyProtocolParsing(sender, event);
 }

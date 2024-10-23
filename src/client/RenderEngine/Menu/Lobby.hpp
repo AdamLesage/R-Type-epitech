@@ -135,6 +135,10 @@ namespace RType {
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
 
         private:
+            /**
+             * @brief Displays the connected Player
+             */
+            void displayConnectedPlayer();
             Logger _logger;
     };
 

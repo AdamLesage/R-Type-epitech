@@ -61,6 +61,10 @@ void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex) {
     this->_mutex = mutex;
 }
 
+void RType::RenderingEngine::setStateGame(int newState) {
+    this->_stateGame = newState;
+}
+
 extern "C" RType::RenderingEngine* entryPointRenderingEngine() {
     return (new RType::RenderingEngine());
 }

@@ -144,3 +144,16 @@ void NetworkSender::sendProjectilColision(int id_projectil, int id_entity, int c
         this->_network->sendToClient(data.data(), data.size(), clientId);
     }
 }
+
+void NetworkSender::sendStateChange(int id_entity, char newState, int clientId)
+{
+    std::array<char, 6> data{};
+    data[0] = 0x37;
+    std::memcpy(&data[1], &id_entity, sizeof(id_entity));
+    std::memcpy(&data[5], &newState, sizeof(newState));
+    if (clientId == -1) {
+        this->_network->sendToAll(data.data(), data.size());
+    } else {
+        this->_network->sendToClient(data.data(), data.size(), clientId);
+    }
+}

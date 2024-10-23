@@ -106,6 +106,7 @@ class NetworkSender {
          * @param id_entity The unique identifier of the entity hit by the projectile.
          */
         void sendProjectilColision(int id_projectil, int id_entity, int clientId = -1);
+        void sendStateChange(int id_entity, char newState, int clientId = -1);
 
     private:
         std::shared_ptr<NetworkLib::Server> _network;

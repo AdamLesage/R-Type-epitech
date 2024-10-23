@@ -176,6 +176,14 @@ namespace RType {
              */
             bool parseData(const std::string& message);
 
+            /**
+             * @brief Set the mediator for component communication.
+             *
+             * Assigns a mediator to facilitate interaction between system components.
+             *
+             * @param mediator A shared pointer to the mediator instance.
+             */
+            void setMediator(std::shared_ptr<IMediator> mediator);
         protected:
             /**
              * @brief Check if the message type is valid and if its values are valid.
@@ -193,13 +201,13 @@ namespace RType {
              * @return int The new index.
              */
             int updateIndexFromBinaryData(const std::string& message, int& index);
-
         private:
             // Variables
             std::string _protocolPath;
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
             Registry& _registry; // Will be used to update the game engine data
+            std::shared_ptr<IMediator> _mediator;
     };
 } // namespace RType
 
