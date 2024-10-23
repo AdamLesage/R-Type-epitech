@@ -114,6 +114,15 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     }
 }
 
+void GameLogique::spawnWave()
+{
+    spawnEnnemy(0x03, 1920, 10);
+    spawnEnnemy(0x03, 1920, 160);
+    spawnEnnemy(0x03, 1920, 360);
+    spawnEnnemy(0x03, 1920, 580);
+    spawnEnnemy(0x03, 1920, 920);
+}
+
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
     std::clock_t spawnClock = std::clock();
@@ -230,6 +239,45 @@ void GameLogique::handleRecieve() {
                 entity_t entity = reg.entity_from_index(entityId);
                 reg.kill_entity(entity);
                 _networkSender->sendDeleteEntity(entityId);
+                break;
+            }
+            case 0x44: {
+                spawnWave();
+                break;
+            }
+            case 0x45: {
+                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                if (message.first[1] == 0x01) {
+                    playerHealth->isDamageable = false;
+                }
+                if (message.first[1] == 0x02) {
+                    playerHealth->isDamageable = true;
+                }
+                break;
+            }
+            case 0x46: {
+                float value;
+                std::memcpy(&value, &message.first[1], sizeof(float));
+                auto& speed  = reg.get_components<ShootingSpeed_s>();
+                speed[message.second]->shooting_speed = value;
+                break;
+            }
+            case 0x47: {
+                int pos_x, pos_y;
+                std::memcpy(&pos_x, &message.first[2], sizeof(int));
+                std::memcpy(&pos_y, &message.first[6], sizeof(int));
+                auto& position  = reg.get_components<Position_s>()[message.second];
+                position->x = pos_x;
+                position->y = pos_y;
+                _networkSender->sendPositionUpdate(message.second, pos_x, pos_y);
+                break;
+            }
+            case 0x48: {
+                int value;
+                std::memcpy(&value, &message.first[1], sizeof(int));
+                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                playerHealth->health = value;
+                
                 break;
             }
             default:

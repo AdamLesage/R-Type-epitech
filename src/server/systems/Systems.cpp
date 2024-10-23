@@ -159,7 +159,8 @@ void Systems::check_entities_collisions(Registry& reg,
         
 
         if (playerHealth && enemyDamage) {
-            playerHealth->health -= enemyDamage->damage;
+            if (playerHealth->isDamageable == true)
+                playerHealth->health -= enemyDamage->damage;
             if (playerHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
