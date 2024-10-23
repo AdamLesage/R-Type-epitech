@@ -70,19 +70,14 @@ class GameLogique {
          */
         void spawnEnnemy(char type, float position_x, float position_y);
         /**
-         * @brief spawn an ennemy
+         * @brief spawn a wave of ennemy
          *
-         * @param type the type of the ennemy
-         * 
-         * @param position_x position of the ennemy x
-         * 
-         * @param position_yposition of the ennemy y
-         * 
          */
         void spawnWave();
         /**
-         * @brief spawn a wave of ennemy
+         * @brief andle the input of the client
          *
+         * @param messsage message of the input
          */
         void handleClientInput(std::pair<std::string, uint32_t> message);
 
