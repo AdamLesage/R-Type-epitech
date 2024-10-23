@@ -76,3 +76,21 @@ std::size_t GameMetrics::getMemoryUsage() {
 #endif
     return 0;
 }
+
+void GameMetrics::displayLatency(sf::RenderWindow& window, float latency) {
+    sf::Text text;
+    static sf::Font font;
+
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    if (!font.loadFromFile(fontPath)) {
+        std::cerr << "Failed to load font" << std::endl;
+        return;
+    }
+    text.setFont(font);
+
+    text.setString("Latency: " + std::to_string(latency) + " ms");
+
+    text.setFillColor(sf::Color::White);
+    text.setPosition(0, 40);
+    window.draw(text);
+}

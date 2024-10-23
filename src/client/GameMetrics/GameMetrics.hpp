@@ -59,6 +59,13 @@ class GameMetrics {
          */
         void displayPlayerPosition();
 
+        /**
+         * @brief Display the latency between server and clients in MS
+         *
+         * @param sf::RenderWindow& window
+         * @param float latency
+         */
+        void displayLatency(sf::RenderWindow& window, float latency);
     private:
         std::size_t getMemoryUsage();
 };

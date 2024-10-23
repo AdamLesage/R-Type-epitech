@@ -186,7 +186,7 @@ void RType::Lobby::displaySubtitles() {
     window->draw(subtitle);
 }
 
-void RType::Lobby::displayLobby() {
+void RType::Lobby::displayLobby(float latency) {
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
         return;
@@ -220,7 +220,7 @@ void RType::Lobby::displayLobby() {
                         games->_mediator = _mediator;
                         games->setCamera(_camera);
                         games->setMutex(_mutex);
-                        games->displayGame();
+                        games->displayGame(latency);
                         break;
                     case 1:
                         settings->displaySettings(false);

@@ -629,7 +629,10 @@ bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& in
     std::string local_time(buffer);
 
     std::chrono::duration<double> diff = std::chrono::system_clock::now() - now;
-    std::cout << "Ping: " << diff.count() * 1000 << " ms" << std::endl;
+
+    _latency = 6;
+
+    std::cout << "Latency global: " << g_latency << " ms" << std::endl;
 
     this->updateIndexFromBinaryData("ping_client", index);
     return true;

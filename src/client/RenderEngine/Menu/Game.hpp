@@ -12,6 +12,7 @@
 #include "../../Camera.hpp"
 #include <mutex>
 #include <libconfig.h++>
+#include "../../GameMetrics/Latency.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -59,12 +60,12 @@ namespace RType {
             /**
              * @brief Displays the cinematic just before the game starts.
              */
-            void displayGame();
+            void displayGame(float latency);
 
             /**
              * @brief Displays the game we are playing.
              */
-            void play();
+            void play(float latency);
             /**
              * @brief Set the camera to display
              *

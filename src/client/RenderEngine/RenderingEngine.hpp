@@ -48,6 +48,13 @@ namespace RType {
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
 
+            /**
+             * @brief Set the Latency object
+             *
+             * @param latency
+             */
+            void setLatency(float latency);
+
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;
@@ -57,6 +64,7 @@ namespace RType {
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
             RType::Logger logger;
+            float _latency;
     };
 } // namespace RType
 

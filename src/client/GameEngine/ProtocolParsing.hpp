@@ -20,6 +20,7 @@
 #include "../../shared/systems/Systems.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Sprite.hpp"
+#include "../GameMetrics/Latency.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -185,6 +186,13 @@ namespace RType {
              */
             bool parsePingClient(const std::string& message, int& index);
 
+            /**
+             * @brief Get the Latency object
+             *
+             * @return float
+             */
+            float getLatency() const { return _latency; }
+
         protected:
             /**
              * @brief Check if the message type is valid and if its values are valid.
@@ -209,6 +217,7 @@ namespace RType {
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
             Registry& _registry; // Will be used to update the game engine data
+            float _latency;
     };
 } // namespace RType
 

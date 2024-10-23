@@ -37,7 +37,7 @@ void RType::RenderingEngine::run() {
     while (window->isOpen()) {
         int scene = _menu->displayMenu();
         if (scene == 1) {
-            lobby->displayLobby();
+            lobby->displayLobby(_latency);
         } else if (scene == 2) {
             settings->displaySettings(false);
         } else if (scene == 3) {
@@ -58,6 +58,10 @@ void RType::RenderingEngine::setCamera(std::shared_ptr<Camera>& camera) {
 
 void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex) {
     this->_mutex = mutex;
+}
+
+void RType::RenderingEngine::setLatency(float latency) {
+    _latency = latency;
 }
 
 extern "C" RType::RenderingEngine* entryPointRenderingEngine() {
