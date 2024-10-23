@@ -42,6 +42,7 @@ void RType::Mediator::notifyGameEngine(std::string sender, const std::string& ev
     if (event == "updateData") {
         this->_networkEngine->updateData();
     }
+    // if event start with "LATENCY" send to render engine
     this->_networkEngine->_client->send(event);
 }
 
@@ -74,6 +75,10 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         std::memcpy(&data[1], &player_id, sizeof(int));
         std::string data_str(data, sizeof(data));
         this->_networkEngine->_client->send(data_str);
+    }
+    if (event.rfind("LATENCY", 0) == 0) {
+        std::string latency = event.substr(8);
+        this->_renderingEngine->setLatency(std::stof(latency));
     }
 }
 

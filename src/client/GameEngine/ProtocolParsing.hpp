@@ -14,6 +14,7 @@
 #include <map>
 #include <utility>
 #include <cstring>
+#include <iomanip>
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/systems/Systems.hpp"
@@ -176,6 +177,21 @@ namespace RType {
              */
             bool parseData(const std::string& message);
 
+            /**
+             * @brief Parse the message to validate and extract information for the corresponding operation.
+             *
+             * @param message The time code to parse.
+             * @param index The index to update.
+             */
+            bool parsePingClient(const std::string& message, int& index);
+
+            /**
+             * @brief Get the Latency object
+             *
+             * @return float
+             */
+            float getLatency() const { return _latency; }
+
         protected:
             /**
              * @brief Check if the message type is valid and if its values are valid.
@@ -200,6 +216,7 @@ namespace RType {
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
             Registry& _registry; // Will be used to update the game engine data
+            float _latency;
     };
 } // namespace RType
 

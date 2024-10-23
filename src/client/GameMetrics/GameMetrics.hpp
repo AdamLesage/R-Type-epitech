@@ -87,6 +87,8 @@ class GameMetrics {
          * @param window
          */
         void displayGpuUsage(sf::RenderWindow& window);
+
+        void displayLatency(sf::RenderWindow& window, float& latency);
     private:
         std::size_t getMemoryUsage();
 };

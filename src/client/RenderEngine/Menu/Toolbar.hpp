@@ -63,11 +63,12 @@ class Toolbar {
          * @param optionName option's name
          */
         void displayMetrics(const std::string optionName);
-        
+
         bool showFps;
         bool showMemory;
         bool showCpu;
         bool showGpu;
+        bool showNetwork;
 
     private:
         bool isVisible;

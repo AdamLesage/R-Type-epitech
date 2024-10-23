@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** rtype [WSL: Ubuntu-22.04]
+** R-Type-epitech [WSL: Ubuntu]
 ** File description:
 ** Toolbar
 */
@@ -8,7 +8,7 @@
 #include "Toolbar.hpp"
 
 Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false),
-    showGpu(false), isVisible(false), dropdownOpen(false)
+    showGpu(false), showNetwork(false), isVisible(false), dropdownOpen(false)
 {
     toolbarShape.setSize({1920, 50});
     toolbarShape.setFillColor(sf::Color(50,50,50));
@@ -21,7 +21,7 @@ Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false),
     text.setFont(font);
     text.setString("Overlay");
     text.setPosition(10, 5);
-    dropdownShape.setSize({150, 150});
+    dropdownShape.setSize({150, 180});
     dropdownShape.setFillColor(sf::Color(70, 70, 70));
     dropdownShape.setPosition(10, 50);
     initializeMenuOptions();
@@ -33,7 +33,7 @@ Toolbar::~Toolbar()
 
 void Toolbar::initializeMenuOptions()
 {
-    optionSelected = {{"FPS", false}, {"CPU Usage", false}, {"GPU Usage", false}, {"RAM", false}, {"World Position", false}};
+    optionSelected = {{"FPS", false}, {"CPU Usage", false}, {"GPU Usage", false}, {"RAM", false}, {"World Position", false}, {"Network", false}};
     sf::Text fpsOption("FPS", font, 25);
     fpsOption.setFillColor(sf::Color::White);
     fpsOption.setPosition(20, 50);
@@ -49,11 +49,16 @@ void Toolbar::initializeMenuOptions()
     sf::Text posOption("World Position", font, 25);
     posOption.setFillColor(sf::Color::White);
     posOption.setPosition(20, 170);
+    sf::Text networkOption("Network", font, 25);
+    networkOption.setFillColor(sf::Color::White);
+    networkOption.setPosition(20, 200);
+
     menuOptions["FPS"] = fpsOption;
     menuOptions["CPU Usage"] = cpuOption;
     menuOptions["GPU Usage"] = gpuOption;
     menuOptions["RAM"] = ramOption;
     menuOptions["World position"] = posOption;
+    menuOptions["Network"] = networkOption;
 }
 
 void Toolbar::open()
@@ -122,6 +127,9 @@ void Toolbar::displayMetrics(const std::string optionName)
     }
     if (optionName == "GPU Usage") {
         showGpu = optionSelected[optionName];
+    }
+    if (optionName == "Network") {
+        showNetwork = optionSelected[optionName];
     }
 }
 

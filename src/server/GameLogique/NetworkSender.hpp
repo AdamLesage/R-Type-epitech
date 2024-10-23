@@ -107,6 +107,13 @@ class NetworkSender {
          */
         void sendProjectilColision(int id_projectil, int id_entity);
 
+        /**
+         * @brief send a ping containing the time code to the clients
+         *
+         * @param timeCode
+         */
+        void sendPing(std::string timeCode);
+
     private:
         std::shared_ptr<NetworkLib::Server> _network;
 };

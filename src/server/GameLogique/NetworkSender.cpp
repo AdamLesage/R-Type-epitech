@@ -104,3 +104,13 @@ void NetworkSender::sendProjectilColision(int id_projectil, int id_entity) {
     std::memcpy(&data[5], &id_entity, sizeof(id_entity));
     this->_network->sendToAll(data.data(), data.size());
 }
+
+void NetworkSender::sendPing(std::string timeCode) {
+    //finir et ajouter à une méthode à protocol parsing.
+    //protocl parsing fichier de config dans le constructeur de game engine, bouger le fichier de config.
+    std::vector<char> data(strlen(timeCode.c_str()) + 1);
+    data[0] = 0x99;
+    std::memcpy(&data[1], timeCode.c_str(), strlen(timeCode.c_str()));
+    std::memcpy(&data[strlen(timeCode.c_str()) + 1], "\0", 1);
+    this->_network->sendToAll(data.data(), data.size());
+}

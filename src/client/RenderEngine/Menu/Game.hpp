@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** R-Type-epitech [WSL: Ubuntu]
+** File description:
+** Game
+*/
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
@@ -61,12 +68,12 @@ namespace RType {
             /**
              * @brief Displays the cinematic just before the game starts.
              */
-            void displayGame();
+            void displayGame(float& latency);
 
             /**
              * @brief Displays the game we are playing.
              */
-            void play();
+            void play(float& latency);
             /**
              * @brief Set the camera to display
              *

@@ -32,7 +32,8 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
                        {"PROJECTILE_FIRING", {0x34, "projectile_firing"}},
                        {"PROJECTILE_COLLISION", {0x35, "projectile_collision"}},
                        {"SCORE_UPDATE", {0x36, "score_update"}},
-                       {"STATE_CHANGE", {0x37, "state_change"}}};
+                       {"STATE_CHANGE", {0x37, "state_change"}},
+                       {"PING_CLIENT", {0x99, "ping_client"}}};
 }
 
 RType::ProtocolParsing::~ProtocolParsing() {
@@ -608,6 +609,33 @@ bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& i
     return true;
 }
 
+bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& index) {
+    if (!checkMessageType("PING_CLIENT", message, index)) return false;
+
+    std::string timeCode(&message[index + 1], message.size() - index - 1);
+
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+
+    std::tm localtm;
+#ifdef _WIN32
+    gmtime_s(&localtm, &now_c);
+#else
+    gmtime_r(&now_c, &localtm);
+#endif
+
+    char buffer[100];
+    std::strftime(buffer, sizeof(buffer), "%d/%H/%M/%S", &localtm);
+    std::string local_time(buffer);
+
+    std::chrono::duration<double> diff = std::chrono::system_clock::now() - now;
+
+    _latency = diff.count() * 1000;
+
+    this->updateIndexFromBinaryData("ping_client", index);
+    return true;
+}
+
 bool RType::ProtocolParsing::parseData(const std::string& message) {
     if (message.empty()) return false;
 
@@ -628,6 +656,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parseProjectileCollision(message, index)) continue;
         if (this->parseScoreUpdate(message, index)) continue;
         if (this->parseStateChange(message, index)) continue;
+        if (this->parsePingClient(message, index)) continue;
         index += 1;
     }
     return false;
