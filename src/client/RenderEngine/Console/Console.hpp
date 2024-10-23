@@ -24,7 +24,7 @@
 namespace RType {
     class Console {
         public:
-            Console(std::shared_ptr<sf::RenderWindow> _window);
+            Console(std::shared_ptr<sf::RenderWindow> _window,std::shared_ptr<sf::RenderTexture> _RenderTexture);
             ~Console();
 
             /**
@@ -106,6 +106,7 @@ namespace RType {
             void displayContainer();
             sf::Event event;
             std::shared_ptr<sf::RenderWindow> window;
+            std::shared_ptr<sf::RenderTexture> RenderTexture;
             std::vector<sf::Text> History;
             std::vector<sf::Text> CommandHistory;
             sf::Text _inputText;

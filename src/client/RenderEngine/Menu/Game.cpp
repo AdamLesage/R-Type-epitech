@@ -85,14 +85,39 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
         players[i].setPosition(sf::Vector2f(125.f + (125.f * i), 125.f));
         players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
     }
-
+        if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading deuteranopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading protanopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading tritanopia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading achromatopsia shader" << std::endl;
+        return;
+    }
+    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
+        std::cerr << "Error loading normal shader" << std::endl;
+        return;
+    }
+    sf::RenderTexture *RenderTexture2 = new sf::RenderTexture();
+    RenderTexture2->create(1920, 1080);
+    RenderTexture = std::shared_ptr<sf::RenderTexture>(RenderTexture2);
     settings = std::make_shared<Settings>(window);
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
     _registry.register_component<Drawable_s>();
     _registry.register_component<Controllable_s>();
-    console = std::make_shared<Console>(window);
+    console = std::make_shared<Console>(window,RenderTexture);
     BackgroundClock.restart();
+
+
+
 }
 
 RType::Game::~Game() {
@@ -106,7 +131,7 @@ void RType::Game::displayPiou() {
     piouText.setFillColor(sf::Color::White);
     piouText.setStyle(sf::Text::Bold);
     piouText.setPosition(1920 / 2 - 40, 900);
-    window->draw(piouText);
+    RenderTexture->draw(piouText);
 }
 
 void RType::Game::ShootSound() {
@@ -140,7 +165,7 @@ void RType::Game::DisplaySkipIntro() {
     skipIntro.setFillColor(sf::Color::White);
     skipIntro.setStyle(sf::Text::Bold);
     skipIntro.setPosition(1920 / 2 - 200, 1080 - 100);
-    window->draw(skipIntro);
+    RenderTexture->draw(skipIntro);
 }
 
 void RType::Game::play() {
@@ -175,15 +200,37 @@ void RType::Game::play() {
         if (backgrounds[2].getPosition().x < -1920) backgrounds[2].setPosition(1920, 0);
         if (backgrounds[3].getPosition().x < -1920) backgrounds[3].setPosition(1920, 0);
         for (int i = 0; i < 4; i++) {
-            window->draw(backgrounds[i]);
+            RenderTexture->draw(backgrounds[i]);
         }
         this->set_texture();
         for (int i = 0; i < (int)entity.size(); i++) {
-            window->draw(entity[i]);
+            RenderTexture->draw(entity[i]);
         }
         if (piou) {
             displayPiou();
             piou = false;
+        }
+                libconfig::Config cfg;
+        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+        try {
+            cfg.readFile(configPath.c_str());
+        } catch (const libconfig::FileIOException& fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            return;
+        }
+        RenderTexture->display();
+        sf::Sprite sprite(RenderTexture->getTexture());
+        std::string colorblind = settings->get_key_value(cfg, "Keys8");
+        if (colorblind.find("Deuteranopia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[0]);
+        } else if (colorblind.find("Protanopia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[1]);
+        } else if (colorblind.find("Tritanopia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[2]);
+        } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[3]);
+        } else {
+            window->draw(sprite, &colorblindShader[4]);
         }
         console->displayDeveloperConsole();
         window->display();
@@ -260,12 +307,34 @@ void RType::Game::displayGame() {
             game_launch_music.stop();
             play();
         } else {
-            window->draw(rectangleshape);
+            RenderTexture->draw(rectangleshape);
             DisplaySkipIntro();
         }
         if (piou) {
             displayPiou();
             piou = false;
+        }
+                libconfig::Config cfg;
+        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+        try {
+            cfg.readFile(configPath.c_str());
+        } catch (const libconfig::FileIOException& fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            return;
+        }
+        RenderTexture->display();
+        sf::Sprite sprite(RenderTexture->getTexture());
+        std::string colorblind = settings->get_key_value(cfg, "Keys8");
+        if (colorblind.find("Deuteranopia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[0]);
+        } else if (colorblind.find("Protanopia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[1]);
+        } else if (colorblind.find("Tritanopia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[2]);
+        } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+            window->draw(sprite, &colorblindShader[3]);
+        } else {
+            window->draw(sprite, &colorblindShader[4]);
         }
         window->display();
     }
