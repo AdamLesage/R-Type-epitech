@@ -55,6 +55,11 @@ namespace RType {
             void displaySubmitButton();
 
             /**
+             * @brief Display the error message if the host or port are invalid
+             */
+            void displayError();
+
+            /**
              * @brief Retrieve the input text for the host
              */
             void retrieveInputTextHost(const sf::Event &event);
@@ -79,8 +84,16 @@ namespace RType {
             unsigned short getServerPort() const { return std::stoi(_inputTextPort.getString().toAnsiString()); }
         protected:
         private:
+            /**
+             * @brief Check if the host and port are valid
+             * 
+             * @return true if the host and port are valid, false otherwise
+             */
+            bool areHostAndPortValid();
+
             std::shared_ptr<sf::RenderWindow> _window;
             std::string _inputBoxSelected; // Can be "host" or "port"
+            bool _invalidPortOrHost;
 
             sf::Text _inputTextHost;
             sf::Text _inputTextPort;

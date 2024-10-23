@@ -22,7 +22,7 @@ RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsign
     _window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _window->setFramerateLimit(60);
     _inputBoxSelected = "host";
-
+    _invalidPortOrHost = false;
 
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
@@ -60,6 +60,7 @@ void RType::ClientConnexionHandling::displayConnexionWindow()
         this->displayInputTextHost();
         this->displayInputTextPort();
         this->displaySubmitButton();
+        this->displayError();
         _window->display();
     }
 }
@@ -82,7 +83,7 @@ void RType::ClientConnexionHandling::displayInputTextHost()
     labelHost.setFont(_font);
     labelHost.setString("Host");
     labelHost.setCharacterSize(24);
-    labelHost.setFillColor(sf::Color::Yellow);
+    labelHost.setFillColor(sf::Color::Red);
     labelHost.setPosition(1920 / 2 - 100, 1080 / 2 - 85);
 
     sf::RectangleShape inputTextHost(sf::Vector2f(200, 50));
@@ -109,7 +110,7 @@ void RType::ClientConnexionHandling::displayInputTextPort()
     labelPort.setFont(_font);
     labelPort.setString("Port");
     labelPort.setCharacterSize(24);
-    labelPort.setFillColor(sf::Color::Yellow);
+    labelPort.setFillColor(sf::Color::Red);
     labelPort.setPosition(1920 / 2 - 100, 1080 / 2 + 15);
 
     sf::RectangleShape inputTextPort(sf::Vector2f(200, 50));
@@ -150,15 +151,33 @@ void RType::ClientConnexionHandling::displaySubmitButton()
     sf::FloatRect bounds = submitButtonRect.getGlobalBounds();
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
-        std::cout << "Submit button pressed" << std::endl;
-        _window->close();
-        return;
+        if (this->areHostAndPortValid() == true) {
+            _window->close();
+            return;
+        } else {
+            _invalidPortOrHost = true;
+        }
     }
 
     _window->draw(submitButtonRect);
     _window->draw(submitButton);
 }
 
+void RType::ClientConnexionHandling::displayError()
+{
+    if (_invalidPortOrHost == false) {
+        return;
+    }
+
+    sf::Text error;
+    error.setFont(_font);
+    error.setString("Invalid port or host");
+    error.setCharacterSize(24);
+    error.setFillColor(sf::Color::Red);
+    error.setPosition(1920 / 2 - error.getLocalBounds().width / 2, 1080 / 2 + 200);
+
+    _window->draw(error);
+}
 
 void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event &event)
 {
@@ -190,3 +209,16 @@ void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event &even
     }
 }
 
+
+bool RType::ClientConnexionHandling::areHostAndPortValid()
+{
+    if (this->getServerPort() < 1024 || this->getServerPort() > 65535) {
+        std::cerr << "Port must be between 1024 and 65535" << std::endl;
+        return false;
+    }
+    if (std::string(this->getHost()).length() < 7) {
+        std::cerr << "Host must be at least 7 characters long" << std::endl;
+        return false;
+    }
+    return true;
+}
