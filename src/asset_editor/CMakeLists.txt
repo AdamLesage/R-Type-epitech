@@ -24,6 +24,7 @@ set(SOURCES
     AssetEditor/AssetEditor.cpp
     EditionScreen/EditionScreen.cpp
     EditionScreen/SaveScene.cpp
+    EditionScreen/LoadScene.cpp
     history/Asset.cpp
     history/AddAsset.cpp
     history/RemoveAsset.cpp

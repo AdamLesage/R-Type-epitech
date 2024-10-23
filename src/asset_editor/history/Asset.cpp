@@ -52,3 +52,14 @@ sf::FloatRect Edition::Asset::getGlobalBounds()
 {
     return (this->_sprite.getGlobalBounds());
 }
+
+void Edition::Asset::setSpriteTexture(std::string assetPath)
+{
+    _spriteTexture = new sf::Texture();
+    if (!_spriteTexture->loadFromFile(assetPath)) {
+        std::cerr << "Failed to load texture from " << assetPath << std::endl;
+        return;
+    }
+    this->_sprite.setTexture(_spriteTexture);
+    this->_sprite.setSize(sf::Vector2f(this->getComponent<Size>().x, this->getComponent<Size>().y));
+}

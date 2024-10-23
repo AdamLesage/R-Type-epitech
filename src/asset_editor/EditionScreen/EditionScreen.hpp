@@ -14,6 +14,7 @@
 #include "../history/RemoveAsset.hpp"
 #include "../history/CommandManager.hpp"
 #include "SaveScene.hpp"
+#include "LoadScene.hpp"
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -72,12 +73,27 @@ namespace Edition {
             void retrieveInputSaveScene(const sf::Event &event);
 
             /**
+             * @brief Load the scene
+             * 
+             * @param event The event to handle
+             */
+            void retrieveInputLoadScene(const sf::Event &event);
+
+            /**
              * @brief Display dialog to delete the scene
              * 
              * @param window The window of the Asset Editor
              * @return true if the user deleted the scene, false if the dialog was closed
              */
             bool displayDeleteDialog(std::shared_ptr<sf::RenderWindow> window);
+
+            /**
+             * @brief Display dialog to load the scene
+             * 
+             * @param window The window of the Asset Editor
+             * @return true if the user loaded the scene, false if the dialog was closed
+             */
+            bool displayLoadDialog(std::shared_ptr<sf::RenderWindow> window);
 
             /**
              * @brief Save the scene in a cfg file with the given name
@@ -101,6 +117,12 @@ namespace Edition {
              * @return The left edge position of the view as a float
              */
             float getViewLeftEdge();
+            /** @brief Load the scene with the given name
+             * 
+             * @param sceneName The name of the scene to load
+             */
+            void loadScene(const std::string &sceneName);
+
             /**
              * @brief The command manager
              */
@@ -114,6 +136,7 @@ namespace Edition {
             sf::Vector2f _centralAreaSize;
             bool _isInArea = false;
             float _viewLeftEdge = 0;
+            sf::Text _inputLoadText;
     };
 }
 

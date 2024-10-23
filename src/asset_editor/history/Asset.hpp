@@ -70,11 +70,25 @@ namespace Edition {
             std::string getEntityCode() const { return _entityCode; }
 
             /**
+             * @brief Set the entity code of the asset
+             * 
+             * @param code The entity code to set
+             */
+            void setEntityCode(std::string code) { _entityCode = code; }
+
+            /**
              * @brief Get the global bounds of the asset.
              * 
              * @return The bounding rectangle of the asset as an sf::FloatRect.
              */
             sf::FloatRect getGlobalBounds();
+
+            /**
+             * @brief Set the texture of the sprite.
+             * 
+             * @param assetPath The path to the asset.
+             */
+            void setSpriteTexture(std::string assetPath);
 
             /**
              * @brief Adds a component to the asset.
