@@ -271,10 +271,10 @@ void Edition::ComponentsEditor::updateSelectedEntity(std::shared_ptr<Edition::As
         std::cerr << e.what() << '\n';
     }
     
-    this->posX->setInput(std::to_string(static_cast<int>(_asset->getGlobalBounds().left)));
-    this->posY->setInput(std::to_string(static_cast<int>(_asset->getGlobalBounds().top)));
-    this->sizeX->setInput(std::to_string(static_cast<int>(_asset->getGlobalBounds().width)));
-    this->sizeY->setInput(std::to_string(static_cast<int>(_asset->getGlobalBounds().height)));
+    this->posX->setInput(std::to_string(static_cast<int>(this->_asset->getComponent<Position>().x)));
+    this->posY->setInput(std::to_string(static_cast<int>(this->_asset->getComponent<Position>().y)));
+    this->sizeX->setInput(std::to_string(static_cast<int>(this->_asset->getComponent<Size>().x)));
+    this->sizeY->setInput(std::to_string(static_cast<int>(this->_asset->getComponent<Size>().y)));
 }
 
 void Edition::ComponentsEditor::addComponent()
@@ -467,15 +467,15 @@ void Edition::ComponentsEditor::handleInput(const sf::Event &event)
         label->checkInput(event);
         if (posX->checkInput(event) && this->_asset != nullptr) {
             if (posX->getInput().empty())
-                this->_asset->move(0, _asset->getGlobalBounds().top);
+                this->_asset->move(20, this->_asset->getComponent<Position>().y);
             else
-                this->_asset->move(std::stoi(posX->getInput()), _asset->getGlobalBounds().top);
+                this->_asset->move(std::stoi(posX->getInput()), this->_asset->getComponent<Position>().y);
         }
         if (posY->checkInput(event) && this->_asset != nullptr) {
             if (posY->getInput().empty())
-                this->_asset->move(_asset->getGlobalBounds().left, 0);
+                this->_asset->move(this->_asset->getComponent<Position>().x, 100);
             else
-                this->_asset->move(_asset->getGlobalBounds().left, std::stoi(posY->getInput()));
+                this->_asset->move(this->_asset->getComponent<Position>().x, std::stoi(posY->getInput()));
         }
         if (sizeX->checkInput(event) && this->_asset != nullptr) {
             if (sizeX->getInput().empty())

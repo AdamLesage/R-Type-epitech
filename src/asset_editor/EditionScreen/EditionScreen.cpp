@@ -19,13 +19,17 @@
 #endif
 
 
-Edition::EditionScreen::EditionScreen()
+Edition::EditionScreen::EditionScreen() : _zoomFactor(1.0f), _centralAreaPosition(0, 100), _centralAreaSize(1900, 900)
 {
-    _centralArea.setSize(sf::Vector2f(1350, 900));
-    _centralArea.setPosition(20, 100);
+    _centralArea.setSize(sf::Vector2f(_centralAreaSize.x, _centralAreaSize.y));
+    _centralArea.setPosition(_centralAreaPosition.x, _centralAreaPosition.y);
     _centralArea.setFillColor(sf::Color(50, 50, 50));
     _centralArea.setOutlineThickness(1);
     _centralArea.setOutlineColor(sf::Color::White);
+
+    _centralView.setSize(1350, 900);
+    _centralView.setCenter(_centralAreaPosition.x + _centralAreaSize.x / 2, 
+                           _centralAreaPosition.y + _centralAreaSize.y / 2);
 
     commandManager = CommandManager();
 }
@@ -37,21 +41,69 @@ Edition::EditionScreen::~EditionScreen()
 void Edition::EditionScreen::draw(sf::RenderWindow &window)
 {
     window.draw(_centralArea);
-
+    window.setView(_centralView);
     for (const auto &asset : commandManager.getUndoAssets()) {
         asset->draw(window);
     }
+    window.setView(window.getDefaultView());
 }
 
-std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Event &event)
+std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Event &event, sf::RenderWindow &window)
 {
-    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+    sf::Vector2f mouseWorldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), _centralView);
+
+    if (event.type == sf::Event::MouseMoved) {
+        sf::Vector2f mousPos;
+        mousPos.x = static_cast<float>(event.mouseMove.x);
+        mousPos.y = static_cast<float>(event.mouseMove.y);
+        sf::FloatRect area(200.0f, 200.0f, 1300.0f, 1080.0f);
+        if (area.contains(mousPos)) {
+            _isInArea = true;
+        } else {
+            _isInArea = false;
+        }
+    }
+
+    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && _isInArea) {
+        sf::Vector2f mousPos;
+        mousPos.x = static_cast<float>(event.mouseButton.x);
+        mousPos.y = static_cast<float>(event.mouseButton.y);
         for (const auto &asset : commandManager.getUndoAssets()) {
-            if (asset->getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+            if (asset->getGlobalBounds().contains(mouseWorldPos.x, mouseWorldPos.y)) {
                 return asset;
             }
         }
     }
+    if (event.type == sf::Event::MouseWheelScrolled && _isInArea) {
+        if (event.mouseWheelScroll.delta > 0) {
+            _centralView.zoom(0.9f);
+            _zoomFactor *= 0.9f;
+        } else if (event.mouseWheelScroll.delta < 0) {
+            if (_zoomFactor < 1) {
+                _centralView.zoom(1.1f);
+                _zoomFactor *= 1.1f;
+            }
+        }
+    }
+
+    if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left) && _isInArea) {
+        static sf::Vector2i lastMousePos = sf::Mouse::getPosition(window);
+        sf::Vector2i newMousePos = sf::Mouse::getPosition(window);
+        sf::Vector2f delta(static_cast<float>(lastMousePos.x - newMousePos.x), 
+                           static_cast<float>(0));
+        
+        delta.x = std::clamp(delta.x, -15.0f * _zoomFactor, 15.0f * _zoomFactor);
+        sf::Vector2f viewCenter = _centralView.getCenter();
+        sf::Vector2f viewSize = _centralView.getSize();
+        _viewLeftEdge = viewCenter.x - viewSize.x / 2.0f;
+
+        if (_viewLeftEdge + delta.x >= 20) {
+            _centralView.move(delta);
+        }
+
+        lastMousePos = newMousePos;
+    }
+
     return nullptr;
 }
 
@@ -357,4 +409,15 @@ void Edition::EditionScreen::deleteEditionScreen()
 {
     commandManager.clearRedoAssets();
     commandManager.clearUndoAssets();
+}
+
+float Edition::EditionScreen::getViewLeftEdge()
+{
+
+    return this->_viewLeftEdge;
+}
+
+sf::View Edition::EditionScreen::getView()
+{
+    return this->_centralView;
 }

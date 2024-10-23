@@ -29,7 +29,10 @@ void Edition::AssetEditor::run()
             std::string texture = this->_rightSidebar->handleEvent(event);
             manageDragAndDrop(event, texture);
             this->handleToolbarEvents(event);
-            std::shared_ptr<Edition::Asset> asset = this->_editionScreen.handleEvent(event);
+            std::shared_ptr<Edition::Asset> asset;
+            if (mouseTexture == nullptr) {
+                asset = this->_editionScreen.handleEvent(event, *_window.get());
+            }
             if (asset != nullptr) {
                 _rightSidebar->updateSelectedEntity(asset);
             }
@@ -69,8 +72,15 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
     }
     if (event.type == sf::Event::MouseButtonReleased) {
         if (mousePickRect != nullptr && !mousePathTexture.empty() && _lastEntityCode < 100) { // Limit the number of entities to 100
-            std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(event.mouseButton.x, event.mouseButton.y, mousePathTexture, _lastEntityCode);
-            _lastEntityCode++; // Increment the entity code
+            sf::Vector2i mousePosition = sf::Mouse::getPosition(*_window.get());
+            sf::Vector2f worldPosition = _window->mapPixelToCoords(mousePosition, this->_editionScreen.getView());
+            std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(
+                worldPosition.x,
+                worldPosition.y,
+                mousePathTexture,
+                _lastEntityCode
+            );
+            _lastEntityCode++;
             this->_editionScreen.commandManager.createAsset(asset);
         }
 
