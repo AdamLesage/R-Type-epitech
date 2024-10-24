@@ -7,9 +7,8 @@
 
 #include "Menu.hpp"
 
-RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw, std::shared_ptr<IMediator> mediator) {
+RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
         std::cout << "RenderingEngine running" << std::endl;
-    (void)mediator;
     window = wndw;
     if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
@@ -194,7 +193,7 @@ void RType::Menu::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
-int RType::Menu::displayMenu() {
+void RType::Menu::runScene() {
     sf::Event event;
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -216,12 +215,15 @@ int RType::Menu::displayMenu() {
                 switch (getSelectedOption()) {
                 case 0:
                     backgroundMusic.stop();
-                    return (1);
+                    this->sendStateChange(2);
+                    return;
                 case 1:
-                    return (2);
+                    this->settings->display();
+                    break;
                 case 2:
+                    this->sendStateChange(-1);
                     backgroundMusic.stop();
-                    return (3);
+                    return;
                 }
                 break;
             default:
@@ -237,7 +239,7 @@ int RType::Menu::displayMenu() {
         cfg.readFile(configPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
-        return 84;
+        // return 84;
     }
     std::string keyValue = settings->get_key_value(cfg, "Keys7");
     if (keyValue == "ON") {
@@ -258,9 +260,5 @@ int RType::Menu::displayMenu() {
         window->draw(sprite, &colorblindShader[4]);
     }
     window->display();
-    return (0);
-}
-
-void RType::Menu::setMediator(std::shared_ptr<RType::IMediator> mediator) {
-    _mediator = mediator;
+    // return (0);
 }

@@ -8,12 +8,12 @@
 #ifndef SETTINGS_HPP_
 #define SETTINGS_HPP_
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <memory>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <cstring>
-#include "Button.hpp"
 #include <libconfig.h++>
 #include <string>
 

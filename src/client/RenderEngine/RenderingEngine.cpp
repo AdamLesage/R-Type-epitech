@@ -16,34 +16,49 @@ RType::RenderingEngine::~RenderingEngine() {
 void RType::RenderingEngine::run() {
     logger.log(RType::Logger::LogType::RTYPEINFO, "RenderingEngine created");
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
-    _menu  = std::make_unique<Menu>(window, std::shared_ptr<IMediator>(this->_mediator));
-    logger.log(RType::Logger::LogType::RTYPEINFO, "Menu created");
     std::cout << "RenderingEngine running" << std::endl;
 
     try {
-        settings = std::make_shared<Settings>(window);
-        lobby    = std::make_shared<Lobby>(window);
+        this->_menu = std::make_unique<Menu>(window);
+        this->_settings = std::make_shared<Settings>(window);
+        this->_lobby    = std::make_shared<Lobby>(window);
+        this->_game = std::make_shared<Game>(window);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         exit(84);
     }
-    this->lobby->setMediator(_mediator);
+    logger.log(RType::Logger::LogType::RTYPEINFO, "Scenes Created");
     this->_menu->setMediator(_mediator);
-    if (this->_camera == nullptr) {
-        std::cout << "run camera null" << std::endl;
-    }
-    this->lobby->setCamera(_camera);
-    this->lobby->setMutex(_mutex);
+    this->_lobby->setMediator(_mediator);
+    this->_menu->setMediator(_mediator);
+    this->_game->setMediator(_mediator);
+
+    this->_lobby->setCamera(_camera);
+    this->_game->setCamera(_camera);
+    this->_game->setMutex(_mutex);
+    this->_lobby->setMutex(_mutex);
     window->setFramerateLimit(360);
     window->clear();
     while (window->isOpen()) {
-        int scene = _menu->displayMenu();
-        if (scene == 1) {
-            lobby->displayLobby();
-        } else if (scene == 2) {
-            settings->displaySettings(false);
-        } else if (scene == 3) {
+        switch (_stateGame)
+        {
+        case 1:
+            this->_menu->runScene();
+            break;
+        case 2:
+            this->_lobby->runScene();
+            break;
+        case 3:
+            this->_game->runScene();
+            break;
+        case 4:
+            // end of game Menu
+            break;
+        case -1:
             window->close();
+            break;
+        default:
+            break;
         }
     }
     exit(0);

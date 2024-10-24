@@ -220,99 +220,87 @@ void RType::Lobby::displayConnectedPlayer()
     }
 }
 
-void RType::Lobby::displayLobby() {
+void RType::Lobby::runScene() {
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
         return;
     }
-    backgroundMusic.play();
-    backgroundMusic.setLoop(true);
-    while (window->isOpen()) {
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window->close();
-            }
-            handleKeyPress(event);
-            if (event.type == sf::Event::KeyPressed) {
-                switch (event.key.code) {
-                case sf::Keyboard::Right:
-                    moveRight();
+    if (backgroundMusic.getStatus() != sf::Sound::Playing) {
+        backgroundMusic.play();
+        backgroundMusic.setLoop(true);
+    }
+    sf::Event event;
+    while (window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window->close();
+        }
+        handleKeyPress(event);
+        if (event.type == sf::Event::KeyPressed) {
+            switch (event.key.code) {
+            case sf::Keyboard::Right:
+                moveRight();
+                break;
+            case sf::Keyboard::Left:
+                moveLeft();
+                break;
+            case sf::Keyboard::Return:
+                switch (getSelectedOption()) {
+                case 0: // Start game
+                    backgroundMusic.stop();
+                    this->sendStateChange(3);
                     break;
-                case sf::Keyboard::Left:
-                    moveLeft();
+                case 1:
+                    settings->displaySettings(false);
                     break;
-                case sf::Keyboard::Return:
-                    switch (getSelectedOption()) {
-                    case 0: // Start game
-                        backgroundMusic.stop();
-                        if (_mediator != nullptr) {
-                            _mediator->notify("RenderingEngine", "play");
-                        } else {
-                            std::cerr << "Error: Mediator is null" << std::endl;
-                        }
-                        games->_mediator = _mediator;
-                        games->setCamera(_camera);
-                        games->setMutex(_mutex);
-                        games->displayGame();
-                        return;
-                        break;
-                    case 1:
-                        settings->displaySettings(false);
-                        break;
-                    case 2:
-                        backgroundMusic.stop();
-                        window->close();
-                        break;
-                    }
-                    break;
-                default:
+                case 2:
+                    this->sendStateChange(-1);
+                    backgroundMusic.stop();
+                    window->close();
                     break;
                 }
+                break;
+            default:
+                break;
             }
         }
-
-        window->clear();
-        RenderTexture.draw(background);
-        RenderTexture.draw(logoSprite);
-
-        for (const auto& option : menuOptions) {
-            RenderTexture.draw(option);
-        }
-        displayConnectedPlayer();
-        displaySound();
-        libconfig::Config cfg;
-        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-        try {
-            cfg.readFile(configPath.c_str());
-        } catch (const libconfig::FileIOException& fioex) {
-            std::cerr << "I/O error while reading file." << std::endl;
-            return;
-        }
-        std::string keyValue = settings->get_key_value(cfg, "Keys7");
-        if (keyValue == "ON") {
-            displaySubtitles();
-        }
-        RenderTexture.display();
-        sf::Sprite sprite(RenderTexture.getTexture());
-        std::string colorblind = settings->get_key_value(cfg, "Keys8");
-        if (colorblind.find("Deuteranopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[0]);
-        } else if (colorblind.find("Protanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[1]);
-        } else if (colorblind.find("Tritanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[2]);
-        } else if (colorblind.find("Achromatopsia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[3]);
-        } else {
-            window->draw(sprite, &colorblindShader[4]);
-        }
-        window->display();
     }
-}
 
-void RType::Lobby::setMediator(std::shared_ptr<RType::IMediator> mediator) {
-    _mediator = mediator;
+    window->clear();
+    RenderTexture.draw(background);
+    RenderTexture.draw(logoSprite);
+
+    for (const auto& option : menuOptions) {
+        RenderTexture.draw(option);
+    }
+    displayConnectedPlayer();
+    displaySound();
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    std::string keyValue = settings->get_key_value(cfg, "Keys7");
+    if (keyValue == "ON") {
+        displaySubtitles();
+    }
+    RenderTexture.display();
+    sf::Sprite sprite(RenderTexture.getTexture());
+    std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    if (colorblind.find("Deuteranopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[0]);
+    } else if (colorblind.find("Protanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[1]);
+    } else if (colorblind.find("Tritanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[2]);
+    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[3]);
+    } else {
+        window->draw(sprite, &colorblindShader[4]);
+    }
+    window->display();
 }
 
 void RType::Lobby::setCamera(std::shared_ptr<Camera> camera) {

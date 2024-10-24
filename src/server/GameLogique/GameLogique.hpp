@@ -54,6 +54,10 @@ class GameLogique {
         bool running;
         std::mutex _mutex;
         /**
+         * @brief Delete all entity at the end of the game
+         */
+        void clearGame();
+        /**
          * @brief listen to the server socket to manage client input
          */
         void handleRecieve();

@@ -37,7 +37,15 @@ GameLogique::~GameLogique() {
 
 void GameLogique::startGame(int idEntity) {
     if (running == false) {
-        this->_networkSender->sendStateChange(idEntity, 0x02);
+        for (size_t i = 0; i != network->getClientCount(); i++) {
+            auto &pos = reg.get_components<Position>()[i];
+            if (pos) {
+                pos->x = 100.f;
+                pos->y = 100 + (100.f * i);
+            }
+            this->_networkSender->sendPositionUpdate(i , 100.f, 100 + (100.f * i));
+        }
+        this->_networkSender->sendStateChange(idEntity, 0x03);
         this->running = true;
     }
 }
@@ -133,14 +141,47 @@ void GameLogique::runGame() {
                 spawnClock = std::clock();
             }
             if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {
-                this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
                 endClock = std::clock();
-                this->_networkSender->sendStateChange(1, 0x03);
+                clearGame();
                 this->running = false;
+                sleep(1);
+                this->_networkSender->sendStateChange(1, 0x01);
             }
+        } else {
+            endClock = std::clock();
         }
-        endClock = std::clock();
     }
+}
+
+void GameLogique::clearGame()
+{
+    auto& types  = reg.get_components<Type>();
+    size_t numberPlayer = 0;
+
+    for (size_t i = 0; i < types.size(); ++i) {
+        auto &type = types[i];
+        usleep(1000);
+        if (type && type->type != EntityType::PLAYER) {
+            this->_networkSender->sendDeleteEntity(i);
+            this->reg.kill_entity(i);
+        } else {
+            numberPlayer++;
+        }
+    }
+    usleep(1000);
+    for (; numberPlayer < this->network->getClientCount() + 1; numberPlayer++) {
+        this->reg.add_component<Position>(numberPlayer, Position_s{100.f + (100.f * numberPlayer), 100.f});
+        this->reg.add_component<Velocity>(numberPlayer, Velocity_s{0.f, 0.f});
+        this->reg.add_component<Tag>(numberPlayer, Tag{"player"});
+        this->reg.add_component<Health>(numberPlayer, Health{100, 100, true, true});
+        this->reg.add_component<Shoot>(numberPlayer, Shoot{true, std::chrono::steady_clock::now()});
+        this->reg.add_component<ShootingSpeed_s>(numberPlayer, ShootingSpeed_s{0.3f});
+        this->reg.add_component<Type>(numberPlayer, Type{EntityType::PLAYER});
+        this->reg.add_component<Size>(numberPlayer, Size{130, 80});
+        this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));     
+        usleep(1000);
+    }
+    
 }
 
 std::array<char, 6> GameLogique::retrieveInputKeys() {
@@ -176,6 +217,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
         std::cout << "Invalid message size" << std::endl;
         return;
     }
+    if (running == false) return;
 
     size_t id  = 0;
     char input = 0;

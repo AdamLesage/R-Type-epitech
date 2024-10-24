@@ -193,6 +193,32 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         this->_networkEngine->_client->send(data_str);
         return;
     }
+    if (event.find("StateChange ") == 0) {
+        std::cout << "event: " << event << std::endl;
+        std::string numbers_str = event.substr(12);
+        std::cout << numbers_str << std::endl;
+        int gameState = std::stoi(numbers_str);
+        switch (gameState) {
+            case 1:
+                this->_renderingEngine->setStateGame(1);
+                break;
+            case 2:
+                this->_renderingEngine->setStateGame(2);
+                /* code */
+                break;
+            case 3: {
+                char data[5];
+                data[0]       = 0x41; // Start game in protocol
+                int player_id = 1;
+                std::memcpy(&data[1], &player_id, sizeof(int));
+                std::string data_str(data, sizeof(data));
+                this->_networkEngine->_client->send(data_str);
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 void RType::Mediator::notifyPhysicEngine(std::string sender, const std::string& event) {
