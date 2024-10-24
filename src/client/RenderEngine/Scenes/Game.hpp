@@ -19,6 +19,7 @@
 #include "../Console/Console.hpp"
 #include <mutex>
 #include <libconfig.h++>
+#include "../ARenderEngineScene.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -27,7 +28,7 @@
 #endif
 
 namespace RType {
-    class Game {
+    class Game : public ARenderEngineScene {
         public:
             /**
              * @brief Default constructor.
@@ -66,7 +67,7 @@ namespace RType {
             /**
              * @brief Displays the cinematic just before the game starts.
              */
-            void displayGame();
+            void runScene() override;
 
             /**
              * @brief Displays the game we are playing.
@@ -102,16 +103,11 @@ namespace RType {
              *
              * @param mediator The mediator to set.
              */
-            void setMediator(std::shared_ptr<IMediator> mediator);
-            /**
-             * @brief Set the mutex
-             *
-             * @param mutex the mutex to set
-             */
+
             void setMutex(std::shared_ptr<std::mutex> mutex);
-            std::shared_ptr<IMediator>
-                _mediator; // Public attribute to be able to access it from the derived class.
+
         private:
+            std::unique_ptr<sf::Clock> cinematicsClock;
             std::shared_ptr<sf::RenderWindow> window;
             int currentFrame;
             float frameDuration;

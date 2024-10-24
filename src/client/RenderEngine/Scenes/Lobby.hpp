@@ -20,6 +20,7 @@
 #include "Settings.hpp"
 #include "../../Mediator/IMediator.hpp"
 #include "../../../shared/utils/Logger.hpp"
+#include "../ARenderEngineScene.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -28,7 +29,7 @@
 #endif
 
 namespace RType {
-    class Lobby {
+    class Lobby : public ARenderEngineScene {
         public:
             /**
              * @brief Construct a new Lobby object.
@@ -86,19 +87,8 @@ namespace RType {
             /**
              * @brief Displays the menu.
              */
-            void displayLobby();
+            void runScene() override;
 
-            /**
-             * @brief Sets the mediator, it will be used to communicate with the rendering engine.
-             *
-             * @param mediator The mediator to set.
-             */
-            void setMediator(std::shared_ptr<IMediator> mediator);
-            /**
-             * @brief Set the camera to display
-             *
-             * @param camera the camera to set
-             */
             void setCamera(std::shared_ptr<Camera> camera);
             /**
              * @brief Set the mutex
@@ -107,8 +97,6 @@ namespace RType {
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
 
-            std::shared_ptr<IMediator>
-                _mediator; // Public attribute to be able to access it from the derived class.
         protected:
             std::shared_ptr<sf::RenderWindow> window; // The window to display the Lobby on.
             int selectedOption; // The selected option
@@ -135,6 +123,10 @@ namespace RType {
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
 
         private:
+            /**
+             * @brief Displays the connected Player
+             */
+            void displayConnectedPlayer();
             Logger _logger;
     };
 

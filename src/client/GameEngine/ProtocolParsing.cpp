@@ -593,6 +593,7 @@ bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& i
     }
 
     try {
+        _mediator->notify("ProtocolParsing", "GameState " + std::to_string(int(state)));
         entity_t entity = _registry.entity_from_index(entityId);
         (void)entity;
         this->updateIndexFromBinaryData("state_change", index);
@@ -631,4 +632,8 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         index += 1;
     }
     return false;
+}
+
+void RType::ProtocolParsing::setMediator(std::shared_ptr<IMediator> mediator) {
+    _mediator = mediator;
 }
