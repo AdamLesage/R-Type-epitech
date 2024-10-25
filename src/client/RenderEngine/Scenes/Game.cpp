@@ -50,7 +50,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
                 throw std::runtime_error("Error loading backgroundTexture " + std::to_string(i + 1));
             }
 
-            backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
+            backgrounds.push_back(sf::RectangleShape(sf::Vector2f(window->getSize().x, window->getSize().y)));
             backgrounds[i].setTexture(&backgroundTextures[i]);
             backgrounds[i].setPosition(sf::Vector2f(0, 0));
             if (transparency != 0) {
@@ -82,35 +82,9 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
 
     // Background for colorblind filters
     backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
-    backgrounds[3].setTexture(&backgroundTextures[1]);
-    backgrounds[3].setPosition(sf::Vector2f(1920, 0));
+    backgrounds[backgrounds.size() - 1].setTexture(&backgroundTextures[1]);
+    backgrounds[backgrounds.size() - 1].setPosition(sf::Vector2f(1920, 0));
 
-    try {
-        // Load all player textures
-        libconfig::Setting& playerSettings = _cfg.lookup("Menu.Game.players");
-        this->playerTextures.resize(playerSettings.getLength());
-        this->players.resize(playerSettings.getLength());
-
-        for (size_t i = 0; i < playerTextures.size(); i++) {
-            libconfig::Setting& playerSetting = playerSettings[i];
-            std::string playerPath = playerSetting["path"];
-            #ifdef _WIN32
-                std::replace(playerPath.begin(), playerPath.end(), '/', '\\');
-            #else
-                std::replace(playerPath.begin(), playerPath.end(), '\\', '/');
-            #endif
-
-            if (!playerTextures[i].loadFromFile(playerPath)) {
-                throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
-            }
-
-            players[i].setTexture(&playerTextures[i]);
-            players[i].setPosition(sf::Vector2f(125.f + (125.f * i), 125.f));
-            players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
-        }
-    } catch (const libconfig::SettingNotFoundException& e) {
-        throw std::runtime_error("Error loading player settings");
-    }
 
     // Set up colorblind shaders
     std::vector<std::string> shaderNames = {
@@ -200,16 +174,23 @@ void RType::Game::play() {
     _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
 
     window->clear();
-    if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
-        backgrounds[1].move(-2.f, 0.f);
-        backgrounds[3].move(-2.f, 0.f);
-        backgrounds[2].move(-1.f, 0.f);
-        BackgroundClock.restart();
+
+    // Move backgrounds
+    libconfig::Setting& backgroundSettings = _cfg.lookup("Menu.Game.backgrounds");
+    for (size_t i = backgroundSettings.getLength() - 1; i > 0; i--) { // Browse backwards to have the same order than in the config file
+        int speedX = backgroundSettings[i]["movingSpeedX"];
+        int speedY = backgroundSettings[i]["movingSpeedY"];
+
+        backgrounds[i].move(speedX, speedY);
+        if (backgrounds[i].getPosition().x < -1920) backgrounds[i].setPosition(1920, 0);
+        if (backgrounds[i].getPosition().x > 1920) backgrounds[i].setPosition(-1920, 0);
+        if (backgrounds[i].getPosition().y < -1080) backgrounds[i].setPosition(0, 1080);
+        if (backgrounds[i].getPosition().y > 1080) backgrounds[i].setPosition(0, -1080);
+
     }
-    if (backgrounds[1].getPosition().x < -1920) backgrounds[1].setPosition(1920, 0);
-    if (backgrounds[2].getPosition().x < -1920) backgrounds[2].setPosition(1920, 0);
-    if (backgrounds[3].getPosition().x < -1920) backgrounds[3].setPosition(1920, 0);
-    for (int i = 0; i < 4; i++) {
+    BackgroundClock.restart();
+
+    for (size_t i = 0; i < backgrounds.size(); i++) {
         RenderTexture->draw(backgrounds[i]);
     }
     this->set_texture();
@@ -261,6 +242,7 @@ sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
 void RType::Game::set_texture() {
     std::lock_guard<std::mutex> lock(*this->_mutex.get());
     entity.clear();
+    window->clear();
     if (_camera == nullptr) return;
 
     for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
@@ -319,7 +301,7 @@ void RType::Game::runScene() {
     window->clear();
     if (animationComplete) {
         game_launch_music.stop();
-        play();
+        this->play();
         return;
     } else {
         RenderTexture->draw(rectangleshape);
