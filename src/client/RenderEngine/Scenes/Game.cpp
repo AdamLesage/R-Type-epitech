@@ -204,7 +204,15 @@ void RType::Game::play() {
         displayPiou();
         piou = false;
     }
-            libconfig::Config cfg;
+    RenderTexture->display();
+    this->handleColorblind();
+    console->displayDeveloperConsole();
+    window->display();
+}
+
+void RType::Game::handleColorblind()
+{
+    libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
         cfg.readFile(configPath.c_str());
@@ -212,7 +220,6 @@ void RType::Game::play() {
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    RenderTexture->display();
     sf::Sprite sprite(RenderTexture->getTexture());
     std::string colorblind = settings->get_key_value(cfg, "Keys8");
     if (colorblind.find("Deuteranopia") != std::string::npos) {
@@ -226,8 +233,6 @@ void RType::Game::play() {
     } else {
         window->draw(sprite, &colorblindShader[4]);
     }
-    console->displayDeveloperConsole();
-    window->display();
 }
 
 sf::Vector2f RType::Game::convertToVector2f(const Size& size) {

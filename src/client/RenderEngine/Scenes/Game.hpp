@@ -99,12 +99,16 @@ namespace RType {
             void DisplaySkipIntro();
 
             /**
-             * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+             * @brief Set the mutex
              *
-             * @param mediator The mediator to set.
+             * @param mutex the mutex to set
              */
-
             void setMutex(std::shared_ptr<std::mutex> mutex);
+
+            /**
+             * @brief Handles if colorblind is activated
+             */
+            void handleColorblind();
 
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
