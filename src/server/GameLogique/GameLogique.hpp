@@ -98,6 +98,8 @@ class GameLogique {
          * @return std::vector<char> the array with the input key in the order: [up, down, left, right, shoot]
          */
         std::array<char, 6> retrieveInputKeys();
+
+        std::map<size_t, size_t> playersId;
 };
 
 #endif /* !GAMELOGIQUE_HPP_ */
