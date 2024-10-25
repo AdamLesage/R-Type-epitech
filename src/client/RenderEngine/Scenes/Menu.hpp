@@ -99,7 +99,6 @@ namespace RType {
             sf::Sound backgroundMusic; // The background music
             sf::RenderTexture RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
-            // std::shared_ptr<Game> games;
     };
 } // namespace RType
 

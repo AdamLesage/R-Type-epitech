@@ -45,7 +45,7 @@ namespace RType {
              *
              * @param _window The window to display the game on.
              */
-            Game(std::shared_ptr<sf::RenderWindow> _window);
+            Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath);
 
             /**
              * @brief Destroy the Game object.
@@ -133,6 +133,8 @@ namespace RType {
              * @return false If the texture failed to load.
              */
             bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
+            libconfig::Config _cfg; // The config file
+
             Registry _registry;
             Systems _systems;
             std::shared_ptr<Console> console;
@@ -152,8 +154,6 @@ namespace RType {
             sf::Sound game_launch_music; // The sound of the game launch
             sf::SoundBuffer shoot_sound; // The buffer of the shoot sound
             sf::Sound shoot_music; // The sound of the shoot
-            sf::SoundBuffer shoot_sound2; // The buffer of the shoot sound 2
-            sf::Sound shoot_music2; // The sound of the shoot 2
             bool isShooting; // A boolean to know if the player is shooting
             sf::Font font; // The font used for the game
             std::shared_ptr<std::mutex> _mutex; 

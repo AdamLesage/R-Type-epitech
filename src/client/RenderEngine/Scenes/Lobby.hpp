@@ -116,7 +116,6 @@ namespace RType {
             std::shared_ptr<Camera> _camera; // The camera to display
             Registry _registry; 
             Systems _systems;
-            std::shared_ptr<Game> games; //the class game used to display the game
             std::shared_ptr<Settings> settings; //the class settings used to display the settings
             std::shared_ptr<std::mutex> _mutex; 
             sf::RenderTexture RenderTexture; // The render texture
