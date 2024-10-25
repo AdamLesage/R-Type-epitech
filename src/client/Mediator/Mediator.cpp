@@ -194,9 +194,7 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         return;
     }
     if (event.find("StateChange ") == 0) {
-        std::cout << "event: " << event << std::endl;
         std::string numbers_str = event.substr(12);
-        std::cout << numbers_str << std::endl;
         int gameState = std::stoi(numbers_str);
         switch (gameState) {
             case 1:
