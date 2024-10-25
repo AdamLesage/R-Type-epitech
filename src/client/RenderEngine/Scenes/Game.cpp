@@ -14,7 +14,6 @@
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
     : currentFrame(1), frameDuration(0.05f), animationComplete(false) {
     this->window = _window;
-    std::cout << "Game created and mediator is null" << std::endl;
     this->_mediator      = nullptr;
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
