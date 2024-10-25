@@ -23,6 +23,7 @@ RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsign
     _window->setFramerateLimit(60);
     _inputBoxSelected = "host";
     _invalidPortOrHost = false;
+    _gameSelected = "R-Type";
 
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
@@ -54,6 +55,7 @@ void RType::ClientConnexionHandling::displayConnexionWindow()
             }
             this->retrieveInputTextHost(event);
             this->retrieveInputTextPort(event);
+            this->retrieveInputGameSelection(event);
         }
         _window->clear();
         this->displayBackground();
@@ -61,6 +63,7 @@ void RType::ClientConnexionHandling::displayConnexionWindow()
         this->displayInputTextPort();
         this->displaySubmitButton();
         this->displayError();
+        this->displayGameSelection();
         _window->display();
     }
 }
@@ -77,6 +80,7 @@ void RType::ClientConnexionHandling::displayBackground()
     background.setTexture(&texture);
     _window->draw(background);
 }
+
 void RType::ClientConnexionHandling::displayInputTextHost()
 {
     sf::Text labelHost;
@@ -89,6 +93,14 @@ void RType::ClientConnexionHandling::displayInputTextHost()
     sf::RectangleShape inputTextHost(sf::Vector2f(200, 50));
     inputTextHost.setFillColor(sf::Color(50, 50, 50, 255));
     inputTextHost.setPosition(1920 / 2 - 100, 1080 / 2 - 50);
+
+    // Ajouter un contour de 2 si sélectionné
+    if (_inputBoxSelected == "host") {
+        inputTextHost.setOutlineThickness(2);
+    } else {
+        inputTextHost.setOutlineThickness(0);
+    }
+    inputTextHost.setOutlineColor(sf::Color::Red);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
     sf::FloatRect bounds = inputTextHost.getGlobalBounds();
@@ -117,6 +129,14 @@ void RType::ClientConnexionHandling::displayInputTextPort()
     inputTextPort.setFillColor(sf::Color(50, 50, 50, 255));
     inputTextPort.setPosition(1920 / 2 - 100, 1080 / 2 + 50);
 
+    // Ajouter un contour de 2 si sélectionné
+    if (_inputBoxSelected == "port") {
+        inputTextPort.setOutlineThickness(2);
+    } else {
+        inputTextPort.setOutlineThickness(0);
+    }
+    inputTextPort.setOutlineColor(sf::Color::Red);
+
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
     sf::FloatRect bounds = inputTextPort.getGlobalBounds();
 
@@ -131,17 +151,20 @@ void RType::ClientConnexionHandling::displayInputTextPort()
     _window->draw(_inputTextPort);
 }
 
+
 void RType::ClientConnexionHandling::displaySubmitButton()
 {
     sf::RectangleShape submitButtonRect(sf::Vector2f(100, 50));
-    submitButtonRect.setFillColor(sf::Color(50, 50, 50, 255));
-    submitButtonRect.setPosition(1920 / 2 - 50, 1080 / 2 + 150);
+    submitButtonRect.setFillColor(sf::Color::Red);
+    submitButtonRect.setPosition(1920 / 2 - 50, 1080 / 2 + 250);
 
     sf::Text submitButton;
     submitButton.setFont(_font);
     submitButton.setString("Submit");
     submitButton.setCharacterSize(24);
-    submitButton.setFillColor(sf::Color::Red);
+    submitButton.setFillColor(sf::Color::White);
+    submitButton.setStyle(sf::Text::Bold);
+    submitButton.setOutlineColor(sf::Color::Red);
     submitButton.setPosition(
         submitButtonRect.getPosition().x + (submitButtonRect.getSize().x - submitButton.getLocalBounds().width) / 2,
         submitButtonRect.getPosition().y + (submitButtonRect.getSize().y - submitButton.getLocalBounds().height) / 2 - submitButton.getLocalBounds().top
@@ -150,7 +173,8 @@ void RType::ClientConnexionHandling::displaySubmitButton()
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
     sf::FloatRect bounds = submitButtonRect.getGlobalBounds();
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
+    if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos)) == true) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
         if (this->areHostAndPortValid() == true) {
             _window->close();
             return;
@@ -178,6 +202,47 @@ void RType::ClientConnexionHandling::displayError()
 
     _window->draw(error);
 }
+
+void RType::ClientConnexionHandling::displayGameSelection()
+{
+    sf::Text labelGame;
+    labelGame.setFont(_font);
+    labelGame.setString("Game");
+    labelGame.setCharacterSize(24);
+    labelGame.setFillColor(sf::Color::Red);
+    labelGame.setPosition(1920 / 2 - 100, 1080 / 2 + 115);
+
+    sf::RectangleShape inputTextGame(sf::Vector2f(200, 50));
+    inputTextGame.setFillColor(sf::Color(50, 50, 50, 255));
+    inputTextGame.setPosition(1920 / 2 - 100, 1080 / 2 + 150);
+
+    // Ajouter un contour de 2 si sélectionné
+    if (_inputBoxSelected == "gameSelection") {
+        inputTextGame.setOutlineThickness(2);
+    } else {
+        inputTextGame.setOutlineThickness(0);
+    }
+    inputTextGame.setOutlineColor(sf::Color::Red);
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
+    sf::FloatRect bounds = inputTextGame.getGlobalBounds();
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
+        _inputBoxSelected = "gameSelection";
+    }
+
+    sf::Text gameText;
+    gameText.setFont(_font);
+    gameText.setString(_gameSelected);
+    gameText.setCharacterSize(24);
+    gameText.setFillColor(sf::Color::White);
+    gameText.setPosition(inputTextGame.getPosition().x + 10, inputTextGame.getPosition().y + 10);
+
+    _window->draw(labelGame);
+    _window->draw(inputTextGame);
+    _window->draw(gameText);
+}
+
 
 void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event &event)
 {
@@ -209,10 +274,26 @@ void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event &even
     }
 }
 
+void RType::ClientConnexionHandling::retrieveInputGameSelection(const sf::Event &event)
+{
+    if (_inputBoxSelected == "gameSelection" && event.type == sf::Event::KeyPressed) {
+        switch (event.key.code) {
+            case sf::Keyboard::Right:
+                _gameSelected = "Platformer";
+                break;
+            case sf::Keyboard::Left:
+                _gameSelected = "R-Type";
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 
 bool RType::ClientConnexionHandling::areHostAndPortValid()
 {
-    if (this->getServerPort() < 1024 || this->getServerPort() > 65535) {
+    if ((int)this->getServerPort() < 1024 || (int)this->getServerPort() > 65534) {
         std::cerr << "Port must be between 1024 and 65535" << std::endl;
         return false;
     }

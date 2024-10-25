@@ -108,6 +108,7 @@ int main(int ac, char** av) {
 
     std::string host           = "";
     unsigned short server_port = 0;
+    std::string gameSelected   = "";
 
     if (av[1] != nullptr && av[2] != nullptr && isNumber(av[2])) {
         host        = av[1];
@@ -164,9 +165,7 @@ int main(int ac, char** av) {
         clientConnexionHandling->displayConnexionWindow();
         host        = clientConnexionHandling->getHost();
         server_port = clientConnexionHandling->getServerPort();
-
-        std::cout << "Host: " << host << std::endl;
-        std::cout << "Port: " << server_port << std::endl;
+        gameSelected = clientConnexionHandling->getGameSelected();
 
         auto networkEngine = loadEngine<RType::NetworkEngine>(networkEngineLoader, "entryPointNetworkEngine");
         networkEngine->setParams(host, server_port, local_port);

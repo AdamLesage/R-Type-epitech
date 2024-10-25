@@ -78,7 +78,7 @@ void RType::GameEngine::run() {
         try {
             physicEngine->run();
         } catch (const std::exception& e) {
-            std::cerr << "Error running render engine: " << e.what() << std::endl;
+            std::cerr << "Error running physic engine: " << e.what() << std::endl;
         }
     });
 
