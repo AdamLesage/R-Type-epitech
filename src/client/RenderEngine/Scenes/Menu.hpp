@@ -21,14 +21,14 @@
 
 namespace RType {
     class IMediator;
-    class Menu {
+    class Menu : public ARenderEngineScene  {
         public:
             /**
              * @brief Construct a new Menu object.
              *
              * @param _window The window to display the menu on.
              */
-            Menu(std::shared_ptr<sf::RenderWindow> wdw, std::shared_ptr<RType::IMediator> _mediator);
+            Menu(std::shared_ptr<sf::RenderWindow> wdw);
 
             /**
              * @brief Destroy the Menu object.
@@ -80,17 +80,8 @@ namespace RType {
             /**
              * @brief Displays the menu.
              */
-            int displayMenu();
+            void runScene() override;
 
-            /**
-             * @brief Sets the mediator, it will be used to communicate with the rendering engine.
-             *
-             * @param mediator The mediator to set.
-             */
-            void setMediator(std::shared_ptr<RType::IMediator> mediator);
-
-            std::shared_ptr<IMediator>
-                _mediator; // Public attribute to be able to access it from the derived class.
         private:
             int selectedOption; // The selected option
             sf::Font font; // The font used for the menu

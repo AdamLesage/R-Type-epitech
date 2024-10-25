@@ -11,6 +11,7 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->network        = std::make_shared<NetworkLib::Server>(port);
     this->_networkSender = std::make_unique<NetworkSender>(this->network);
     this->receiverThread = std::thread(&GameLogique::handleRecieve, this);
+    this->connectionManagmentThread = std::thread(&GameLogique::handleClientConnection, this);
     this->running        = false;
     this->frequency      = _frequency;
     this->reg.register_component<Position>();
@@ -31,25 +32,20 @@ GameLogique::GameLogique(size_t port, int _frequency) {
 
 GameLogique::~GameLogique() {
     receiverThread.join();
+    connectionManagmentThread.join();
 }
 
-void GameLogique::startGame() {
+void GameLogique::startGame(int idEntity) {
     if (running == false) {
-        // std::cout << network->getClientCount() << std::endl;
         for (size_t i = 0; i != network->getClientCount(); i++) {
-            size_t entity = this->reg.spawn_entity();
-            float xPos    = 100.f + (100.f * i);
-            float yPos    = 100.f;
-            this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * i), 100.f});
-            this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
-            this->reg.add_component<Tag>(entity, Tag{"player"});
-            this->reg.add_component<Health>(entity, Health{100, 100, true, true});
-            this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
-            this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
-            this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
-            this->reg.add_component<Size>(entity, Size{130, 80});
-            this->_networkSender->sendCreatePlayer(entity, xPos, yPos);
+            auto &pos = reg.get_components<Position>()[i];
+            if (pos) {
+                pos->x = 100.f;
+                pos->y = 100 + (100.f * i);
+            }
+            this->_networkSender->sendPositionUpdate(i , 100.f, 100 + (100.f * i));
         }
+        this->_networkSender->sendStateChange(idEntity, 0x03);
         this->running = true;
     }
 }
@@ -125,6 +121,7 @@ void GameLogique::spawnWave()
 
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
+    std::clock_t endClock      = std::clock();
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
@@ -143,8 +140,48 @@ void GameLogique::runGame() {
                 this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
+            if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {
+                endClock = std::clock();
+                clearGame();
+                this->running = false;
+                sleep(1);
+                this->_networkSender->sendStateChange(1, 0x01);
+            }
+        } else {
+            endClock = std::clock();
         }
     }
+}
+
+void GameLogique::clearGame()
+{
+    auto& types  = reg.get_components<Type>();
+    size_t numberPlayer = 0;
+
+    for (size_t i = 0; i < types.size(); ++i) {
+        auto &type = types[i];
+        usleep(1000);
+        if (type && type->type != EntityType::PLAYER) {
+            this->_networkSender->sendDeleteEntity(i);
+            this->reg.kill_entity(i);
+        } else {
+            numberPlayer++;
+        }
+    }
+    usleep(1000);
+    for (; numberPlayer < this->network->getClientCount() + 1; numberPlayer++) {
+        this->reg.add_component<Position>(numberPlayer, Position_s{100.f + (100.f * numberPlayer), 100.f});
+        this->reg.add_component<Velocity>(numberPlayer, Velocity_s{0.f, 0.f});
+        this->reg.add_component<Tag>(numberPlayer, Tag{"player"});
+        this->reg.add_component<Health>(numberPlayer, Health{100, 100, true, true});
+        this->reg.add_component<Shoot>(numberPlayer, Shoot{true, std::chrono::steady_clock::now()});
+        this->reg.add_component<ShootingSpeed_s>(numberPlayer, ShootingSpeed_s{0.3f});
+        this->reg.add_component<Type>(numberPlayer, Type{EntityType::PLAYER});
+        this->reg.add_component<Size>(numberPlayer, Size{130, 80});
+        this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));     
+        usleep(1000);
+    }
+    
 }
 
 std::array<char, 6> GameLogique::retrieveInputKeys() {
@@ -180,6 +217,7 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
         std::cout << "Invalid message size" << std::endl;
         return;
     }
+    if (running == false) return;
 
     size_t id  = 0;
     char input = 0;
@@ -221,7 +259,7 @@ void GameLogique::handleRecieve() {
             std::pair<std::string, uint32_t> message = network->popMessage();
             switch (message.first[0]) {
             case 0x41:
-                startGame();
+                startGame(message.second);
                 break;
             case 0x40:
                 handleClientInput(message);
@@ -283,6 +321,57 @@ void GameLogique::handleRecieve() {
             default:
                 std::cout << "unknowCommand" << std::endl;
                 break;
+            }
+        }
+    }
+}
+
+void GameLogique::handleClientConnection()
+{
+    while (1)
+    {
+        if (network->hasNewClientConnected()) {
+            size_t clientId = network->popNewConnectedClient();
+            {
+                std::lock_guard<std::mutex> lock(this->_mutex);
+                if (running == false) {
+                    size_t entity = this->reg.spawn_entity();
+                    this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * entity), 100.f});
+                    this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
+                    this->reg.add_component<Tag>(entity, Tag{"player"});
+                    this->reg.add_component<Health>(entity, Health{100, 100, true, true});
+                    this->reg.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
+                    this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
+                    this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
+                    this->reg.add_component<Size>(entity, Size{130, 80});
+                    this->_networkSender->sendCreatePlayer(entity, 100.f, 100 + (100.f * entity));
+                }
+
+                auto& positions  = reg.get_components<Position_s>();
+                auto& types  = reg.get_components<Type>();
+
+                for (size_t i = 0; i < positions.size() && i < types.size(); ++i) {
+                    auto &position = positions[i];
+                    auto &type = types[i];
+                    if (type && position && (i != clientId || running)) {
+                        switch (type->type) {
+                            case EntityType::ENEMY:
+                                this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y, clientId);
+                                break;
+                            case EntityType::PLAYER:
+                                this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
+                                break;
+                            case EntityType::PLAYER_PROJECTILE:
+                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
+                                break;
+                            case EntityType::ENEMY_PROJECTILE:
+                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
         }
     }

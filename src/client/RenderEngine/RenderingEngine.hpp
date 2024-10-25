@@ -11,10 +11,10 @@
 #include "../AEngine.hpp"
 #include "../Mediator/IMediator.hpp"
 #include "../../shared/utils/Logger.hpp"
-#include "Menu/Menu.hpp"
-#include "Menu/Game.hpp"
-#include "Menu/Settings.hpp"
-#include "Menu/Lobby.hpp"
+#include "Scenes/Menu.hpp"
+#include "Scenes/Game.hpp"
+#include "Scenes/Settings.hpp"
+#include "Scenes/Lobby.hpp"
 #include "../Camera.hpp"
 #include <mutex>
 
@@ -48,15 +48,22 @@ namespace RType {
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
 
+            /**
+             * @brief Set a new State
+             * 
+             *  @param newState the new state
+             */
+            void setStateGame(int newState);
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;
-            std::shared_ptr<Game> games;
-            std::shared_ptr<Settings> settings;
-            std::shared_ptr<Lobby> lobby;
+            std::shared_ptr<Game> _game;
+            std::shared_ptr<Settings> _settings;
+            std::shared_ptr<Lobby> _lobby;
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
             RType::Logger logger;
+            int _stateGame = 1;
     };
 } // namespace RType
 

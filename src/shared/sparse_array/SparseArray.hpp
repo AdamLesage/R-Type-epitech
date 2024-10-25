@@ -236,7 +236,7 @@ template <typename Component> class SparseArray {
          */
         void erase(size_type pos) {
             if (pos < _data.size()) {
-                _data[pos] = Component();
+                _data[pos].reset();
             }
         }
 

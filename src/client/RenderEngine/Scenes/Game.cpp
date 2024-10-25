@@ -116,8 +116,6 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
     console = std::make_shared<Console>(window,RenderTexture);
     BackgroundClock.restart();
 
-
-
 }
 
 RType::Game::~Game() {
@@ -169,72 +167,67 @@ void RType::Game::DisplaySkipIntro() {
 }
 
 void RType::Game::play() {
-    console->setMediator(std::shared_ptr<IMediator>(this->_mediator));
-    while (window->isOpen()) {
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window->close();
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Escape) {
-                    settings->displaySettings(true);
-                }
-                console->toggleDeveloperConsoleFromEvent(event);
-                console->checkInput();
+    while (window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) window->close();
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                settings->displaySettings(true);
             }
+            console->toggleDeveloperConsoleFromEvent(event);
+            console->checkInput();
         }
-
-        _systems.control_system(_registry, *window.get(), _mediator,
-                                std::bind(&RType::Game::ShootSound, this));
-        _systems.position_system(_registry);
-        _systems.collision_system(_registry, *window.get());
-        // if (keyPressed == 88)
-        //     ShootSound();
-
-        window->clear();
-        if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
-            backgrounds[1].move(-2.f, 0.f);
-            backgrounds[3].move(-2.f, 0.f);
-            backgrounds[2].move(-1.f, 0.f);
-            BackgroundClock.restart();
-        }
-        if (backgrounds[1].getPosition().x < -1920) backgrounds[1].setPosition(1920, 0);
-        if (backgrounds[2].getPosition().x < -1920) backgrounds[2].setPosition(1920, 0);
-        if (backgrounds[3].getPosition().x < -1920) backgrounds[3].setPosition(1920, 0);
-        for (int i = 0; i < 4; i++) {
-            RenderTexture->draw(backgrounds[i]);
-        }
-        this->set_texture();
-        for (int i = 0; i < (int)entity.size(); i++) {
-            RenderTexture->draw(entity[i]);
-        }
-        if (piou) {
-            displayPiou();
-            piou = false;
-        }
-                libconfig::Config cfg;
-        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-        try {
-            cfg.readFile(configPath.c_str());
-        } catch (const libconfig::FileIOException& fioex) {
-            std::cerr << "I/O error while reading file." << std::endl;
-            return;
-        }
-        RenderTexture->display();
-        sf::Sprite sprite(RenderTexture->getTexture());
-        std::string colorblind = settings->get_key_value(cfg, "Keys8");
-        if (colorblind.find("Deuteranopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[0]);
-        } else if (colorblind.find("Protanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[1]);
-        } else if (colorblind.find("Tritanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[2]);
-        } else if (colorblind.find("Achromatopsia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[3]);
-        } else {
-            window->draw(sprite, &colorblindShader[4]);
-        }
-        console->displayDeveloperConsole();
-        window->display();
     }
+
+    _systems.control_system(_registry, *window.get(), _mediator,
+                            std::bind(&RType::Game::ShootSound, this));
+    // if (keyPressed == 88)
+    //     ShootSound();
+
+    window->clear();
+    if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
+        backgrounds[1].move(-2.f, 0.f);
+        backgrounds[3].move(-2.f, 0.f);
+        backgrounds[2].move(-1.f, 0.f);
+        BackgroundClock.restart();
+    }
+    if (backgrounds[1].getPosition().x < -1920) backgrounds[1].setPosition(1920, 0);
+    if (backgrounds[2].getPosition().x < -1920) backgrounds[2].setPosition(1920, 0);
+    if (backgrounds[3].getPosition().x < -1920) backgrounds[3].setPosition(1920, 0);
+    for (int i = 0; i < 4; i++) {
+        RenderTexture->draw(backgrounds[i]);
+    }
+    this->set_texture();
+    for (int i = 0; i < (int)entity.size(); i++) {
+        RenderTexture->draw(entity[i]);
+    }
+    if (piou) {
+        displayPiou();
+        piou = false;
+    }
+            libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    RenderTexture->display();
+    sf::Sprite sprite(RenderTexture->getTexture());
+    std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    if (colorblind.find("Deuteranopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[0]);
+    } else if (colorblind.find("Protanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[1]);
+    } else if (colorblind.find("Tritanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[2]);
+    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[3]);
+    } else {
+        window->draw(sprite, &colorblindShader[4]);
+    }
+    console->displayDeveloperConsole();
+    window->display();
 }
 
 sf::Vector2f RType::Game::convertToVector2f(const Size& size) {
@@ -277,67 +270,69 @@ void RType::Game::set_texture() {
     }
 }
 
-void RType::Game::displayGame() {
+void RType::Game::runScene() {
     sf::RectangleShape rectangleshape;
     sf::Texture texture;
-    sf::Clock clock;
+
+    if (this->cinematicsClock == nullptr) {
+        cinematicsClock = std::make_unique<sf::Clock>();
+        console->setMediator(std::shared_ptr<IMediator>(this->_mediator));
+    }
 
     if (!window) {
         std::cerr << "Error: Window not initialized!" << std::endl;
         return;
     }
 
-    while (window->isOpen()) {
-        handleEvents();
-
-        if (!animationComplete) {
-            if (currentFrame == 1) {
-                game_launch_music.play();
+    if (!animationComplete) {
+        if (currentFrame == 1) {
+            game_launch_music.play();
+        }
+        if (cinematicsClock->getElapsedTime().asSeconds() > frameDuration) {
+            if (!loadFrameTexture(texture, rectangleshape)) {
+                return;
             }
-            if (clock.getElapsedTime().asSeconds() > frameDuration) {
-                if (!loadFrameTexture(texture, rectangleshape)) {
-                    return;
-                }
-                clock.restart();
-            }
+            cinematicsClock->restart();
         }
-
-        window->clear();
-        if (animationComplete) {
-            game_launch_music.stop();
-            play();
-        } else {
-            RenderTexture->draw(rectangleshape);
-            DisplaySkipIntro();
-        }
-        if (piou) {
-            displayPiou();
-            piou = false;
-        }
-                libconfig::Config cfg;
-        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-        try {
-            cfg.readFile(configPath.c_str());
-        } catch (const libconfig::FileIOException& fioex) {
-            std::cerr << "I/O error while reading file." << std::endl;
-            return;
-        }
-        RenderTexture->display();
-        sf::Sprite sprite(RenderTexture->getTexture());
-        std::string colorblind = settings->get_key_value(cfg, "Keys8");
-        if (colorblind.find("Deuteranopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[0]);
-        } else if (colorblind.find("Protanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[1]);
-        } else if (colorblind.find("Tritanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[2]);
-        } else if (colorblind.find("Achromatopsia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[3]);
-        } else {
-            window->draw(sprite, &colorblindShader[4]);
-        }
-        window->display();
     }
+
+    window->clear();
+    if (animationComplete) {
+        game_launch_music.stop();
+        play();
+        return;
+    } else {
+        RenderTexture->draw(rectangleshape);
+        DisplaySkipIntro();
+    }
+    if (piou) {
+        displayPiou();
+        piou = false;
+    }
+            libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    RenderTexture->display();
+    sf::Sprite sprite(RenderTexture->getTexture());
+    std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    if (colorblind.find("Deuteranopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[0]);
+    } else if (colorblind.find("Protanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[1]);
+    } else if (colorblind.find("Tritanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[2]);
+    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[3]);
+    } else {
+        window->draw(sprite, &colorblindShader[4]);
+    }
+    window->display();
+    handleEvents();
 }
 
 void RType::Game::handleEvents() {
@@ -376,10 +371,6 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
 
 void RType::Game::setCamera(std::shared_ptr<Camera> camera) {
     this->_camera = camera;
-}
-
-void RType::Game::setMediator(std::shared_ptr<IMediator> mediator) {
-    _mediator = mediator;
 }
 
 void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex) {
