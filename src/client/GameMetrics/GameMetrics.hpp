@@ -12,6 +12,7 @@
     #include <iostream>
     #include <fstream>
     #include <string>
+    #include "../../shared/entities/Entity.hpp"
     #ifdef _WIN32
         #include <windows.h>
         #include <psapi.h>
@@ -61,11 +62,15 @@ class GameMetrics {
 
         /**
          * @brief Display game Frame Per Second 
+         * 
+         * @param window
          */
         void displayFPS(sf::RenderWindow& window);
 
         /**
          * @brief Display CPU information 
+         * 
+         * @param window
          */
         void displayCPU(sf::RenderWindow& window);
 
@@ -78,8 +83,11 @@ class GameMetrics {
 
         /**
          * @brief Display player position
+         * 
+         * @param window
+         * @param pos
          */
-        void displayPlayerPosition();
+        void displayPlayerPosition(sf::RenderWindow& window, sf::Vector2f pos);
 
         /**
          * @brief Display GPU usage
@@ -88,6 +96,12 @@ class GameMetrics {
          */
         void displayGpuUsage(sf::RenderWindow& window);
 
+        /**
+         * @brief Display Latency
+         * 
+         * @param window
+         * @param latency
+         */
         void displayLatency(sf::RenderWindow& window, float& latency);
     private:
         std::size_t getMemoryUsage();

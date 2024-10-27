@@ -219,6 +219,25 @@ void GameMetrics::displayLatency(sf::RenderWindow& window, float& latency)
 
     text.setString("Latency: " + std::to_string(latency) + " ms");
     text.setFillColor(sf::Color::White);
-    text.setPosition(0, 80);
+    text.setPosition(0, 130);
+    window.draw(text);
+}
+
+void GameMetrics::displayPlayerPosition(sf::RenderWindow& window, sf::Vector2f pos)
+{
+    sf::Text text;
+    sf::Font font;
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+
+    if (!font.loadFromFile(fontPath)) {
+        std::cerr << "Failed to load font" << std::endl;
+        return;
+    }
+    text.setFont(font);
+    text.setString("Player Position: (" +
+        std::to_string(static_cast<int>(pos.x)) + ", " +
+        std::to_string(static_cast<int>(pos.y)) + ")");
+    text.setFillColor(sf::Color::White);
+    text.setPosition(0, 150);
     window.draw(text);
 }
