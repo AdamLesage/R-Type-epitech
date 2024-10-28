@@ -78,7 +78,6 @@ void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex) {
 
 void RType::RenderingEngine::setLatency(float latency) {
     _latency = latency;
-    // std::cout << "Latency FROM SETTER: " << _latency << std::endl;
 }
 
 void RType::RenderingEngine::setStateGame(int newState) {

@@ -175,11 +175,9 @@ void RType::Game::play(float &latency) {
             console->toggleDeveloperConsoleFromEvent(event);
             console->checkInput();
             if (event.key.code == sf::Keyboard::F3) {
-                std::cout << "F3 pressed" << std::endl;
                 toolbar.open();
             }
         }
-        std::cout << "Latency: " << latency << std::endl;
     }
 
     _systems.control_system(_registry, *window.get(), _mediator,
@@ -222,7 +220,6 @@ void RType::Game::play(float &latency) {
         sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
         metrics.displayPlayerPosition(*window, pos);
     }
-    toolbar.draw(*window);
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
@@ -246,6 +243,7 @@ void RType::Game::play(float &latency) {
         window->draw(sprite, &colorblindShader[4]);
     }
     console->displayDeveloperConsole();
+    toolbar.draw(*window);
     window->display();
 }
 
