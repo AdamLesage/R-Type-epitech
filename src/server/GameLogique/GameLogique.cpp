@@ -114,9 +114,42 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     }
 }
 
+void GameLogique::spawnBonus(char type, float position_x, float position_y) {
+    {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+
+        size_t entity = this->reg.spawn_entity();
+
+        switch (type) {
+        case 0x21:
+            std::cout << "createdd bonus" << std::endl;
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        default:
+            std::cout << "create bonus" << std::endl;
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{70, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        }
+        this->_networkSender->sendCreateBonus(type, entity, position_x, position_y);
+    }
+}
+
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
     std::clock_t spawnClock = std::clock();
+    std::clock_t bonusClock = std::clock();
     while (1) {
         if (this->running) {
             if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {
@@ -133,6 +166,10 @@ void GameLogique::runGame() {
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
                 this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
+            }
+            if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 30) {
+                this->spawnBonus(0x21, rand() % 1920, rand() % 1080);
+                bonusClock = std::clock();
             }
         }
     }
@@ -222,6 +259,13 @@ void GameLogique::handleRecieve() {
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
                 spawnEnnemy(message.first[1], static_cast<float>(pos_x), static_cast<float>(pos_y));
+                break;
+            }
+            case 0x21: {
+                int pos_x, pos_y;
+                std::memcpy(&pos_x, &message.first[2], sizeof(int));
+                std::memcpy(&pos_y, &message.first[6], sizeof(int));
+                spawnBonus(message.first[1], static_cast<float>(pos_x), static_cast<float>(pos_y));
                 break;
             }
             case 0x43: {

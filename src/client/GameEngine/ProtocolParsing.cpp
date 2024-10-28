@@ -59,10 +59,8 @@ bool RType::ProtocolParsing::checkMessageType(const std::string& messageType,
                                               int& index) {
     // Check if message is for the current parsing function such as current type (0xXX) is correct
     if (static_cast<uint8_t>(message[index]) != _messageTypeMap[messageType].first) return false;
-
     // Check if the message type is a byte
     if (sizeof(message[index]) != sizeof(uint8_t)) return false;
-
     // Compare message size with the expected size in the protocol config file
     if (!_cfg.exists("protocol")) {
         return false;
@@ -123,7 +121,6 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
         _registry.add_component<Direction>(entity, Direction{1, 0});
         std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
                            + std::to_string(entity + 1) + ".png";
-        std::cout << path << std::endl;
         _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception& e) {
@@ -226,10 +223,10 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
 
 bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int& index) {
     if (!checkMessageType("BONUS_CREATION", message, index)) return false;
-
     unsigned int bonusId;
     float posX;
     float posY;
+    std::string path;
 
     try {
         std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
@@ -243,16 +240,20 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int&
     try {
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
-        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Scale>(entity, Scale{1});
-        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "bigrayon_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
         this->updateIndexFromBinaryData("bonus_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
         return false;
     }
-
+    std::cout << "Bonus position" << posX << " " << posY << std::endl;
+    std::cout << "Bonus created" << std::endl;
     return true;
 }
 

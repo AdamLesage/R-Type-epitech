@@ -148,8 +148,11 @@ void Systems::check_entities_collisions(Registry& reg,
     bool enemyTakeDamage =
         (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE);
 
+    bool playerTakeBonus =
+        (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::POWERUP);
+
     if (collisionX == false || collisionY == false
-        || (playerTakeDamage == false && enemyTakeDamage == false)) { // No collision
+        || (playerTakeDamage == false && enemyTakeDamage == false && playerTakeBonus == false)) { // No collision
         return;
     }
 
@@ -194,6 +197,15 @@ void Systems::check_entities_collisions(Registry& reg,
             logger.log(RType::Logger::RTYPEERROR, "Error while getting health or damage component for enemy");
         }
         // If enemy take damage, it is only a projectile so we delete it
+        reg.kill_entity(entityId2);
+        networkSender->sendDeleteEntity(entityId2);
+    }
+
+    if (playerTakeBonus && collisionX && collisionY) {
+        auto& playerHealth = reg.get_components<Health_s>()[entityId1];
+        auto& bonusType    = reg.get_components<Type_s>()[entityId2];
+
+        std::cout << "Player take bonus" << std::endl;
         reg.kill_entity(entityId2);
         networkSender->sendDeleteEntity(entityId2);
     }
