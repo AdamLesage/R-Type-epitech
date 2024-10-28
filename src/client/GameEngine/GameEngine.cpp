@@ -38,7 +38,7 @@ RType::GameEngine::GameEngine() {
     this->_systems = Systems();
     try {
         std::string playerConfigPath = std::string("config") + PATH_SEPARATOR + std::string("player.cfg");
-        _playerConfig.readFile(playerConfigPath);
+        _playerConfig.readFile(playerConfigPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
     } catch (const libconfig::ParseException& pex) {
