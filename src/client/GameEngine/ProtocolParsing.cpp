@@ -146,12 +146,10 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
 bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int& index) {
 
     if (message.length() - index < 13) {
-        std::cout << "message len" << std::endl;
         return false;
     }
     std::shared_ptr<EntityData> &data = _assetEditorParsing->getEntityData(message[index]);
     if (data == nullptr) {
-        std::cout << "data not found" << std::endl;
         return false;
     }
     unsigned int entityId;
