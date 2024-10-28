@@ -10,6 +10,11 @@
 
 #include "IGame.hpp"
 
+#include <cmath>
+#include <chrono>
+#include <thread>
+#include <iostream>
+
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
 #else
@@ -39,8 +44,32 @@ namespace RType {
              */
             std::shared_ptr<Camera> getCamera() const { return _camera; }
 
+            /**
+             * @brief jump function
+             */
+            void jump() override = 0;
+
+            /**
+             * @brief apply gravity to the player
+             */
+            void applyGravity() override = 0;
+
         protected:
             std::shared_ptr<Camera> _camera;
+
+            /**
+             * @brief The start of the jump
+             * 
+             * Jump will last 1 second with a curve of 1/2
+             */
+            std::chrono::time_point<std::chrono::system_clock> _startOfJump;
+
+            /**
+             * @brief Boolean to know if the player is jumping
+             * 
+             * True if the player is jumping else false
+             */
+            bool _isJumping;
         private:
     };
 }

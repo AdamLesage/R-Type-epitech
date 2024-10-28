@@ -40,8 +40,22 @@ namespace RType {
              * Everything is calculated on the client side
              */
             void handleOfflineGame() override;
+
+            /**
+             * @brief jump function
+             */
+            void jump() override;
+
+            /**
+             * @brief apply gravity to the player
+             */
+            void applyGravity() override;
         protected:
         private:
+            float _initialYPosition;
+            float _jumpVelocity;
+            bool _canJump;
+            bool _canApplyGravity;
     };
 }
 

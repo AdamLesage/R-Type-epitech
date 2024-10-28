@@ -36,6 +36,16 @@ namespace RType {
              * @return std::shared_ptr<Camera> the camera
              */
             virtual std::shared_ptr<Camera> getCamera() const = 0;
+
+            /**
+             * @brief jump function
+             */
+            virtual void jump() = 0;
+
+            /**
+             * @brief apply gravity to the player
+             */
+            virtual void applyGravity() = 0;
         protected:
         private:
     };
