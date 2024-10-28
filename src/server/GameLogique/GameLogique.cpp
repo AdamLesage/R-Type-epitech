@@ -198,7 +198,8 @@ void GameLogique::runGame() {
                 spawnClock = std::clock();
             }
             if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 30) {
-                this->spawnBonus(0x21, rand() % 1920, rand() % 1080);
+                char bonusType = 0x21 + (rand() % 4);
+                this->spawnBonus(bonusType, rand() % 1920, rand() % 1080);
                 bonusClock = std::clock();
             }
         }
