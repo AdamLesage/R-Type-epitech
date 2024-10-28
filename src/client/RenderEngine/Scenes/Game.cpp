@@ -109,6 +109,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     RenderTexture = std::make_shared<sf::RenderTexture>();
     RenderTexture->create(1920, 1080);
     BackgroundClock.restart();
+    _camera = std::make_shared<Camera>();
 }
 
 RType::Game::~Game() {
@@ -174,6 +175,10 @@ void RType::Game::play() {
     _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
 
     window->clear();
+    if (this->isGameOffline() == true) {
+        this->handleOfflineGame();
+    }
+
 
     // Move backgrounds
     libconfig::Setting& backgroundSettings = _cfg.lookup("Menu.Game.backgrounds");
@@ -245,11 +250,11 @@ void RType::Game::set_texture() {
     window->clear();
     if (_camera == nullptr) return;
 
-    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
+    for (size_t i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
         entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
     }
 
-    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
+    for (size_t i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
         if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath)
             != Textures.end()) { // If texture already loaded
             entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
@@ -286,7 +291,7 @@ void RType::Game::runScene() {
         return;
     }
 
-    if (!animationComplete) {
+    if (!animationComplete && this->haveCinematic() == true) {
         if (currentFrame == 1) {
             game_launch_music.play();
         }
@@ -299,7 +304,7 @@ void RType::Game::runScene() {
     }
 
     window->clear();
-    if (animationComplete) {
+    if (animationComplete || this->haveCinematic() == false) {
         game_launch_music.stop();
         this->play();
         return;
@@ -311,28 +316,9 @@ void RType::Game::runScene() {
         displayPiou();
         piou = false;
     }
-    libconfig::Config cfg;
-    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-    try {
-        cfg.readFile(configPath.c_str());
-    } catch (const libconfig::FileIOException& fioex) {
-        std::cerr << "I/O error while reading file." << std::endl;
-        return;
-    }
+    std::cout << "Game is offline: " << this->isGameOffline() << std::endl;
     RenderTexture->display();
-    sf::Sprite sprite(RenderTexture->getTexture());
-    std::string colorblind = settings->get_key_value(cfg, "Keys8");
-    if (colorblind.find("Deuteranopia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[0]);
-    } else if (colorblind.find("Protanopia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[1]);
-    } else if (colorblind.find("Tritanopia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[2]);
-    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[3]);
-    } else {
-        window->draw(sprite, &colorblindShader[4]);
-    }
+    // this->handleColorblind();
     window->display();
     handleEvents();
 }
@@ -372,9 +358,129 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
 }
 
 void RType::Game::setCamera(std::shared_ptr<Camera> camera) {
-    this->_camera = camera;
+    std::cout << "Setting camera" << std::endl;
+    if (this->isGameOffline() == true)
+        return; // Camera is loaded from client
+    _camera = camera;
 }
 
 void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex) {
     this->_mutex = mutex;
+}
+
+bool RType::Game::haveCinematic() {
+    if (_gameSelected == "R-Type") { // For the moment, only R-Type has a cinematic
+        return true;
+    }
+    return false;
+}
+
+bool RType::Game::isGameOffline() {
+    // Need to fix this method to play offline with R-Type
+    if (_gameSelected == "R-Type") {
+        return false;
+    }
+    return true;
+}
+
+void RType::Game::handleOfflineGame()
+{
+    bool isPlayerInList = false;
+    // Create player if not in the list
+    for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
+        if (this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png" ||
+            this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-right.png") {
+            isPlayerInList = true;
+        }
+    }
+    if (!isPlayerInList) {
+        EntityRenderInfo entity;
+        entity.position.x = 1920 / 2;
+        entity.position.y = 1080 / 2;
+        entity.size = {100, 100};
+        entity.sprite.spritePath = std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png";
+        entity.sprite.rectPos = {0, 0};
+        entity.sprite.rectSize = {100, 100};
+        entity.direction.x = 0;
+        entity.direction.y = 0;
+        this->_camera->listEntityToDisplay.push_back(entity);
+    }
+
+    // Need to set the camera to display the entities
+    if (this->_camera->listEntityToDisplay.size() < 15) {
+        for (size_t i = this->_camera->listEntityToDisplay.size(); i < 10; i++) {
+            EntityRenderInfo entity;
+            entity.position.x = rand() % 1920;
+            entity.position.y = rand() % 1080;
+            entity.size = {100, 100};
+            entity.sprite.spritePath = std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png";
+            entity.sprite.rectPos = {0, 0};
+            entity.sprite.rectSize = {100, 100};
+            entity.direction.x = 0;
+            entity.direction.y = 1;
+            this->_camera->listEntityToDisplay.push_back(entity);
+        }
+    }
+
+    // Move entities
+    for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
+        this->_camera->listEntityToDisplay[i].position.y += this->_camera->listEntityToDisplay[i].direction.y;
+        this->_camera->listEntityToDisplay[i].position.x += this->_camera->listEntityToDisplay[i].direction.x;
+
+        if (this->_camera->listEntityToDisplay[i].position.y > 1080) {
+            this->_camera->listEntityToDisplay[i].position.y = rand() % 401 - 400;
+        }
+
+        if (this->_camera->listEntityToDisplay[i].position.x > 1920) {
+            this->_camera->listEntityToDisplay[i].position.x = 0;
+        }
+        if (this->_camera->listEntityToDisplay[i].position.x < 0) {
+            this->_camera->listEntityToDisplay[i].position.x = 1920;
+        }
+    }
+
+    // Apply gravity to player
+    for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
+        if (this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png" ||
+            this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-right.png") {
+            if (this->_camera->listEntityToDisplay[i].position.y < 1080 / 2) {
+                this->_camera->listEntityToDisplay[i].direction.y += 1;
+            } else {
+                this->_camera->listEntityToDisplay[i].direction.y = 0;
+            }
+
+            if (this->_camera->listEntityToDisplay[i].position.y > 1080 / 2) {
+                this->_camera->listEntityToDisplay[i].position.y = 1080 / 2;
+            }
+        }
+    }
+
+    // Handle key pressed
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
+            if (this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png" ||
+                this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-right.png") {
+                this->_camera->listEntityToDisplay[i].sprite.spritePath = std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-right.png";
+                this->_camera->listEntityToDisplay[i].direction.x = 1;
+            }
+        }
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
+            if (this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-right.png" ||
+                this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png") {
+                this->_camera->listEntityToDisplay[i].sprite.spritePath = std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png";
+                this->_camera->listEntityToDisplay[i].direction.x = -1;
+            }
+        }
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        std::cout << "Jump" << std::endl;
+        for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
+            if (this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png" ||
+                this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-right.png") {
+                this->_camera->listEntityToDisplay[i].direction.y = -1;
+            }
+        }
+    }
 }

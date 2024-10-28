@@ -110,6 +110,20 @@ namespace RType {
              */
             void handleColorblind();
 
+            /**
+             * @brief Return if the game has a cinematic
+             *
+             * @return true if the game has a cinematic
+             */
+            bool haveCinematic();
+
+            /**
+             * @brief Set the game selected
+             * 
+             * @param gameSelected the game selected
+             */
+            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
             std::shared_ptr<sf::RenderWindow> window;
@@ -117,12 +131,25 @@ namespace RType {
             float frameDuration;
             sf::Clock BackgroundClock;
             bool animationComplete;
+            std::string _gameSelected;
             /**
              * @brief Handles the events of the game.
              *
              * This function processes events such as closing the window.
              */
             void handleEvents();
+
+            /**
+             * @brief Check if the game is offline
+             * 
+             * @return true if the game is offline
+             */
+            bool isGameOffline();
+
+            /**
+             * @brief Handle the offline game, create different entities to display on the scene and set the camera
+             */
+            void handleOfflineGame();
 
             /**
              * @brief Loads the texture of the current frame.

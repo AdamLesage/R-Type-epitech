@@ -33,6 +33,7 @@ void RType::RenderingEngine::run() {
     this->_lobby->setGameSelected(_gameSelected);
     this->_menu->setMediator(_mediator);
     this->_game->setMediator(_mediator);
+    this->_game->setGameSelected(_gameSelected);
 
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
