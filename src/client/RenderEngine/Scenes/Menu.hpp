@@ -81,7 +81,11 @@ namespace RType {
              * @brief Displays the menu.
              */
             void runScene() override;
-
+            /**
+             * @brief Set the volume of the background music.
+             *
+             * @param number The volume to set.
+            */
             void setVolume(float number);
         private:
             int selectedOption; // The selected option

@@ -35,17 +35,69 @@ namespace RType {
              * @param mediator The mediator to set.
              */
             void setMediator(std::shared_ptr<IMediator> mediator) override;
+
+            /**
+             * @brief Play the shoot sound.
+             */
             void ShootSound();
+
+            /**
+             * @brief Play the launch music.
+             */
             void launch_music_play();
+
+            /**
+             * @brief Stop the launch music.
+             */
             void launch_music_stop();
+
+            /**
+             * @brief Play the select sound.
+             */
             void selectSoundPlay();
+
+            /**
+             * @brief Adjust the volume of the background music.
+             *
+             * @param increase If true, increase the volume; otherwise, decrease it.
+             */
             void adjustVolume(bool increase);
+
+            /**
+             * @brief Get the volume of the background music.
+             */
             void BackgroundMusicGetVolume();
+
+            /**
+             * @brief Play the background music.
+             */
             void backgroundMusicPlay();
+
+            /**
+             * @brief Stop the background music.
+             */
             void backgroundMusicStop();
+
+            /**
+             * @brief Get the volume of the second background music.
+             */
             void BackgroundMusicGetVolume2();
+
+            /**
+             * @brief Play the second background music.
+             */
             void backgroundMusicPlay2();
+
+            /**
+             * @brief Stop the second background music.
+             */
             void backgroundMusicStop2();
+
+            /**
+             * @brief Adjust the volume of the second background music.
+             *
+             * @param increase If true, increase the volume; otherwise, decrease it.
+             */
             void adjustVolume2(bool increase);
         protected:
             sf::SoundBuffer game_launch_sound; // The buffer of the game launch sound

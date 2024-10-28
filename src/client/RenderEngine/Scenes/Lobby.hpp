@@ -96,7 +96,11 @@ namespace RType {
              * @param mutex the mutex to set
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
-
+            /**
+             * @brief Set the volume of the background music.
+             *
+             * @param number The volume to set.
+            */
             void setVolume(float number);
         protected:
             std::shared_ptr<sf::RenderWindow> window; // The window to display the Lobby on.
