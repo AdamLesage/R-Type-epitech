@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <array>
+#include <chrono>
 /**
  * @struct Animation_s
  */
@@ -20,6 +21,8 @@ typedef struct Annimation_s {
          */
         float annimationSpeed;
         std::vector<std::array<int, 4>> annimation;
+        size_t index;
+        std::chrono::steady_clock::time_point lastExecution;
 } Annimation;
 
 #endif /* !ANNIMATION_HPP_ */

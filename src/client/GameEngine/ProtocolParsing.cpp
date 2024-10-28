@@ -182,7 +182,7 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
             _registry.add_component<Rotation>(entity, Rotation{data->rotation->rotation});
         }
         if (data->annimation != nullptr) {
-            _registry.add_component<Annimation>(entity, Annimation{data->annimation->annimationSpeed ,data->annimation->annimation});
+            _registry.add_component<Annimation>(entity, Annimation{data->annimation->annimationSpeed ,data->annimation->annimation, 0, std::chrono::steady_clock::now()});
         }
         if (data->type != nullptr) {
             _registry.add_component<Type>(entity, Type{data->type->type});

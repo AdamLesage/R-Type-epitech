@@ -30,11 +30,13 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Velocity_s>();
     _registry.register_component<Size>();
     _registry.register_component<Direction>();
+    _registry.register_component<Annimation>();
 
     _protocolParsing =
         std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", "./config/scenes/sceneText.cfg", _registry);
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
+    this->_systems = Systems();
 }
 
 RType::GameEngine::~GameEngine() {
@@ -92,6 +94,7 @@ void RType::GameEngine::run() {
 
     // Wait for all threads to finish
     while (1) {
+        this->_systems.annimation_system(this->_registry);
         updateCamera();
     }
 

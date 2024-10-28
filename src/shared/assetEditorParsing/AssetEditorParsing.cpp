@@ -112,6 +112,12 @@ void AssetEditorParsing::parseSprite(EntityData &entityData, libconfig::Setting 
         int rectSizeY = spriteSettings.lookup("rectSize")[1];
         int rectPosX = spriteSettings.lookup("rectPos")[0];
         int rectPosY = spriteSettings.lookup("rectPos")[1];
+        size_t startPos = 0;
+        std::string from = "/";
+        while((startPos = spritePath.find(from, startPos)) != std::string::npos) {
+            spritePath.replace(startPos, from.length(), PATH_SEPARATOR);
+            startPos += 2;
+        }
         entityData.sprite = std::make_shared<Sprite>(Sprite{spritePath, {rectSizeX, rectSizeY}, {rectPosX, rectPosY}});
     } catch (const std::exception &e) {
         std::cerr << "Error from LoadScene loadComponentSprite: " << e.what() << std::endl;
@@ -229,6 +235,8 @@ void AssetEditorParsing::parseAnnimation(EntityData &entityData, libconfig::Sett
             libconfig::Setting &step = steps[i];
             annimation.annimation.push_back({step[0], step[1],step[2],step[3]});
         }
+        annimation.index = 0;
+        annimation.lastExecution = std::chrono::steady_clock::now();
         annimation.annimationSpeed = annimationSpeed;
         entityData.annimation = std::make_shared<Annimation>(annimation);
     } catch (const std::exception &e) {

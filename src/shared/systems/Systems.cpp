@@ -114,3 +114,28 @@ void Systems::direction_system(Registry& reg) {
         }
     }
 }
+
+void Systems::annimation_system(Registry& reg) {
+    auto& annimations = reg.get_components<Annimation>();
+    auto& sprites = reg.get_components<Sprite>();
+
+    for (size_t i = 0; i < annimations.size() && i < sprites.size(); ++i) {
+        auto& annimation = annimations[i];
+        auto& sprite = sprites[i];
+
+        if (annimation && sprite) {
+            auto now                        = std::chrono::steady_clock::now();
+            std::chrono::duration<float> fs = now - annimation->lastExecution;
+            float elapsed_seconds           = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
+            if (elapsed_seconds >= annimation->annimationSpeed * 1000) {
+                annimation->lastExecution = std::chrono::steady_clock::now();
+                annimation->index++;
+                // sprite->rectSize[0] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][2];
+                // sprite->rectSize[1] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][3];
+                sprite->rectPos[0] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][0];
+                sprite->rectPos[1] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][1];
+                std::cout <<  "[" << annimation->annimation[annimation->index % annimation->annimation.size() - 1][0] << "|" <<  annimation->annimation[annimation->index % annimation->annimation.size() - 1][1] <<  "|" <<  annimation->annimation[annimation->index % annimation->annimation.size() - 1][2] << "|" <<  annimation->annimation[annimation->index % annimation->annimation.size() - 1][3] <<  "]" << std::endl;
+            }
+        }
+    }
+}
