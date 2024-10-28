@@ -8,7 +8,6 @@
 #include "Menu.hpp"
 
 RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
-        std::cout << "RenderingEngine running" << std::endl;
     window = wndw;
     if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;

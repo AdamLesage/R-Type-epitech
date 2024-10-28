@@ -35,6 +35,7 @@ RType::GameEngine::GameEngine() {
         std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
+    this->_gameSelected = "R-Type";
 }
 
 RType::GameEngine::~GameEngine() {
@@ -55,6 +56,7 @@ void RType::GameEngine::run() {
     auto& renderingEngine = _renderingEngine;
     auto& physicEngine    = _physicEngine;
     auto& audioEngine     = _audioEngine;
+    _mediator->setGameSelected(_gameSelected);
 
     std::thread networkThread([&]() {
         try {
@@ -66,6 +68,7 @@ void RType::GameEngine::run() {
 
     std::thread renderingThread([&]() {
         try {
+            renderingEngine->setGameSelected(_gameSelected);
             renderingEngine->setCamera(this->_camera);
             renderingEngine->setMutex(this->_mutex);
             renderingEngine->run();
@@ -95,7 +98,7 @@ void RType::GameEngine::run() {
         updateCamera();
     }
 
-    networkThread.join();
+    if (_gameSelected == "R-Type") networkThread.join();
     renderingThread.join();
     physicThread.join();
     audioThread.join();

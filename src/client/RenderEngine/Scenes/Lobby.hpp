@@ -97,6 +97,13 @@ namespace RType {
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
 
+            /**
+             * @brief Set the game selected
+             * 
+             * @param gameSelected the game selected
+             */
+            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+
         protected:
             std::shared_ptr<sf::RenderWindow> window; // The window to display the Lobby on.
             int selectedOption; // The selected option
@@ -120,6 +127,7 @@ namespace RType {
             std::shared_ptr<std::mutex> _mutex; 
             sf::RenderTexture RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
+            std::string _gameSelected; // The game selected
 
         private:
             /**

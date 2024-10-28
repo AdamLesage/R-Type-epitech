@@ -179,6 +179,7 @@ int main(int ac, char** av) {
             new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
         (void)mediator;
         gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
+        gameEngine->setGameSelected(gameSelected);
         gameEngine->run();
     } catch (const RType::DLError& e) {
         std::cerr << e.what() << std::endl;

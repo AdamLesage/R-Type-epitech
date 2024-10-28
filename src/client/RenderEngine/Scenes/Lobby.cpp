@@ -249,7 +249,8 @@ void RType::Lobby::runScene() {
                 switch (getSelectedOption()) {
                 case 0: // Start game
                     backgroundMusic.stop();
-                    this->sendStateChange(3);
+                    if (_gameSelected == "R-Type") this->sendStateChange(3); // Send to server to start the game because it is the only online game
+                    else this->_mediator->notify("RenderingEngine", "Start offline game"); // Notify the mediator to start the game
                     break;
                 case 1:
                     settings->displaySettings(false);
