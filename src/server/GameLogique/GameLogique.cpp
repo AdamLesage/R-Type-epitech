@@ -122,9 +122,39 @@ void GameLogique::spawnBonus(char type, float position_x, float position_y) {
 
         switch (type) {
         case 0x21:
-            std::cout << "createdd bonus" << std::endl;
+            std::cout << "created bonus" << std::endl;
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
-            this->reg.add_component<Tag>(entity, Tag{"bonus"});
+            this->reg.add_component<Tag>(entity, Tag{"machinegun_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+         case 0x22:
+            std::cout << "created bonus" << std::endl;
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"shield_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+         case 0x23:
+            std::cout << "created bonus" << std::endl;
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"rocket_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+         case 0x24:
+            std::cout << "created bonus" << std::endl;
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"beam_bonus"});
             this->reg.add_component<Direction>(entity, Direction{1, 0});
             this->reg.add_component<Size>(entity, Size{35, 30});
             this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
