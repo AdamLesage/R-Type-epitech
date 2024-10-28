@@ -204,8 +204,25 @@ void Systems::check_entities_collisions(Registry& reg,
     if (playerTakeBonus && collisionX && collisionY) {
         auto& playerHealth = reg.get_components<Health_s>()[entityId1];
         auto& bonusType    = reg.get_components<Type_s>()[entityId2];
+        auto& bonustag    = reg.get_components<Tag_s>()[entityId2];
 
-        std::cout << "Player take bonus" << std::endl;
+        if (playerHealth && bonusType) {
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "shield_bonus") {
+                playerHealth->health += 50;
+                networkSender->sendHealthUpdate(entityId1, playerHealth->health);
+            }
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "machinegun_bonus") {
+                reg.get_components<ShootingSpeed_s>()[entityId1]->shooting_speed *= 0.9;
+            }
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "rocket_bonus") {
+                std::cout << "rocket bonus" << std::endl;
+            }
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "beam_bonus") {
+                std::cout << "beam bonus" << std::endl;
+            }
+        } else {
+            logger.log(RType::Logger::RTYPEERROR, "Error while getting health or type component for player");
+        }
         reg.kill_entity(entityId2);
         networkSender->sendDeleteEntity(entityId2);
     }
