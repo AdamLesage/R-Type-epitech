@@ -197,6 +197,10 @@ void RType::Game::play(float& latency) {
             metrics.displayGpuUsage(*window);
         if (toolbar.showNetwork)
             metrics.displayLatency(*window, latency);
+        if (toolbar.showPlayerPos) {
+            sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
+            metrics.displayPlayerPosition(*window, pos);
+        }
         toolbar.draw(*window);
         window->display();
     }

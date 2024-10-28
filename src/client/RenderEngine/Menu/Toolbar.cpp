@@ -7,8 +7,8 @@
 
 #include "Toolbar.hpp"
 
-Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false),
-    showGpu(false), showNetwork(false), isVisible(false), dropdownOpen(false)
+Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false), showGpu(false),
+    showNetwork(false), showPlayerPos(false), isVisible(false), dropdownOpen(false)
 {
     toolbarShape.setSize({1920, 50});
     toolbarShape.setFillColor(sf::Color(50,50,50));
@@ -33,7 +33,8 @@ Toolbar::~Toolbar()
 
 void Toolbar::initializeMenuOptions()
 {
-    optionSelected = {{"FPS", false}, {"CPU Usage", false}, {"GPU Usage", false}, {"RAM", false}, {"World Position", false}, {"Network", false}};
+    optionSelected = {{"FPS", false}, {"CPU Usage", false}, {"GPU Usage", false},
+        {"RAM", false}, {"World Position", false}, {"Network", false}};
     sf::Text fpsOption("FPS", font, 25);
     fpsOption.setFillColor(sf::Color::White);
     fpsOption.setPosition(20, 50);
@@ -130,6 +131,9 @@ void Toolbar::displayMetrics(const std::string optionName)
     }
     if (optionName == "Network") {
         showNetwork = optionSelected[optionName];
+    }
+    if (optionName == "World position") {
+        showPlayerPos = optionSelected[optionName];
     }
 }
 

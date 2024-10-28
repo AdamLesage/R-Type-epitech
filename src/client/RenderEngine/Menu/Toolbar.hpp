@@ -69,6 +69,7 @@ class Toolbar {
         bool showCpu;
         bool showGpu;
         bool showNetwork;
+        bool showPlayerPos;
 
     private:
         bool isVisible;
