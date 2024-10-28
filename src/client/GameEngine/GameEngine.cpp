@@ -36,6 +36,15 @@ RType::GameEngine::GameEngine() {
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
     this->_systems = Systems();
+    try {
+        std::string playerConfigPath = std::string("config") + PATH_SEPARATOR + std::string("player.cfg");
+        _playerConfig.readFile(playerConfigPath);
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
 }
 
 RType::GameEngine::~GameEngine() {
@@ -93,7 +102,7 @@ void RType::GameEngine::run() {
 
     // Wait for all threads to finish
     while (1) {
-        this->_systems.direction_system(_registry);
+        this->_systems.direction_system(_registry, _playerConfig);
         updateCamera();
     }
 

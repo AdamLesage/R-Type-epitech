@@ -100,7 +100,7 @@ void Systems::collision_system(Registry& reg, sf::RenderWindow& window) {
     }
 }
 
-void Systems::direction_system(Registry& reg) {
+void Systems::direction_system(Registry& reg, libconfig::Config &playerConfig) {
     auto& types      = reg.get_components<Type>();
     auto& directions = reg.get_components<Direction>();
     auto& sprites = reg.get_components<Sprite>();
@@ -112,12 +112,26 @@ void Systems::direction_system(Registry& reg) {
 
         if (dir && type && sprite) {
             if (type->type == EntityType::PLAYER) {
-                if (dir->y > 0) {
-                    sprite->rectPos[0] = 0;
-                } else if (dir->y < 0) {
-                    sprite->rectPos[0] = 263 * 4;
-                } else if (dir->y == 0) {
-                    sprite->rectPos[0] = 263;
+                try {
+                    libconfig::Setting& player = playerConfig.lookup("players")[0];
+                    libconfig::Setting& directionRect = player.lookup("directionRect");
+                    if (dir->y > 0) {
+                        libconfig::Setting& down = directionRect.lookup("Down");
+                        sprite->rectPos[0] = down.lookup("rectPos")[0];
+                        sprite->rectPos[1] = down.lookup("rectPos")[1];
+                    } else if (dir->y < 0) {
+                        libconfig::Setting& up = directionRect.lookup("Up");
+                        sprite->rectPos[0] = up.lookup("rectPos")[0];
+                        sprite->rectPos[1] = up.lookup("rectPos")[1];
+                    } else if (dir->y == 0) {
+                        libconfig::Setting& none = directionRect.lookup("None");
+                        sprite->rectPos[0] = none.lookup("rectPos")[0];
+                        sprite->rectPos[1] = none.lookup("rectPos")[1];
+                    }                    
+                }  catch (const libconfig::SettingNotFoundException &e) {
+                    std::cerr << "directionRect setting not found: " << e.what() << std::endl;
+                } catch (const std::exception &e) {
+                    std::cerr << "Error from direction system: player setting" << e.what() << std::endl;
                 }
             }
         }

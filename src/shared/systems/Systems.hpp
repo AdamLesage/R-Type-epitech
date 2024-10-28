@@ -32,6 +32,7 @@
 #include "../../client/Mediator/IMediator.hpp"
 #include <iostream>
 #include <memory>
+#include <libconfig.h++>
 
 class Systems {
     public:
@@ -75,7 +76,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void direction_system(Registry& reg);
+        void direction_system(Registry& reg, libconfig::Config &playerConfig);
 };
 
 #endif /* !SYSTEMS_HPP_ */
