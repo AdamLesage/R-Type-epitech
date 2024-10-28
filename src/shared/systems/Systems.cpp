@@ -101,16 +101,25 @@ void Systems::collision_system(Registry& reg, sf::RenderWindow& window) {
 }
 
 void Systems::direction_system(Registry& reg) {
-    auto& velocities = reg.get_components<Velocity_s>();
-    auto& directions = reg.get_components<Direction_s>();
+    auto& types      = reg.get_components<Type>();
+    auto& directions = reg.get_components<Direction>();
+    auto& sprites = reg.get_components<Sprite>();
 
-    for (size_t i = 0; i < velocities.size() && i < directions.size(); ++i) {
-        auto& vel = velocities[i];
+    for (size_t i = 0; i < types.size() && i < directions.size(); ++i) {
+        auto& type  = types[i];
         auto& dir = directions[i];
+        auto& sprite = sprites[i];
 
-        if (vel && dir) {
-            vel->x = dir->x;
-            vel->y = dir->y;
+        if (dir && type && sprite) {
+            if (type->type == EntityType::PLAYER) {
+                if (dir->y > 0) {
+                    sprite->rectPos[0] = 0;
+                } else if (dir->y < 0) {
+                    sprite->rectPos[0] = 263 * 4;
+                } else if (dir->y == 0) {
+                    sprite->rectPos[0] = 263;
+                }
+            }
         }
     }
 }

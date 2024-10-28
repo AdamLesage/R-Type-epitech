@@ -35,6 +35,7 @@ RType::GameEngine::GameEngine() {
         std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
+    this->_systems = Systems();
 }
 
 RType::GameEngine::~GameEngine() {
@@ -92,6 +93,7 @@ void RType::GameEngine::run() {
 
     // Wait for all threads to finish
     while (1) {
+        this->_systems.direction_system(_registry);
         updateCamera();
     }
 

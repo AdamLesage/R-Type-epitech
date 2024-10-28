@@ -158,7 +158,7 @@ void NetworkSender::sendStateChange(int id_entity, char newState, int clientId)
     }
 }
 
-void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId = -1)
+void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId)
 {
     std::array<char, 13> data{};
     data[0] = 0x32;

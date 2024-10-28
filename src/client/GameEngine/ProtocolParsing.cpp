@@ -120,6 +120,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{130, 80});
+        _registry.add_component<Type>(entity, Type{EntityType::PLAYER});
         _registry.add_component<Direction>(entity, Direction{1, 0});
         std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
                            + std::to_string(playerId + 1) + ".png";
