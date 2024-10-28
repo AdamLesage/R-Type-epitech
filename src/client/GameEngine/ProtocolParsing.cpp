@@ -123,7 +123,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
         _registry.add_component<Size>(entity, Size{130, 80});
         _registry.add_component<Direction>(entity, Direction{1, 0});
         std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
-                           + std::to_string(entity + 1) + ".png";
+                           + std::to_string(playerId + 1) + ".png";
         _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception& e) {
@@ -594,6 +594,7 @@ bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& i
     }
 
     try {
+        _mediator->notify("ProtocolParsing", "GameState " + std::to_string(int(state)));
         entity_t entity = _registry.entity_from_index(entityId);
         (void)entity;
         this->updateIndexFromBinaryData("state_change", index);
@@ -660,4 +661,8 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         index += 1;
     }
     return false;
+}
+
+void RType::ProtocolParsing::setMediator(std::shared_ptr<IMediator> mediator) {
+    _mediator = mediator;
 }

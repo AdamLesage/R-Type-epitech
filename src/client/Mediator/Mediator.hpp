@@ -75,6 +75,16 @@ namespace RType {
              */
             void notifyAudioEngine(std::string sender, const std::string& event);
 
+            /**
+             * @brief Notify the protocol parsing system of an event.
+             *
+             * This function is responsible for manage notify from ProtocolParsing
+             *
+             * @param sender The sender of the event.
+            * @param event The event to notify.
+            */
+            void notifyProtocolParsing(std::string sender, const std::string& event);
+
         private:
             std::shared_ptr<GameEngine> _gameEngine;
             std::shared_ptr<NetworkEngine> _networkEngine;

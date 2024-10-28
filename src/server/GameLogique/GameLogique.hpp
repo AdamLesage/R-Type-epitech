@@ -48,10 +48,15 @@ class GameLogique {
         std::shared_ptr<NetworkLib::Server> network;
         std::unique_ptr<NetworkSender> _networkSender;
         std::thread receiverThread;
+        std::thread connectionManagmentThread;
         int frequency;
         RType::Logger logger;
         bool running;
         std::mutex _mutex;
+        /**
+         * @brief Delete all entity at the end of the game
+         */
+        void clearGame();
         /**
          * @brief listen to the server socket to manage client input
          */
@@ -59,7 +64,7 @@ class GameLogique {
         /**
          * @brief lunch a game with connected player
          */
-        void startGame();
+        void startGame(int idEntity);
         /**
          * @brief add a Enemy on the registry and send a notification to connected client
          *
@@ -70,12 +75,21 @@ class GameLogique {
          */
         void spawnEnnemy(char type, float position_x, float position_y);
         /**
-         * @brief handle the Inpute of the client
-         *
-         * @param message the message send by the client
+         * @brief spawn a wave of ennemy
          *
          */
+        void spawnWave();
+        /**
+         * @brief andle the input of the client
+         *
+         * @param messsage message of the input
+         */
         void handleClientInput(std::pair<std::string, uint32_t> message);
+
+        /**
+         * @brief Handle a new client connection and perform any setup required for the client.
+         */
+        void handleClientConnection();
 
         /**
          * @brief handle the Inpute of the client
@@ -84,6 +98,8 @@ class GameLogique {
          * @return std::vector<char> the array with the input key in the order: [up, down, left, right, shoot]
          */
         std::array<char, 6> retrieveInputKeys();
+
+        std::map<size_t, size_t> playersId;
 };
 
 #endif /* !GAMELOGIQUE_HPP_ */

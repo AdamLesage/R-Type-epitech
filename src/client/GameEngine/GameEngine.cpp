@@ -115,6 +115,7 @@ void RType::GameEngine::handleServerData(const std::string& message) {
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
+    this->_protocolParsing->setMediator(mediator);
 }
 
 void RType::GameEngine::updateCamera() {
@@ -124,7 +125,6 @@ void RType::GameEngine::updateCamera() {
     auto& sprites    = this->_registry.get_components<Sprite>();
     std::vector<EntityRenderInfo> entityRender;
     entityRender.reserve(std::min({positions.size(), sizes.size(), directions.size(), sprites.size()}));
-
     for (size_t i = 0;
          i < positions.size() && i < sizes.size() && i < directions.size() && i < sprites.size(); ++i) {
         auto& position  = positions[i];
@@ -132,9 +132,19 @@ void RType::GameEngine::updateCamera() {
         auto& direction = directions[i];
         auto& sprite    = sprites[i];
 
-        if (position && size && direction && sprite) {
-            entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
+        try
+        {
+            if (position && size && direction && sprite) {
+                entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
+            }
         }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return;
+        }
+        
+        
     }
     {
         std::lock_guard<std::mutex> lock(*this->_mutex.get());

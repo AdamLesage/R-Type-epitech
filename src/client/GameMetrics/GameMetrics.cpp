@@ -16,7 +16,7 @@ GameMetrics::GameMetrics()
     if (PdhOpenQuery(NULL, NULL, &cpuQuery) != ERROR_SUCCESS) {
         std::cerr << "Failed to open PDH query." << std::endl;
     }
-    
+
     if (PdhAddCounter(cpuQuery, "\\Processor(_Total)\\% Processor Time", NULL, &cpuTotal) != ERROR_SUCCESS) {
         std::cerr << "Failed to add PDH counter." << std::endl;
     }
