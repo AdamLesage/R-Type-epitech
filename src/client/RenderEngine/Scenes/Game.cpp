@@ -308,6 +308,7 @@ void RType::Game::runScene() {
     } else {
         window->draw(sprite, &colorblindShader[4]);
     }
+    console->displayDeveloperConsole();
     window->display();
     handleEvents();
 }
