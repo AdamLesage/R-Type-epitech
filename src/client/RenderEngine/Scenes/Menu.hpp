@@ -80,7 +80,7 @@ namespace RType {
             /**
              * @brief Displays the menu.
              */
-            void runScene() override;
+            void runScene(float &latency) override;
 
         private:
             int selectedOption; // The selected option

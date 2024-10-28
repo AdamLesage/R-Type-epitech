@@ -43,10 +43,10 @@ void RType::RenderingEngine::run() {
         switch (_stateGame)
         {
         case 1:
-            this->_menu->runScene();
+            this->_menu->runScene(_latency);
             break;
         case 2:
-            this->_lobby->runScene();
+            this->_lobby->runScene(_latency);
             break;
         case 3:
             this->_game->runScene(_latency);

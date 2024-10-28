@@ -68,15 +68,8 @@ namespace RType {
             /**
              * @brief Displays the cinematic just before the game starts.
              */
-            void runScene(float &latency);
+            void runScene(float &latency) override;
 
-            /**
-             * @brief Displays the game we are playing.
-             */
-            void runScene() override {
-                float latency = 0;
-                runScene(latency);
-            };
             /**
              * @brief Displays the game we are playing.
              */
