@@ -207,7 +207,7 @@ void RType::Lobby::displayConnectedPlayer()
             if (!playerTextures[i].loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath)) {
                 throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
             }
-        } catch (std::exception e) {
+        } catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
         }
         playerSprites[i].setTexture(playerTextures[i]);

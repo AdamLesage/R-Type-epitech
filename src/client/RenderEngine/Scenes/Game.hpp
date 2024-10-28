@@ -19,6 +19,9 @@
 #include "../Console/Console.hpp"
 #include <mutex>
 #include <libconfig.h++>
+
+#include "Games/DoodleJump.hpp"
+#include "Games/IGame.hpp"
 #include "../ARenderEngineScene.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -147,11 +150,6 @@ namespace RType {
             bool isGameOffline();
 
             /**
-             * @brief Handle the offline game, create different entities to display on the scene and set the camera
-             */
-            void handleOfflineGame();
-
-            /**
              * @brief Loads the texture of the current frame.
              *
              * @param texture The texture to load.
@@ -188,6 +186,7 @@ namespace RType {
             std::shared_ptr<sf::RenderTexture> RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
             sf::Event event; // The event of the game
+            std::shared_ptr<IGame> _currentGame;
     };
 } // namespace RType
 
