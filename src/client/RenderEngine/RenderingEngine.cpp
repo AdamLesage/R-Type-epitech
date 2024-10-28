@@ -49,7 +49,7 @@ void RType::RenderingEngine::run() {
             this->_lobby->runScene();
             break;
         case 3:
-            this->_game->runScene();
+            this->_game->runScene(_latency);
             break;
         case 4:
             // end of game Menu
