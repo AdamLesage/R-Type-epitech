@@ -21,7 +21,10 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
     _messageTypeMap = {{"PLAYER_CREATION", {0x01, "player_creation"}},
                        {"PROJECTILE_CREATION", {0x02, "projectile_creation"}},
                        {"ENEMY_CREATION", {0x03, "enemy_creation"}},
-                       {"BONUS_CREATION", {0x21, "bonus_creation"}},
+                       {"SHIELD_CREATION", {0x21, "shlield_creation"}},
+                       {"MACHINEGUN_BONUS_CREATION", {0x22, "machinegun_bonus_creation"}},
+                        {"ROCKET_BONUS_CREATION", {0x24, "rocket_bonus_creation"}},
+                       {"BEAM_BONUS_CREATION", {0x24, "beam_bonus_creation"}},
                        {"WALL_CREATION", {0x25, "wall_creation"}},
                        {"REWARD_CREATION", {0x26, "reward_creation"}},
                        {"ENTITY_DELETION", {0x29, "entity_deletion"}},
@@ -221,8 +224,8 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
     return true;
 }
 
-bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int& index) {
-    if (!checkMessageType("BONUS_CREATION", message, index)) return false;
+bool RType::ProtocolParsing::parseShieldCreation(const std::string& message, int& index) {
+    if (!checkMessageType("SHIELD_CREATION", message, index)) return false;
     unsigned int bonusId;
     float posX;
     float posY;
@@ -232,6 +235,7 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int&
         std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
         std::memcpy(&posX, &message[index + 5], sizeof(float));
         std::memcpy(&posY, &message[index + 9], sizeof(float));
+
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
         return false;
@@ -245,15 +249,118 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int&
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Tag>(entity, Tag{"bonus"});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "bigrayon_bonus.png";
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "shield_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
         this->updateIndexFromBinaryData("bonus_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
         return false;
     }
-    std::cout << "Bonus position" << posX << " " << posY << std::endl;
-    std::cout << "Bonus created" << std::endl;
+    return true;
+}
+
+bool RType::ProtocolParsing::parseMachinegunCreation(const std::string& message, int& index) {
+    if (!checkMessageType("MACHINEGUN_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+    std::string path;
+
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "machinegun_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        this->updateIndexFromBinaryData("bonus_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool RType::ProtocolParsing::parseRocketCreation(const std::string& message, int& index) {
+    if (!checkMessageType("ROCKET_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+    std::string path;
+
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "rocket_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        this->updateIndexFromBinaryData("bonus_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool RType::ProtocolParsing::parseBeamCreation(const std::string& message, int& index) {
+    if (!checkMessageType("BEAM_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+    std::string path;
+
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "beam_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        this->updateIndexFromBinaryData("bonus_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
     return true;
 }
 
@@ -629,7 +736,10 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parsePlayerCreation(message, index)) continue;
         if (this->parseProjectileCreation(message, index)) continue;
         if (this->parseEnemyCreation(message, index)) continue;
-        if (this->parseBonusCreation(message, index)) continue;
+        if (this->parseShieldCreation(message, index)) continue;
+        if (this->parseMachinegunCreation(message, index)) continue;
+        if (this->parseRocketCreation(message, index)) continue;
+        if (this->parseBeamCreation(message, index)) continue;
         if (this->parseWallCreation(message, index)) continue;
         if (this->parseRewardCreation(message, index)) continue;
         if (this->parseEntityDeletion(message, index)) continue;

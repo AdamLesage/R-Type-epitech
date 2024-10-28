@@ -66,7 +66,36 @@ namespace RType {
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
-            bool parseBonusCreation(const std::string& message, int& index);
+            bool parseShieldCreation(const std::string& message, int& index);
+
+            /**
+             * @brief Parse the message to validate and extract information for the corresponding operation
+             * and manage the corresponding request (creation, deletion, update)
+             *
+             * @param message A pointer to a C-string containing the message to be parsed.
+             * @return true if the parsing is successful and the message is valid, false otherwise.
+             */
+            bool parseMachinegunCreation(const std::string& message, int& index);
+
+            /**
+             * @brief Parse the message to validate and extract information for the corresponding operation
+             * and manage the corresponding request (creation, deletion, update)
+             *
+             * @param message A pointer to a C-string containing the message to be parsed.
+             * @return true if the parsing is successful and the message is valid, false otherwise.
+             */
+            bool parseRocketCreation(const std::string& message, int& index);
+
+            /**
+             * @brief Parse the message to validate and extract information for the corresponding operation
+             * and manage the corresponding request (creation, deletion, update)
+             *
+             * @param message A pointer to a C-string containing the message to be parsed.
+             * @return true if the parsing is successful and the message is valid, false otherwise.
+             */
+            bool parseBeamCreation(const std::string& message, int& index);
+
+
 
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation
