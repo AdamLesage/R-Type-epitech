@@ -66,6 +66,13 @@ namespace Edition {
              * @param selection The current selection
              */
             void setCurrentSelection(CurrentSelection selection) { _currentSelection = selection; }
+
+            /**
+             * @brief Get the current selection
+             * 
+             * @return CurrentSelection The current selection
+             */
+            CurrentSelection getCurrentSelection() { return _currentSelection; }
         protected:
         private:
             std::vector<ToolbarButton> _toolbarButtons;

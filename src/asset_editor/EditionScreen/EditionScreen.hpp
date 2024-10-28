@@ -13,11 +13,14 @@
 #include "../history/AddAsset.hpp"
 #include "../history/RemoveAsset.hpp"
 #include "../history/CommandManager.hpp"
+#include "SaveScene.hpp"
+#include "LoadScene.hpp"
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
+#include <libconfig.h++>
 
 namespace Edition {
 
@@ -52,20 +55,88 @@ namespace Edition {
              * 
              * @param event The event to handle
              */
-            void handleEvent(const sf::Event &event);
-
-        private:
-            sf::RectangleShape _centralArea;
+            std::shared_ptr<Edition::Asset> handleEvent(const sf::Event &event, sf::RenderWindow &window);
 
             /**
-             * @brief The assets of the scene
+             * @brief Display dialog to save the scene
+             * 
+             * @param window The window of the Asset Editor
+             * @return true if the user saved the scene, false if the dialog was closed
              */
-            std::vector<std::shared_ptr<Edition::Asset>> _assets;
+            bool displaySaveDialog(std::shared_ptr<sf::RenderWindow> window);
+
+            /**
+             * @brief Save the scene
+             * 
+             * @param event The event to handle
+             */
+            void retrieveInputSaveScene(const sf::Event &event);
+
+            /**
+             * @brief Load the scene
+             * 
+             * @param event The event to handle
+             */
+            void retrieveInputLoadScene(const sf::Event &event);
+
+            /**
+             * @brief Display dialog to delete the scene
+             * 
+             * @param window The window of the Asset Editor
+             * @return true if the user deleted the scene, false if the dialog was closed
+             */
+            bool displayDeleteDialog(std::shared_ptr<sf::RenderWindow> window);
+
+            /**
+             * @brief Display dialog to load the scene
+             * 
+             * @param window The window of the Asset Editor
+             * @return true if the user loaded the scene, false if the dialog was closed
+             */
+            bool displayLoadDialog(std::shared_ptr<sf::RenderWindow> window);
+
+            /**
+             * @brief Save the scene in a cfg file with the given name
+             * 
+             * @param sceneName The name of the scene to load
+             */
+            void saveScene(const std::string &sceneName);
+
+            /**
+             * @brief Delete every entities in the scene
+             */
+            void deleteEditionScreen();
+            /**
+             * @brief Get the current view of the scene
+             * @return The current sf::View object
+             */
+            sf::View getView();
+
+            /**
+             * @brief Get the left edge of the current view
+             * @return The left edge position of the view as a float
+             */
+            float getViewLeftEdge();
+            /** @brief Load the scene with the given name
+             * 
+             * @param sceneName The name of the scene to load
+             */
+            void loadScene(const std::string &sceneName);
 
             /**
              * @brief The command manager
              */
             CommandManager commandManager;
+        private:
+            sf::RectangleShape _centralArea;
+            sf::Text _inputSaveText;
+            sf::View _centralView;
+            float _zoomFactor;
+            sf::Vector2f _centralAreaPosition;
+            sf::Vector2f _centralAreaSize;
+            bool _isInArea = false;
+            float _viewLeftEdge = 0;
+            sf::Text _inputLoadText;
     };
 }
 

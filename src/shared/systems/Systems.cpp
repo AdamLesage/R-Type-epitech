@@ -130,11 +130,8 @@ void Systems::annimation_system(Registry& reg) {
             if (elapsed_seconds >= annimation->annimationSpeed * 1000) {
                 annimation->lastExecution = std::chrono::steady_clock::now();
                 annimation->index++;
-                // sprite->rectSize[0] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][2];
-                // sprite->rectSize[1] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][3];
                 sprite->rectPos[0] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][0];
                 sprite->rectPos[1] = annimation->annimation[annimation->index % annimation->annimation.size() - 1][1];
-                std::cout <<  "[" << annimation->annimation[annimation->index % annimation->annimation.size() - 1][0] << "|" <<  annimation->annimation[annimation->index % annimation->annimation.size() - 1][1] <<  "|" <<  annimation->annimation[annimation->index % annimation->annimation.size() - 1][2] << "|" <<  annimation->annimation[annimation->index % annimation->annimation.size() - 1][3] <<  "]" << std::endl;
             }
         }
     }

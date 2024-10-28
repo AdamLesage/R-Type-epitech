@@ -15,8 +15,16 @@ set(SOURCES
     Sidebar/RightSidebar.cpp
     Sidebar/Toolbar.cpp
     Sidebar/ToolbarButton.cpp
+    Sidebar/assetSelector/AssetSelector.cpp
+    Sidebar/componentsEditor/ComponentsEditor.cpp
+    Sidebar/componentsEditor/Input.cpp
+    Sidebar/componentsEditor/InputNumber.cpp
+    Sidebar/componentsEditor/SelectButton.cpp
+    Sidebar/selectBar/SelectBar.cpp
     AssetEditor/AssetEditor.cpp
     EditionScreen/EditionScreen.cpp
+    EditionScreen/SaveScene.cpp
+    EditionScreen/LoadScene.cpp
     history/Asset.cpp
     history/AddAsset.cpp
     history/RemoveAsset.cpp
@@ -34,6 +42,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     sfml-graphics
     sfml-network
     sfml-audio
+    -lconfig++
 )
 
 # Platform-specific settings
