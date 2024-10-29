@@ -25,6 +25,7 @@
 #include "../../shared/components/ShootStraightPattern.hpp"
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/Direction.hpp"
+#include "../../shared/components/ParentId.hpp"
 #include "../GameLogique/NetworkSender.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Tag.hpp"
@@ -78,11 +79,15 @@ class Systems {
          * @briefHandle the collisions between entities.
          *
          * @param reg The registry containing the components.
+         * @param MapSize The size of the map.
+         * @param networkSender The class for sending
+         * @param logger The logger to log the events.
+         * @param friendlyfire If the players can hurt each other.
          */
         void collision_system(Registry& reg,
                               std::pair<size_t, size_t> MapSize,
                               std::unique_ptr<NetworkSender>& networkSender,
-                              RType::Logger& logger);
+                              RType::Logger& logger, bool friendlyfire);
 
         /**
          * @brief Handles the shoot for the entities.
@@ -189,6 +194,7 @@ class Systems {
          * @param networkSender The class for sending.
          * @param entityType1 The type of the first entity.
          * @param entityType2 The type of the second entity.
+         * @param friendlyfire If the players can hurt each other.
          */
         void check_entities_collisions(Registry& reg,
                                        size_t entityId1,
@@ -200,7 +206,8 @@ class Systems {
                                        RType::Logger& logger,
                                        std::unique_ptr<NetworkSender>& networkSender,
                                        Type_s* entityType1,
-                                       Type_s* entityType2);
+                                       Type_s* entityType2,
+                                       bool friendlyfire);
 
         /**
          * @brief Read the file that contains the scores history
