@@ -28,6 +28,7 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<ShootPlayerPattern>();
     this->reg.register_component<ShootStraightPattern>();
     this->reg.register_component<Size>();
+    this->reg.register_component<Direction>();
 }
 
 GameLogique::~GameLogique() {
@@ -110,6 +111,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
         }
+        this->reg.add_component<Direction>(entity, Direction{0, 0});
         this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
     }
 }
@@ -180,7 +182,7 @@ void GameLogique::clearGame()
         this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
         this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
         this->reg.add_component<Size>(entity, Size{130, 80});
-        std::cout << numberPlayer << std::endl;
+        this->reg.add_component<Direction>(entity, Direction{0, 0});
         this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));
         this->playersId[numberPlayer] = entity;
         usleep(1000);
@@ -348,6 +350,7 @@ void GameLogique::handleClientConnection()
                     this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
                     this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
                     this->reg.add_component<Size>(entity, Size{130, 80});
+                    this->reg.add_component<Direction>(entity, Direction{0, 0});
                     this->_networkSender->sendCreatePlayer(clientId, 100.f, 100 + (100.f * clientId));
                     this->playersId[clientId] = entity;
                 }

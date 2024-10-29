@@ -157,3 +157,17 @@ void NetworkSender::sendStateChange(int id_entity, char newState, int clientId)
         this->_network->sendToClient(data.data(), data.size(), clientId);
     }
 }
+
+void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId)
+{
+    std::array<char, 13> data{};
+    data[0] = 0x32;
+    std::memcpy(&data[1], &id_entity, sizeof(id_entity));
+    std::memcpy(&data[5], &x, sizeof(x));
+    std::memcpy(&data[9], &y, sizeof(y));
+    if (clientId == -1) {
+        this->_network->sendToAll(data.data(), data.size());
+    } else {
+        this->_network->sendToClient(data.data(), data.size(), clientId);
+    }
+}

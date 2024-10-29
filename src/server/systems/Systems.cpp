@@ -14,6 +14,7 @@ void Systems::position_system(Registry& reg,
     auto& positions  = reg.get_components<Position_s>();
     auto& velocities = reg.get_components<Velocity_s>();
     auto& types      = reg.get_components<Type>();
+    auto& directions = reg.get_components<Direction>();
 
     for (size_t i = 0; i < positions.size() && i < velocities.size(); ++i) {
         auto& pos  = positions[i];
@@ -28,6 +29,14 @@ void Systems::position_system(Registry& reg,
             } else if (type->type == EntityType::PLAYER_PROJECTILE) {
                 if (vel->x == 0) {
                     vel->x = 3;
+                }
+            }
+            if (type->type == EntityType::PLAYER) {
+                auto &playerDirection = directions[i];
+                if (playerDirection->x != vel->x || playerDirection->y != vel->y) {
+                    playerDirection->x = vel->x;
+                    playerDirection->y = vel->y;
+                    networkSender->sendDirectionUpdate(i, playerDirection->x, playerDirection->y);
                 }
             }
             pos->x += vel->x;
