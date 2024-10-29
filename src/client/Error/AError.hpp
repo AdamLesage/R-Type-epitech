@@ -22,7 +22,7 @@ namespace RType {
             const char* what() const noexcept override {
                 return (_errorMessage.c_str());
             }
-            const char* where() const noexcept {
+            const char* where() const noexcept override {
                 return (_errorLocation.c_str());
             }
 

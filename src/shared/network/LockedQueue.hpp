@@ -29,7 +29,7 @@ namespace NetworkLib {
             // Note: not exception-safe (will lose the message)
             _T pop() {
                 std::unique_lock<std::mutex> lock(mutex);
-                _T value;
+                _T value = _T();
                 std::swap(value, queue.front());
                 queue.pop();
                 return value;

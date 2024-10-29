@@ -42,7 +42,7 @@ namespace RType {
              * 
              * @return std::shared_ptr<Camera> the camera
              */
-            std::shared_ptr<Camera> getCamera() const { return _camera; }
+            std::shared_ptr<Camera> getCamera() const override { return _camera; }
 
             /**
              * @brief jump function
