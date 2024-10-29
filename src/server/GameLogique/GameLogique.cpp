@@ -29,6 +29,16 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<ShootStraightPattern>();
     this->reg.register_component<Size>();
     this->reg.register_component<Direction>();
+
+    try {
+        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type") + PATH_SEPARATOR + std::string("game_config.cfg");
+        _gameConfig.readFile(gameConfigPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
 }
 
 GameLogique::~GameLogique() {
@@ -144,12 +154,9 @@ void GameLogique::runGame() {
                 this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
-            if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {
+            if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 40) {
                 endClock = std::clock();
-                clearGame();
-                this->running = false;
-                sleep(1);
-                this->_networkSender->sendStateChange(1, 0x01);
+                this->handleChangeLevel(_currentLevel + 1);
             }
         } else {
             endClock = std::clock();
@@ -157,8 +164,27 @@ void GameLogique::runGame() {
     }
 }
 
-void GameLogique::clearGame()
-{
+void GameLogique::handleChangeLevel(unsigned int newLevel) {
+    clearGame();
+    try {
+        libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
+        if (newLevel >= levels.getLength()) {
+            this->running = false;
+            sleep(1);
+            this->_networkSender->sendStateChange(1, 0x01);
+            this->_currentLevel = 0;
+            this->_networkSender->sendLevelUpdate(this->_currentLevel);
+            return;
+        }
+        printf("send new level: %u\n", newLevel);
+        this->_networkSender->sendLevelUpdate(newLevel);
+        this->_currentLevel = newLevel;
+    } catch (std::exception &e) {
+        std::cerr << "failed to load level" << std::endl;
+    }
+}
+
+void GameLogique::clearGame() {
     auto& types  = reg.get_components<Type>();
     size_t numberPlayer = 0;
 

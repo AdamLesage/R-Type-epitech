@@ -625,7 +625,7 @@ bool RType::ProtocolParsing::parseLevelUpdate(const std::string& message, int& i
 
     try {
         _mediator->notify("ProtocolParsing", "GameLevel " + std::to_string(level));
-        this->updateIndexFromBinaryData("state_change", index);
+        this->updateIndexFromBinaryData("level_update", index);
         // Need to implement the method to update the entity state
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found" << std::endl;
@@ -657,6 +657,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parseProjectileCollision(message, index)) continue;
         if (this->parseScoreUpdate(message, index)) continue;
         if (this->parseStateChange(message, index)) continue;
+        if (this->parseLevelUpdate(message, index)) continue;
         index += 1;
     }
     return false;

@@ -80,6 +80,8 @@ void RType::Game::loadBackgroundConfig(libconfig::Setting &levelSetting) {
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
 
         // Resize backgroundTextures to match the number of backgrounds
+        backgrounds.clear();
+        backgroundTextures.clear();
         backgroundTextures.resize(backgroundSettings.getLength());
 
         for (size_t i = 0; i < backgroundTextures.size(); i++) { // Load all backgrounds textures
@@ -391,6 +393,14 @@ void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex) {
 
 void RType::Game::setLevel(size_t level) {
     this->_level = level;
+    try {
+        libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
+        this->loadBackgroundConfig(levelSetting);
+        this->loadSoundConfig(levelSetting);
+        
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Error loading level settings");
+    }
 }
 
 bool RType::Game::haveCinematic() {

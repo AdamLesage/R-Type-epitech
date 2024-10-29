@@ -92,6 +92,12 @@ class GameLogique {
         void handleClientConnection();
 
         /**
+         * @brief handle the change of level
+         * 
+         */
+        void handleChangeLevel(unsigned int);
+
+        /**
          * @brief handle the Inpute of the client
          *
          * @param message the message send by the client
@@ -100,6 +106,8 @@ class GameLogique {
         std::array<char, 6> retrieveInputKeys();
 
         std::map<size_t, size_t> playersId;
+        libconfig::Config _gameConfig;
+        unsigned int _currentLevel = 0;
 };
 
 #endif /* !GAMELOGIQUE_HPP_ */
