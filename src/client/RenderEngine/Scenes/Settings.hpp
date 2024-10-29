@@ -105,7 +105,7 @@ class Settings {
         sf::Sound selectSound; // The sound played when selecting an option
         std::shared_ptr<sf::RenderWindow> window; // The window to display the settings on
         sf::Font font; // The font used for the settings
-        sf::Text menuOptions[8]; // The options of the settings so the keys up, down, left, right, shoot, escape, subtitles and colorblind
+        sf::Text menuOptions[9]; // The options of the settings so the keys up, down, left, right, shoot, escape, subtitles, colorblind and friendly fire
         sf::Texture logoTexture; // The texture of the logo
         sf::Sprite logoSprite; // The sprite of the logo
         sf::Event event; // The event of the settings

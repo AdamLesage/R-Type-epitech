@@ -27,7 +27,7 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     background.setPosition(sf::Vector2f(0, 0));
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
-    logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
+    logoSprite.setPosition(sf::Vector2f(0, 0));
     if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
@@ -100,7 +100,7 @@ void Settings::moveUp() {
 }
 
 void Settings::moveDown() {
-    if (selectedOption + 1 < 8) {
+    if (selectedOption + 1 < 9) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
@@ -117,7 +117,7 @@ void Settings::changeKey(std::string key) {
     std::string newKey2;
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-
+    std::cout << "Key: " << key << std::endl;
     try {
         cfg.readFile(configPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
@@ -152,6 +152,22 @@ void Settings::changeKey(std::string key) {
             newKey2 = "Normal";
         }
         set_key_value(cfg, "Keys8", newKey2.c_str());
+        try {
+            cfg.writeFile(configPath.c_str());
+        } catch (const libconfig::FileIOException& fioex) {
+            std::cerr << "Error while writing file: " << configPath << std::endl;
+            return;
+        }
+        return;
+    }
+    else if (key ==  "FRIENDLY FIRE: ON" || key == "FRIENDLY FIRE: OFF") {
+        std::cout << "FRIENDLY FIRE" << std::endl;
+        if (key.find("ON") != std::string::npos) {
+            newKey2 = "OFF";
+        } else {
+            newKey2 = "ON";
+        }
+        set_key_value(cfg, "Keys9", newKey2.c_str());
         try {
             cfg.writeFile(configPath.c_str());
         } catch (const libconfig::FileIOException& fioex) {
@@ -250,7 +266,7 @@ void Settings::display() {
     RenderTexture.draw(logoSprite);
     displayInput();
 
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 9; ++i) {
         RenderTexture.draw(menuOptions[i]);
     }
     RenderTexture.display();
@@ -290,14 +306,14 @@ void Settings::initTextAndSprites()
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    std::string optionsText[] = {"UP         : ", "DOWN       : ", "LEFT       : ", "RIGHT      : ",
-                                 "SHOOT      : ", "SETTINGS   : ",  "SUBTITLES : ", "COLORBLIND : "};
-    for (int i = 0; i < 8; i++) {
+    std::string optionsText[] = {"UP            : ", "DOWN          : ", "LEFT          : ", "RIGHT         : ",
+                                 "SHOOT         : ", "SETTINGS      : ",  "SUBTITLES     : ", "COLORBLIND    : ", "FRIENDLY FIRE : "};
+    for (int i = 0; i < 9; i++) {
         optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)).c_str());
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Red : sf::Color::White);
         menuOptions[i].setString(optionsText[i]);
-        menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 200 + i * 100));
+        menuOptions[i].setPosition(sf::Vector2f(1920 / 2 - 40, 150 + i * 100));
     }
     sf::Vector2f shootInputPosition = menuOptions[4].getPosition();
     shootInputPosition.x -= 80;
@@ -382,6 +398,15 @@ void Settings::displaySettings(bool ingame) {
                             } else if (menuOptions[7].getString().toAnsiString().find("Achromatopsia") != std::string::npos) {
                                 changeKey("COLORBLIND: Achromatopsia");
                                 menuOptions[7].setString("COLORBLIND: Normal");
+                            }
+                            break;
+                        case 8:
+                            if (menuOptions[8].getString().toAnsiString().find("ON") != std::string::npos) {
+                                changeKey("FRIENDLY FIRE: ON");
+                                menuOptions[8].setString("FRIENDLY FIRE: OFF");
+                            } else {
+                                changeKey("FRIENDLY FIRE: OFF");
+                                menuOptions[8].setString("FRIENDLY FIRE: ON");
                             }
                             break;
                         }
