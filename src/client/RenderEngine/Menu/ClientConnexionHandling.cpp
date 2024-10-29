@@ -31,7 +31,7 @@ RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsign
     _inputTextHost.setCharacterSize(24);
     _inputTextHost.setFillColor(sf::Color::White);
 
-    _inputTextPort.setString(std::to_string(server_port));
+    _inputTextPort.setString("");
     _inputTextPort.setFont(_font);
     _inputTextPort.setCharacterSize(24);
     _inputTextPort.setFillColor(sf::Color::White);
