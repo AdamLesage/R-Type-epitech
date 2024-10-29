@@ -184,28 +184,30 @@ void RType::ClientConnexionHandling::displayError() {
 
 void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event& event) {
     if (_inputBoxSelected == "host" && event.type == sf::Event::TextEntered) {
-        if (event.text.unicode == 8 && !_inputTextHost.getString().isEmpty()) {
-            // Remove the last character if backspace
-            std::string currentText = _inputTextHost.getString();
-            currentText.pop_back();
-            _inputTextHost.setString(currentText);
+        std::string currentText = _inputTextHost.getString();
+
+        if (event.text.unicode == 8) {
+            if (!currentText.empty()) {
+                currentText.pop_back();
+                _inputTextHost.setString(currentText);
+            }
         } else if (event.text.unicode < 128) {
-            // Add char if user types
-            _inputTextHost.setString(_inputTextHost.getString() + static_cast<char>(event.text.unicode));
+            _inputTextHost.setString(currentText + static_cast<char>(event.text.unicode));
         }
     }
 }
 
 void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event& event) {
     if (_inputBoxSelected == "port" && event.type == sf::Event::TextEntered) {
-        if (event.text.unicode == 8 && !_inputTextPort.getString().isEmpty()) {
-            // Remove the last character if backspace
-            std::string currentText = _inputTextPort.getString();
-            currentText.pop_back();
-            _inputTextPort.setString(currentText);
-        } else if (event.text.unicode < 128) {
-            // Add char if user types
-            _inputTextPort.setString(_inputTextPort.getString() + static_cast<char>(event.text.unicode));
+        std::string currentText = _inputTextPort.getString();
+
+        if (event.text.unicode == 8) {
+            if (!currentText.empty()) {
+                currentText.pop_back();
+                _inputTextPort.setString(currentText);
+            }
+        } else if (event.text.unicode >= '0' && event.text.unicode <= '9') {
+            _inputTextPort.setString(currentText + static_cast<char>(event.text.unicode));
         }
     }
 }
