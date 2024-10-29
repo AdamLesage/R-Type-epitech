@@ -15,6 +15,10 @@
 #include <iostream>
 #include <sstream>
 
+#include <stdexcept>
+#include <string>
+#include <limits>
+
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #define LIB_EXTENSION ".dll"
@@ -161,17 +165,48 @@ void getUserInput(int& port, int& frequency) {
     frequency = std::stoi(freqStr);
 }
 
-int main() {
-    int port;
+bool isValidPort(int port) {
+    return port >= 1024 && port <= 65535;
+}
+
+bool isValidFrequency(int frequency) {
+    return frequency > 0;
+}
+
+int main(int ac, char **av) {
+    int port = 5000;    // Default value
     int frequency = 60; // Default value
 
-    // Call the function that displays the window to enter port and frequency
-    getUserInput(port, frequency);
+    if (ac == 2 || ac > 3) {
+        std::cerr << "Usage: ./rtype_server <port> <frequency> OR ./rtype_server\n";
+        return 84;
+    }
 
-    std::cout << "Port: " << port << std::endl;
-    std::cout << "Frequency: " << frequency << std::endl;
+    try {
+        if (ac == 3) {
+            port = std::stoi(av[1]);
+            frequency = std::stoi(av[2]);
 
-    // Initialize and start the game
+            if (!isValidPort(port)) {
+                std::cerr << "Error: Port must be between 1024 and 65535.\n";
+                return 84;
+            }
+            if (!isValidFrequency(frequency)) {
+                std::cerr << "Error: Frequency must be a positive integer.\n";
+                return 84;
+            }
+        } else if (ac == 1) {
+            getUserInput(port, frequency);
+        }
+
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error: Invalid argument(s). Port and frequency must be integers.\n";
+        return 84;
+    } catch (const std::out_of_range& e) {
+        std::cerr << "Error: Argument(s) out of range.\n";
+        return 84;
+    }
+
     GameLogique gameLogique(port, frequency);
     gameLogique.runGame();
 

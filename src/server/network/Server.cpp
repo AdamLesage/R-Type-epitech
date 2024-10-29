@@ -10,7 +10,7 @@
 NetworkLib::Server::Server(unsigned short local_port)
     : socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)),
       service_thread(&Server::run_service, this), nextClientID(0L) {
-    std::cout << "Starting server on port" << local_port << std::endl;
+    std::cout << "Starting server on port: " << local_port << std::endl;
 };
 
 NetworkLib::Server::~Server() {
