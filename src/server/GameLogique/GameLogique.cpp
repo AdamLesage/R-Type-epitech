@@ -76,7 +76,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
             this->reg.add_component<Health>(entity, Health{100, 100, false, true});
             this->reg.add_component<Damage>(entity, Damage{20});
-            this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
+            this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
@@ -110,7 +110,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             break;
         }
         this->reg.add_component<Direction>(entity, Direction{0, 0});
-        this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
+        this->_networkSender->sendCreateEnemy(0X03, entity, position_x, position_y);
     }
 }
 
@@ -131,7 +131,7 @@ void GameLogique::runGame() {
         if (this->running) {
             if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {
                 clock = std::clock();
-                sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC, logger);
+                sys.wave_pattern_system(reg, logger);
                 sys.Straight_line_pattern_system(this->reg);
                 sys.player_following_pattern_system(this->reg);
                 sys.shoot_player_pattern_system(this->reg, this->_networkSender);
@@ -141,7 +141,7 @@ void GameLogique::runGame() {
                 sys.position_system(reg, this->_networkSender, logger);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
-                this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
+                this->spawnEnnemy(0x04, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
             if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {

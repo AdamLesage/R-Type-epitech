@@ -475,7 +475,7 @@ void Systems::death_system(Registry& reg, RType::Logger& logger) {
     }
 }
 
-void Systems::wave_pattern_system(Registry& reg, float totalTime, RType::Logger& logger) {
+void Systems::wave_pattern_system(Registry& reg, RType::Logger& logger) {
     (void)logger;
     auto& patterns  = reg.get_components<Wave_pattern>();
     auto& positions = reg.get_components<Position>();
@@ -486,8 +486,11 @@ void Systems::wave_pattern_system(Registry& reg, float totalTime, RType::Logger&
         auto& position = positions[i];
         auto& velocity = velocitys[i];
         if (pattern && position && velocity) {
+            auto now                        = std::chrono::steady_clock::now();
+            std::chrono::duration<float> fs = now - pattern->creation;
+            float elapsed_seconds           = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
             velocity->x = -1;
-            position->y += (pattern->amplitude * std::sin(pattern->frequency * totalTime));
+            position->y += (pattern->amplitude * std::sin(pattern->frequency * (elapsed_seconds / 10)));
         }
         // logger.log(RType::Logger::LogType::INFO, "Player %d shot a projectile", playerId);
     }
