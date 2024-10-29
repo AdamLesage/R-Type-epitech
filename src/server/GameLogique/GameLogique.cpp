@@ -169,7 +169,7 @@ void GameLogique::clearGame() {
         }
     }
     usleep(1000);
-    for (size_t numberPlayer = 0; numberPlayer != this->network->getClientCount(); numberPlayer++) {
+    for (numberPlayer = 0; numberPlayer != this->network->getClientCount(); numberPlayer++) {
         entity_t entity = this->reg.spawn_entity();
         this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * numberPlayer), 100.f});
         this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});

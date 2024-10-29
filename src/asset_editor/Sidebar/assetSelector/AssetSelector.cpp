@@ -39,6 +39,7 @@ void Edition::AssetSelector::updateRectangleShape() {
 
     float totalHeight = 0;
     for (auto& it : this->assetMap[category]) {
+        (void)it;
         totalHeight += 150;
     }
 

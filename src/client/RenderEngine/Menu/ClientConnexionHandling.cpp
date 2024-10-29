@@ -200,7 +200,7 @@ void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event& even
 }
 
 bool RType::ClientConnexionHandling::areHostAndPortValid() {
-    if (this->getServerPort() < 1024 || this->getServerPort() > 65535) {
+    if (this->getServerPort() < 1024) {
         std::cerr << "Port must be between 1024 and 65535" << std::endl;
         return false;
     }

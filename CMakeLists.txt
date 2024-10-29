@@ -77,7 +77,7 @@ else()
 
     # Compiler flags
     set(CMAKE_CXX_STANDARD 17)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Werror")
 
     # Find and configure Boost
     find_package(Boost 1.70 REQUIRED)
