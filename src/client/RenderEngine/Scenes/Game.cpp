@@ -11,110 +11,111 @@
 #include <iomanip>
 #include <random>
 
-RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
-    : currentFrame(1), frameDuration(0.05f), animationComplete(false) {
-    this->window = _window;
+RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath)
+    : currentFrame(1), frameDuration(0.05f), animationComplete(false)
+{
+    this->window         = _window;
     this->_mediator      = nullptr;
-    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
-    if (!font.loadFromFile(fontPath)) {
+    isShooting = false;
+
+    try {
+        _cfg.readFile(scenePath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        throw std::runtime_error("Error loading config file");
+    }
+
+    if (!font.loadFromFile(std::string("assets") + PATH_SEPARATOR + "r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
+    level = 0;
 
-    backgroundTextures.push_back(sf::Texture());
-    backgroundTextures.push_back(sf::Texture());
-    backgroundTextures.push_back(sf::Texture());
+    try {
+        libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[level];
+        try {
+            // Retrieve background paths from config file
+            libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
 
-    std::string backgroundPath1 =
-        std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR + "back.png";
-    if (!backgroundTextures[0].loadFromFile(backgroundPath1)) {
-        throw std::runtime_error("Error loading backgroundTexture 1");
-    }
+            // Resize backgroundTextures to match the number of backgrounds
+            backgroundTextures.resize(backgroundSettings.getLength());
 
-    std::string backgroundPath2 =
-        std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR + "stars.png";
-    if (!backgroundTextures[1].loadFromFile(backgroundPath2)) {
-        throw std::runtime_error("Error loading backgroundTexture 2");
-    }
+            for (size_t i = 0; i < backgroundTextures.size(); i++) { // Load all backgrounds textures
+                libconfig::Setting& backgroundSetting = backgroundSettings[i];
+                // Clean path to be Linux/Windows compatible
+                std::string backgroundPath = backgroundSetting["path"];
+                int transparency = backgroundSetting["transparency"];
+                #ifdef _WIN32
+                    std::replace(backgroundPath.begin(), backgroundPath.end(), '/', '\\');
+                #else
+                    std::replace(backgroundPath.begin(), backgroundPath.end(), '\\', '/');
+                #endif
 
-    std::string backgroundPath3 =
-        std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR + "planet.png";
-    if (!backgroundTextures[2].loadFromFile(backgroundPath3)) {
-        throw std::runtime_error("Error loading backgroundTexture 3");
-    }
+                if (!backgroundTextures[i].loadFromFile(backgroundPath)) {
+                    throw std::runtime_error("Error loading backgroundTexture " + std::to_string(i + 1));
+                }
 
-    std::string soundPath =
-        std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "game_launch.ogg";
-    if (!game_launch_sound.loadFromFile(soundPath)) {
-        throw std::runtime_error("Error loading game launch sound");
-    }
-    game_launch_music.setBuffer(game_launch_sound);
-    isShooting = false;
-    std::string shootPath =
-        std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "shootsounds.wav";
-    if (!shoot_sound.loadFromFile(shootPath)) {
-        throw std::runtime_error("Error loading shoot sound");
-    }
-    shoot_music.setBuffer(shoot_sound);
-    std::string shootPath2 = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "Piou.wav";
-    if (!shoot_sound2.loadFromFile(shootPath2)) {
-        throw std::runtime_error("Error loading shoot sound 2");
-    }
-    shoot_music2.setBuffer(shoot_sound2);
-    for (int i = 0; i < 3; i++) {
-        backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
-        backgrounds[i].setTexture(&backgroundTextures[i]);
-        backgrounds[i].setPosition(sf::Vector2f(0, 0));
-    }
-    backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
-    backgrounds[3].setTexture(&backgroundTextures[1]);
-    backgrounds[3].setPosition(sf::Vector2f(1920, 0));
-    backgrounds[1].setFillColor(sf::Color(255, 255, 255, 128)); // Set half transparency
-
-    for (int i = 0; i < 5; i++) {
-        players.push_back(sf::RectangleShape(sf::Vector2f(131.5, 58.f)));
-        playerTextures.push_back(sf::Texture());
-    }
-    for (int i = 0; i < 5; i++) {
-        std::string playerPath = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR
-                                 + "player_" + std::to_string(i + 1) + ".png";
-        if (!playerTextures[i].loadFromFile(playerPath)) {
-            throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
+                backgrounds.push_back(sf::RectangleShape(sf::Vector2f(window->getSize().x, window->getSize().y)));
+                backgrounds[i].setTexture(&backgroundTextures[i]);
+                backgrounds[i].setPosition(sf::Vector2f(0, 0));
+                if (transparency != 0) {
+                    backgrounds[i].setFillColor(sf::Color(255, 255, 255, transparency)); // Set transparency
+                }
+            }
+        } catch (const libconfig::SettingNotFoundException& e) {
+            throw std::runtime_error("Error loading background settings");
         }
-        players[i].setTexture(&playerTextures[i]);
-        players[i].setPosition(sf::Vector2f(125.f + (125.f * i), 125.f));
-        players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
-    }
-        if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
-        std::cerr << "Error loading deuteranopia shader" << std::endl;
-        return;
-    }
-    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
-        std::cerr << "Error loading protanopia shader" << std::endl;
-        return;
-    }
-    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
-        std::cerr << "Error loading tritanopia shader" << std::endl;
-        return;
-    }
-    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
-        std::cerr << "Error loading achromatopsia shader" << std::endl;
-        return;
-    }
-    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
-        std::cerr << "Error loading normal shader" << std::endl;
-        return;
-    }
-    sf::RenderTexture *RenderTexture2 = new sf::RenderTexture();
-    RenderTexture2->create(1920, 1080);
-    RenderTexture = std::shared_ptr<sf::RenderTexture>(RenderTexture2);
-    settings = std::make_shared<Settings>(window);
-    _registry.register_component<Position_s>();
-    _registry.register_component<Velocity_s>();
-    _registry.register_component<Drawable_s>();
-    _registry.register_component<Controllable_s>();
-    console = std::make_shared<Console>(window,RenderTexture);
-    BackgroundClock.restart();
+        try {
+            // Retrieve sounds paths from config file
+            libconfig::Setting& soundSettings = levelSetting.lookup("sounds");
 
+            if (!game_launch_sound.loadFromFile(soundSettings["lauchSound"])) { // Load game launch sound
+                throw std::runtime_error("Error loading game launch sound");
+            }
+
+            if (!shoot_sound.loadFromFile(soundSettings["shootSound"])) { // Load shoot sound
+                throw std::runtime_error("Error loading shoot sound");
+            }
+
+            // Load all sounds
+            game_launch_music.setBuffer(game_launch_sound);
+            shoot_music.setBuffer(shoot_sound);
+        } catch (const libconfig::SettingNotFoundException& e) {
+            throw std::runtime_error("Error loading sound settings");
+        }
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Error loading level settings");
+    }
+
+    // Background for colorblind filters
+    backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
+    backgrounds[backgrounds.size() - 1].setTexture(&backgroundTextures[1]);
+    backgrounds[backgrounds.size() - 1].setPosition(sf::Vector2f(1920, 0));
+
+
+    // Set up colorblind shaders
+    std::vector<std::string> shaderNames = {
+        "Deuteranopia_shader.frag",
+        "Protanopia_shader.frag",
+        "Tritanopia_shader.frag",
+        "Achromatopsia_shader.frag",
+        "Normal_shader.frag"
+    };
+    // Load all shaders
+    try {
+        for (size_t i = 0; i < shaderNames.size(); ++i) {
+            if (!colorblindShader[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + shaderNames[i], sf::Shader::Fragment)) {
+                throw std::runtime_error("Error loading " + shaderNames[i]);
+            }
+        }
+    } catch (const std::runtime_error& e) {
+        throw std::runtime_error("Error loading shaders");
+    }
+    settings      = std::make_shared<Settings>(window);
+    console       = std::make_shared<Console>(window, RenderTexture);
+    RenderTexture = std::make_shared<sf::RenderTexture>();
+    RenderTexture->create(1920, 1080);
+    BackgroundClock.restart();
+    _camera = std::make_shared<Camera>();
+    _currentGame = std::make_shared<DoodleJump>();
 }
 
 RType::Game::~Game() {
@@ -147,10 +148,10 @@ void RType::Game::ShootSound() {
     }
     int random = rand() % 10;
     if (random == 9) {
-        shoot_music2.setVolume(200);
-        shoot_music2.play();
+        shoot_music.setVolume(200);
+        shoot_music.play();
     } else {
-        shoot_music2.play();
+        shoot_music.play();
     }
 }
 
@@ -177,22 +178,35 @@ void RType::Game::play() {
         }
     }
 
-    _systems.control_system(_registry, *window.get(), _mediator,
-                            std::bind(&RType::Game::ShootSound, this));
-    // if (keyPressed == 88)
-    //     ShootSound();
+    _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
 
     window->clear();
-    if (BackgroundClock.getElapsedTime().asSeconds() > 0.01f) {
-        backgrounds[1].move(-2.f, 0.f);
-        backgrounds[3].move(-2.f, 0.f);
-        backgrounds[2].move(-1.f, 0.f);
-        BackgroundClock.restart();
+    if (this->isGameOffline() == true) {
+        this->_currentGame->handleOfflineGame();
     }
-    if (backgrounds[1].getPosition().x < -1920) backgrounds[1].setPosition(1920, 0);
-    if (backgrounds[2].getPosition().x < -1920) backgrounds[2].setPosition(1920, 0);
-    if (backgrounds[3].getPosition().x < -1920) backgrounds[3].setPosition(1920, 0);
-    for (int i = 0; i < 4; i++) {
+
+
+    // Move backgrounds
+    try {
+        libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[level];
+        libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
+        for (size_t i = backgroundSettings.getLength() - 1; i > 0; i--) { // Browse backwards to have the same order than in the config file
+            int speedX = backgroundSettings[i]["movingSpeedX"];
+            int speedY = backgroundSettings[i]["movingSpeedY"];
+
+            backgrounds[i].move(speedX, speedY);
+            if (backgrounds[i].getPosition().x < -1920) backgrounds[i].setPosition(1920, 0);
+            if (backgrounds[i].getPosition().x > 1920) backgrounds[i].setPosition(-1920, 0);
+            if (backgrounds[i].getPosition().y < -1080) backgrounds[i].setPosition(0, 1080);
+            if (backgrounds[i].getPosition().y > 1080) backgrounds[i].setPosition(0, -1080);
+
+        }
+        BackgroundClock.restart();
+    } catch (std::exception e) {
+        std::cerr << "fail to load Game Backgounds" << std::endl;
+    }
+
+    for (size_t i = 0; i < backgrounds.size(); i++) {
         RenderTexture->draw(backgrounds[i]);
     }
     this->set_texture();
@@ -203,7 +217,14 @@ void RType::Game::play() {
         displayPiou();
         piou = false;
     }
-            libconfig::Config cfg;
+    RenderTexture->display();
+    this->handleColorblind();
+    console->displayDeveloperConsole();
+    window->display();
+}
+
+void RType::Game::handleColorblind() {
+    libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
         cfg.readFile(configPath.c_str());
@@ -211,7 +232,6 @@ void RType::Game::play() {
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    RenderTexture->display();
     sf::Sprite sprite(RenderTexture->getTexture());
     std::string colorblind = settings->get_key_value(cfg, "Keys8");
     if (colorblind.find("Deuteranopia") != std::string::npos) {
@@ -225,8 +245,6 @@ void RType::Game::play() {
     } else {
         window->draw(sprite, &colorblindShader[4]);
     }
-    console->displayDeveloperConsole();
-    window->display();
 }
 
 sf::Vector2f RType::Game::convertToVector2f(const Size& size) {
@@ -240,13 +258,17 @@ sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
 void RType::Game::set_texture() {
     std::lock_guard<std::mutex> lock(*this->_mutex.get());
     entity.clear();
+    window->clear();
     if (_camera == nullptr) return;
+    if (this->isGameOffline() == true) { // If game is offline, camera is set in the game
+        this->_camera = _currentGame->getCamera();
+    }
 
-    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
+    for (size_t i = 0; i < _camera->listEntityToDisplay.size(); i++) {
         entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
     }
 
-    for (int i = 0; i < (int)_camera->listEntityToDisplay.size(); i++) {
+    for (size_t i = 0; i < _camera->listEntityToDisplay.size(); i++) {
         if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath)
             != Textures.end()) { // If texture already loaded
             entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
@@ -283,7 +305,7 @@ void RType::Game::runScene() {
         return;
     }
 
-    if (!animationComplete) {
+    if (animationComplete == false && this->haveCinematic() == true) {
         if (currentFrame == 1) {
             game_launch_music.play();
         }
@@ -296,40 +318,20 @@ void RType::Game::runScene() {
     }
 
     window->clear();
-    if (animationComplete) {
+    if (animationComplete || this->haveCinematic() == false) {
         game_launch_music.stop();
-        play();
+        this->play();
         return;
-    } else {
+    } else if (animationComplete == false && this->haveCinematic() == true) {
         RenderTexture->draw(rectangleshape);
-        DisplaySkipIntro();
+        this->DisplaySkipIntro();
     }
     if (piou) {
         displayPiou();
         piou = false;
     }
-            libconfig::Config cfg;
-    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-    try {
-        cfg.readFile(configPath.c_str());
-    } catch (const libconfig::FileIOException& fioex) {
-        std::cerr << "I/O error while reading file." << std::endl;
-        return;
-    }
     RenderTexture->display();
-    sf::Sprite sprite(RenderTexture->getTexture());
-    std::string colorblind = settings->get_key_value(cfg, "Keys8");
-    if (colorblind.find("Deuteranopia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[0]);
-    } else if (colorblind.find("Protanopia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[1]);
-    } else if (colorblind.find("Tritanopia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[2]);
-    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
-        window->draw(sprite, &colorblindShader[3]);
-    } else {
-        window->draw(sprite, &colorblindShader[4]);
-    }
+    this->handleColorblind();
     window->display();
     handleEvents();
 }
@@ -369,9 +371,26 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
 }
 
 void RType::Game::setCamera(std::shared_ptr<Camera> camera) {
-    this->_camera = camera;
+    if (this->isGameOffline() == true)
+        return; // Camera is loaded from client
+    _camera = camera;
 }
 
 void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex) {
     this->_mutex = mutex;
+}
+
+bool RType::Game::haveCinematic() {
+    if (_gameSelected == "R-Type") { // For the moment, only R-Type has a cinematic
+        return true;
+    }
+    return false;
+}
+
+bool RType::Game::isGameOffline() {
+    // Need to fix this method to play offline with R-Type
+    if (_gameSelected == "R-Type") {
+        return false;
+    }
+    return true;
 }

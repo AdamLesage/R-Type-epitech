@@ -54,6 +54,13 @@ namespace RType {
              *  @param newState the new state
              */
             void setStateGame(int newState);
+
+            /**
+             * @brief Set the game selected
+             * 
+             * @param gameSelected the game selected
+             */
+            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;
@@ -64,6 +71,7 @@ namespace RType {
             std::shared_ptr<std::mutex> _mutex;
             RType::Logger logger;
             int _stateGame = 1;
+            std::string _gameSelected;
     };
 } // namespace RType
 

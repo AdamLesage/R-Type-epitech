@@ -60,14 +60,34 @@ namespace RType {
             void displayError();
 
             /**
+             * @brief Display the game selection
+             * 
+             * Choices are "R-Type" and "Platformer"
+             */
+            void displayGameSelection();
+
+            /**
              * @brief Retrieve the input text for the host
+             * 
+             * @param event The event to retrieve
              */
             void retrieveInputTextHost(const sf::Event &event);
 
             /**
              * @brief Retrieve the input text for the port
+             * 
+             * @param event The event to retrieve
              */
             void retrieveInputTextPort(const sf::Event &event);
+
+            /**
+             * @brief Retrieve the input game selection
+             * 
+             * Choices are "R-Type" and "Platformer"
+             * 
+             * @param event The event to retrieve
+             */
+            void retrieveInputGameSelection(const sf::Event &event);
 
             /**
              * @brief Get the Host object
@@ -82,6 +102,13 @@ namespace RType {
              * @return unsigned short The server port
              */
             unsigned short getServerPort() const { return std::stoi(_inputTextPort.getString().toAnsiString()); }
+
+            /**
+             * @brief Get the Game Selected object
+             * 
+             * @return std::string The game selected
+             */
+            std::string getGameSelected() const { return _gameSelected; }
         protected:
         private:
             /**
@@ -92,7 +119,8 @@ namespace RType {
             bool areHostAndPortValid();
 
             std::shared_ptr<sf::RenderWindow> _window;
-            std::string _inputBoxSelected; // Can be "host" or "port"
+            std::string _inputBoxSelected; // Can be "host" or "port" or "gameSelection"
+            std::string _gameSelected; // Can be "R-Type" or "Platformer"
             bool _invalidPortOrHost;
 
             sf::Text _inputTextHost;
