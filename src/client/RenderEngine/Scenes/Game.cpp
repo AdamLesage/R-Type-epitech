@@ -295,7 +295,7 @@ void RType::Game::runScene() {
         return;
     }
 
-    if (!animationComplete && this->haveCinematic() == true) {
+    if (animationComplete == false && this->haveCinematic() == true) {
         if (currentFrame == 1) {
             game_launch_music.play();
         }
@@ -312,17 +312,16 @@ void RType::Game::runScene() {
         game_launch_music.stop();
         this->play();
         return;
-    } else {
+    } else if (animationComplete == false && this->haveCinematic() == true) {
         RenderTexture->draw(rectangleshape);
-        DisplaySkipIntro();
+        this->DisplaySkipIntro();
     }
     if (piou) {
         displayPiou();
         piou = false;
     }
-    std::cout << "Game is offline: " << this->isGameOffline() << std::endl;
     RenderTexture->display();
-    // this->handleColorblind();
+    this->handleColorblind();
     window->display();
     handleEvents();
 }
@@ -362,7 +361,6 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
 }
 
 void RType::Game::setCamera(std::shared_ptr<Camera> camera) {
-    std::cout << "Setting camera" << std::endl;
     if (this->isGameOffline() == true)
         return; // Camera is loaded from client
     _camera = camera;

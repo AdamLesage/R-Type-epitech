@@ -22,6 +22,8 @@ RType::DoodleJump::~DoodleJump()
 void RType::DoodleJump::handleOfflineGame()
 {
     bool isPlayerInList = false;
+    const size_t NUMBER_PLATFORM = 25;
+
     // Create player if not in the list
     for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
         if (this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png" ||
@@ -43,8 +45,8 @@ void RType::DoodleJump::handleOfflineGame()
     }
 
     // Need to set the camera to display the entities
-    if (this->_camera->listEntityToDisplay.size() < 15) {
-        for (size_t i = this->_camera->listEntityToDisplay.size(); i < 10; i++) {
+    if (this->_camera->listEntityToDisplay.size() < NUMBER_PLATFORM) {
+        for (size_t i = this->_camera->listEntityToDisplay.size(); i < NUMBER_PLATFORM; i++) {
             EntityRenderInfo entity;
             entity.position.x = rand() % 1920;
             entity.position.y = rand() % 1080;
@@ -55,6 +57,7 @@ void RType::DoodleJump::handleOfflineGame()
             entity.direction.x = 0;
             entity.direction.y = 1;
             _initialYPosition = entity.position.y;
+
             this->_camera->listEntityToDisplay.push_back(entity);
         }
     }
@@ -86,7 +89,8 @@ void RType::DoodleJump::handleOfflineGame()
                 this->_camera->listEntityToDisplay[i].direction.y = 0;
             }
 
-            if (this->_camera->listEntityToDisplay[i].position.y > 1080 / 2) {
+            if (this->_camera->listEntityToDisplay[i].position.y > 1080) {
+                // Game over
                 this->_camera->listEntityToDisplay[i].position.y = 1080 / 2;
             }
         }
@@ -120,7 +124,7 @@ void RType::DoodleJump::handleOfflineGame()
 
 void RType::DoodleJump::applyGravity()
 {
-    const float GRAVITY = 2.5f;
+    const float GRAVITY = 2.0f;
 
     float jumpImpulseVel = -2.0f; 
     float jumpAccel = -1.0f;
@@ -147,24 +151,19 @@ void RType::DoodleJump::applyGravity()
                 entity.direction.y = GRAVITY;
             }
 
-            // // Détection de collision avec une plateforme et rebond seulement quand il tombe
-            // if (entity.direction.y > 0) { // Le doodle doit être en train de tomber pour vérifier la collision
-            //     for (auto &platform : this->_camera->listEntityToDisplay) {
-            //         if (platform.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png") {
-            //             if (entity.position.y + entity.size.y >= platform.position.y &&
-            //                 entity.position.y <= platform.position.y + platform.size.y &&
-            //                 entity.position.x + entity.size.x >= platform.position.x &&
-            //                 entity.position.x <= platform.position.x + platform.size.x) {
-                            
-            //                 // Positionner le doodle au-dessus de la plateforme et appliquer le rebond
-            //                 entity.position.y = platform.position.y - entity.size.y;
-            //                 entity.direction.y = -entity.direction.y;
-            //                 _isJumping = true; // Considérer cela comme un nouveau saut
-            //                 break; // Sortir de la boucle dès qu'une collision est détectée
-            //             }
-            //         }
-            //     }
-            // }
+            // Handle collision with platforms
+            for (auto &platform : this->_camera->listEntityToDisplay) {
+                if (platform.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png") {
+                    // If player collides with the top of the platform
+                    if (entity.position.y + entity.size.y > platform.position.y &&
+                        entity.position.y < platform.position.y + platform.size.y &&
+                        entity.position.x + entity.size.x > platform.position.x &&
+                        entity.position.x < platform.position.x + platform.size.x) {
+                        // entity.position.y = platform.position.y - entity.size.y;
+                        this->jump();
+                    }
+                }
+            }
         }
     }
 }
