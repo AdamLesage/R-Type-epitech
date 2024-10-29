@@ -31,7 +31,7 @@ RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsign
     _inputTextHost.setCharacterSize(24);
     _inputTextHost.setFillColor(sf::Color::White);
 
-    _inputTextPort.setString("");
+    _inputTextPort.setString(std::to_string(server_port));
     _inputTextPort.setFont(_font);
     _inputTextPort.setCharacterSize(24);
     _inputTextPort.setFillColor(sf::Color::White);
@@ -97,8 +97,8 @@ void RType::ClientConnexionHandling::displayInputTextHost(sf::Text labelHost, sf
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "host";
-        _isHostSelected = true;
-        _isPortSelected = false;
+        _isHostSelected   = true;
+        _isPortSelected   = false;
     }
 
     labelHost.setFillColor(_isHostSelected ? sf::Color::Green : sf::Color::Red);
@@ -121,8 +121,8 @@ void RType::ClientConnexionHandling::displayInputTextPort(sf::Text labelPort, sf
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "port";
-        _isPortSelected = true;
-        _isHostSelected = false;
+        _isPortSelected   = true;
+        _isHostSelected   = false;
     }
 
     labelPort.setFillColor(_isPortSelected ? sf::Color::Green : sf::Color::Red);

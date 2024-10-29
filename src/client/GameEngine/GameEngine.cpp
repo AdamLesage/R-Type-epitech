@@ -30,12 +30,15 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Velocity_s>();
     _registry.register_component<Size>();
     _registry.register_component<Direction>();
+    _registry.register_component<Annimation>();
 
-    _protocolParsing =
-        std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
-    this->_camera  = std::make_shared<Camera>();
-    this->_mutex   = std::make_shared<std::mutex>();
-    this->_systems = Systems();
+    std::string scenesConfigPath = std::string("config") + PATH_SEPARATOR + std::string("scenes")
+                                   + PATH_SEPARATOR + std::string("sceneText.cfg");
+    _protocolParsing = std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg",
+                                                                scenesConfigPath, _registry);
+    this->_camera    = std::make_shared<Camera>();
+    this->_mutex     = std::make_shared<std::mutex>();
+    this->_systems   = Systems();
     try {
         std::string playerConfigPath = std::string("config") + PATH_SEPARATOR + std::string("player.cfg");
         _playerConfig.readFile(playerConfigPath.c_str());
@@ -102,6 +105,7 @@ void RType::GameEngine::run() {
 
     // Wait for all threads to finish
     while (1) {
+        this->_systems.annimation_system(this->_registry);
         this->_systems.direction_system(_registry, _playerConfig);
         updateCamera();
     }
@@ -129,20 +133,24 @@ void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {
 void RType::GameEngine::updateCamera() {
     auto& positions  = this->_registry.get_components<Position_s>();
     auto& sizes      = this->_registry.get_components<Size>();
+    auto& rotations  = this->_registry.get_components<Rotation>();
     auto& directions = this->_registry.get_components<Direction>();
     auto& sprites    = this->_registry.get_components<Sprite>();
     std::vector<EntityRenderInfo> entityRender;
-    entityRender.reserve(std::min({positions.size(), sizes.size(), directions.size(), sprites.size()}));
-    for (size_t i = 0;
-         i < positions.size() && i < sizes.size() && i < directions.size() && i < sprites.size(); ++i) {
+    entityRender.reserve(std::min({positions.size(), sizes.size(), rotations.size(), sprites.size()}));
+    for (size_t i = 0; i < positions.size() && i < sizes.size() && i < directions.size()
+                       && i < rotations.size() && i < sprites.size();
+         ++i) {
         auto& position  = positions[i];
         auto& size      = sizes[i];
-        auto& direction = directions[i];
+        auto& rotation  = rotations[i];
         auto& sprite    = sprites[i];
+        auto& direction = directions[i];
 
         try {
-            if (position && size && direction && sprite) {
-                entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
+            if (position && size && rotation && sprite && direction) {
+                entityRender.push_back(
+                    {size.value(), position.value(), rotation.value(), direction.value(), sprite.value()});
             }
         } catch (const std::exception& e) {
             std::cerr << e.what() << '\n';
