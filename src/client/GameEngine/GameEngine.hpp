@@ -23,8 +23,10 @@
 
 #ifdef _WIN32
     #include <Windows.h>
+    #define PATH_SEPARATOR "\\"
 #else
     #include <unistd.h>
+    #define PATH_SEPARATOR "/"
 #endif
 
 namespace RType {
@@ -83,6 +85,7 @@ namespace RType {
         private:
             Registry _registry;
             Systems _systems;
+            libconfig::Config _playerConfig;
             std::unique_ptr<RType::ProtocolParsing> _protocolParsing;
             std::shared_ptr<NetworkEngine> _networkEngine;
             std::shared_ptr<RenderingEngine> _renderingEngine;
