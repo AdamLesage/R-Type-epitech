@@ -121,12 +121,41 @@ void GameLogique::spawnWave()
     spawnEnnemy(0x03, 1920, 920);
 }
 
+bool GameLogique::getfriendlyfire() {
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    cfg.readFile(configPath.c_str());
+    std::string friendlyfireStr;
+    const libconfig::Setting& root = cfg.getRoot();
+    const libconfig::Setting& keys = root["Keys"];
+    
+    for (int i = 0; i < keys.getLength(); ++i) {
+        const libconfig::Setting& key = keys[i];
+        std::string name;
+        key.lookupValue("name", name);
+        if (name == "FRIENDLY FIRE") {
+            key.lookupValue("value", friendlyfireStr);
+            break;
+        }
+    }
+
+    if (friendlyfireStr == "ON")
+        return true;
+    return false;
+}
+
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
     std::clock_t endClock      = std::clock();
     std::clock_t spawnClock = std::clock();
+    int friendlyFireCheckCounter = 0;
     while (1) {
         if (this->running) {
+            if (friendlyFireCheckCounter == 0) {
+                friendlyfire = getfriendlyfire();
+                friendlyFireCheckCounter = 999;
+            }
+
             if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {
                 clock = std::clock();
                 sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC, logger);
@@ -135,7 +164,7 @@ void GameLogique::runGame() {
                 sys.shoot_player_pattern_system(this->reg, this->_networkSender);
                 sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
                 sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
-                                     logger);
+                                     logger, friendlyfire);
                 sys.position_system(reg, this->_networkSender, logger);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
