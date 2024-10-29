@@ -25,11 +25,13 @@ RType::AudioEngine::AudioEngine() {
         throw std::runtime_error("Error loading shoot sound 2");
     }
     shoot_music2.setBuffer(shoot_sound2);
-    if (!backgroundBuffer.loadFromFile("assets/Sounds/lobby.ogg")) {
+    std::string lobbyogg = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "lobby.wav";
+    if (!backgroundBuffer.loadFromFile(lobbyogg)) {
         throw std::runtime_error("Error loading background music");
     }
     backgroundMusic2.setBuffer(backgroundBuffer);
-    if (!selectBuffer.loadFromFile("assets/Sounds/selectsound.wav")) {
+    std::string select = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "selectsound.wav";
+    if (!selectBuffer.loadFromFile(select)) {
         throw std::runtime_error("Error loading select sound");
     }
     selectSound.setBuffer(selectBuffer);
