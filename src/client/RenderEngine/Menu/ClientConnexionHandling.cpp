@@ -41,6 +41,20 @@ RType::ClientConnexionHandling::~ClientConnexionHandling() {
 }
 
 void RType::ClientConnexionHandling::displayConnexionWindow() {
+    sf::Text labelHost;
+    labelHost.setFont(_font);
+    labelHost.setString("Host");
+    labelHost.setCharacterSize(24);
+    labelHost.setFillColor(sf::Color::Red);
+    labelHost.setPosition(1920 / 2 - 100, 1080 / 2 - 85);
+
+    sf::Text labelPort;
+    labelPort.setFont(_font);
+    labelPort.setString("Port");
+    labelPort.setCharacterSize(24);
+    labelPort.setFillColor(sf::Color::Red);
+    labelPort.setPosition(1920 / 2 - 100, 1080 / 2 + 15);
+
     while (_window->isOpen()) {
         sf::Event event;
         while (_window->pollEvent(event)) {
@@ -52,8 +66,8 @@ void RType::ClientConnexionHandling::displayConnexionWindow() {
         }
         _window->clear();
         this->displayBackground();
-        this->displayInputTextHost();
-        this->displayInputTextPort();
+        this->displayInputTextHost(labelHost, labelPort);
+        this->displayInputTextPort(labelPort, labelHost);
         this->displaySubmitButton();
         this->displayError();
         _window->display();
@@ -72,14 +86,8 @@ void RType::ClientConnexionHandling::displayBackground() {
     background.setTexture(&texture);
     _window->draw(background);
 }
-void RType::ClientConnexionHandling::displayInputTextHost() {
-    sf::Text labelHost;
-    labelHost.setFont(_font);
-    labelHost.setString("Host");
-    labelHost.setCharacterSize(24);
-    labelHost.setFillColor(sf::Color::Red);
-    labelHost.setPosition(1920 / 2 - 100, 1080 / 2 - 85);
 
+void RType::ClientConnexionHandling::displayInputTextHost(sf::Text labelHost, sf::Text labelPort) {
     sf::RectangleShape inputTextHost(sf::Vector2f(200, 50));
     inputTextHost.setFillColor(sf::Color(50, 50, 50, 255));
     inputTextHost.setPosition(1920 / 2 - 100, 1080 / 2 - 50);
@@ -89,7 +97,12 @@ void RType::ClientConnexionHandling::displayInputTextHost() {
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "host";
+        _isHostSelected = true;
+        _isPortSelected = false;
     }
+
+    labelHost.setFillColor(_isHostSelected ? sf::Color::Green : sf::Color::Red);
+    labelPort.setFillColor(_isPortSelected ? sf::Color::Red : sf::Color::Red);
 
     _inputTextHost.setPosition(inputTextHost.getPosition().x + 10, inputTextHost.getPosition().y + 10);
 
@@ -98,14 +111,7 @@ void RType::ClientConnexionHandling::displayInputTextHost() {
     _window->draw(_inputTextHost);
 }
 
-void RType::ClientConnexionHandling::displayInputTextPort() {
-    sf::Text labelPort;
-    labelPort.setFont(_font);
-    labelPort.setString("Port");
-    labelPort.setCharacterSize(24);
-    labelPort.setFillColor(sf::Color::Red);
-    labelPort.setPosition(1920 / 2 - 100, 1080 / 2 + 15);
-
+void RType::ClientConnexionHandling::displayInputTextPort(sf::Text labelPort, sf::Text labelHost) {
     sf::RectangleShape inputTextPort(sf::Vector2f(200, 50));
     inputTextPort.setFillColor(sf::Color(50, 50, 50, 255));
     inputTextPort.setPosition(1920 / 2 - 100, 1080 / 2 + 50);
@@ -115,7 +121,12 @@ void RType::ClientConnexionHandling::displayInputTextPort() {
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "port";
+        _isPortSelected = true;
+        _isHostSelected = false;
     }
+
+    labelPort.setFillColor(_isPortSelected ? sf::Color::Green : sf::Color::Red);
+    labelHost.setFillColor(_isHostSelected ? sf::Color::Red : sf::Color::Red);
 
     _inputTextPort.setPosition(inputTextPort.getPosition().x + 10, inputTextPort.getPosition().y + 10);
 

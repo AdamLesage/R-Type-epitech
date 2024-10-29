@@ -42,12 +42,12 @@ namespace RType {
             /**
              * @brief Display the input text for the host
              */
-            void displayInputTextHost();
+            void displayInputTextHost(sf::Text labelHost, sf::Text labelPort);
 
             /**
              * @brief Display the input text for the port
              */
-            void displayInputTextPort();
+            void displayInputTextPort(sf::Text labelPort, sf::Text labelHost);
 
             /**
              * @brief Display the submit button
@@ -103,6 +103,8 @@ namespace RType {
             sf::Text _inputTextHost;
             sf::Text _inputTextPort;
             sf::Font _font;
+            bool _isHostSelected = false;
+            bool _isPortSelected = false;
     };
 }; // namespace RType
 
