@@ -55,7 +55,7 @@ void RType::DoodleJump::handleOfflineGame()
             entity.sprite.rectPos = {0, 0};
             entity.sprite.rectSize = {100, 100};
             entity.direction.x = 0;
-            entity.direction.y = 1;
+            entity.direction.y = 0.2;
             _initialYPosition = entity.position.y;
 
             this->_camera->listEntityToDisplay.push_back(entity);
@@ -89,7 +89,7 @@ void RType::DoodleJump::handleOfflineGame()
                 this->_camera->listEntityToDisplay[i].direction.y = 0;
             }
 
-            if (this->_camera->listEntityToDisplay[i].position.y > 1080) {
+            if (this->_camera->listEntityToDisplay[i].position.y > 1080 + 1080 / 4) {
                 // Game over
                 this->_camera->listEntityToDisplay[i].position.y = 1080 / 2;
             }
@@ -129,6 +129,29 @@ void RType::DoodleJump::applyGravity()
     float jumpImpulseVel = -2.0f; 
     float jumpAccel = -1.0f;
 
+    if (_isJumping) {
+        for (auto& player : this->_camera->listEntityToDisplay) {
+            if (player.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-left.png" ||
+                player.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-right.png") {
+                for (auto& platform : this->_camera->listEntityToDisplay) {
+                    if (platform.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png" && player.position.y < 100) {
+                        platform.direction.y = GRAVITY * 2; // Increase speed of platforms because player is jumping on top of the screen
+                    } else if (platform.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png" && player.position.y < 500) {
+                        platform.direction.y = GRAVITY; // Increase speed of platforms because player is jumping on top of the screen
+                    } else if (platform.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png" && player.position.y >= 500) {
+                        platform.direction.y = 1.0f;
+                    }
+                }
+            }
+        }
+    } else {
+        for (auto& platform : this->_camera->listEntityToDisplay) {
+            if (platform.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png") {
+                platform.direction.y = 0.2f;
+            }
+        }
+    }
+
     if (_startOfJump + std::chrono::milliseconds(500) < std::chrono::system_clock::now()) {
         _isJumping = false;
         _canJump = true;
@@ -155,8 +178,8 @@ void RType::DoodleJump::applyGravity()
             for (auto &platform : this->_camera->listEntityToDisplay) {
                 if (platform.sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png") {
                     // If player collides with the top of the platform
-                    if (entity.position.y + entity.size.y > platform.position.y &&
-                        entity.position.y < platform.position.y + platform.size.y &&
+                    if (entity.position.y + entity.size.y >= platform.position.y &&
+                        entity.position.y + entity.size.y <= platform.position.y + platform.size.y &&
                         entity.position.x + entity.size.x > platform.position.x &&
                         entity.position.x < platform.position.x + platform.size.x) {
                         // entity.position.y = platform.position.y - entity.size.y;
