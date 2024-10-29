@@ -54,6 +54,11 @@ namespace RType {
              */
             void applyGravity() override = 0;
 
+            /**
+             * @brief handle input, can be input from keyboard or mouse
+             */
+            virtual void handleInput() override = 0;
+
         protected:
             std::shared_ptr<Camera> _camera;
 

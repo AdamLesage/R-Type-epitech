@@ -46,6 +46,11 @@ namespace RType {
              * @brief apply gravity to the player
              */
             virtual void applyGravity() = 0;
+
+            /**
+             * @brief handle input, can be input from keyboard or mouse
+             */
+            virtual void handleInput() = 0;
         protected:
         private:
     };

@@ -50,6 +50,11 @@ namespace RType {
              * @brief apply gravity to the player
              */
             void applyGravity() override;
+
+            /**
+             * @brief handle input, can be input from keyboard or mouse
+             */
+            void handleInput() override;
         protected:
         private:
             float _initialYPosition;
