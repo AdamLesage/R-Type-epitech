@@ -117,7 +117,6 @@ void Settings::changeKey(std::string key) {
     std::string newKey2;
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-    std::cout << "Key: " << key << std::endl;
     try {
         cfg.readFile(configPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
@@ -161,7 +160,6 @@ void Settings::changeKey(std::string key) {
         return;
     }
     else if (key ==  "FRIENDLY FIRE: ON" || key == "FRIENDLY FIRE: OFF") {
-        std::cout << "FRIENDLY FIRE" << std::endl;
         if (key.find("ON") != std::string::npos) {
             newKey2 = "OFF";
         } else {
