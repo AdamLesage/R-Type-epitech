@@ -32,7 +32,8 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
                        {"PROJECTILE_FIRING", {0x34, "projectile_firing"}},
                        {"PROJECTILE_COLLISION", {0x35, "projectile_collision"}},
                        {"SCORE_UPDATE", {0x36, "score_update"}},
-                       {"STATE_CHANGE", {0x37, "state_change"}}};
+                       {"STATE_CHANGE", {0x37, "state_change"}},
+                       {"LEVEL_UPDATE", {0x3a, "level_update"}}};
 }
 
 RType::ProtocolParsing::~ProtocolParsing() {
@@ -607,6 +608,32 @@ bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& i
         return false;
     }
 
+    return true;
+}
+
+bool RType::ProtocolParsing::parseLevelUpdate(const std::string& message, int& index) {
+    if (!checkMessageType("LEVEL_UPDATE", message, index)) return false;
+
+    unsigned int level;
+
+    try {
+        std::memcpy(&level, &message[index + 1], sizeof(unsigned int));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the level update message" << std::endl;
+        return false;
+    }
+
+    try {
+        _mediator->notify("ProtocolParsing", "GameLevel " + std::to_string(level));
+        this->updateIndexFromBinaryData("state_change", index);
+        // Need to implement the method to update the entity state
+    } catch (const std::out_of_range& e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while updating the level" << std::endl;
+        return false;
+    }
     return true;
 }
 

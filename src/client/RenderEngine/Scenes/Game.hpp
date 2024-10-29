@@ -87,6 +87,12 @@ namespace RType {
              */
             void set_texture();
             /**
+             * @brief Set the level to display
+             *
+             * @param level the new level
+             */
+            void setLevel(size_t level);
+            /**
              * @brief Convert structure Size to a Vector2f
              */
             sf::Vector2f convertToVector2f(const Size& size);
@@ -158,6 +164,18 @@ namespace RType {
              * @return false If the texture failed to load.
              */
             bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
+            /**
+             * @brief Loads the Backround for the current level setting
+             *
+             * @param levelSetting The current level setting
+             */
+            void loadBackgroundConfig(libconfig::Setting &levelSetting);
+            /**
+             * @brief Loads the sound for the current level setting
+             *
+             * @param levelSetting The current level setting
+             */
+            void loadSoundConfig(libconfig::Setting &levelSetting);
             libconfig::Config _cfg; // The config file
 
             Registry _registry;
@@ -187,7 +205,7 @@ namespace RType {
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
             sf::Event event; // The event of the game
             std::shared_ptr<IGame> _currentGame;
-            size_t level;
+            size_t _level;
     };
 } // namespace RType
 

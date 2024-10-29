@@ -168,6 +168,15 @@ namespace RType {
             bool parseStateChange(const std::string& message, int& index);
 
             /**
+             * @brief Parses and validates a level update message, adjusting the index and handling level-based actions.
+             *
+             * @param message Reference to the level update message string.
+             * @param index Reference to the current parsing position in the message.
+             * @return true if parsing is successful and the message is valid; false otherwise.
+             */
+            bool parseLevelUpdate(const std::string& message, int& index);
+
+            /**
              * @brief Parse the message to validate and extract information for the corresponding operation.
              * This function is the main function to parse the message.
              *

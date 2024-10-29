@@ -61,6 +61,12 @@ namespace RType {
              * @param gameSelected the game selected
              */
             void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+            /**
+             * @brief Set the level to display
+             *
+             * @param level the new level
+             */
+            void setLevel(size_t level);
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;

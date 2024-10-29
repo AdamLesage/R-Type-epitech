@@ -82,6 +82,14 @@ void RType::RenderingEngine::setStateGame(int newState) {
     this->_stateGame = newState;
 }
 
+void RType::RenderingEngine::setLevel(size_t level) {
+    if (this->_game != nullptr) {
+        this->_game->setLevel(level);
+    } else {
+        std::cerr << "failed to set level game is null" << std::endl;
+    }
+}
+
 extern "C" RType::RenderingEngine* entryPointRenderingEngine() {
     return (new RType::RenderingEngine());
 }
