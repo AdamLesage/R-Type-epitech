@@ -173,9 +173,9 @@ bool isValidFrequency(int frequency) {
     return frequency > 0;
 }
 
-int main(int ac, char **av) {
-    int port = 5000;    // Default value
-    int frequency = 60; // Default value
+int main(int ac, char** av) {
+    int port      = 5000; // Default value
+    int frequency = 60;   // Default value
 
     if (ac == 2 || ac > 3) {
         std::cerr << "Usage: ./rtype_server <port> <frequency> OR ./rtype_server\n";
@@ -184,7 +184,7 @@ int main(int ac, char **av) {
 
     try {
         if (ac == 3) {
-            port = std::stoi(av[1]);
+            port      = std::stoi(av[1]);
             frequency = std::stoi(av[2]);
 
             if (!isValidPort(port)) {
