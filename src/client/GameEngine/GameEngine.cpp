@@ -33,8 +33,8 @@ RType::GameEngine::GameEngine() {
 
     _protocolParsing =
         std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", _registry);
-    this->_camera = std::make_shared<Camera>();
-    this->_mutex  = std::make_shared<std::mutex>();
+    this->_camera  = std::make_shared<Camera>();
+    this->_mutex   = std::make_shared<std::mutex>();
     this->_systems = Systems();
     try {
         std::string playerConfigPath = std::string("config") + PATH_SEPARATOR + std::string("player.cfg");
@@ -140,29 +140,24 @@ void RType::GameEngine::updateCamera() {
         auto& direction = directions[i];
         auto& sprite    = sprites[i];
 
-        try
-        {
+        try {
             if (position && size && direction && sprite) {
                 entityRender.push_back({size.value(), position.value(), direction.value(), sprite.value()});
             }
-        }
-        catch(const std::exception& e)
-        {
+        } catch (const std::exception& e) {
             std::cerr << e.what() << '\n';
             return;
         }
-        
-        
     }
     {
         std::lock_guard<std::mutex> lock(*this->_mutex.get());
         this->_camera->listEntityToDisplay = std::move(entityRender);
     }
-    #ifdef _WIN32
-        Sleep(10);
-    #else
-        usleep(10000);
-    #endif
+#ifdef _WIN32
+    Sleep(10);
+#else
+    usleep(10000);
+#endif
 }
 
 extern "C" RType::GameEngine* entryPointGameEngine() {

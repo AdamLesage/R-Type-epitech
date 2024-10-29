@@ -9,7 +9,7 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
 
     playerTextures.resize(5);
     playerSprites.resize(5);
-    
+
     for (int i = 0; i < 5; ++i) {
         playersNames[i].setFont(font);
         playersNames[i].setString("Player " + std::to_string(i + 1));
@@ -70,23 +70,33 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         std::cerr << e.what() << std::endl;
         exit(84);
     }
-    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Deuteranopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Protanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading protanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Tritanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading tritanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Achromatopsia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading achromatopsia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Normal_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }
@@ -199,8 +209,7 @@ void RType::Lobby::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
-void RType::Lobby::displayConnectedPlayer()
-{
+void RType::Lobby::displayConnectedPlayer() {
     float totalHeight      = window->getSize().y;
     float playerAreaHeight = 500;
     float playerStartY     = (totalHeight - playerAreaHeight) / 2.0f;
@@ -213,10 +222,13 @@ void RType::Lobby::displayConnectedPlayer()
             std::cerr << e.what() << std::endl;
         }
         playerSprites[i].setTexture(playerTextures[i]);
-        playerSprites[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1], _camera->listEntityToDisplay[i].sprite.rectSize[0],  _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+        playerSprites[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
+                                                    _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                                                    _camera->listEntityToDisplay[i].sprite.rectSize[0],
+                                                    _camera->listEntityToDisplay[i].sprite.rectSize[1]));
         playerSprites[i].setScale(0.7, 0.7);
         float verticalSpacing = 100;
-        float currentY = playerStartY + i * verticalSpacing;
+        float currentY        = playerStartY + i * verticalSpacing;
         playersNames[i].setPosition(window->getSize().x / 3.0f, currentY);
         playerSprites[i].setPosition((window->getSize().x / 3.0f) + 200, currentY - 10);
         RenderTexture.draw(playersNames[i]);

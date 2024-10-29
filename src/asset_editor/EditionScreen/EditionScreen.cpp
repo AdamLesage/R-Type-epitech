@@ -7,20 +7,18 @@
 
 #include "EditionScreen.hpp"
 
-
 #if defined(_WIN32) || defined(_WIN64)
-    #include <windows.h>
-    #define LIB_EXTENSION ".dll"
-    #define PATH_SEPARATOR "\\"
+#include <windows.h>
+#define LIB_EXTENSION ".dll"
+#define PATH_SEPARATOR "\\"
 #else
-    #include <dlfcn.h>
-    #define LIB_EXTENSION ".so"
-    #define PATH_SEPARATOR "/"
+#include <dlfcn.h>
+#define LIB_EXTENSION ".so"
+#define PATH_SEPARATOR "/"
 #endif
 
-
-Edition::EditionScreen::EditionScreen() : _zoomFactor(1.0f), _centralAreaPosition(0, 100), _centralAreaSize(1900, 900)
-{
+Edition::EditionScreen::EditionScreen()
+    : _zoomFactor(1.0f), _centralAreaPosition(0, 100), _centralAreaSize(1900, 900) {
     _centralArea.setSize(sf::Vector2f(_centralAreaSize.x, _centralAreaSize.y));
     _centralArea.setPosition(_centralAreaPosition.x, _centralAreaPosition.y);
     _centralArea.setFillColor(sf::Color(50, 50, 50));
@@ -28,28 +26,26 @@ Edition::EditionScreen::EditionScreen() : _zoomFactor(1.0f), _centralAreaPositio
     _centralArea.setOutlineColor(sf::Color::White);
 
     _centralView.setSize(1350, 900);
-    _centralView.setCenter(_centralAreaPosition.x + _centralAreaSize.x / 2, 
+    _centralView.setCenter(_centralAreaPosition.x + _centralAreaSize.x / 2,
                            _centralAreaPosition.y + _centralAreaSize.y / 2);
 
     commandManager = CommandManager();
 }
 
-Edition::EditionScreen::~EditionScreen()
-{
+Edition::EditionScreen::~EditionScreen() {
 }
 
-void Edition::EditionScreen::draw(sf::RenderWindow &window)
-{
+void Edition::EditionScreen::draw(sf::RenderWindow& window) {
     window.draw(_centralArea);
     window.setView(_centralView);
-    for (const auto &asset : commandManager.getUndoAssets()) {
+    for (const auto& asset : commandManager.getUndoAssets()) {
         asset->draw(window);
     }
     window.setView(window.getDefaultView());
 }
 
-std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Event &event, sf::RenderWindow &window)
-{
+std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Event& event,
+                                                                    sf::RenderWindow& window) {
     sf::Vector2f mouseWorldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window), _centralView);
 
     if (event.type == sf::Event::MouseMoved) {
@@ -64,11 +60,12 @@ std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Ev
         }
     }
 
-    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && _isInArea) {
+    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left
+        && _isInArea) {
         sf::Vector2f mousPos;
         mousPos.x = static_cast<float>(event.mouseButton.x);
         mousPos.y = static_cast<float>(event.mouseButton.y);
-        for (const auto &asset : commandManager.getUndoAssets()) {
+        for (const auto& asset : commandManager.getUndoAssets()) {
             if (asset->getGlobalBounds().contains(mouseWorldPos.x, mouseWorldPos.y)) {
                 return asset;
             }
@@ -88,14 +85,13 @@ std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Ev
 
     if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left) && _isInArea) {
         static sf::Vector2i lastMousePos = sf::Mouse::getPosition(window);
-        sf::Vector2i newMousePos = sf::Mouse::getPosition(window);
-        sf::Vector2f delta(static_cast<float>(lastMousePos.x - newMousePos.x), 
-                           static_cast<float>(0));
-        
-        delta.x = std::clamp(delta.x, -15.0f * _zoomFactor, 15.0f * _zoomFactor);
+        sf::Vector2i newMousePos         = sf::Mouse::getPosition(window);
+        sf::Vector2f delta(static_cast<float>(lastMousePos.x - newMousePos.x), static_cast<float>(0));
+
+        delta.x                 = std::clamp(delta.x, -15.0f * _zoomFactor, 15.0f * _zoomFactor);
         sf::Vector2f viewCenter = _centralView.getCenter();
-        sf::Vector2f viewSize = _centralView.getSize();
-        _viewLeftEdge = viewCenter.x - viewSize.x / 2.0f;
+        sf::Vector2f viewSize   = _centralView.getSize();
+        _viewLeftEdge           = viewCenter.x - viewSize.x / 2.0f;
 
         if (_viewLeftEdge + delta.x >= 20) {
             _centralView.move(delta);
@@ -107,19 +103,20 @@ std::shared_ptr<Edition::Asset> Edition::EditionScreen::handleEvent(const sf::Ev
     return nullptr;
 }
 
-bool Edition::EditionScreen::displaySaveDialog(std::shared_ptr<sf::RenderWindow> window)
-{
+bool Edition::EditionScreen::displaySaveDialog(std::shared_ptr<sf::RenderWindow> window) {
     // Display a dialog to save the scene
     sf::RectangleShape dialog(sf::Vector2f(400, 200));
     dialog.setFillColor(sf::Color(75, 75, 75));
     dialog.setOutlineThickness(1);
     dialog.setOutlineColor(sf::Color::White);
-    dialog.setPosition(window->getSize().x / 2 - dialog.getSize().x / 2, window->getSize().y / 2 - dialog.getSize().y / 2);
+    dialog.setPosition(window->getSize().x / 2 - dialog.getSize().x / 2,
+                       window->getSize().y / 2 - dialog.getSize().y / 2);
 
     // Display button on the top right to close the dialog
     sf::RectangleShape closeButton(sf::Vector2f(20, 20));
     closeButton.setFillColor(sf::Color::Red);
-    closeButton.setPosition(dialog.getPosition().x + dialog.getSize().x - closeButton.getSize().x, dialog.getPosition().y);
+    closeButton.setPosition(dialog.getPosition().x + dialog.getSize().x - closeButton.getSize().x,
+                            dialog.getPosition().y);
 
     // If the close button is clicked, close the dialog
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -139,12 +136,14 @@ bool Edition::EditionScreen::displaySaveDialog(std::shared_ptr<sf::RenderWindow>
     text.setString("Save the scene ?");
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::White);
-    text.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - text.getGlobalBounds().width / 2, dialog.getPosition().y + 20);
+    text.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - text.getGlobalBounds().width / 2,
+                     dialog.getPosition().y + 20);
 
     // Display input field to enter the name of the scene
     sf::RectangleShape inputField(sf::Vector2f(200, 30));
     inputField.setFillColor(sf::Color::White);
-    inputField.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - inputField.getSize().x / 2, dialog.getPosition().y + 100);
+    inputField.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - inputField.getSize().x / 2,
+                           dialog.getPosition().y + 100);
 
     // Display the text of the input field
     _inputSaveText.setFont(font);
@@ -155,7 +154,8 @@ bool Edition::EditionScreen::displaySaveDialog(std::shared_ptr<sf::RenderWindow>
     // Display the button to save the scene
     sf::RectangleShape saveButton(sf::Vector2f(100, 30));
     saveButton.setFillColor(sf::Color::Green);
-    saveButton.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - saveButton.getSize().x / 2, dialog.getPosition().y + 150);
+    saveButton.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - saveButton.getSize().x / 2,
+                           dialog.getPosition().y + 150);
     saveButton.setOutlineThickness(1);
     saveButton.setOutlineColor(sf::Color::White);
 
@@ -165,7 +165,9 @@ bool Edition::EditionScreen::displaySaveDialog(std::shared_ptr<sf::RenderWindow>
     saveText.setString("Save");
     saveText.setCharacterSize(20);
     saveText.setFillColor(sf::Color::White);
-    saveText.setPosition(saveButton.getPosition().x + saveButton.getSize().x / 2 - saveText.getGlobalBounds().width / 2, saveButton.getPosition().y + 5);
+    saveText.setPosition(saveButton.getPosition().x + saveButton.getSize().x / 2
+                             - saveText.getGlobalBounds().width / 2,
+                         saveButton.getPosition().y + 5);
 
     // If the save button is clicked, save the scene
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -190,8 +192,7 @@ bool Edition::EditionScreen::displaySaveDialog(std::shared_ptr<sf::RenderWindow>
     return true;
 }
 
-void Edition::EditionScreen::retrieveInputSaveScene(const sf::Event &event)
-{
+void Edition::EditionScreen::retrieveInputSaveScene(const sf::Event& event) {
     if (event.type == sf::Event::TextEntered) {
         if (event.text.unicode == 8 && !_inputSaveText.getString().isEmpty()) { // Handle backspace
             std::string sceneName = _inputSaveText.getString();
@@ -205,8 +206,7 @@ void Edition::EditionScreen::retrieveInputSaveScene(const sf::Event &event)
     }
 }
 
-void Edition::EditionScreen::retrieveInputLoadScene(const sf::Event &event)
-{
+void Edition::EditionScreen::retrieveInputLoadScene(const sf::Event& event) {
     if (event.type == sf::Event::TextEntered) {
         if (event.text.unicode == 8 && !_inputLoadText.getString().isEmpty()) { // Handle backspace
             std::string sceneName = _inputLoadText.getString();
@@ -220,19 +220,20 @@ void Edition::EditionScreen::retrieveInputLoadScene(const sf::Event &event)
     }
 }
 
-bool Edition::EditionScreen::displayDeleteDialog(std::shared_ptr<sf::RenderWindow> window)
-{
+bool Edition::EditionScreen::displayDeleteDialog(std::shared_ptr<sf::RenderWindow> window) {
     // Display a dialog to delete the scene
     sf::RectangleShape dialog(sf::Vector2f(600, 200));
     dialog.setFillColor(sf::Color(75, 75, 75));
     dialog.setOutlineThickness(1);
     dialog.setOutlineColor(sf::Color::White);
-    dialog.setPosition(window->getSize().x / 2 - dialog.getSize().x / 2, window->getSize().y / 2 - dialog.getSize().y / 2);
+    dialog.setPosition(window->getSize().x / 2 - dialog.getSize().x / 2,
+                       window->getSize().y / 2 - dialog.getSize().y / 2);
 
     // Display button on the top right to close the dialog
     sf::RectangleShape closeButton(sf::Vector2f(20, 20));
     closeButton.setFillColor(sf::Color::Red);
-    closeButton.setPosition(dialog.getPosition().x + dialog.getSize().x - closeButton.getSize().x, dialog.getPosition().y);
+    closeButton.setPosition(dialog.getPosition().x + dialog.getSize().x - closeButton.getSize().x,
+                            dialog.getPosition().y);
 
     // If the close button is clicked, close the dialog
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -251,12 +252,14 @@ bool Edition::EditionScreen::displayDeleteDialog(std::shared_ptr<sf::RenderWindo
     text.setString("Are you sure you want to delete the scene ?\n(No way to undo)");
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::White);
-    text.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - text.getGlobalBounds().width / 2, dialog.getPosition().y + 20);
+    text.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - text.getGlobalBounds().width / 2,
+                     dialog.getPosition().y + 20);
 
     // Display the button to delete the scene
     sf::RectangleShape deleteButton(sf::Vector2f(100, 30));
     deleteButton.setFillColor(sf::Color::Red);
-    deleteButton.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - deleteButton.getSize().x / 2, dialog.getPosition().y + 150);
+    deleteButton.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - deleteButton.getSize().x / 2,
+                             dialog.getPosition().y + 150);
     deleteButton.setOutlineThickness(1);
     deleteButton.setOutlineColor(sf::Color::White);
 
@@ -266,7 +269,9 @@ bool Edition::EditionScreen::displayDeleteDialog(std::shared_ptr<sf::RenderWindo
     deleteText.setString("Delete");
     deleteText.setCharacterSize(20);
     deleteText.setFillColor(sf::Color::White);
-    deleteText.setPosition(deleteButton.getPosition().x + deleteButton.getSize().x / 2 - deleteText.getGlobalBounds().width / 2, deleteButton.getPosition().y + 5);
+    deleteText.setPosition(deleteButton.getPosition().x + deleteButton.getSize().x / 2
+                               - deleteText.getGlobalBounds().width / 2,
+                           deleteButton.getPosition().y + 5);
 
     // If the delete button is clicked, delete the scene
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -288,19 +293,20 @@ bool Edition::EditionScreen::displayDeleteDialog(std::shared_ptr<sf::RenderWindo
     return true;
 }
 
-bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow> window)
-{
+bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow> window) {
     // Display a dialog to load the scene
     sf::RectangleShape dialog(sf::Vector2f(400, 200));
     dialog.setFillColor(sf::Color(75, 75, 75));
     dialog.setOutlineThickness(1);
     dialog.setOutlineColor(sf::Color::White);
-    dialog.setPosition(window->getSize().x / 2 - dialog.getSize().x / 2, window->getSize().y / 2 - dialog.getSize().y / 2);
+    dialog.setPosition(window->getSize().x / 2 - dialog.getSize().x / 2,
+                       window->getSize().y / 2 - dialog.getSize().y / 2);
 
     // Display button on the top right to close the dialog
     sf::RectangleShape closeButton(sf::Vector2f(20, 20));
     closeButton.setFillColor(sf::Color::Red);
-    closeButton.setPosition(dialog.getPosition().x + dialog.getSize().x - closeButton.getSize().x, dialog.getPosition().y);
+    closeButton.setPosition(dialog.getPosition().x + dialog.getSize().x - closeButton.getSize().x,
+                            dialog.getPosition().y);
 
     // If the close button is clicked, close the dialog
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -319,12 +325,14 @@ bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow>
     text.setString("Load the scene ?");
     text.setCharacterSize(30);
     text.setFillColor(sf::Color::White);
-    text.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - text.getGlobalBounds().width / 2, dialog.getPosition().y + 20);
+    text.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - text.getGlobalBounds().width / 2,
+                     dialog.getPosition().y + 20);
 
     // Display input field to enter the name of the scene
     sf::RectangleShape inputField(sf::Vector2f(200, 30));
     inputField.setFillColor(sf::Color::White);
-    inputField.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - inputField.getSize().x / 2, dialog.getPosition().y + 100);
+    inputField.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - inputField.getSize().x / 2,
+                           dialog.getPosition().y + 100);
 
     // Display the text of the input field
     _inputLoadText.setFont(font);
@@ -335,7 +343,8 @@ bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow>
     // Display the button to load the scene
     sf::RectangleShape loadButton(sf::Vector2f(100, 30));
     loadButton.setFillColor(sf::Color::Green);
-    loadButton.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - loadButton.getSize().x / 2, dialog.getPosition().y + 150);
+    loadButton.setPosition(dialog.getPosition().x + dialog.getSize().x / 2 - loadButton.getSize().x / 2,
+                           dialog.getPosition().y + 150);
     loadButton.setOutlineThickness(1);
     loadButton.setOutlineColor(sf::Color::White);
 
@@ -345,7 +354,9 @@ bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow>
     loadText.setString("Load");
     loadText.setCharacterSize(20);
     loadText.setFillColor(sf::Color::White);
-    loadText.setPosition(loadButton.getPosition().x + loadButton.getSize().x / 2 - loadText.getGlobalBounds().width / 2, loadButton.getPosition().y + 5);
+    loadText.setPosition(loadButton.getPosition().x + loadButton.getSize().x / 2
+                             - loadText.getGlobalBounds().width / 2,
+                         loadButton.getPosition().y + 5);
 
     // If the load button is clicked, load the scene
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -370,18 +381,17 @@ bool Edition::EditionScreen::displayLoadDialog(std::shared_ptr<sf::RenderWindow>
     return true;
 }
 
-void Edition::EditionScreen::saveScene(const std::string &sceneName)
-{
+void Edition::EditionScreen::saveScene(const std::string& sceneName) {
     // Add prefix and extension to the scene name
     // Fileconfig: "./config" + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg"
-    std::string scenePath = std::string("config") + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg";
+    std::string scenePath =
+        std::string("config") + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg";
     SaveScene saveScene = SaveScene(scenePath, commandManager.getUndoAssets());
 
     saveScene.save();
 }
 
-void Edition::EditionScreen::loadScene(const std::string &sceneName)
-{
+void Edition::EditionScreen::loadScene(const std::string& sceneName) {
     if (sceneName.empty()) {
         return;
     }
@@ -389,9 +399,9 @@ void Edition::EditionScreen::loadScene(const std::string &sceneName)
     // Add prefix and extension to the scene name
     // Fileconfig: "./config" + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg"
     try {
-        std::string scenePath = std::string("config") + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg";
-        if (scenePath.empty() == true)
-            return;
+        std::string scenePath =
+            std::string("config") + PATH_SEPARATOR + "scenes" + PATH_SEPARATOR + sceneName + ".cfg";
+        if (scenePath.empty() == true) return;
         LoadScene loadScene = LoadScene(scenePath, commandManager.getUndoAssets());
 
         std::vector<std::shared_ptr<Edition::Asset>> assetsLoaded = loadScene.load();
@@ -400,24 +410,21 @@ void Edition::EditionScreen::loadScene(const std::string &sceneName)
             commandManager.clearRedoAssets();
             commandManager.setUndoAssets(assetsLoaded);
         }
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         std::cerr << "Error from loadScene: " << e.what() << std::endl;
     }
 }
 
-void Edition::EditionScreen::deleteEditionScreen()
-{
+void Edition::EditionScreen::deleteEditionScreen() {
     commandManager.clearRedoAssets();
     commandManager.clearUndoAssets();
 }
 
-float Edition::EditionScreen::getViewLeftEdge()
-{
+float Edition::EditionScreen::getViewLeftEdge() {
 
     return this->_viewLeftEdge;
 }
 
-sf::View Edition::EditionScreen::getView()
-{
+sf::View Edition::EditionScreen::getView() {
     return this->_centralView;
 }

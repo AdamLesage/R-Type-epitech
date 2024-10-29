@@ -8,12 +8,12 @@
 #include "GameLogique.hpp"
 
 GameLogique::GameLogique(size_t port, int _frequency) {
-    this->network        = std::make_shared<NetworkLib::Server>(port);
-    this->_networkSender = std::make_unique<NetworkSender>(this->network);
-    this->receiverThread = std::thread(&GameLogique::handleRecieve, this);
+    this->network                   = std::make_shared<NetworkLib::Server>(port);
+    this->_networkSender            = std::make_unique<NetworkSender>(this->network);
+    this->receiverThread            = std::thread(&GameLogique::handleRecieve, this);
     this->connectionManagmentThread = std::thread(&GameLogique::handleClientConnection, this);
-    this->running        = false;
-    this->frequency      = _frequency;
+    this->running                   = false;
+    this->frequency                 = _frequency;
     this->reg.register_component<Position>();
     this->reg.register_component<Velocity>();
     this->reg.register_component<Tag>();
@@ -39,12 +39,12 @@ GameLogique::~GameLogique() {
 void GameLogique::startGame(int idEntity) {
     if (running == false) {
         for (size_t i = 0; i != network->getClientCount(); i++) {
-            auto &pos = reg.get_components<Position>()[i];
+            auto& pos = reg.get_components<Position>()[i];
             if (pos) {
                 pos->x = 100.f;
                 pos->y = 100 + (100.f * i);
             }
-            this->_networkSender->sendPositionUpdate(i , 100.f, 100 + (100.f * i));
+            this->_networkSender->sendPositionUpdate(i, 100.f, 100 + (100.f * i));
             usleep(10000);
         }
         sleep(1);
@@ -114,8 +114,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     }
 }
 
-void GameLogique::spawnWave()
-{
+void GameLogique::spawnWave() {
     spawnEnnemy(0x03, 1920, 10);
     spawnEnnemy(0x03, 1920, 160);
     spawnEnnemy(0x03, 1920, 360);
@@ -125,7 +124,7 @@ void GameLogique::spawnWave()
 
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
-    std::clock_t endClock      = std::clock();
+    std::clock_t endClock   = std::clock();
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
@@ -157,13 +156,12 @@ void GameLogique::runGame() {
     }
 }
 
-void GameLogique::clearGame()
-{
-    auto& types  = reg.get_components<Type>();
+void GameLogique::clearGame() {
+    auto& types         = reg.get_components<Type>();
     size_t numberPlayer = 0;
 
     for (size_t i = 0; i < types.size(); ++i) {
-        auto &type = types[i];
+        auto& type = types[i];
         usleep(1000);
         if (type) {
             this->_networkSender->sendDeleteEntity(i);
@@ -186,7 +184,6 @@ void GameLogique::clearGame()
         this->playersId[numberPlayer] = entity;
         usleep(1000);
     }
-    
 }
 
 std::array<char, 6> GameLogique::retrieveInputKeys() {
@@ -231,7 +228,8 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
 
     auto& velocities = reg.get_components<Velocity_s>();
     auto& types      = reg.get_components<Type>();
-    if ((unsigned int)velocities.size() <= this->playersId[message.second] && this->playersId[message.second] <= (unsigned int)types.size()) {
+    if ((unsigned int)velocities.size() <= this->playersId[message.second]
+        && this->playersId[message.second] <= (unsigned int)types.size()) {
         std::cerr << "Invalid entity ID: " << this->playersId[message.second] << std::endl;
         return;
     }
@@ -289,7 +287,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x45: {
-                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                auto& playerHealth = reg.get_components<Health_s>()[message.second];
                 if (message.first[1] == 0x01) {
                     playerHealth->isDamageable = false;
                 }
@@ -301,7 +299,7 @@ void GameLogique::handleRecieve() {
             case 0x46: {
                 float value;
                 std::memcpy(&value, &message.first[1], sizeof(float));
-                auto& speed  = reg.get_components<ShootingSpeed_s>();
+                auto& speed                           = reg.get_components<ShootingSpeed_s>();
                 speed[message.second]->shooting_speed = value;
                 break;
             }
@@ -309,18 +307,18 @@ void GameLogique::handleRecieve() {
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
-                auto& position  = reg.get_components<Position_s>()[message.second];
-                position->x = pos_x;
-                position->y = pos_y;
+                auto& position = reg.get_components<Position_s>()[message.second];
+                position->x    = pos_x;
+                position->y    = pos_y;
                 _networkSender->sendPositionUpdate(message.second, pos_x, pos_y);
                 break;
             }
             case 0x48: {
                 int value;
                 std::memcpy(&value, &message.first[1], sizeof(int));
-                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                auto& playerHealth   = reg.get_components<Health_s>()[message.second];
                 playerHealth->health = value;
-                
+
                 break;
             }
             default:
@@ -331,10 +329,8 @@ void GameLogique::handleRecieve() {
     }
 }
 
-void GameLogique::handleClientConnection()
-{
-    while (1)
-    {
+void GameLogique::handleClientConnection() {
+    while (1) {
         if (network->hasNewClientConnected()) {
             size_t clientId = network->popNewConnectedClient();
             {
@@ -354,28 +350,31 @@ void GameLogique::handleClientConnection()
                     this->playersId[clientId] = entity;
                 }
 
-                auto& positions  = reg.get_components<Position_s>();
-                auto& types  = reg.get_components<Type>();
+                auto& positions = reg.get_components<Position_s>();
+                auto& types     = reg.get_components<Type>();
 
                 for (size_t i = 0; i < positions.size() && i < types.size(); ++i) {
-                    auto &position = positions[i];
-                    auto &type = types[i];
+                    auto& position = positions[i];
+                    auto& type     = types[i];
                     if (type && position && (i != clientId || running)) {
                         switch (type->type) {
-                            case EntityType::ENEMY:
-                                this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y, clientId);
-                                break;
-                            case EntityType::PLAYER:
-                                this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
-                                break;
-                            case EntityType::PLAYER_PROJECTILE:
-                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
-                                break;
-                            case EntityType::ENEMY_PROJECTILE:
-                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
-                                break;
-                            default:
-                                break;
+                        case EntityType::ENEMY:
+                            this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y,
+                                                                  clientId);
+                            break;
+                        case EntityType::PLAYER:
+                            this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
+                            break;
+                        case EntityType::PLAYER_PROJECTILE:
+                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
+                                                                      clientId);
+                            break;
+                        case EntityType::ENEMY_PROJECTILE:
+                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
+                                                                      clientId);
+                            break;
+                        default:
+                            break;
                         }
                     }
                 }

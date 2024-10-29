@@ -132,31 +132,32 @@ namespace RType {
             Registry _registry;
             Systems _systems;
             std::shared_ptr<Console> console;
-            std::shared_ptr<Settings> settings; //the class settings used to display the settings
+            std::shared_ptr<Settings> settings;          // the class settings used to display the settings
             std::vector<sf::RectangleShape> backgrounds; // The backgrounds of the game
             std::vector<sf::Texture> backgroundTextures; // The textures of the backgrounds
-            std::vector<sf::RectangleShape> players; // The players of the game
-            std::vector<sf::RectangleShape> entity; // The entities of the game
-            std::vector<sf::Texture> playerTextures; // The textures of the players
-            std::shared_ptr<Camera> _camera; // The camera to display
+            std::vector<sf::RectangleShape> players;     // The players of the game
+            std::vector<sf::RectangleShape> entity;      // The entities of the game
+            std::vector<sf::Texture> playerTextures;     // The textures of the players
+            std::shared_ptr<Camera> _camera;             // The camera to display
             /**
              * @brief map that will stock the textures, It will allow us to not load a texture every time we
              * find a new entity but just when we find one that is not in our map
              */
             std::unordered_map<std::string, sf::Texture*> Textures; // a map that will stock the textures
-            sf::SoundBuffer game_launch_sound; // The buffer of the game launch sound
-            sf::Sound game_launch_music; // The sound of the game launch
-            sf::SoundBuffer shoot_sound; // The buffer of the shoot sound
-            sf::Sound shoot_music; // The sound of the shoot
-            sf::SoundBuffer shoot_sound2; // The buffer of the shoot sound 2
-            sf::Sound shoot_music2; // The sound of the shoot 2
+            sf::SoundBuffer game_launch_sound;                      // The buffer of the game launch sound
+            sf::Sound game_launch_music;                            // The sound of the game launch
+            sf::SoundBuffer shoot_sound;                            // The buffer of the shoot sound
+            sf::Sound shoot_music;                                  // The sound of the shoot
+            sf::SoundBuffer shoot_sound2;                           // The buffer of the shoot sound 2
+            sf::Sound shoot_music2;                                 // The sound of the shoot 2
             bool isShooting; // A boolean to know if the player is shooting
-            sf::Font font; // The font used for the game
-            std::shared_ptr<std::mutex> _mutex; 
+            sf::Font font;   // The font used for the game
+            std::shared_ptr<std::mutex> _mutex;
             bool piou = false; // A boolean to know wd need to display the piou sound
             std::shared_ptr<sf::RenderTexture> RenderTexture; // The render texture
-            sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
-            sf::Event event; // The event of the game
+            sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia,
+                                            // Achromatopsia, Normal)
+            sf::Event event;                // The event of the game
     };
 } // namespace RType
 

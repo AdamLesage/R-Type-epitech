@@ -8,7 +8,7 @@
 #include "Menu.hpp"
 
 RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
-        std::cout << "RenderingEngine running" << std::endl;
+    std::cout << "RenderingEngine running" << std::endl;
     window = wndw;
     if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
@@ -247,7 +247,7 @@ void RType::Menu::runScene() {
     }
     RenderTexture.display();
     sf::Sprite sprite(RenderTexture.getTexture());
-        std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    std::string colorblind = settings->get_key_value(cfg, "Keys8");
     if (colorblind.find("Deuteranopia") != std::string::npos) {
         window->draw(sprite, &colorblindShader[0]);
     } else if (colorblind.find("Protanopia") != std::string::npos) {

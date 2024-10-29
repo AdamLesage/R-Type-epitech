@@ -32,7 +32,7 @@ void Systems::position_system(Registry& reg,
                 }
             }
             if (type->type == EntityType::PLAYER) {
-                auto &playerDirection = directions[i];
+                auto& playerDirection = directions[i];
                 if (playerDirection->x != vel->x || playerDirection->y != vel->y) {
                     playerDirection->x = vel->x;
                     playerDirection->y = vel->y;
@@ -163,13 +163,11 @@ void Systems::check_entities_collisions(Registry& reg,
     }
 
     if (playerTakeDamage && collisionX && collisionY) {
-        auto &playerHealth = reg.get_components<Health_s>()[entityId1];
-        auto &enemyDamage = reg.get_components<Damage_s>()[entityId2];
-        
+        auto& playerHealth = reg.get_components<Health_s>()[entityId1];
+        auto& enemyDamage  = reg.get_components<Damage_s>()[entityId2];
 
         if (playerHealth && enemyDamage) {
-            if (playerHealth->isDamageable == true)
-                playerHealth->health -= enemyDamage->damage;
+            if (playerHealth->isDamageable == true) playerHealth->health -= enemyDamage->damage;
             if (playerHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
@@ -210,53 +208,57 @@ void Systems::check_entities_collisions(Registry& reg,
 }
 
 struct SpatialHash {
-    int cellSize;
-    std::unordered_map<int, std::vector<size_t>> grid;
+        int cellSize;
+        std::unordered_map<int, std::vector<size_t>> grid;
 
-    // Renommage du paramètre du constructeur pour éviter le shadowing
-    SpatialHash(int initialCellSize) : cellSize(initialCellSize) {}
-
-    // Hash function for a cell key
-    int hash(int x, int y) const {
-        return std::hash<int>()(x / cellSize) ^ std::hash<int>()(y / cellSize);
-    }
-
-    // Insert an entity
-    void insert(int x, int y, size_t entityIndex) {
-        int cellKey = hash(x, y);
-        grid[cellKey].push_back(entityIndex);
-    }
-
-    // Get nearby entities for a given position
-    std::vector<size_t> getNearbyEntities(int x, int y) const {
-        std::vector<size_t> nearbyEntities;
-        
-        // Pre compute the offsets for the 8 adjacent cells
-        std::array<int, 9> offsets = {
-            -1, -1, 0,   // Top-left, Top, Top-right
-            -1,  0, 0,   // Left, Center, Right
-            -1,  1, 0    // Bottom-left, Bottom, Bottom-right
-        };
-
-        // Iterate over the 8 adjacent cells
-        for (size_t i = 0; i < offsets.size(); i += 1) {
-            int adjacentCellKey = hash(x + offsets[i] * cellSize, y + offsets[i + 1] * cellSize);
-            auto it = grid.find(adjacentCellKey);
-            if (it != grid.end()) { // If the cell exists
-                nearbyEntities.insert(nearbyEntities.end(), it->second.begin(), it->second.end());
-            }
+        // Renommage du paramètre du constructeur pour éviter le shadowing
+        SpatialHash(int initialCellSize) : cellSize(initialCellSize) {
         }
 
-        return nearbyEntities;
-    }
+        // Hash function for a cell key
+        int hash(int x, int y) const {
+            return std::hash<int>()(x / cellSize) ^ std::hash<int>()(y / cellSize);
+        }
+
+        // Insert an entity
+        void insert(int x, int y, size_t entityIndex) {
+            int cellKey = hash(x, y);
+            grid[cellKey].push_back(entityIndex);
+        }
+
+        // Get nearby entities for a given position
+        std::vector<size_t> getNearbyEntities(int x, int y) const {
+            std::vector<size_t> nearbyEntities;
+
+            // Pre compute the offsets for the 8 adjacent cells
+            std::array<int, 9> offsets = {
+                -1, -1, 0, // Top-left, Top, Top-right
+                -1, 0,  0, // Left, Center, Right
+                -1, 1,  0  // Bottom-left, Bottom, Bottom-right
+            };
+
+            // Iterate over the 8 adjacent cells
+            for (size_t i = 0; i < offsets.size(); i += 1) {
+                int adjacentCellKey = hash(x + offsets[i] * cellSize, y + offsets[i + 1] * cellSize);
+                auto it             = grid.find(adjacentCellKey);
+                if (it != grid.end()) { // If the cell exists
+                    nearbyEntities.insert(nearbyEntities.end(), it->second.begin(), it->second.end());
+                }
+            }
+
+            return nearbyEntities;
+        }
 };
 
-void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger) {
-    auto &positions = reg.get_components<Position_s>();
-    auto &sizes = reg.get_components<Size_s>();
-    auto &types = reg.get_components<Type_s>();
+void Systems::collision_system(Registry& reg,
+                               std::pair<size_t, size_t> MapSize,
+                               std::unique_ptr<NetworkSender>& networkSender,
+                               RType::Logger& logger) {
+    auto& positions = reg.get_components<Position_s>();
+    auto& sizes     = reg.get_components<Size_s>();
+    auto& types     = reg.get_components<Type_s>();
 
-    int cellSize = 100; 
+    int cellSize = 100;
     SpatialHash spatialHash(cellSize); // Create a spatial hash with a cell size of 100
 
     // Insert all entities into the spatial hash
@@ -268,15 +270,15 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize,
 
     // Check collisions between entities
     for (size_t i = 0; i < positions.size() && i < sizes.size(); ++i) {
-        if (!positions[i] || !sizes[i] || !types[i])
-            continue;
+        if (!positions[i] || !sizes[i] || !types[i]) continue;
 
-        auto &entityPos = *positions[i];
-        auto &entitySize = *sizes[i];
-        auto &entityType = *types[i];
+        auto& entityPos  = *positions[i];
+        auto& entitySize = *sizes[i];
+        auto& entityType = *types[i];
 
         // Check if the entity is colliding with the map borders
-        check_borders_collisions(reg, i, &entityPos, &entitySize, &entityType, MapSize, logger, networkSender);
+        check_borders_collisions(reg, i, &entityPos, &entitySize, &entityType, MapSize, logger,
+                                 networkSender);
 
         // Get nearby entities from the spatial hash
         auto nearbyEntities = spatialHash.getNearbyEntities(entityPos.x, entityPos.y);
@@ -284,12 +286,13 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize,
         for (size_t j : nearbyEntities) {
             if (i == j || !positions[j] || !sizes[j] || !types[j]) continue;
 
-            auto &entityPos2 = *positions[j];
-            auto &entitySize2 = *sizes[j];
-            auto &entityType2 = *types[j];
+            auto& entityPos2  = *positions[j];
+            auto& entitySize2 = *sizes[j];
+            auto& entityType2 = *types[j];
 
             // Check if the entities are colliding
-            check_entities_collisions(reg, i, &entityPos, &entitySize, j, &entityPos2, &entitySize2, logger, networkSender, &entityType, &entityType2);
+            check_entities_collisions(reg, i, &entityPos, &entitySize, j, &entityPos2, &entitySize2, logger,
+                                      networkSender, &entityType, &entityType2);
         }
     }
 }

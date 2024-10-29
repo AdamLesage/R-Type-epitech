@@ -111,7 +111,8 @@ class NetworkSender {
          *
          * @param id_entity The unique identifier of the entity whose state has changed.
          * @param newState The new state of the entity.
-         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning
+         * all clients.
          */
         void sendStateChange(int id_entity, char newState, int clientId = -1);
         /**
@@ -119,10 +120,10 @@ class NetworkSender {
          *
          * @param id_entity The unique identifier of the entity whose state has changed.
          * @param newState The new state of the entity.
-         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning
+         * all clients.
          */
         void sendDirectionUpdate(int id_entity, float x, float y, int clientId = -1);
-
 
     private:
         std::shared_ptr<NetworkLib::Server> _network;

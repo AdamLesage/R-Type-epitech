@@ -17,13 +17,11 @@
 
 #include "ClientConnexionHandling.hpp"
 
-RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsigned short server_port)
-{
+RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsigned short server_port) {
     _window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _window->setFramerateLimit(60);
-    _inputBoxSelected = "host";
+    _inputBoxSelected  = "host";
     _invalidPortOrHost = false;
-
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     _font.loadFromFile(fontPath);
@@ -37,15 +35,12 @@ RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsign
     _inputTextPort.setFont(_font);
     _inputTextPort.setCharacterSize(24);
     _inputTextPort.setFillColor(sf::Color::White);
-
 }
 
-RType::ClientConnexionHandling::~ClientConnexionHandling()
-{
+RType::ClientConnexionHandling::~ClientConnexionHandling() {
 }
 
-void RType::ClientConnexionHandling::displayConnexionWindow()
-{
+void RType::ClientConnexionHandling::displayConnexionWindow() {
     while (_window->isOpen()) {
         sf::Event event;
         while (_window->pollEvent(event)) {
@@ -65,10 +60,10 @@ void RType::ClientConnexionHandling::displayConnexionWindow()
     }
 }
 
-void RType::ClientConnexionHandling::displayBackground()
-{
+void RType::ClientConnexionHandling::displayBackground() {
     sf::Texture texture;
-    std::string spritePath = "assets" + std::string(PATH_SEPARATOR) + "background" + std::string(PATH_SEPARATOR) + "menu.jpg";
+    std::string spritePath =
+        "assets" + std::string(PATH_SEPARATOR) + "background" + std::string(PATH_SEPARATOR) + "menu.jpg";
     if (!texture.loadFromFile(spritePath)) {
         std::cerr << "Failed to load texture from " << spritePath << std::endl;
         return;
@@ -77,8 +72,7 @@ void RType::ClientConnexionHandling::displayBackground()
     background.setTexture(&texture);
     _window->draw(background);
 }
-void RType::ClientConnexionHandling::displayInputTextHost()
-{
+void RType::ClientConnexionHandling::displayInputTextHost() {
     sf::Text labelHost;
     labelHost.setFont(_font);
     labelHost.setString("Host");
@@ -91,7 +85,7 @@ void RType::ClientConnexionHandling::displayInputTextHost()
     inputTextHost.setPosition(1920 / 2 - 100, 1080 / 2 - 50);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-    sf::FloatRect bounds = inputTextHost.getGlobalBounds();
+    sf::FloatRect bounds  = inputTextHost.getGlobalBounds();
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "host";
@@ -104,8 +98,7 @@ void RType::ClientConnexionHandling::displayInputTextHost()
     _window->draw(_inputTextHost);
 }
 
-void RType::ClientConnexionHandling::displayInputTextPort()
-{
+void RType::ClientConnexionHandling::displayInputTextPort() {
     sf::Text labelPort;
     labelPort.setFont(_font);
     labelPort.setString("Port");
@@ -118,7 +111,7 @@ void RType::ClientConnexionHandling::displayInputTextPort()
     inputTextPort.setPosition(1920 / 2 - 100, 1080 / 2 + 50);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-    sf::FloatRect bounds = inputTextPort.getGlobalBounds();
+    sf::FloatRect bounds  = inputTextPort.getGlobalBounds();
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "port";
@@ -131,8 +124,7 @@ void RType::ClientConnexionHandling::displayInputTextPort()
     _window->draw(_inputTextPort);
 }
 
-void RType::ClientConnexionHandling::displaySubmitButton()
-{
+void RType::ClientConnexionHandling::displaySubmitButton() {
     sf::RectangleShape submitButtonRect(sf::Vector2f(100, 50));
     submitButtonRect.setFillColor(sf::Color(50, 50, 50, 255));
     submitButtonRect.setPosition(1920 / 2 - 50, 1080 / 2 + 150);
@@ -142,13 +134,14 @@ void RType::ClientConnexionHandling::displaySubmitButton()
     submitButton.setString("Submit");
     submitButton.setCharacterSize(24);
     submitButton.setFillColor(sf::Color::Red);
-    submitButton.setPosition(
-        submitButtonRect.getPosition().x + (submitButtonRect.getSize().x - submitButton.getLocalBounds().width) / 2,
-        submitButtonRect.getPosition().y + (submitButtonRect.getSize().y - submitButton.getLocalBounds().height) / 2 - submitButton.getLocalBounds().top
-    );
+    submitButton.setPosition(submitButtonRect.getPosition().x
+                                 + (submitButtonRect.getSize().x - submitButton.getLocalBounds().width) / 2,
+                             submitButtonRect.getPosition().y
+                                 + (submitButtonRect.getSize().y - submitButton.getLocalBounds().height) / 2
+                                 - submitButton.getLocalBounds().top);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-    sf::FloatRect bounds = submitButtonRect.getGlobalBounds();
+    sf::FloatRect bounds  = submitButtonRect.getGlobalBounds();
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         if (this->areHostAndPortValid() == true) {
@@ -163,8 +156,7 @@ void RType::ClientConnexionHandling::displaySubmitButton()
     _window->draw(submitButton);
 }
 
-void RType::ClientConnexionHandling::displayError()
-{
+void RType::ClientConnexionHandling::displayError() {
     if (_invalidPortOrHost == false) {
         return;
     }
@@ -179,8 +171,7 @@ void RType::ClientConnexionHandling::displayError()
     _window->draw(error);
 }
 
-void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event &event)
-{
+void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event& event) {
     if (_inputBoxSelected == "host" && event.type == sf::Event::TextEntered) {
         if (event.text.unicode == 8 && !_inputTextHost.getString().isEmpty()) {
             // Remove the last character if backspace
@@ -194,11 +185,10 @@ void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event &even
     }
 }
 
-void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event &event)
-{
+void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event& event) {
     if (_inputBoxSelected == "port" && event.type == sf::Event::TextEntered) {
         if (event.text.unicode == 8 && !_inputTextPort.getString().isEmpty()) {
-            // Remove the last character if backspace   
+            // Remove the last character if backspace
             std::string currentText = _inputTextPort.getString();
             currentText.pop_back();
             _inputTextPort.setString(currentText);
@@ -209,9 +199,7 @@ void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event &even
     }
 }
 
-
-bool RType::ClientConnexionHandling::areHostAndPortValid()
-{
+bool RType::ClientConnexionHandling::areHostAndPortValid() {
     if (this->getServerPort() < 1024 || this->getServerPort() > 65535) {
         std::cerr << "Port must be between 1024 and 65535" << std::endl;
         return false;

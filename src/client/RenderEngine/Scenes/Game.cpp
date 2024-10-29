@@ -13,7 +13,7 @@
 
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
     : currentFrame(1), frameDuration(0.05f), animationComplete(false) {
-    this->window = _window;
+    this->window         = _window;
     this->_mediator      = nullptr;
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
@@ -84,37 +84,46 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
         players[i].setPosition(sf::Vector2f(125.f + (125.f * i), 125.f));
         players[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
     }
-        if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Deuteranopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Protanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading protanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Tritanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading tritanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Achromatopsia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading achromatopsia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Normal_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }
-    sf::RenderTexture *RenderTexture2 = new sf::RenderTexture();
+    sf::RenderTexture* RenderTexture2 = new sf::RenderTexture();
     RenderTexture2->create(1920, 1080);
     RenderTexture = std::shared_ptr<sf::RenderTexture>(RenderTexture2);
-    settings = std::make_shared<Settings>(window);
+    settings      = std::make_shared<Settings>(window);
     _registry.register_component<Position_s>();
     _registry.register_component<Velocity_s>();
     _registry.register_component<Drawable_s>();
     _registry.register_component<Controllable_s>();
-    console = std::make_shared<Console>(window,RenderTexture);
+    console = std::make_shared<Console>(window, RenderTexture);
     BackgroundClock.restart();
-
 }
 
 RType::Game::~Game() {
@@ -177,8 +186,7 @@ void RType::Game::play() {
         }
     }
 
-    _systems.control_system(_registry, *window.get(), _mediator,
-                            std::bind(&RType::Game::ShootSound, this));
+    _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
     // if (keyPressed == 88)
     //     ShootSound();
 
@@ -203,7 +211,7 @@ void RType::Game::play() {
         displayPiou();
         piou = false;
     }
-            libconfig::Config cfg;
+    libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
         cfg.readFile(configPath.c_str());
@@ -308,7 +316,7 @@ void RType::Game::runScene() {
         displayPiou();
         piou = false;
     }
-            libconfig::Config cfg;
+    libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
         cfg.readFile(configPath.c_str());

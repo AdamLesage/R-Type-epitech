@@ -50,10 +50,11 @@ namespace RType {
 
             /**
              * @brief Set a new State
-             * 
+             *
              *  @param newState the new state
              */
             void setStateGame(int newState);
+
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;

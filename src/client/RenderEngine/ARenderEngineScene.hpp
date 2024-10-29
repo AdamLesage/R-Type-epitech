@@ -10,13 +10,12 @@
 
 #include "IRenderEngineScene.hpp"
 
-
 namespace RType {
     class ARenderEngineScene : public IRenderEngineScene {
         public:
             ARenderEngineScene() = default;
             ~ARenderEngineScene();
-            
+
             /**
              * @brief Run the scene
              *
@@ -31,14 +30,16 @@ namespace RType {
 
             /**
              * @brief send a request of state change to the mediator
-             * 
+             *
              * @param newState the state
              */
             void sendStateChange(int newState) override;
+
         protected:
             std::shared_ptr<IMediator> _mediator;
+
         private:
     };
-};
+}; // namespace RType
 
 #endif

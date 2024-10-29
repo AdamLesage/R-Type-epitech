@@ -9,7 +9,28 @@ on:
       - main
 
 jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+      - name: Check Coding Style
+        run: |
+          make linter > linter_logs.txt 2>&1
+          if [ $? -ne 0 ]; then
+            cat linter_logs.txt
+            echo "Too many coding style errors. Run make format to fix them."
+            exit 1
+          fi
+
   build_cross_platform:
+    needs:
+      - check_coding_style
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -46,6 +67,8 @@ jobs:
         timeout-minutes: 10
 
   release_mode_test_linux:
+    needs:
+      - check_coding_style
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -89,6 +112,8 @@ jobs:
         timeout-minutes: 180
 
   # release_mode_test_windows:
+  #   needs:
+  #     - check_coding_style
   #   runs-on: windows-latest
   #   steps:
   #     - uses: actions/checkout@v3
@@ -120,6 +145,8 @@ jobs:
   #       timeout-minutes: 180
 
   create_linux_release:
+    needs:
+      - check_coding_style
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
@@ -164,6 +191,8 @@ jobs:
           asset_content_type: application/gzip
 
   create_windows_release:
+    needs:
+      - check_coding_style
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:

@@ -76,7 +76,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void direction_system(Registry& reg, libconfig::Config &playerConfig);
+        void direction_system(Registry& reg, libconfig::Config& playerConfig);
 };
 
 #endif /* !SYSTEMS_HPP_ */

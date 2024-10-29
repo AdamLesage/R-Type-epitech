@@ -19,10 +19,10 @@ void RType::RenderingEngine::run() {
     std::cout << "RenderingEngine running" << std::endl;
 
     try {
-        this->_menu = std::make_unique<Menu>(window);
+        this->_menu     = std::make_unique<Menu>(window);
         this->_settings = std::make_shared<Settings>(window);
         this->_lobby    = std::make_shared<Lobby>(window);
-        this->_game = std::make_shared<Game>(window);
+        this->_game     = std::make_shared<Game>(window);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         exit(84);
@@ -40,8 +40,7 @@ void RType::RenderingEngine::run() {
     window->setFramerateLimit(360);
     window->clear();
     while (window->isOpen()) {
-        switch (_stateGame)
-        {
+        switch (_stateGame) {
         case 1:
             this->_menu->runScene();
             break;

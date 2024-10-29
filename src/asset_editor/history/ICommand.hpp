@@ -17,7 +17,7 @@ namespace Edition {
 
     /**
      * @brief Command Interface
-     * 
+     *
      * This interface will be used to create commands
      */
     class ICommand {
@@ -41,7 +41,7 @@ namespace Edition {
 
             /**
              * @brief Get the asset
-             * 
+             *
              * @return std::shared_ptr<Asset> The asset
              */
             virtual std::shared_ptr<Asset> getAsset() = 0;
@@ -49,6 +49,6 @@ namespace Edition {
         protected:
         private:
     };
-}
+} // namespace Edition
 
 #endif /* !ICOMMAND_HPP_ */

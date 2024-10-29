@@ -9,7 +9,7 @@
 
 NetworkLib::Server::Server(unsigned short local_port)
     : socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)),
-        service_thread(&Server::run_service, this), nextClientID(0L) {
+      service_thread(&Server::run_service, this), nextClientID(0L) {
     std::cout << "Starting server on port" << local_port << std::endl;
 };
 
@@ -57,7 +57,7 @@ void NetworkLib::Server::handle_receive(const std::error_code& error, std::size_
         }
     } else {
         std::cout << "handle_receive: error: " << error.message() << " while receiving from address "
-                    << _remote_endpoint;
+                  << _remote_endpoint;
         handle_remote_error(_remote_endpoint);
     }
 
@@ -68,7 +68,9 @@ void NetworkLib::Server::send(std::vector<char> message, boost::asio::ip::udp::e
     this->socket.send_to(boost::asio::buffer(message, message.size()), target_endpoint);
 }
 
-void NetworkLib::Server::send(const char* message, size_t size, boost::asio::ip::udp::endpoint target_endpoint) {
+void NetworkLib::Server::send(const char* message,
+                              size_t size,
+                              boost::asio::ip::udp::endpoint target_endpoint) {
 
     this->socket.send_to(boost::asio::buffer(message, size), target_endpoint);
 }
@@ -77,17 +79,16 @@ void NetworkLib::Server::sendToClient(const char* message, size_t size, uint32_t
     try {
         send(message, size, clients.at(clientID));
     } catch (...) {
-        std::cout << "sendToClient: Unknown error while sending message to client " << clientID
-                    << std::endl;
+        std::cout << "sendToClient: Unknown error while sending message to client " << clientID << std::endl;
     }
 };
 
 void NetworkLib::Server::sendToAll(const char* message, size_t size) {
     packetToSend.insert(packetToSend.end(), message, message + size);
 
-    auto now = std::chrono::steady_clock::now();
+    auto now                        = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = now - lastPacketSend;
-    float elapsed_seconds = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
+    float elapsed_seconds           = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
 
     if (packetToSend.size() >= 1000 || elapsed_seconds > 100) {
         lastPacketSend = std::chrono::steady_clock::now();
@@ -121,13 +122,14 @@ for (const auto& client : clients) {
 {
     std::unique_lock<std::shared_mutex> lock(mtx);
     auto id = nextClientID++;
-    //add client
+    // add client
     newConnectedClient.push(id);
     std::cout << "client Connect: " << id << std::endl;
     clients.insert({id, endpoint});
     return id;
 }
-};
+}
+;
 
 size_t NetworkLib::Server::getClientCount() {
     return clients.size();

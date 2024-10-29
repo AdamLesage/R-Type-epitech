@@ -17,15 +17,14 @@ namespace Edition {
 
     /**
      * @brief Add Asset Command
-     * 
+     *
      * This command will be used to add an asset to the scene
      */
     class AddAsset : public ICommand {
         public:
-
             /**
              * @brief Construct a new Add Asset object
-             * 
+             *
              * @param assets The assets of the scene
              * @param asset The asset to add
              */
@@ -38,14 +37,14 @@ namespace Edition {
 
             /**
              * @brief Execute the command
-             * 
+             *
              * This will add the asset to the scene
              */
             void execute() override;
 
             /**
              * @brief Undo the command
-             * 
+             *
              * This will remove the asset from the scene
              */
             void undo() override;
@@ -57,10 +56,12 @@ namespace Edition {
 
             /**
              * @brief Get the asset
-             * 
+             *
              * @return std::shared_ptr<Asset> The asset
              */
-            std::shared_ptr<Asset> getAsset() override { return _asset; }
+            std::shared_ptr<Asset> getAsset() override {
+                return _asset;
+            }
 
         protected:
         private:
@@ -74,6 +75,6 @@ namespace Edition {
              */
             std::shared_ptr<Asset> _asset;
     };
-}
+} // namespace Edition
 
 #endif /* !ADDASSET_HPP_ */

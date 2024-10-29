@@ -184,6 +184,7 @@ namespace RType {
              * @param mediator A shared pointer to the mediator instance.
              */
             void setMediator(std::shared_ptr<IMediator> mediator);
+
         protected:
             /**
              * @brief Check if the message type is valid and if its values are valid.
@@ -201,6 +202,7 @@ namespace RType {
              * @return int The new index.
              */
             int updateIndexFromBinaryData(const std::string& message, int& index);
+
         private:
             // Variables
             std::string _protocolPath;

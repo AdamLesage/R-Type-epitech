@@ -1,6 +1,8 @@
 #include "SelectButton.hpp"
 
-Edition::SelectButton::SelectButton(const sf::Vector2f& position, const sf::Vector2f& size, const std::vector<std::string>& options)
+Edition::SelectButton::SelectButton(const sf::Vector2f& position,
+                                    const sf::Vector2f& size,
+                                    const std::vector<std::string>& options)
     : options(options), selectedOption(-1), isDropdownOpen(false) {
 
     box.setPosition(position);
@@ -34,8 +36,7 @@ bool Edition::SelectButton::handleInput(const sf::Event& event) {
         mousPos.y = static_cast<float>(event.mouseButton.y);
         if (box.getGlobalBounds().contains(mousPos)) {
             toggleDropdown();
-        }
-        else if (isDropdownOpen) {
+        } else if (isDropdownOpen) {
             for (size_t i = 0; i < backOptions.size(); ++i) {
                 if (backOptions[i].getGlobalBounds().contains(mousPos)) {
 
@@ -53,8 +54,7 @@ bool Edition::SelectButton::handleInput(const sf::Event& event) {
         mousPos.y = static_cast<float>(event.mouseButton.y);
         if (box.getGlobalBounds().contains(mousPos)) {
             toggleDropdown();
-        }
-        else if (isDropdownOpen) {
+        } else if (isDropdownOpen) {
             for (size_t i = 0; i < optionTexts.size(); ++i) {
                 if (backOptions[i].getGlobalBounds().contains(mousPos)) {
                     backOptions[i].setFillColor(sf::Color(100, 100, 100));
@@ -69,18 +69,11 @@ bool Edition::SelectButton::handleInput(const sf::Event& event) {
     return false;
 }
 
-void centerText(sf::RectangleShape &shape, sf::Text &text)
-{
+void centerText(sf::RectangleShape& shape, sf::Text& text) {
     const sf::FloatRect textBounds = text.getLocalBounds();
-    const sf::Vector2f boxSize = shape.getSize();
-    text.setOrigin(
-        textBounds.left + textBounds.width / 2.0f,
-        textBounds.top + textBounds.height / 2.0f
-    );
-    text.setPosition(
-        shape.getPosition().x + boxSize.x / 2.0f,
-        shape.getPosition().y + boxSize.y / 2.0f
-    );     
+    const sf::Vector2f boxSize     = shape.getSize();
+    text.setOrigin(textBounds.left + textBounds.width / 2.0f, textBounds.top + textBounds.height / 2.0f);
+    text.setPosition(shape.getPosition().x + boxSize.x / 2.0f, shape.getPosition().y + boxSize.y / 2.0f);
 }
 
 void Edition::SelectButton::display(sf::RenderWindow& window) {
@@ -99,8 +92,8 @@ void Edition::SelectButton::display(sf::RenderWindow& window) {
 
     if (isDropdownOpen) {
         for (size_t i = 0; i < optionTexts.size(); ++i) {
-            sf::Text& text = optionTexts[i];
-            sf::RectangleShape &back = this->backOptions[i];
+            sf::Text& text           = optionTexts[i];
+            sf::RectangleShape& back = this->backOptions[i];
             text.setPosition(box.getPosition().x, box.getPosition().y + (i + 1) * box.getSize().y);
             back.setPosition(box.getPosition().x, box.getPosition().y + (i + 1) * box.getSize().y);
             centerText(back, text);

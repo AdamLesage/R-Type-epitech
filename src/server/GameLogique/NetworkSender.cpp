@@ -41,7 +41,8 @@ void NetworkSender::sendCreateEnemy(char type, int id, float pos_x, float pos_y,
     }
 }
 
-void NetworkSender::sendCreateWall(int id, float pos_x, float pos_y, float size_x, float size_y, int clientId) {
+void NetworkSender::sendCreateWall(
+    int id, float pos_x, float pos_y, float size_x, float size_y, int clientId) {
     std::array<char, 21> data{};
 
     data[0] = 0x025;
@@ -145,8 +146,7 @@ void NetworkSender::sendProjectilColision(int id_projectil, int id_entity, int c
     }
 }
 
-void NetworkSender::sendStateChange(int id_entity, char newState, int clientId)
-{
+void NetworkSender::sendStateChange(int id_entity, char newState, int clientId) {
     std::array<char, 6> data{};
     data[0] = 0x37;
     std::memcpy(&data[1], &id_entity, sizeof(id_entity));
@@ -158,8 +158,7 @@ void NetworkSender::sendStateChange(int id_entity, char newState, int clientId)
     }
 }
 
-void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId)
-{
+void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId) {
     std::array<char, 13> data{};
     data[0] = 0x32;
     std::memcpy(&data[1], &id_entity, sizeof(id_entity));

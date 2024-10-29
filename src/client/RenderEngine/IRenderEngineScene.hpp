@@ -15,7 +15,7 @@ namespace RType {
     class IRenderEngineScene {
         public:
             virtual ~IRenderEngineScene() = default;
-            
+
             /**
              * @brief Run the scene
              *
@@ -27,16 +27,17 @@ namespace RType {
              * @param mediator The mediator to set.
              */
             virtual void setMediator(std::shared_ptr<IMediator> mediator) = 0;
-            
+
             /**
              * @brief send a request of state change to the mediator
-             * 
+             *
              * @param newState the state
              */
             virtual void sendStateChange(int newState) = 0;
+
         protected:
         private:
     };
-};
+}; // namespace RType
 
 #endif /* !IRENDERENGINESCENE_HPP_ */

@@ -62,31 +62,36 @@ namespace RType {
             /**
              * @brief Retrieve the input text for the host
              */
-            void retrieveInputTextHost(const sf::Event &event);
+            void retrieveInputTextHost(const sf::Event& event);
 
             /**
              * @brief Retrieve the input text for the port
              */
-            void retrieveInputTextPort(const sf::Event &event);
+            void retrieveInputTextPort(const sf::Event& event);
 
             /**
              * @brief Get the Host object
-             * 
+             *
              * @return std::string The host
              */
-            std::string getHost() const { return _inputTextHost.getString(); }
+            std::string getHost() const {
+                return _inputTextHost.getString();
+            }
 
             /**
              * @brief Get the Server Port object
-             * 
+             *
              * @return unsigned short The server port
              */
-            unsigned short getServerPort() const { return std::stoi(_inputTextPort.getString().toAnsiString()); }
+            unsigned short getServerPort() const {
+                return std::stoi(_inputTextPort.getString().toAnsiString());
+            }
+
         protected:
         private:
             /**
              * @brief Check if the host and port are valid
-             * 
+             *
              * @return true if the host and port are valid, false otherwise
              */
             bool areHostAndPortValid();
