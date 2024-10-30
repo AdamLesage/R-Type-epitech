@@ -177,6 +177,7 @@ void RType::Game::play() {
 
     window->clear();
     if (this->isGameOffline() == true) {
+        _currentGame->setMediator(_mediator);
         this->_currentGame->handleOfflineGame();
     }
 

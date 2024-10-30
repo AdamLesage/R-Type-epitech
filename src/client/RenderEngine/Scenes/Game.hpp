@@ -127,6 +127,13 @@ namespace RType {
              */
             void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
 
+            /**
+             * @brief Return current instance of currentGame, will be called by mediator to reset game
+             * @return current game instance
+             * @author Adam Lesage
+             */
+            std::shared_ptr<IGame> getCurrentGame() const { return _currentGame; }
+
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
             std::shared_ptr<sf::RenderWindow> window;

@@ -67,6 +67,23 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         this->_networkEngine->_client->send(std::string(data, sizeof(data)));
         return;
     }
+    if (event == "Game over offline") {
+        this->_renderingEngine->setStateGame(4); // Game go to end menu screen
+        return;
+    }
+    if (event == "Play again offline") {
+        this->_renderingEngine->getCurrentGameDisplay()->getCurrentGame()->resetGame();
+        this->_renderingEngine->setStateGame(2); // Show current game screen
+        return;
+    }
+    if (event == "Menu offline") {
+        this->_renderingEngine->setStateGame(1); // Show menu screen
+        return;
+    }
+    if (event == "Exit offline") {
+        this->_renderingEngine->setStateGame(4); // Exit program
+        return;
+    }
     if (event == "play") { // Start the game
         char data[5];
         data[0]       = 0x41; // Start game in protocol

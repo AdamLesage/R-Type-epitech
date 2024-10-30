@@ -78,9 +78,13 @@ void RType::DoodleJump::handleOfflineGame()
             } else {
                 this->_camera->listEntityToDisplay[i].sprite.spritePath = std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "lik-front.png";
             }
-        }
 
-        if (this->_camera->listEntityToDisplay[i].position.y > 1080) {
+            if (this->_camera->listEntityToDisplay[i].position.y > 1080 + 1080 / 2) { // Game over because player fell
+                this->gameOver(); 
+            }
+        }
+        if (this->_camera->listEntityToDisplay[i].position.y > 1080 &&
+            this->_camera->listEntityToDisplay[i].sprite.spritePath == std::string("assets") + PATH_SEPARATOR + "doodle_jump" + PATH_SEPARATOR + "green-tile.png") {
             this->_camera->listEntityToDisplay[i].position.y = rand() % 401 - 400;
         }
 
@@ -101,11 +105,6 @@ void RType::DoodleJump::handleOfflineGame()
                 this->_camera->listEntityToDisplay[i].direction.y += 1;
             } else {
                 this->_camera->listEntityToDisplay[i].direction.y = 0;
-            }
-
-            if (this->_camera->listEntityToDisplay[i].position.y > 1080 + 1080 / 4) {
-                // Game over
-                this->_camera->listEntityToDisplay[i].position.y = 1080 / 2;
             }
         }
     }
