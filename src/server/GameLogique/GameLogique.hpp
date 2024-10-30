@@ -111,10 +111,22 @@ class GameLogique {
          */
         void updateLevelConfig();
 
+        /**
+         * @brief add a Enemy on the registry and send a notification to connected client
+         *
+         * @param type the type off entity
+         * @param position_x the x position of the entity
+         * @param position_y the y position of the entity
+         *
+         */
+        void spawnCustomEntity(char type, float position_x, float position_y, size_t entity);
+
         std::map<size_t, size_t> playersId;
         libconfig::Config _gameConfig;
         libconfig::Config _levelConfig;
         std::unique_ptr<AssetEditorParsing> assetEditorParsing;
+        bool ennemyAlive = true;
+        float _camera_x = 1920;
         unsigned int _currentLevel = 0;
 };
 

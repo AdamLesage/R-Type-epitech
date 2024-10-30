@@ -85,10 +85,45 @@ void GameLogique::startGame(int idEntity) {
     }
 }
 
+void GameLogique::spawnCustomEntity(char type, float position_x, float position_y, size_t entity) {
+    std::shared_ptr<EntityData> &entityData = this->assetEditorParsing->getEntityData(type);
+    if (entity == -1) {
+        entity = this->reg.spawn_entity();
+    }
+
+    this->reg.add_component<Position>(entity, Position{position_x, position_y});
+    this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+    this->reg.add_component<Damage>(entity, Damage{20});
+    if (entityData->health != nullptr) {
+        this->reg.add_component<Health>(entity, Health{entityData->health->health, entityData->health->maxHealth, false, true});
+    }
+    if (entityData->playerFollowingPattern != nullptr) {
+        this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{entityData->playerFollowingPattern->speed});
+    }
+    if (entityData->straightLinePattern != nullptr) {
+        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{entityData->straightLinePattern->speed});
+    }
+    if (entityData->shootPlayerPattern != nullptr) {
+        this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{entityData->shootPlayerPattern->projectileSpeed, entityData->shootPlayerPattern->shootCooldown, entityData->shootPlayerPattern->lastShotTime});
+    }
+    if (entityData->shootStraightPattern != nullptr) {
+        this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, entityData->shootStraightPattern->lastShotTime});
+    }
+    if (entityData->WavePattern != nullptr) {
+        this->reg.add_component<Wave_pattern>(entity, Wave_pattern{entityData->WavePattern->amplitude, entityData->WavePattern->frequency});
+    }
+    if (entityData->size != nullptr) {
+        this->reg.add_component<Size>(entity, Size{entityData->size->x, entityData->size->y});
+    }
+    this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+    this->reg.add_component<Direction>(entity, Direction{0, 0});
+    this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
+}
+
 void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     {
         std::lock_guard<std::mutex> lock(this->_mutex);
-
+        
         size_t entity = this->reg.spawn_entity();
 
         switch (type) {
@@ -135,47 +170,33 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             std::map<uint8_t, std::shared_ptr<EntityData>> &entities = this->assetEditorParsing->getEntities();
 
             std::vector<std::map<uint8_t, std::shared_ptr<EntityData>>::iterator> validEntities;
+            std::vector<std::map<uint8_t, std::shared_ptr<EntityData>>::iterator> staticEntities;
 
             for (auto it = entities.begin(); it != entities.end(); ++it) {
                 if (it->second->number != -1 && it->second->number != 0) {
                     validEntities.push_back(it);
+                } else if (it->second->number == -1) {
+                    staticEntities.push_back(it);
                 }
             }
 
             if (!validEntities.empty()) {
                 int randomIndex = std::rand() % validEntities.size();
                 auto selectedIt = validEntities[randomIndex];
-                this->reg.add_component<Position>(entity, Position{position_x, position_y});
-                this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
-                this->reg.add_component<Damage>(entity, Damage{20});
-                
-                if (selectedIt->second->health != nullptr) {
-                    this->reg.add_component<Health>(entity, Health{selectedIt->second->health->health, selectedIt->second->health->maxHealth, false, true});
-                }
-                if (selectedIt->second->playerFollowingPattern != nullptr) {
-                    this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{selectedIt->second->playerFollowingPattern->speed});
-                }
-                if (selectedIt->second->straightLinePattern != nullptr) {
-                    this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{selectedIt->second->straightLinePattern->speed});
-                }
-                if (selectedIt->second->shootPlayerPattern != nullptr) {
-                    this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{selectedIt->second->shootPlayerPattern->projectileSpeed, selectedIt->second->shootPlayerPattern->shootCooldown, selectedIt->second->shootPlayerPattern->lastShotTime});
-                }
-                if (selectedIt->second->shootStraightPattern != nullptr) {
-                    this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, selectedIt->second->shootStraightPattern->lastShotTime});
-                }
-                if (selectedIt->second->WavePattern != nullptr) {
-                    this->reg.add_component<Wave_pattern>(entity, Wave_pattern{selectedIt->second->WavePattern->amplitude, selectedIt->second->WavePattern->frequency});
-                }
-                if (selectedIt->second->size != nullptr) {
-                    this->reg.add_component<Size>(entity, Size{selectedIt->second->size->x, selectedIt->second->size->y});
-                }
-                this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
-                this->reg.add_component<Direction>(entity, Direction{0, 0});
+                this->spawnCustomEntity(selectedIt->first, position_x, position_y, entity);
                 selectedIt->second->number -= 1;
-                this->_networkSender->sendCreateEnemy(selectedIt->first, entity, position_x, position_y);
+            } else {
+                ennemyAlive = false;
+                this->_networkSender->sendCreateEnemy(0x03, entity, position_x, position_y);
                 return;
             }
+            for (auto &it : staticEntities) {
+                if (it->second->pos != nullptr && it->second->pos->x < this->_camera_x) {
+                    this->spawnCustomEntity(type, 1800, it->second->pos->y, -1);
+                    it->second->number = 0;
+                }
+            }
+            return;
             break;
         }
         this->reg.add_component<Direction>(entity, Direction{0, 0});
@@ -208,12 +229,13 @@ void GameLogique::runGame() {
                 sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
                                      logger);
                 sys.position_system(reg, this->_networkSender, logger);
+                _camera_x += 0.1;
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
                 this->spawnEnnemy(0x61, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
-            if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 40) {
+            if (ennemyAlive == false) {
                 endClock = std::clock();
                 this->handleChangeLevel(_currentLevel + 1);
             }
@@ -225,6 +247,7 @@ void GameLogique::runGame() {
 
 void GameLogique::handleChangeLevel(unsigned int newLevel) {
     clearGame();
+    ennemyAlive = true;
     try {
         libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
         if (newLevel >= (unsigned int)levels.getLength()) {
