@@ -210,7 +210,7 @@ void GameLogique::runGame() {
                 sys.position_system(reg, this->_networkSender, logger);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
-                this->spawnEnnemy(0x50, 1920, rand() % 700 + 200);
+                this->spawnEnnemy(0x60, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
             if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 40) {
