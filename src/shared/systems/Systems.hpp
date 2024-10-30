@@ -30,8 +30,10 @@
 #include "../components/Type.hpp"
 #include "../components/Velocity.hpp"
 #include "../../client/Mediator/IMediator.hpp"
+#include "../components/Annimation.hpp"
 #include <iostream>
 #include <memory>
+#include <libconfig.h++>
 
 class Systems {
     public:
@@ -75,7 +77,13 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void direction_system(Registry& reg);
+        void direction_system(Registry& reg, libconfig::Config &playerConfig);
+        /**
+         * @brief Update the annimation of all entity
+         *
+         * @param reg The registry containing the components.
+         */
+        void annimation_system(Registry& reg);
 };
 
 #endif /* !SYSTEMS_HPP_ */

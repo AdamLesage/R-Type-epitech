@@ -158,12 +158,16 @@ void NetworkSender::sendStateChange(int id_entity, char newState, int clientId)
     }
 }
 
-void NetworkSender::sendPing(std::string timeCode) {
-    //finir et ajouter à une méthode à protocol parsing.
-    //protocl parsing fichier de config dans le constructeur de game engine, bouger le fichier de config.
-    std::vector<char> data(strlen(timeCode.c_str()) + 1);
-    data[0] = 0x99;
-    std::memcpy(&data[1], timeCode.c_str(), strlen(timeCode.c_str()));
-    std::memcpy(&data[strlen(timeCode.c_str()) + 1], "\0", 1);
-    this->_network->sendToAll(data.data(), data.size());
+void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId)
+{
+    std::array<char, 13> data{};
+    data[0] = 0x32;
+    std::memcpy(&data[1], &id_entity, sizeof(id_entity));
+    std::memcpy(&data[5], &x, sizeof(x));
+    std::memcpy(&data[9], &y, sizeof(y));
+    if (clientId == -1) {
+        this->_network->sendToAll(data.data(), data.size());
+    } else {
+        this->_network->sendToClient(data.data(), data.size(), clientId);
+    }
 }
