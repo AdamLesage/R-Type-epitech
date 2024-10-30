@@ -32,7 +32,7 @@ void RType::EndMenu::runScene()
 void RType::EndMenu::setGameSelected(const std::string& gameSelected) {
     _gameSelected = gameSelected;
     try {
-        _cfg.readFile(std::string("config") + PATH_SEPARATOR + _gameSelected + PATH_SEPARATOR + "game_config.cfg");
+        _cfg.readFile((std::string("config") + PATH_SEPARATOR + _gameSelected + PATH_SEPARATOR + "game_config.cfg").c_str());
     } catch (const libconfig::FileIOException &fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
         return;
