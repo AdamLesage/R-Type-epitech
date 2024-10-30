@@ -207,20 +207,6 @@ void RType::Game::play(float &latency) {
         displayPiou();
         piou = false;
     }
-    if (toolbar.showFps)
-        metrics.displayFPS(*window);
-    if (toolbar.showCpu)
-        metrics.displayCPU(*window);
-    if (toolbar.showMemory)
-        metrics.displayMemory(*window);
-    if (toolbar.showGpu)
-        metrics.displayGpuUsage(*window);
-    if (toolbar.showNetwork)
-        metrics.displayLatency(*window, latency);
-    if (toolbar.showPlayerPos) {
-        sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
-        metrics.displayPlayerPosition(*window, pos);
-    }
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
@@ -242,6 +228,20 @@ void RType::Game::play(float &latency) {
         window->draw(sprite, &colorblindShader[3]);
     } else {
         window->draw(sprite, &colorblindShader[4]);
+    }
+    if (toolbar.showFps)
+        metrics.displayFPS(*window);
+    if (toolbar.showCpu)
+        metrics.displayCPU(*window);
+    if (toolbar.showMemory)
+        metrics.displayMemory(*window);
+    if (toolbar.showGpu)
+        metrics.displayGpuUsage(*window);
+    if (toolbar.showNetwork)
+        metrics.displayLatency(*window, latency);
+    if (toolbar.showPlayerPos) {
+        sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
+        metrics.displayPlayerPosition(*window, pos);
     }
     console->displayDeveloperConsole();
     toolbar.draw(*window);

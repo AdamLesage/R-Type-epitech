@@ -147,7 +147,7 @@ void Toolbar::draw(sf::RenderWindow& window)
         window.draw(dropdownShape);
         for (auto& [name, textOption] : menuOptions) {
             if (name == hoveredOpt) {
-                textOption.setFillColor(sf::Color::Yellow);
+                textOption.setFillColor(sf::Color::Red);
             } else {
                 textOption.setFillColor(sf::Color::White);
             }
