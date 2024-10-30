@@ -28,6 +28,7 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<ShootPlayerPattern>();
     this->reg.register_component<ShootStraightPattern>();
     this->reg.register_component<Size>();
+    this->reg.register_component<Direction>();
 }
 
 GameLogique::~GameLogique() {
@@ -101,13 +102,16 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
         default:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-            this->reg.add_component<Health>(entity, Health{100, 100, false, true});
+            this->reg.add_component<Health>(entity, Health{50, 50, false, true});
             this->reg.add_component<Damage>(entity, Damage{20});
-            this->reg.add_component<StraightLinePattern>(entity, {0.5f});
+            this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
+            this->reg.add_component<ShootStraightPattern>(
+                entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
         }
+        this->reg.add_component<Direction>(entity, Direction{0, 0});
         this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
     }
 }
@@ -139,7 +143,7 @@ void GameLogique::runGame() {
                 sys.position_system(reg, this->_networkSender, logger);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
-                this->spawnEnnemy(0x03, 1920, rand() % 700 + 200);
+                this->spawnEnnemy(0x50, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
             if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {
@@ -176,7 +180,6 @@ bool GameLogique::areAllPlayersDead()
 void GameLogique::clearGame()
 {
     auto& types  = reg.get_components<Type>();
-    size_t numberPlayer = 0;
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto &type = types[i];
@@ -197,7 +200,7 @@ void GameLogique::clearGame()
         this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
         this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
         this->reg.add_component<Size>(entity, Size{130, 80});
-        std::cout << numberPlayer << std::endl;
+        this->reg.add_component<Direction>(entity, Direction{0, 0});
         this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));
         this->playersId[numberPlayer] = entity;
         usleep(1000);
@@ -365,6 +368,7 @@ void GameLogique::handleClientConnection()
                     this->reg.add_component<ShootingSpeed_s>(entity, ShootingSpeed_s{0.3f});
                     this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
                     this->reg.add_component<Size>(entity, Size{130, 80});
+                    this->reg.add_component<Direction>(entity, Direction{0, 0});
                     this->_networkSender->sendCreatePlayer(clientId, 100.f, 100 + (100.f * clientId));
                     this->playersId[clientId] = entity;
                 }

@@ -182,10 +182,6 @@ namespace RType {
              * find a new entity but just when we find one that is not in our map
              */
             std::unordered_map<std::string, sf::Texture*> Textures; // a map that will stock the textures
-            sf::SoundBuffer game_launch_sound; // The buffer of the game launch sound
-            sf::Sound game_launch_music; // The sound of the game launch
-            sf::SoundBuffer shoot_sound; // The buffer of the shoot sound
-            sf::Sound shoot_music; // The sound of the shoot
             bool isShooting; // A boolean to know if the player is shooting
             sf::Font font; // The font used for the game
             std::shared_ptr<std::mutex> _mutex; 

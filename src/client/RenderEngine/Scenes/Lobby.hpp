@@ -96,7 +96,12 @@ namespace RType {
              * @param mutex the mutex to set
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
-
+            /**
+             * @brief Set the volume of the background music.
+             *
+             * @param number The volume to set.
+            */
+            void setVolume(float number);
             /**
              * @brief Set the game selected
              * 
@@ -109,15 +114,11 @@ namespace RType {
             int selectedOption; // The selected option
             sf::Font font; // The font used for the Lobby
             sf::Text playersNames[5]; // The names of the players
-            sf::Sound backgroundMusic; // The background music of the Lobby
-            sf::SoundBuffer backgroundBuffer; // The buffer of the background music
             sf::Texture backgroundTexture; // The texture of the background
             sf::RectangleShape background; // The background of the Lobby
             sf::Texture logoTexture; // The texture of the logo
             sf::Sprite logoSprite; // The sprite of the logo
             sf::Text menuOptions[3]; // Play, Settings, Quit
-            sf::SoundBuffer selectBuffer; // The buffer of the select sound
-            sf::Sound selectSound; // The sound played when selecting an option
             std::vector<sf::Texture> playerTextures; // The textures of the players
             std::vector<sf::Sprite> playerSprites; // The sprites of the players
             std::shared_ptr<Camera> _camera; // The camera to display
@@ -128,7 +129,8 @@ namespace RType {
             sf::RenderTexture RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
             std::string _gameSelected; // The game selected
-
+            float backgroundMusicVolume; // The volume of the background music
+            bool music;
         private:
             /**
              * @brief Displays the connected Player

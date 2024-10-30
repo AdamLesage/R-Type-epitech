@@ -38,7 +38,7 @@ void RType::RenderingEngine::run() {
     this->_lobby->setGameSelected(_gameSelected);
     this->_game->setGameSelected(_gameSelected);
     this->_endMenu->setGameSelected(_gameSelected);
-
+    this->_settings->setMediator(_mediator);
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
 
@@ -46,6 +46,7 @@ void RType::RenderingEngine::run() {
     this->_lobby->setMutex(_mutex);
     window->setFramerateLimit(360);
     window->clear();
+    _mediator->notify("RenderingEngine", "backgroundMusicPlay");
     while (window->isOpen()) {
         switch (_stateGame)
         {
