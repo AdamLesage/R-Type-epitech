@@ -493,6 +493,22 @@ void Systems::wave_pattern_system(Registry& reg, float totalTime, RType::Logger&
     }
 }
 
+void Systems::boss_system(Registry& reg)
+{
+    auto& patterns = reg.get_components<BossPatern>();
+    auto& positions = reg.get_components<Position>();
+    auto& velocitys = reg.get_components<Velocity>();
+
+    for (size_t i = 0; i < positions.size() / 3 && i < patterns.size(); ++i) {
+        auto& pattern  = patterns[i];
+        auto& position = positions[i];
+        auto& velocity = velocitys[i];
+        if (pattern && position && velocity) {
+            velocity->x = pattern->speed;
+        }
+    }
+}
+
 void Systems::Straight_line_pattern_system(Registry& reg) {
     auto& patterns  = reg.get_components<StraightLinePattern>();
     auto& positions = reg.get_components<Position>();

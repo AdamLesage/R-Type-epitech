@@ -123,6 +123,7 @@ void GameLogique::spawnWave()
     spawnEnnemy(0x03, 1920, 360);
     spawnEnnemy(0x03, 1920, 580);
     spawnEnnemy(0x03, 1920, 920);
+    spawnEnnemy(0x04, 1920, 500);
 }
 
 void GameLogique::runGame() {

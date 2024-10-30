@@ -25,6 +25,7 @@
 #include "../../shared/components/ShootStraightPattern.hpp"
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/Direction.hpp"
+#include "../../shared/components/Boss.hpp"
 #include "../GameLogique/NetworkSender.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Tag.hpp"
@@ -110,6 +111,13 @@ class Systems {
          * @param totalTime The count since the start.
          */
         void wave_pattern_system(Registry& reg, float totalTime, RType::Logger& logger);
+
+        /**
+         * @brief Update the direction of all entities based on their velocity.
+         *
+         * @param reg The registry containing the components.
+         */
+        void boss_system(Registry& reg);
 
         /**
          * @brief Update the health of all entities based on the damages / regeneration / healing they
