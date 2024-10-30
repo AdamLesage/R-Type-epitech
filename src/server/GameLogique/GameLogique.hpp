@@ -105,8 +105,14 @@ class GameLogique {
          */
         std::array<char, 6> retrieveInputKeys();
 
+        /**
+         * @brief update the Level config at level change
+         */
+        void updateLevelConfig();
+
         std::map<size_t, size_t> playersId;
         libconfig::Config _gameConfig;
+        libconfig::Config _levelConfig;
         unsigned int _currentLevel = 0;
 };
 

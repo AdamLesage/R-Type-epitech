@@ -193,6 +193,13 @@ namespace RType {
              * @param mediator A shared pointer to the mediator instance.
              */
             void setMediator(std::shared_ptr<IMediator> mediator);
+            /**
+             * @brief Set the game selected by the client.
+             * 
+             * @param gameSelected The game selected by the client.
+             * @return void
+             */
+            void setGameSelected(const std::string& gameSelected);
         protected:
             /**
              * @brief Check if the message type is valid and if its values are valid.
@@ -217,6 +224,8 @@ namespace RType {
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
             Registry& _registry; // Will be used to update the game engine data
             std::shared_ptr<IMediator> _mediator;
+             libconfig::Config _gameConfig;
+
     };
 } // namespace RType
 

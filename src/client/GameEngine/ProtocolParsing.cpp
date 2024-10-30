@@ -666,3 +666,15 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
 void RType::ProtocolParsing::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
 }
+
+void RType::ProtocolParsing::setGameSelected(const std::string& gameSelected) {
+    try {
+        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + gameSelected + PATH_SEPARATOR + std::string("game_config.cfg");
+        _gameConfig.readFile(gameConfigPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
+}

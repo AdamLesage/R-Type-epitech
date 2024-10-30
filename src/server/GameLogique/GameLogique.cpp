@@ -39,11 +39,32 @@ GameLogique::GameLogique(size_t port, int _frequency) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
     }
+    this->updateLevelConfig();
 }
 
 GameLogique::~GameLogique() {
     receiverThread.join();
     connectionManagmentThread.join();
+}
+
+void GameLogique::updateLevelConfig()
+{
+    try {
+        libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
+        std::string levelConfigPath = levels[this->_currentLevel].lookup("sceneConfig");
+        size_t startPos = 0;
+        std::string from = "/";
+        while((startPos = levelConfigPath.find(from, startPos)) != std::string::npos) {
+            levelConfigPath.replace(startPos, from.length(), PATH_SEPARATOR);
+            startPos += 2;
+        }
+        _levelConfig.readFile(levelConfigPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
 }
 
 void GameLogique::startGame(int idEntity) {
@@ -168,7 +189,7 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
     clearGame();
     try {
         libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
-        if (newLevel >= levels.getLength()) {
+        if (newLevel >= (unsigned int)levels.getLength()) {
             this->running = false;
             sleep(1);
             this->_networkSender->sendStateChange(1, 0x01);
@@ -176,9 +197,10 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
             this->_networkSender->sendLevelUpdate(this->_currentLevel);
             return;
         }
-        printf("send new level: %u\n", newLevel);
         this->_networkSender->sendLevelUpdate(newLevel);
         this->_currentLevel = newLevel;
+        this->updateLevelConfig();
+
     } catch (std::exception &e) {
         std::cerr << "failed to load level" << std::endl;
     }
