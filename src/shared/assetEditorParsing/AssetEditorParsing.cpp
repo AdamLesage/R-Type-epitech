@@ -15,6 +15,7 @@ AssetEditorParsing::AssetEditorParsing(libconfig::Config &config)
         libconfig::Setting &components = entity.lookup("components");
         EntityData entityData;
         uint8_t entityCode = parseCode(entity);
+        entityData.number = parseNumber(entity);
         if (entityCode == 0) {
             continue;
         }
@@ -28,7 +29,6 @@ AssetEditorParsing::AssetEditorParsing(libconfig::Config &config)
         parseShootStraightPattern(entityData, components);
         parsePlayerFollowingPattern(entityData, components);
         parseShootPlayerPattern(entityData, components);
-        parsePlayerFollowingPattern(entityData, components);
         parseStraightLinePattern(entityData, components);
         parseWavePattern(entityData, components);
         parseAnnimation(entityData, components);
@@ -46,6 +46,10 @@ std::shared_ptr<EntityData> &AssetEditorParsing::getEntityData(uint8_t code)
     return this->_entityData[code];
 }
 
+std::map<uint8_t, std::shared_ptr<EntityData>> &AssetEditorParsing::getEntities() {
+    return this->_entityData;
+}
+
 uint8_t AssetEditorParsing::parseCode(libconfig::Setting &entity)
 {
     int code;
@@ -60,6 +64,25 @@ uint8_t AssetEditorParsing::parseCode(libconfig::Setting &entity)
         return code;
     } catch (const std::exception &e) {
         std::cerr << "Error from LoadScene loadEntityCode: " << e.what() << std::endl;
+        return 0;
+    }
+    return 0;
+}
+
+int AssetEditorParsing::parseNumber(libconfig::Setting &entity)
+{
+    int number;
+    try {
+        // Check if the entity has a code
+        if (!entity.exists("number")) {
+            std::cerr << "Entity has no code" << std::endl;
+            throw std::runtime_error("Entity has no code");
+        }
+
+        entity.lookupValue("number", number);
+        return number;
+    } catch (const std::exception &e) {
+        std::cerr << "Error from LoadScene loadEntityNumber: " << e.what() << std::endl;
         return 0;
     }
     return 0;
@@ -197,7 +220,7 @@ void AssetEditorParsing::parsePlayerFollowingPattern(EntityData &entityData, lib
         float speed = playerFollowingPatternSetting["speed"];
         entityData.playerFollowingPattern = std::make_shared<PlayerFollowingPattern>(PlayerFollowingPattern{speed});
     } catch (const std::exception &e) {
-        std::cerr << "Error from LoadScene loadComponentShootPlayerPattern: " << e.what() << std::endl;
+        std::cerr << "Error from LoadScene loadComponentPlayerFollowingPattern: " << e.what() << std::endl;
     }
 }
 
@@ -208,7 +231,7 @@ void AssetEditorParsing::parseStraightLinePattern(EntityData &entityData, libcon
         float speed = StraightLinePatternSetting["speed"];
         entityData.straightLinePattern = std::make_shared<StraightLinePattern>(StraightLinePattern{speed});
     } catch (const std::exception &e) {
-        std::cerr << "Error from LoadScene loadComponentShootPlayerPattern: " << e.what() << std::endl;
+        std::cerr << "Error from LoadScene loadComponentStraihtLinePattern: " << e.what() << std::endl;
     }
 }
 
@@ -220,7 +243,7 @@ void AssetEditorParsing::parseWavePattern(EntityData &entityData, libconfig::Set
         float frequency = WavePatternSetting["frequency"];
         entityData.WavePattern = std::make_shared<Wave_pattern>(Wave_pattern{amplitude, frequency});
     } catch (const std::exception &e) {
-        std::cerr << "Error from LoadScene loadComponentShootPlayerPattern: " << e.what() << std::endl;
+        std::cerr << "Error from LoadScene loadComponentWavePattern: " << e.what() << std::endl;
     }
 }
 
