@@ -29,7 +29,6 @@ void RType::RenderingEngine::run() {
         exit(84);
     }
     logger.log(RType::Logger::LogType::RTYPEINFO, "Scenes Created");
-    this->_menu->setMediator(_mediator);
     this->_lobby->setMediator(_mediator);
     this->_menu->setMediator(_mediator);
     this->_game->setMediator(_mediator);

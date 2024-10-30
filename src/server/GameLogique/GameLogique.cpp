@@ -190,7 +190,7 @@ void GameLogique::clearGame()
         }
     }
     usleep(1000);
-    for (numberPlayer = 0; numberPlayer != this->network->getClientCount(); numberPlayer++) {
+    for (size_t numberPlayer = 0; numberPlayer != this->network->getClientCount(); numberPlayer++) {
         entity_t entity = this->reg.spawn_entity();
         this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * numberPlayer), 100.f});
         this->reg.add_component<Velocity>(entity, Velocity_s{0.f, 0.f});
@@ -238,7 +238,7 @@ std::array<char, 6> GameLogique::retrieveInputKeys() {
 
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
     if (message.first.size() != 6) {
-        std::cout << "Invalid message size" << std::endl;
+        std::cerr << "Invalid message size" << std::endl;
         return;
     }
     if (running == false) return;
@@ -343,7 +343,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             default:
-                std::cout << "unknowCommand" << std::endl;
+                std::cerr << "unknowCommand" << std::endl;
                 break;
             }
         }

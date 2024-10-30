@@ -53,10 +53,10 @@ void NetworkLib::Server::handle_receive(const std::error_code& error, std::size_
             if (!message.first.empty()) incomingMessages.push(message);
             ;
         } catch (...) {
-            std::cout << "handle_receive: Unknown error while parsing incoming message" << std::endl;
+            std::cerr << "handle_receive: Unknown error while parsing incoming message" << std::endl;
         }
     } else {
-        std::cout << "handle_receive: error: " << error.message() << " while receiving from address "
+        std::cerr << "handle_receive: error: " << error.message() << " while receiving from address "
                     << _remote_endpoint;
         handle_remote_error(_remote_endpoint);
     }
@@ -77,7 +77,7 @@ void NetworkLib::Server::sendToClient(const char* message, size_t size, uint32_t
     try {
         send(message, size, clients.at(clientID));
     } catch (...) {
-        std::cout << "sendToClient: Unknown error while sending message to client " << clientID
+        std::cerr << "sendToClient: Unknown error while sending message to client " << clientID
                     << std::endl;
     }
 };
@@ -103,9 +103,9 @@ void NetworkLib::Server::run_service() {
         try {
             io_service.run();
         } catch (const std::exception& e) {
-            std::cout << "Server: Network exception: " << e.what() << std::endl;
+            std::cerr << "Server: Network exception: " << e.what() << std::endl;
         } catch (...) {
-            std::cout << "Server: Network exception: unknown" << std::endl;
+            std::cerr << "Server: Network exception: unknown" << std::endl;
         }
     }
     std::cout << "Server network thread stopped" << std::endl;

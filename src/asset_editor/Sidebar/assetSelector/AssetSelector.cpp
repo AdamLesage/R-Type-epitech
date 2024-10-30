@@ -117,7 +117,7 @@ void Edition::AssetSelector::findAndLoadAsset(const std::string &assetPath)
             if (std::find(this->extensions.begin(), this->extensions.end(), entry.path().extension()) != this->extensions.end()) {
                 std::shared_ptr<sf::Texture> texture = std::make_shared<sf::Texture>();
                 if (!texture->loadFromFile(entry.path())) {
-                    std::cout << "fail to load: " << entry.path() << std::endl;
+                    std::cerr << "fail to load: " << entry.path() << std::endl;
                 }
                 size_t found = 0;
                 found = folder.find_last_of("/\\");

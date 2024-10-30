@@ -18,12 +18,10 @@ RType::AGame::~AGame()
 
 void RType::AGame::jump()
 {
-    std::cout << "Jumping" << std::endl;
 }
 
 void RType::AGame::applyGravity()
 {
-    std::cout << "Applying gravity" << std::endl;
 }
 
 void RType::AGame::setMediator(std::shared_ptr<IMediator> mediator)
