@@ -52,7 +52,7 @@ void RType::Console::displayFPS()
     float deltaTime = clock.restart().asSeconds();
     fps = 1.0f / deltaTime;  // Calcul des FPS
     FPS.setString(std::to_string(fps));
-    window->draw(FPS);
+    RenderTexture->draw(FPS);
 }
 
 void RType::Console::displayDeveloperConsole() {
@@ -96,11 +96,11 @@ void RType::Console::displayContainer() {
     secondContainer.setPosition(0, consoleHeight);
     _inputText.setPosition(10, consoleHeight);
 
-    window->draw(container);
-    window->draw(secondContainer);
-    window->draw(_inputText);
+    RenderTexture->draw(container);
+    RenderTexture->draw(secondContainer);
+    RenderTexture->draw(_inputText);
     for (std::size_t i = 0; i < History.size(); i++) {
-        window->draw(History[i]);
+        RenderTexture->draw(History[i]);
     }
 }
 
@@ -276,7 +276,7 @@ void RType::Console::displayCloseContainerButton() {
     closeBtn.setFillColor(sf::Color(255, 0, 0, 128));
 
     closeBtn.setPosition(closeBtnPosX - 2, 2);
-    window->draw(closeBtn);
+    RenderTexture->draw(closeBtn);
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
         if (closeBtn.getGlobalBounds().contains(static_cast<float>(mousePos.x),
