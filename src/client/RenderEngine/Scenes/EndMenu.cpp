@@ -92,7 +92,7 @@ void RType::EndMenu::displayEndMenuOptions()
         } else if (_options[_selectedOption] == "Menu") {
             this->_mediator->notify("RenderingEngine", "Menu offline");
         } else if (_options[_selectedOption] == "Exit") {
-            this->_mediator->notify("RenderingEngine", "Exit offline");
+            this->_mediator->notify("RenderingEngine", "Exit");
         } else {
             std::cerr << "Unsupported action from client";
         }

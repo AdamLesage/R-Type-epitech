@@ -80,8 +80,8 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         this->_renderingEngine->setStateGame(1); // Show menu screen
         return;
     }
-    if (event == "Exit offline") {
-        this->_renderingEngine->setStateGame(4); // Exit program
+    if (event == "Exit") {
+        this->_renderingEngine->setStateGame(-1); // Exit program
         return;
     }
     if (event == "play") { // Start the game

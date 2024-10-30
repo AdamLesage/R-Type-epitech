@@ -149,10 +149,28 @@ void GameLogique::runGame() {
                 sleep(1);
                 this->_networkSender->sendStateChange(1, 0x01);
             }
+            if (this->areAllPlayersDead() == true) {
+                this->clearGame();
+                sleep(1);
+                this->_networkSender->sendStateChange(1, 0x04);
+                this->running = false;
+            }
         } else {
             endClock = std::clock();
         }
     }
+}
+
+bool GameLogique::areAllPlayersDead()
+{
+    bool anyPlayerDead = true;
+
+    for (auto& player : reg.get_components<Type>()) {
+        if (player && player->type == EntityType::PLAYER) {
+            anyPlayerDead = false;
+        }
+    }
+    return anyPlayerDead;
 }
 
 void GameLogique::clearGame()
