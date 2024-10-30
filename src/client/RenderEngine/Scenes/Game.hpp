@@ -48,7 +48,7 @@ namespace RType {
              *
              * @param _window The window to display the game on.
              */
-            Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath);
+            Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath, std::shared_ptr<Registry> registry);
 
             /**
              * @brief Destroy the Game object.
@@ -134,6 +134,8 @@ namespace RType {
              */
             std::shared_ptr<IGame> getCurrentGame() const { return _currentGame; }
 
+            void displayEnemyHealth(sf::RenderWindow& win);
+            // void displayPlayerHealth();
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
             std::shared_ptr<sf::RenderWindow> window;
@@ -167,7 +169,7 @@ namespace RType {
             bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
             libconfig::Config _cfg; // The config file
 
-            Registry _registry;
+            std::shared_ptr<Registry> _registry;
             Systems _systems;
             std::shared_ptr<Console> console;
             std::shared_ptr<Settings> settings; //the class settings used to display the settings

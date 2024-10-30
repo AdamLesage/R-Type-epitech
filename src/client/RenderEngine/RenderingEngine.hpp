@@ -17,6 +17,7 @@
 #include "Scenes/Lobby.hpp"
 #include "Scenes/EndMenu.hpp"
 #include "../Camera.hpp"
+#include "../../shared/registry/Registry.hpp"
 
 #include <mutex>
 
@@ -49,6 +50,10 @@ namespace RType {
              * @param mutex the mutex to set
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
+
+            void setRegistry(std::shared_ptr<Registry> registry) {
+                this->_registry = registry; // _registry devrait être un pointeur partagé dans RenderingEngine
+            }
 
             /**
              * @brief Set a new State
@@ -85,6 +90,7 @@ namespace RType {
             RType::Logger logger;
             int _stateGame = 1;
             std::string _gameSelected;
+            std::shared_ptr<Registry> _registry;
     };
 } // namespace RType
 

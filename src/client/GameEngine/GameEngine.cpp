@@ -8,33 +8,34 @@
 #include "GameEngine.hpp"
 
 RType::GameEngine::GameEngine() {
+    _registry = std::make_shared<Registry>();
     // Register all components
-    _registry.register_component<Charging_s>();
-    _registry.register_component<Color_s>();
-    _registry.register_component<Controllable_s>();
-    _registry.register_component<Damage_s>();
-    _registry.register_component<Drawable_s>();
-    _registry.register_component<Freeze_s>();
-    _registry.register_component<Health_s>();
-    _registry.register_component<Level_s>();
-    _registry.register_component<Position_s>();
-    _registry.register_component<Revivable_s>();
-    _registry.register_component<Rotation_s>();
-    _registry.register_component<Scale_s>();
-    _registry.register_component<Shoot_s>();
-    _registry.register_component<ShootingSpeed_s>();
-    _registry.register_component<Sound_s>();
-    _registry.register_component<Sprite_s>();
-    _registry.register_component<Tag_s>();
-    _registry.register_component<Type_s>();
-    _registry.register_component<Velocity_s>();
-    _registry.register_component<Size>();
-    _registry.register_component<Direction>();
-    _registry.register_component<Annimation>();
+    _registry->register_component<Charging_s>();
+    _registry->register_component<Color_s>();
+    _registry->register_component<Controllable_s>();
+    _registry->register_component<Damage_s>();
+    _registry->register_component<Drawable_s>();
+    _registry->register_component<Freeze_s>();
+    _registry->register_component<Health_s>();
+    _registry->register_component<Level_s>();
+    _registry->register_component<Position_s>();
+    _registry->register_component<Revivable_s>();
+    _registry->register_component<Rotation_s>();
+    _registry->register_component<Scale_s>();
+    _registry->register_component<Shoot_s>();
+    _registry->register_component<ShootingSpeed_s>();
+    _registry->register_component<Sound_s>();
+    _registry->register_component<Sprite_s>();
+    _registry->register_component<Tag_s>();
+    _registry->register_component<Type_s>();
+    _registry->register_component<Velocity_s>();
+    _registry->register_component<Size>();
+    _registry->register_component<Direction>();
+    _registry->register_component<Annimation>();
 
     std::string scenesConfigPath = std::string("config") + PATH_SEPARATOR + std::string("scenes") + PATH_SEPARATOR + std::string("sceneText.cfg");
     _protocolParsing =
-        std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", scenesConfigPath, _registry);
+        std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", scenesConfigPath, *_registry);
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
     this->_systems = Systems();
@@ -69,6 +70,7 @@ void RType::GameEngine::run() {
     auto& physicEngine    = _physicEngine;
     auto& audioEngine     = _audioEngine;
     _mediator->setGameSelected(_gameSelected);
+    // std::shared_ptr<Registry> sharedRegistry = std::make_shared<Registry>(_registry);
 
     std::thread networkThread([&]() {
         try {
@@ -83,6 +85,7 @@ void RType::GameEngine::run() {
             renderingEngine->setGameSelected(_gameSelected);
             renderingEngine->setCamera(this->_camera);
             renderingEngine->setMutex(this->_mutex);
+            renderingEngine->setRegistry(_registry);
             renderingEngine->run();
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
@@ -107,8 +110,8 @@ void RType::GameEngine::run() {
 
     // Wait for all threads to finish
     while (1) {
-        this->_systems.annimation_system(this->_registry);
-        this->_systems.direction_system(_registry, _playerConfig);
+        this->_systems.annimation_system(*this->_registry);
+        this->_systems.direction_system(*_registry, _playerConfig);
         updateCamera();
     }
 
@@ -133,11 +136,11 @@ void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {
 }
 
 void RType::GameEngine::updateCamera() {
-    auto& positions  = this->_registry.get_components<Position_s>();
-    auto& sizes      = this->_registry.get_components<Size>();
-    auto& rotations = this->_registry.get_components<Rotation>();
-    auto& directions = this->_registry.get_components<Direction>();
-    auto& sprites    = this->_registry.get_components<Sprite>();
+    auto& positions  = this->_registry->get_components<Position_s>();
+    auto& sizes      = this->_registry->get_components<Size>();
+    auto& rotations = this->_registry->get_components<Rotation>();
+    auto& directions = this->_registry->get_components<Direction>();
+    auto& sprites    = this->_registry->get_components<Sprite>();
     std::vector<EntityRenderInfo> entityRender;
     entityRender.reserve(std::min({positions.size(), sizes.size(), rotations.size(), sprites.size()}));
     for (size_t i = 0;
@@ -159,8 +162,6 @@ void RType::GameEngine::updateCamera() {
             std::cerr << e.what() << '\n';
             return;
         }
-        
-        
     }
     {
         std::lock_guard<std::mutex> lock(*this->_mutex.get());

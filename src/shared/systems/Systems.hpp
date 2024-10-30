@@ -52,8 +52,7 @@ class Systems {
          * @param mediator The mediator to notify the game engine.
          * @param shootSound The function to play the shoot sound.
          */
-        void control_system(Registry& reg,
-                            sf::RenderWindow& window,
+        void control_system(sf::RenderWindow& window,
                             std::shared_ptr<RType::IMediator> mediator,
                             std::function<void()> shootSound);
 

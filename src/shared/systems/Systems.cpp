@@ -22,11 +22,9 @@ void Systems::position_system(Registry& reg) {
     }
 }
 
-void Systems::control_system(Registry& reg,
-                             sf::RenderWindow& window,
+void Systems::control_system(sf::RenderWindow& window,
                              std::shared_ptr<RType::IMediator> mediator,
                              std::function<void()> shootSound) {
-    (void)reg;
     if (window.hasFocus() == false) {
         return;
     }

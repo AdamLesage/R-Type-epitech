@@ -11,11 +11,10 @@
 #include <iomanip>
 #include <random>
 
-RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath)
-    : currentFrame(1), frameDuration(0.05f), animationComplete(false)
-{
-    this->window         = _window;
-    this->_mediator      = nullptr;
+RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath, std::shared_ptr<Registry> registry)
+    : currentFrame(1), frameDuration(0.05f), animationComplete(false), _registry(registry) {
+    this->window = _window;
+    this->_mediator = nullptr;
     isShooting = false;
 
     try {
@@ -150,7 +149,7 @@ void RType::Game::play() {
         }
     }
 
-    _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
+    _systems.control_system(*window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
 
     window->clear();
     if (this->isGameOffline() == true) {
@@ -301,6 +300,8 @@ void RType::Game::runScene() {
     }
     RenderTexture->display();
     this->handleColorblind();
+    std::cout << "Displaying enemy health" << std::endl;
+    displayEnemyHealth(*window.get());
     window->display();
     handleEvents();
 }
@@ -362,4 +363,36 @@ bool RType::Game::isGameOffline() {
         return false;
     }
     return true;
+}
+
+
+void RType::Game::displayEnemyHealth(sf::RenderWindow& win) {
+    (void)win;
+    // Vérifier le nombre d'entités dans le registre
+    std::cout << "Nombre d'entités dans le registry : " << _registry->get_components<Type>().size() << std::endl;
+    
+    // Afficher les composants présents dans chaque SparseArray
+    auto& types = _registry->get_components<Type>();
+    auto& healths = _registry->get_components<Health>();
+
+    std::cout << "Composants Type : " << types.size() << " éléments" << std::endl;
+    std::cout << "Composants Health : " << healths.size() << " éléments" << std::endl;
+
+    for (size_t i = 0; i < types.size(); ++i) {
+        auto& type = types[i];
+        auto& health = healths[i];
+
+        if (type) {
+            std::cout << "Entity " << i << " - Type trouvé : " << static_cast<int>(type->type) << std::endl;
+        } else {
+            std::cout << "Entity " << i << " - Pas de composant Type" << std::endl;
+        }
+
+        if (health) {
+            std::cout << "Entity " << i << " - Health trouvé : " << health->health 
+                      << "/" << health->maxHealth << std::endl;
+        } else {
+            std::cout << "Entity " << i << " - Pas de composant Health" << std::endl;
+        }
+    }
 }

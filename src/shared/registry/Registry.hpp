@@ -130,6 +130,8 @@ class Registry {
             }
         }
 
+        std::vector<entity_t> const& get_entities() const { return _entities; }
+
     private:
         std::unordered_map<std::type_index, std::any> _components_arrays;
         std::unordered_map<std::type_index, std::function<void(Registry&, entity_t const&)>>

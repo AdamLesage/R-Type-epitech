@@ -23,7 +23,7 @@ void RType::RenderingEngine::run() {
         this->_lobby    = std::make_shared<Lobby>(window);
         this->_endMenu  = std::make_shared<EndMenu>(window);
         std::string configPath = std::string("config") + PATH_SEPARATOR + _gameSelected + PATH_SEPARATOR + "game_config.cfg";
-        this->_game = std::make_shared<Game>(window, configPath);
+        this->_game = std::make_shared<Game>(window, configPath, _registry);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         exit(84);
