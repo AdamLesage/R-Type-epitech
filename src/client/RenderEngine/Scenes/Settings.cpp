@@ -100,7 +100,7 @@ void Settings::moveUp() {
 }
 
 void Settings::moveDown() {
-    if (selectedOption + 1 < 9) {
+    if (selectedOption + 1 < 9) { // for the 9 options of menuOptions such as UP, DOWN, LEFT, RIGHT, SHOOT, SETTINGS, SUBTITLES, COLORBLIND, FRIENDLY FIRE
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
