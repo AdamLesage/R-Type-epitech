@@ -19,6 +19,7 @@
 #include "../../shared/systems/Systems.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Sprite.hpp"
+#include "../../shared/assetEditorParsing/AssetEditorParsing.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -40,6 +41,14 @@ namespace RType {
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
             bool parsePlayerCreation(const std::string& message, int& index);
+            /**
+             * @brief Parse the message to validate and extract information for the corresponding operation
+             * and manage the corresponding request (creation, deletion, update)
+             *
+             * @param message A pointer to a C-string containing the message to be parsed.
+             * @return true if the parsing is successful and the message is valid, false otherwise.
+             */
+            bool parseEntityCreation(const std::string& message, int& index);
 
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation
@@ -217,8 +226,14 @@ namespace RType {
              * @return int The new index.
              */
             int updateIndexFromBinaryData(const std::string& message, int& index);
+            /**
+             * 
+             */
+            void loadAssetCfgEditorParsing(size_t level);
         private:
             // Variables
+            std::unique_ptr<AssetEditorParsing> _assetEditorParsing;
+            libconfig::Config _cfgAssetEditor;
             std::string _protocolPath;
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
