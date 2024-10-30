@@ -1,43 +1,129 @@
-## ECS Choice
+# Technical and Comparative Study
 
-Using an **Entity-Component-System** (ECS) architecture provides a clear separation of concerns, allowing for greater flexibility and reusability. This modular design enables components to be easily added or removed from entities without being tied to specific classes. Additionally, ECS improves performance by allowing systems to process similar components in batches, optimizing memory access and reducing cache misses. Overall, adopting ECS results in a more organized and efficient game development process.
-We decided to choose this architecture for our project because it was the best architecture to use in continuing to the bootstrap.
+This document presents a technical and comparative analysis of the architectural and design choices made in our project. We examine the Entity-Component-System (ECS) architecture, the Mediator design pattern, the SFML graphics library, networking techniques, entity spawning algorithms, storage methods, and security considerations.
 
-## Design Pattern
+## ECS Architecture
 
-### Mediator
+### Choice: Entity-Component-System (ECS)
 
-The **Mediator** is a behavioral design pattern that lets you reduce chaotic dependencies between objects. The pattern restricts direct communications between the objects and forces them to collaborate only via a mediator object. In this project, the Mediator design pattern was implemented to streamline communication between engines. By centralizing interactions through a mediator, we reduced direct dependencies between components, simplifying the architecture and enhancing maintainability. This approach not only facilitates easier debugging and testing but also allows for greater scalability; new features can be added with minimal impact on existing code. Overall, the use of the Mediator pattern promotes a more organized and efficient codebase, aligning with best practices in software design.
+- **Advantages**:
+  - **Separation of Concerns**: ECS allows distinct responsibilities for entities, components, and systems, enhancing modularity and maintainability.
+  - **Performance**: By processing similar components in batches, ECS optimizes memory access, reducing cache misses.
+  - **Flexibility**: New components can be added or removed without altering existing class hierarchies.
 
-## C++ SFML
+- **Alternatives**:
+  - **Object-Oriented Programming (OOP)**:
+    - **Advantages**: Familiar to many developers; good for smaller projects.
+    - **Disadvantages**: Can lead to tightly coupled classes, making code harder to maintain and extend.
+  - **Data-Oriented Design (DOD)**:
+    - **Advantages**: Focuses on data layout and cache efficiency, potentially leading to better performance.
+    - **Disadvantages**: May increase complexity and require a steep learning curve.
 
-In C++ there a many graphics library which all have advantages. Some will be better for 3Dimensions project, some will be easier to use, some will be newer, some will be older. For this project we choose to use the SFML library. The main advantage of this library is its ease of use. This library is also very optimal for 2Dimensions project like the R-Type. Finally, as Epitech student we also have used this library for many projects during our two first years.
+### Conclusion:
+ECS was selected due to its modularity and performance benefits, making it particularly suitable for larger projects.
+
+## Design Pattern: Mediator
+
+### Choice: Mediator Pattern
+
+- **Advantages**:
+  - **Reduced Dependencies**: Centralizes communication, minimizing direct interactions between objects.
+  - **Maintainability**: Simplifies debugging and enhances scalability, allowing easy integration of new features.
+
+- **Alternatives**:
+  - **Observer Pattern**:
+    - **Advantages**: Facilitates one-to-many relationships and is useful for event-driven architectures.
+    - **Disadvantages**: Can lead to complex dependencies and unmanageable callback chains.
+  - **Command Pattern**:
+    - **Advantages**: Encapsulates requests as objects, providing flexibility in handling commands.
+    - **Disadvantages**: Increases the number of classes and can complicate the architecture.
+
+### Conclusion:
+The Mediator pattern was chosen for its ability to streamline interactions and reduce coupling, which is crucial in a complex system.
+
+## C++ SFML Graphics Library
+
+### Choice: SFML Library
+
+- **Advantages**:
+  - **Ease of Use**: Provides a straightforward API for 2D graphics, making it beginner-friendly.
+  - **Community Support**: Well-documented and widely used in educational settings, particularly in Epitech.
+
+- **Alternatives**:
+  - **SDL (Simple DirectMedia Layer)**:
+    - **Advantages**: More mature library with extensive platform support and capabilities for both 2D and 3D graphics.
+    - **Disadvantages**: More complex API that may require a steeper learning curve.
+  - **OpenGL**:
+    - **Advantages**: Offers greater control over graphics rendering and is more suited for 3D applications.
+    - **Disadvantages**: More complex, requiring knowledge of shaders and lower-level graphics programming.
+
+### Conclusion:
+SFML was chosen for its simplicity and suitability for 2D games, aligning well with the project's educational context.
 
 ## Networking Techniques
 
-UDP (User Datagram Protocol) combined with binary protocols offers significant advantages for networking techniques, particularly in scenarios demanding speed and efficiency. Unlike TCP, UDP is connectionless, reducing overhead by eliminating the need for handshakes and ensuring faster data transmission, making it ideal for real-time applications such as online gaming. Binary protocols further enhance performance by using a compact data representation, minimizing the amount of data transmitted over the network. This combination leads to lower latency, reduced bandwidth usage, and improved overall performance, making UDP and binary protocols optimal choices for high-speed, resource-sensitive networking environments.
+### Choice: UDP with Binary Protocols
 
-## Algorithms
+- **Advantages**:
+  - **Speed and Efficiency**: UDP's connectionless nature reduces overhead, making it ideal for real-time applications.
+  - **Compact Data Representation**: Binary protocols minimize data size, leading to lower latency and reduced bandwidth usage.
 
-### Spawn of entities
+- **Alternatives**:
+  - **TCP (Transmission Control Protocol)**:
+    - **Advantages**: Guarantees delivery and order of packets, ensuring data integrity.
+    - **Disadvantages**: Higher overhead due to connection establishment and error-checking mechanisms, making it less suitable for real-time applications.
+  - **Text-Based Protocols (e.g., JSON over HTTP)**:
+    - **Advantages**: Human-readable and easier to debug.
+    - **Disadvantages**: Larger data size and increased latency due to parsing overhead.
 
-The spawn of entities in a video game like the R-type is an important aspect of the gameplay.
+### Conclusion:
+UDP combined with binary protocols was selected for its performance advantages in real-time gaming scenarios.
 
-Currently, the game can spawn many different enemies, but we decided to implement a simple algorithm to spawn them. Only one type of enemy is spawning at an defined interval. This interval is defined in the configuration file. The algorithm is simple, it will spawn an enemy at the defined interval. The enemy will spawn at a random position on the screen. The enemy will then move to the left of the screen. If the enemy is destroyed or reach the left of the screen, the enemy will be deleted and the algorithm will wait for the next interval to spawn a new enemy.
+## Algorithms: Entity Spawning
 
-## Storage
+### Choice: Simple Spawn Algorithm
 
-In a video game like the R-type there are many information and assets that you need to store (Image, sound, font, configuration file). Most of them can be stored in different formats which will not really influence our code. However, for the configuration we chose to use the libconfig library. The libconfig will allow us to store our data in a **.cfg** file and use multiple function that will help us read those files.
+- **Advantages**:
+  - **Simplicity**: Easy to implement and maintain, allowing for straightforward adjustments to enemy spawn rates.
+  - **Controlled Difficulty**: Provides a predictable challenge for players, enhancing gameplay balance.
 
-Voici un paragraphe ajouté à la section **Security** du document pour décrire les aspects de sécurité liés au protocole binaire :
+- **Alternatives**:
+  - **Complex Spawn Algorithms (e.g., Wave Spawning)**:
+    - **Advantages**: Creates varied gameplay experiences and can adapt to player performance.
+    - **Disadvantages**: More complex to implement and may require additional tuning for balance.
 
----
+### Conclusion:
+The simple spawn algorithm was chosen for its clarity and ease of integration, making it suitable for the current development phase.
+
+## Storage Methods
+
+### Choice: libconfig for Configuration Storage
+
+- **Advantages**:
+  - **Structured Data Management**: Enables easy reading and writing of configuration data.
+  - **Flexibility**: Supports various data types, allowing for diverse configuration needs.
+
+- **Alternatives**:
+  - **JSON or XML**:
+    - **Advantages**: Human-readable and widely supported.
+    - **Disadvantages**: Parsing overhead and potential for data manipulation risks.
+
+### Conclusion:
+Libconfig was selected for its straightforward handling of configuration data, allowing efficient management of game settings.
 
 ## Security
 
-The binary protocol used for communication between the server and client offers certain security benefits by adding a layer of complexity in the interpretation of the data being exchanged. The compact and encoded nature of the binary format makes it inherently less human-readable than text-based formats such as JSON or XML, which helps in obfuscating the transmitted information and makes it more difficult for unauthorized entities to interpret the raw data directly.
+### Choice: Binary Protocol with Encryption
 
-However, while this complexity can slow down potential attackers trying to reverse-engineer the communication, it is important to emphasize that binary encoding alone does not provide comprehensive security. To ensure the confidentiality and integrity of the data exchanged, the protocol is designed to be used in conjunction with encryption mechanisms like TLS/SSL. This ensures that even if an attacker intercepts the data stream, the actual content remains encrypted and unreadable.
+- **Advantages**:
+  - **Obfuscation**: The binary format is less human-readable, complicating unauthorized data interception.
+  - **Injection Protection**: Fixed-size fields reduce the risk of injection attacks common in text-based protocols.
 
-Furthermore, the binary protocol helps reduce the risk of injection attacks that are common in text-based formats, such as SQL injections or XML injections. By structuring the data into fixed-size fields and using predefined data types, it limits the possibility of unexpected inputs being executed as commands, thus providing an additional layer of resilience against data manipulation.
+- **Alternatives**:
+  - **Text-Based Protocols with Encryption**:
+    - **Advantages**: Easier to debug and test.
+    - **Disadvantages**: More susceptible to injection attacks and larger data sizes.
+
+### Conclusion:
+The binary protocol, combined with encryption mechanisms like TLS/SSL, was chosen for its security benefits, particularly in protecting data integrity and confidentiality.
 
