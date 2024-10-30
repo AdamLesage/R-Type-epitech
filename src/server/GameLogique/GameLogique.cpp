@@ -65,6 +65,7 @@ void GameLogique::updateLevelConfig()
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
     }
+    assetEditorParsing.reset(new AssetEditorParsing(_levelConfig));
 }
 
 void GameLogique::startGame(int idEntity) {
@@ -131,15 +132,50 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
         default:
-            this->reg.add_component<Position>(entity, Position{position_x, position_y});
-            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-            this->reg.add_component<Health>(entity, Health{50, 50, false, true});
-            this->reg.add_component<Damage>(entity, Damage{20});
-            this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
-            this->reg.add_component<ShootStraightPattern>(
-                entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
-            this->reg.add_component<Size>(entity, Size{70, 71});
-            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            std::map<uint8_t, std::shared_ptr<EntityData>> &entities = this->assetEditorParsing->getEntities();
+
+            std::vector<std::map<uint8_t, std::shared_ptr<EntityData>>::iterator> validEntities;
+
+            for (auto it = entities.begin(); it != entities.end(); ++it) {
+                if (it->second->number != -1 && it->second->number != 0) {
+                    validEntities.push_back(it);
+                }
+            }
+
+            if (!validEntities.empty()) {
+                int randomIndex = std::rand() % validEntities.size();
+                auto selectedIt = validEntities[randomIndex];
+                this->reg.add_component<Position>(entity, Position{position_x, position_y});
+                this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
+                this->reg.add_component<Damage>(entity, Damage{20});
+                
+                if (selectedIt->second->health != nullptr) {
+                    this->reg.add_component<Health>(entity, Health{selectedIt->second->health->health, selectedIt->second->health->maxHealth, false, true});
+                }
+                if (selectedIt->second->playerFollowingPattern != nullptr) {
+                    this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{selectedIt->second->playerFollowingPattern->speed});
+                }
+                if (selectedIt->second->straightLinePattern != nullptr) {
+                    this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{selectedIt->second->straightLinePattern->speed});
+                }
+                if (selectedIt->second->shootPlayerPattern != nullptr) {
+                    this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{selectedIt->second->shootPlayerPattern->projectileSpeed, selectedIt->second->shootPlayerPattern->shootCooldown, selectedIt->second->shootPlayerPattern->lastShotTime});
+                }
+                if (selectedIt->second->shootStraightPattern != nullptr) {
+                    this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, selectedIt->second->shootStraightPattern->lastShotTime});
+                }
+                if (selectedIt->second->WavePattern != nullptr) {
+                    this->reg.add_component<Wave_pattern>(entity, Wave_pattern{selectedIt->second->WavePattern->amplitude, selectedIt->second->WavePattern->frequency});
+                }
+                if (selectedIt->second->size != nullptr) {
+                    this->reg.add_component<Size>(entity, Size{selectedIt->second->size->x, selectedIt->second->size->y});
+                }
+                this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+                this->reg.add_component<Direction>(entity, Direction{0, 0});
+                selectedIt->second->number -= 1;
+                this->_networkSender->sendCreateEnemy(selectedIt->first, entity, position_x, position_y);
+                return;
+            }
             break;
         }
         this->reg.add_component<Direction>(entity, Direction{0, 0});
@@ -197,12 +233,12 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
             this->_networkSender->sendStateChange(1, 0x01);
             this->_currentLevel = 0;
             this->_networkSender->sendLevelUpdate(this->_currentLevel);
+            this->updateLevelConfig();
             return;
         }
         this->_networkSender->sendLevelUpdate(newLevel);
         this->_currentLevel = newLevel;
         this->updateLevelConfig();
-
     } catch (std::exception &e) {
         std::cerr << "failed to load level" << std::endl;
     }

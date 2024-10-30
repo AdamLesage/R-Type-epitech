@@ -37,6 +37,7 @@
 #endif
 
 typedef struct EntityData_s {
+    int number;
     std::shared_ptr<Position> pos;
     std::shared_ptr<Size> size;
     std::shared_ptr<Rotation> rotation;
@@ -72,6 +73,12 @@ class AssetEditorParsing {
          */
         std::shared_ptr<EntityData> &getEntityData(uint8_t code);
 
+        /**
+         * @brief Retrieves entities data.
+         * @return map of entity
+         */
+        std::map<uint8_t, std::shared_ptr<EntityData>> &getEntities();
+
     private:
         /**
          * @brief Parses the code for a given entity setting.
@@ -79,6 +86,13 @@ class AssetEditorParsing {
          * @return Parsed code as an unsigned 8-bit integer.
          */
         uint8_t parseCode(libconfig::Setting &entity);
+
+        /**
+         * @brief Parses the number for a given entity setting.
+         * @param entity The entity setting to parse the number from.
+         * @return Parsed number as an int.
+         */
+        int parseNumber(libconfig::Setting &entity);
 
         /**
          * @brief Parses the position component of an entity and populates the EntityData structure.

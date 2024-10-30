@@ -16,6 +16,7 @@
 #include "../../shared/components/Velocity.hpp"
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/ShootingSpeed.hpp"
+#include "../../shared/assetEditorParsing/AssetEditorParsing.hpp"
 #include "./NetworkSender.hpp"
 #include "../../shared/utils/Logger.hpp"
 #include <memory>
@@ -113,6 +114,7 @@ class GameLogique {
         std::map<size_t, size_t> playersId;
         libconfig::Config _gameConfig;
         libconfig::Config _levelConfig;
+        std::unique_ptr<AssetEditorParsing> assetEditorParsing;
         unsigned int _currentLevel = 0;
 };
 
