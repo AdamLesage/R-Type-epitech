@@ -81,25 +81,27 @@ namespace RType {
              * @brief Displays the menu.
              */
             void runScene() override;
-
+            /**
+             * @brief Set the volume of the background music.
+             *
+             * @param number The volume to set.
+            */
+            void setVolume(float number);
         private:
             int selectedOption; // The selected option
             sf::Font font; // The font used for the menu
             sf::Text menuOptions[3]; // Play, Settings, Quit
             sf::Texture logoTexture; // The texture of the logo
             sf::Sprite logoSprite; // The sprite of the logo
-            sf::SoundBuffer selectBuffer; // The buffer of the select sound
-            sf::Sound selectSound; // The sound played when selecting an option
             std::shared_ptr<sf::RenderWindow> window; // The window to display the menu on
             sf::RectangleShape background; // The background of the menu
             sf::Texture backgroundTexture; // The texture of the background
             std::shared_ptr<Settings> settings; // The settings of the menu
             std::shared_ptr<Lobby> lobby; // The lobby of the menu
-            sf::SoundBuffer backgroundBuffer; // The buffer of the background music
-            sf::Sound backgroundMusic; // The background music
             sf::RenderTexture RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
             // std::shared_ptr<Game> games;
+            float backgroundMusicVolume; // The volume of the background music
     };
 } // namespace RType
 

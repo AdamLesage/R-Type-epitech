@@ -217,6 +217,40 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
                 break;
         }
     }
+    if (event == "ShootSound")
+        this->_audioEngine->ShootSound();
+    if (event == "game_launch_music_play")
+        this->_audioEngine->launch_music_play();
+    if (event == "game_launch_music_stop")
+        this->_audioEngine->launch_music_stop();
+    if (event == "backgroundMusicPlay")
+        this->_audioEngine->backgroundMusicPlay();
+    if (event == "selectSound")
+        this->_audioEngine->selectSoundPlay();
+    if (event == "getVolume") {
+        this->_audioEngine->BackgroundMusicGetVolume();
+    }
+    if (event.find("adjustVolume") == 0) {
+        if (event == "adjustVolume True")
+             this->_audioEngine->adjustVolume(true);
+        else if (event == "adjustVolume False")
+             this->_audioEngine->adjustVolume(false);   
+    }
+    if (event == "backgroundMusicStop")
+        this->_audioEngine->backgroundMusicStop();
+    if (event == "backgroundMusicPlay2")
+        this->_audioEngine->backgroundMusicPlay2();
+    if (event == "getVolume2")
+        this->_audioEngine->BackgroundMusicGetVolume2();
+    if (event.find("adjustVolume2") == 0) {
+        if (event == "adjustVolume2 True")
+             this->_audioEngine->adjustVolume2(true);
+        else if (event == "adjustVolume2 False")
+             this->_audioEngine->adjustVolume2(false);   
+    }
+
+    if (event == "backgroundMusicStop2")
+        this->_audioEngine->backgroundMusicStop2();
 }
 
 void RType::Mediator::notifyPhysicEngine(std::string sender, const std::string& event) {
@@ -227,6 +261,12 @@ void RType::Mediator::notifyPhysicEngine(std::string sender, const std::string& 
 void RType::Mediator::notifyAudioEngine(std::string sender, const std::string& event) {
     (void)event;
     if (sender != "AudioEngine") return;
+    if (event.find("volume =") == 0) {
+        std::string numberString = event.substr(8);
+        float number = std::stof(numberString);
+        this->_renderingEngine->getMenu()->setVolume(number);
+        this->_renderingEngine->getLobby()->setVolume(number);
+    }
 }
 
 void RType::Mediator::notifyProtocolParsing(std::string sender, const std::string& event) {
