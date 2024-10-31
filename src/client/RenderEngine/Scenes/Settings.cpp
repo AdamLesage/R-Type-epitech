@@ -93,11 +93,11 @@ int RType::Settings::set_key_value(libconfig::Config& cfg,
             setting = new_value;
             return 0;
         } else {
-            std::cerr << "Kesssy not found: " << key_name << std::endl;
+            std::cerr << "Keys not found: " << key_name << std::endl;
             return -1;
         }
     } catch (const libconfig::SettingNotFoundException& nfex) {
-        std::cerr << "Ketyuioy not found: " << key_name << std::endl;
+        std::cerr << "Keys not found: " << key_name << std::endl;
         return -1;
     } catch (const libconfig::SettingTypeException& tex) {
         std::cerr << "Invalid type for key: " << key_name << std::endl;
@@ -311,8 +311,7 @@ void RType::Settings::display() {
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    std::string Keys8 = "Keys8";
-    std::string colorblind = std::string(get_key_value(cfg, Keys8));
+    std::string colorblind = std::string(get_key_value(cfg, "Keys8"));
     if (colorblind.find("Deuteranopia") != std::string::npos) {
         window->draw(sprite, &colorblindShader[0]);
     } else if (colorblind.find("Protanopia") != std::string::npos) {
