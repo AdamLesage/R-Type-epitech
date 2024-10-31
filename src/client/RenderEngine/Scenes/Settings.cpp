@@ -22,29 +22,39 @@ RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
         std::cerr << "Error loading background" << std::endl;
         return;
     }
-    
+
     background.setTexture(&backgroundTexture);
     background.setPosition(sf::Vector2f(0, 0));
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(0, 0));
-    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Deuteranopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Protanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading protanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Tritanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading tritanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Achromatopsia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading achromatopsia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Normal_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }
@@ -54,7 +64,7 @@ RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
 RType::Settings::~Settings() {
 }
 
-const char* RType::Settings::get_key_value(libconfig::Config &cfg, const char* key_name) {
+const char* RType::Settings::get_key_value(libconfig::Config& cfg, const char* key_name) {
     const char* value;
 
     char path[100];
@@ -69,10 +79,10 @@ const char* RType::Settings::get_key_value(libconfig::Config &cfg, const char* k
     }
 }
 
-int RType::Settings::set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value) {
+int RType::Settings::set_key_value(libconfig::Config& cfg, const char* key_name, const char* new_value) {
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
-    libconfig::Setting &setting = cfg.lookup(path);
+    libconfig::Setting& setting = cfg.lookup(path);
     try {
         if (cfg.exists(path)) {
             setting = new_value;
@@ -81,10 +91,10 @@ int RType::Settings::set_key_value(libconfig::Config &cfg, const char* key_name,
             std::cerr << "Key not found: " << key_name << std::endl;
             return -1;
         }
-    } catch (const libconfig::SettingNotFoundException &nfex) {
+    } catch (const libconfig::SettingNotFoundException& nfex) {
         std::cerr << "Key not found: " << key_name << std::endl;
         return -1;
-    } catch (const libconfig::SettingTypeException &tex) {
+    } catch (const libconfig::SettingTypeException& tex) {
         std::cerr << "Invalid type for key: " << key_name << std::endl;
         return -1;
     }
@@ -100,7 +110,8 @@ void RType::Settings::moveUp() {
 }
 
 void RType::Settings::moveDown() {
-    if (selectedOption + 1 < 9) { // for the 9 options of menuOptions such as UP, DOWN, LEFT, RIGHT, SHOOT, SETTINGS, SUBTITLES, COLORBLIND, FRIENDLY FIRE
+    if (selectedOption + 1 < 9) { // for the 9 options of menuOptions such as UP, DOWN, LEFT, RIGHT, SHOOT,
+                                  // SETTINGS, SUBTITLES, COLORBLIND, FRIENDLY FIRE
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
@@ -137,8 +148,7 @@ void RType::Settings::changeKey(std::string key) {
             return;
         }
         return;
-    }
-    else if (key.find("COLORBLIND") != std::string::npos) {
+    } else if (key.find("COLORBLIND") != std::string::npos) {
         if (key == "COLORBLIND: Normal") {
             newKey2 = "Deuteranopia";
         } else if (key == "COLORBLIND: Deuteranopia") {
@@ -158,8 +168,7 @@ void RType::Settings::changeKey(std::string key) {
             return;
         }
         return;
-    }
-    else if (key ==  "FRIENDLY FIRE: ON" || key == "FRIENDLY FIRE: OFF") {
+    } else if (key == "FRIENDLY FIRE: ON" || key == "FRIENDLY FIRE: OFF") {
         if (key.find("ON") != std::string::npos) {
             newKey2 = "OFF";
         } else {
@@ -222,8 +231,7 @@ void RType::Settings::changeKey(std::string key) {
     }
 }
 
-void RType::Settings::displayInput()
-{
+void RType::Settings::displayInput() {
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
 
@@ -235,17 +243,20 @@ void RType::Settings::displayInput()
     }
     std::string shootinput = std::string(get_key_value(cfg, "Keys5"));
     std::transform(shootinput.begin(), shootinput.end(), shootinput.begin(), ::tolower);
-    if (!ShootInputTexture.loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR + "Keyboard" + PATH_SEPARATOR + "keyboard_" + shootinput + ".png")) {
+    if (!ShootInputTexture.loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR
+                                        + "Keyboard" + PATH_SEPARATOR + "keyboard_" + shootinput + ".png")) {
         std::cerr << "Error loading shoot input texture" << std::endl;
         return;
     }
     ShootInputSprite.setTexture(ShootInputTexture);
 
     for (int i = 0; i < 4; ++i) {
-        std::string arrowKey = "Keys" + std::to_string(i + 1);
+        std::string arrowKey   = "Keys" + std::to_string(i + 1);
         std::string arrowInput = std::string(get_key_value(cfg, arrowKey.c_str()));
         std::transform(arrowInput.begin(), arrowInput.end(), arrowInput.begin(), ::tolower);
-        if (!arrowTexture[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR + "Keyboard" + PATH_SEPARATOR + "keyboard_" + arrowInput + ".png")) {
+        if (!arrowTexture[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR
+                                          + "Keyboard" + PATH_SEPARATOR + "keyboard_" + arrowInput
+                                          + ".png")) {
             std::cerr << "Error loading arrow input texture for " << arrowKey << std::endl;
             return;
         }
@@ -258,11 +269,8 @@ void RType::Settings::displayInput()
     }
 }
 
-void RType::Settings::runScene()
-{
-    
+void RType::Settings::runScene() {
 }
-
 
 void RType::Settings::display() {
     RenderTexture.clear();
@@ -275,7 +283,7 @@ void RType::Settings::display() {
     }
     RenderTexture.display();
     sf::Sprite sprite(RenderTexture.getTexture());
-        libconfig::Config cfg;
+    libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
 
     try {
@@ -297,11 +305,9 @@ void RType::Settings::display() {
         window->draw(sprite, &colorblindShader[4]);
     }
     window->display();
-
 }
 
-void RType::Settings::initTextAndSprites()
-{
+void RType::Settings::initTextAndSprites() {
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
@@ -310,8 +316,9 @@ void RType::Settings::initTextAndSprites()
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    std::string optionsText[] = {"UP            : ", "DOWN          : ", "LEFT          : ", "RIGHT         : ",
-                                 "SHOOT         : ", "SETTINGS      : ",  "SUBTITLES     : ", "COLORBLIND    : ", "FRIENDLY FIRE : "};
+    std::string optionsText[] = {
+        "UP            : ", "DOWN          : ", "LEFT          : ", "RIGHT         : ", "SHOOT         : ",
+        "SETTINGS      : ", "SUBTITLES     : ", "COLORBLIND    : ", "FRIENDLY FIRE : "};
     for (int i = 0; i < 9; i++) {
         optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)).c_str());
         menuOptions[i].setFont(font);
@@ -387,19 +394,24 @@ void RType::Settings::displaySettings(bool ingame) {
                             }
                             break;
                         case 7:
-                            if (menuOptions[7].getString().toAnsiString().find("Normal") != std::string::npos) {
+                            if (menuOptions[7].getString().toAnsiString().find("Normal")
+                                != std::string::npos) {
                                 changeKey("COLORBLIND: Normal");
                                 menuOptions[7].setString("COLORBLIND: Deuteranopia");
-                            } else if (menuOptions[7].getString().toAnsiString().find("Deuteranopia") != std::string::npos) {
+                            } else if (menuOptions[7].getString().toAnsiString().find("Deuteranopia")
+                                       != std::string::npos) {
                                 changeKey("COLORBLIND: Deuteranopia");
                                 menuOptions[7].setString("COLORBLIND: Protanopia");
-                            } else if (menuOptions[7].getString().toAnsiString().find("Protanopia") != std::string::npos) {
+                            } else if (menuOptions[7].getString().toAnsiString().find("Protanopia")
+                                       != std::string::npos) {
                                 changeKey("COLORBLIND: Protanopia");
                                 menuOptions[7].setString("COLORBLIND: Tritanopia");
-                            } else if (menuOptions[7].getString().toAnsiString().find("Tritanopia") != std::string::npos) {
+                            } else if (menuOptions[7].getString().toAnsiString().find("Tritanopia")
+                                       != std::string::npos) {
                                 changeKey("COLORBLIND: Tritanopia");
                                 menuOptions[7].setString("COLORBLIND: Achromatopsia");
-                            } else if (menuOptions[7].getString().toAnsiString().find("Achromatopsia") != std::string::npos) {
+                            } else if (menuOptions[7].getString().toAnsiString().find("Achromatopsia")
+                                       != std::string::npos) {
                                 changeKey("COLORBLIND: Achromatopsia");
                                 menuOptions[7].setString("COLORBLIND: Normal");
                             }
