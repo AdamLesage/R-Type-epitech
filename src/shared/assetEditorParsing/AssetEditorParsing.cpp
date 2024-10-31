@@ -235,7 +235,7 @@ void AssetEditorParsing::parseWavePattern(EntityData &entityData, libconfig::Set
         libconfig::Setting &WavePatternSetting = components.lookup("wave_pattern");
         float amplitude = WavePatternSetting["amplitude"];
         float frequency = WavePatternSetting["frequency"];
-        entityData.WavePattern = std::make_shared<Wave_pattern>(Wave_pattern{amplitude, frequency});
+        entityData.WavePattern = std::make_shared<Wave_pattern>(Wave_pattern{amplitude, frequency, std::chrono::steady_clock::now()});
     } catch (const std::exception&) {
         return;
     }

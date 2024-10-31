@@ -174,7 +174,8 @@ void RType::Menu::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
-void RType::Menu::runScene() {
+void RType::Menu::runScene(float &latency) {
+    (void)latency;
     sf::Event event;
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {

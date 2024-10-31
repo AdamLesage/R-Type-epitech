@@ -136,6 +136,13 @@ class NetworkSender {
         void sendLevelUpdate(unsigned int level, int clientId = -1);
 
 
+        /**
+         * @brief send a ping containing the time code to the clients
+         *
+         * @param timeCode
+         */
+        void sendPing(std::string timeCode);
+
     private:
         std::shared_ptr<NetworkLib::Server> _network;
 };

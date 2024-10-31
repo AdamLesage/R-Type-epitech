@@ -22,7 +22,7 @@ RType::DoodleJump::~DoodleJump()
 void RType::DoodleJump::handleOfflineGame()
 {
     bool isPlayerInList = false;
-    const size_t NUMBER_PLATFORM = 15;
+    const size_t NUMBER_PLATFORM = 25;
 
     // Create player if not in the list
     for (size_t i = 0; i < this->_camera->listEntityToDisplay.size(); i++) {
