@@ -62,6 +62,8 @@ namespace RType {
              *  @param newState the new state
              */
             void setStateGame(int newState);
+            std::shared_ptr<Menu> getMenu() const { return _menu; }
+            std::shared_ptr<Lobby> getLobby() const { return _lobby; }
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;

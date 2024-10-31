@@ -16,7 +16,6 @@ RType::RenderingEngine::~RenderingEngine() {
 void RType::RenderingEngine::run() {
     logger.log(RType::Logger::LogType::RTYPEINFO, "RenderingEngine created");
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
-    std::cout << "RenderingEngine running" << std::endl;
 
     try {
         this->_menu = std::make_unique<Menu>(window);
@@ -32,13 +31,14 @@ void RType::RenderingEngine::run() {
     this->_lobby->setMediator(_mediator);
     this->_menu->setMediator(_mediator);
     this->_game->setMediator(_mediator);
-
+    this->_settings->setMediator(_mediator);
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
     this->_game->setMutex(_mutex);
     this->_lobby->setMutex(_mutex);
     window->setFramerateLimit(360);
     window->clear();
+    _mediator->notify("RenderingEngine", "backgroundMusicPlay");
     while (window->isOpen()) {
         switch (_stateGame)
         {

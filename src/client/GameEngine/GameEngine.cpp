@@ -33,8 +33,9 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Annimation>();
 
     std::string scenesConfigPath = std::string("config") + PATH_SEPARATOR + std::string("scenes") + PATH_SEPARATOR + std::string("sceneText.cfg");
+    std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
     _protocolParsing =
-        std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", scenesConfigPath, _registry);
+        std::make_unique<RType::ProtocolParsing>(protocolPath, scenesConfigPath, _registry);
 
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();

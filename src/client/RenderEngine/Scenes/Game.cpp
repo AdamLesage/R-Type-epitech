@@ -42,24 +42,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window)
         throw std::runtime_error("Error loading backgroundTexture 3");
     }
 
-    std::string soundPath =
-        std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "game_launch.ogg";
-    if (!game_launch_sound.loadFromFile(soundPath)) {
-        throw std::runtime_error("Error loading game launch sound");
-    }
-    game_launch_music.setBuffer(game_launch_sound);
     isShooting = false;
-    std::string shootPath =
-        std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "shootsounds.wav";
-    if (!shoot_sound.loadFromFile(shootPath)) {
-        throw std::runtime_error("Error loading shoot sound");
-    }
-    shoot_music.setBuffer(shoot_sound);
-    std::string shootPath2 = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "Piou.wav";
-    if (!shoot_sound2.loadFromFile(shootPath2)) {
-        throw std::runtime_error("Error loading shoot sound 2");
-    }
-    shoot_music2.setBuffer(shoot_sound2);
     for (int i = 0; i < 3; i++) {
         backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
         backgrounds[i].setTexture(&backgroundTextures[i]);
@@ -145,13 +128,7 @@ void RType::Game::ShootSound() {
     if (keyValue == "ON") {
         piou = true;
     }
-    int random = rand() % 10;
-    if (random == 9) {
-        shoot_music2.setVolume(200);
-        shoot_music2.play();
-    } else {
-        shoot_music2.play();
-    }
+    _mediator->notify("RenderingEngine", "ShootSound");
 }
 
 void RType::Game::DisplaySkipIntro() {
@@ -304,7 +281,8 @@ void RType::Game::runScene(float &latency) {
 
     if (!animationComplete) {
         if (currentFrame == 1) {
-            game_launch_music.play();
+            _mediator->notify("RenderingEngine", "backgroundMusicStop2");
+            _mediator->notify("RenderingEngine", "game_launch_music_play");
         }
         if (cinematicsClock->getElapsedTime().asSeconds() > frameDuration) {
             if (!loadFrameTexture(texture, rectangleshape)) {
@@ -316,7 +294,7 @@ void RType::Game::runScene(float &latency) {
 
     window->clear();
     if (animationComplete) {
-        game_launch_music.stop();
+        _mediator->notify("RenderingEngine", "game_launch_music_stop");
         play(latency);
         return;
     } else {
@@ -349,6 +327,7 @@ void RType::Game::runScene(float &latency) {
     } else {
         window->draw(sprite, &colorblindShader[4]);
     }
+    console->displayDeveloperConsole();
     window->display();
     handleEvents();
 }
