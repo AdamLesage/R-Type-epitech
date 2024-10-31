@@ -68,7 +68,7 @@ void RType::ClientConnexionHandling::displayConnexionWindow() {
 void RType::ClientConnexionHandling::displayBackground() {
     sf::Texture texture;
     std::string spritePath =
-        "assets" + std::string(PATH_SEPARATOR) + "background" + std::string(PATH_SEPARATOR) + "menu.jpg";
+        "assets" + std::string(PATH_SEPARATOR) + "background" + std::string(PATH_SEPARATOR) + "back.png";
     if (!texture.loadFromFile(spritePath)) {
         std::cerr << "Failed to load texture from " << spritePath << std::endl;
         return;
