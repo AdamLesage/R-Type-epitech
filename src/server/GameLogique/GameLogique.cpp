@@ -29,6 +29,8 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<ShootStraightPattern>();
     this->reg.register_component<Size>();
     this->reg.register_component<Direction>();
+    this->reg.register_component<ShootEnnemyMissile>();
+    this->reg.register_component<CanShootMissiles>();
 
     try {
         std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type") + PATH_SEPARATOR + std::string("game_config.cfg");
@@ -312,6 +314,7 @@ void GameLogique::runGame() {
                 sys.wave_pattern_system(reg, logger);
                 sys.Straight_line_pattern_system(this->reg);
                 sys.player_following_pattern_system(this->reg);
+                sys.shoot_enemy_missile(this->reg);
                 {
                     std::lock_guard<std::mutex> lock(this->_mutex);
                     sys.shoot_player_pattern_system(this->reg, this->_networkSender);
@@ -326,7 +329,7 @@ void GameLogique::runGame() {
                 this->spawnEnnemy(0x61, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
-            if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 30) {
+            if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 10) {
                 char bonusType = 0x21 +  rand() % 4;
                 this->spawnBonus(bonusType, rand() % 1920, rand() % 1080);
                 bonusClock = std::clock();
@@ -410,6 +413,7 @@ void GameLogique::clearGame() {
         this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
         this->reg.add_component<Size>(entity, Size{130, 80});
         this->reg.add_component<Direction>(entity, Direction{0, 0});
+        this->reg.add_component<CanShootMissiles>(entity, CanShootMissiles{0});
         this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));
         this->playersId[numberPlayer] = entity;
         usleep(1000);
@@ -584,6 +588,7 @@ void GameLogique::handleClientConnection()
                     this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
                     this->reg.add_component<Size>(entity, Size{130, 80});
                     this->reg.add_component<Direction>(entity, Direction{0, 0});
+                    this->reg.add_component<CanShootMissiles>(entity, CanShootMissiles{0});
                     this->_networkSender->sendCreatePlayer(clientId, 100.f, 100 + (100.f * clientId));
                     this->playersId[clientId] = entity;
                 }

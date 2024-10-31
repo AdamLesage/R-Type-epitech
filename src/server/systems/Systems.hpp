@@ -26,6 +26,8 @@
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/Direction.hpp"
 #include "../../shared/components/ParentId.hpp"
+#include "../../shared/components/ShootEnnemyMissile.hpp"
+#include "../../shared/components/CanShootMissiles.hpp"
 #include "../GameLogique/NetworkSender.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Tag.hpp"
@@ -104,6 +106,7 @@ class Systems {
                           std::unique_ptr<NetworkSender>& networkSender,
                           RType::Logger& logger);
 
+        void shoot_enemy_missile(Registry& reg);
         /**
          * @brief Handle the save of the score of the player.
          * @param reg
@@ -256,7 +259,7 @@ class Systems {
          * @param position_entity the position of the entity
          * @return return the pos of the closest player
          */
-        std::array<float, 2> find_closest_player(Registry& reg, Position* position_entity);
+        std::array<float, 2> find_closest_entity(Registry& reg, Position* position_entity, EntityType type);
 };
 
 #endif /* !SYSTEMS_HPP_ */
