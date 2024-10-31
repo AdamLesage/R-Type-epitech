@@ -157,8 +157,11 @@ void Systems::check_entities_collisions(Registry& reg,
     bool enemyTakeDamage =
         (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE);
 
+    bool bossTakeDamage =
+        (entityType1->type == EntityType::BOSS && entityType2->type == EntityType::PLAYER_PROJECTILE);
+
     if (collisionX == false || collisionY == false
-        || (playerTakeDamage == false && enemyTakeDamage == false)) { // No collision
+        || (playerTakeDamage == false && enemyTakeDamage == false && bossTakeDamage == false)) { // No collision
         return;
     }
 
@@ -206,6 +209,27 @@ void Systems::check_entities_collisions(Registry& reg,
         // If enemy take damage, it is only a projectile so we delete it
         reg.kill_entity(entityId2);
         networkSender->sendDeleteEntity(entityId2);
+    }
+
+    if (bossTakeDamage && collisionX && collisionY) {
+        logger.log(RType::Logger::RTYPEINFO, "Boss take damage1.1");
+        auto& bossHealth      = reg.get_components<Health_s>()[entityId1];
+        auto& projectileDamage = reg.get_components<Damage_s>()[entityId2];
+
+        if (bossHealth && projectileDamage) {
+            bossHealth->health -= projectileDamage->damage;
+            reg.kill_entity(entityId2);
+            networkSender->sendDeleteEntity(entityId2);
+            std::cout << "Boss health: " << bossHealth->health << std::endl;
+            if (bossHealth->health <= 0) {
+                reg.kill_entity(entityId1);
+                networkSender->sendDeleteEntity(entityId1);
+            } else {
+                networkSender->sendHealthUpdate(entityId1, bossHealth->health);
+            }
+        } else {
+            logger.log(RType::Logger::RTYPEERROR, "Error while getting health or damage component for enemy");
+        }
     }
 }
 
@@ -493,18 +517,48 @@ void Systems::wave_pattern_system(Registry& reg, float totalTime, RType::Logger&
     }
 }
 
-void Systems::boss_system(Registry& reg)
+void Systems::boss_system(Registry& reg, std::unique_ptr<NetworkSender>& networkSender)
 {
     auto& patterns = reg.get_components<BossPatern>();
     auto& positions = reg.get_components<Position>();
     auto& velocitys = reg.get_components<Velocity>();
 
-    for (size_t i = 0; i < positions.size() / 3 && i < patterns.size(); ++i) {
+    for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
         auto& pattern  = patterns[i];
         auto& position = positions[i];
         auto& velocity = velocitys[i];
         if (pattern && position && velocity) {
-            velocity->x = pattern->speed;
+            if (position->y >= 800) {
+                pattern->up = false;
+                pattern->down = true;
+            }
+            if (position->y <= 0) {
+                pattern->up = true;
+                pattern->down = false;
+            }
+            if (pattern->up) {
+                velocity->y = -1 * pattern->speed;
+            }
+            if (pattern->down) {
+                velocity->y = pattern->speed;
+            }
+            auto now                        = std::chrono::steady_clock::now();
+            std::chrono::duration<float> fs = now - pattern->lastSpawnTime;
+            float elapsed_seconds           = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
+
+            if (elapsed_seconds >= pattern->spawnCooldown && pattern->spawnCooldown > 1) {
+                for (int j = 0; j < 5; ++j) {
+                    size_t enemy = reg.spawn_entity();
+                    reg.add_component<Position_s>(enemy, Position_s{position->x, (float)j * 200});
+                    reg.add_component<Velocity_s>(enemy, Velocity_s{-1.0f, 0.0f});
+                    reg.add_component<Type_s>(enemy, Type_s{EntityType::ENEMY});
+                    reg.add_component<Health_s>(enemy, Health_s{100, 100});
+                    reg.add_component<Size>(enemy, Size{50, 50});
+                    networkSender->sendCreateEnemy(0x03, enemy, position->x, j * 200);
+                    printf("Boss spawn enemy: %d\n", j);
+                }
+                pattern->lastSpawnTime = now;
+            }
         }
     }
 }

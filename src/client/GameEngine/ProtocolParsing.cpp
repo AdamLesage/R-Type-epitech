@@ -31,7 +31,7 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, std::string sc
     _messageTypeMap = {{"PLAYER_CREATION", {0x01, "player_creation"}},
                        {"PROJECTILE_CREATION", {0x02, "projectile_creation"}},
                        {"ENEMY_CREATION", {0x03, "enemy_creation"}},
-                       {"BOSS_CREATION", {0x04, "boss_creation"}},
+                       {"BOSS_CREATION", {0x10, "boss_creation"}},
                        {"BONUS_CREATION", {0x21, "bonus_creation"}},
                        {"WALL_CREATION", {0x25, "wall_creation"}},
                        {"REWARD_CREATION", {0x26, "reward_creation"}},
@@ -291,8 +291,6 @@ bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& 
         std::memcpy(&bossId, &message[index + 1], sizeof(unsigned int));
         std::memcpy(&posX, &message[index + 5], sizeof(float));
         std::memcpy(&posY, &message[index + 9], sizeof(float));
-        std::memcpy(&width, &message[index + 13], sizeof(float));
-        std::memcpy(&height, &message[index + 17], sizeof(float));
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while parsing the boss creation message" << std::endl;
         return false;
@@ -308,9 +306,11 @@ bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& 
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        _registry.add_component<Size>(entity, Size{70, 71});
-        std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + PATH_SEPARATOR + "boss" + "boss_2.png";
-        _registry.add_component<Sprite>(entity, Sprite{path, {33, 36}, {0, 0}});
+        _registry.add_component<Size>(entity, Size{325, 125});
+        _registry.add_component<Direction>(entity, Direction{-1, 0});
+        std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "boss" + PATH_SEPARATOR + "boss_2.png";
+        std::cout << "bosse comme un boss" << std::endl;
+        _registry.add_component<Sprite>(entity, Sprite{path, {1300, 500}, {0, 0}});
         this->updateIndexFromBinaryData("boss_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the boss" << std::endl;

@@ -29,6 +29,7 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<ShootStraightPattern>();
     this->reg.register_component<Size>();
     this->reg.register_component<Direction>();
+    this->reg.register_component<BossPatern>();
 }
 
 GameLogique::~GameLogique() {
@@ -99,6 +100,17 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
+        case 0x10:
+            reg.add_component<Position>(entity, Position{position_x, position_y});
+            reg.add_component<Tag>(entity, Tag{"boss"});
+            reg.add_component<Health>(entity, Health{1000, 100, false, false}); // We can destroy the boss with a projectile
+            reg.add_component<Damage>(entity, Damage{10});
+            reg.add_component<Velocity>(entity, Velocity{0, 0});
+            reg.add_component<Size>(entity, Size{325, 125});
+            reg.add_component<Type>(entity, Type{EntityType::BOSS});
+            reg.add_component<BossPatern>(entity, BossPatern{-1, true, false, 10.0, std::chrono::steady_clock::now()});
+            std::cout << "Boss created" << std::endl;
+            break;
         default:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Velocity>(entity, Velocity{0, 0});
@@ -118,12 +130,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
 
 void GameLogique::spawnWave()
 {
-    spawnEnnemy(0x03, 1920, 10);
-    spawnEnnemy(0x03, 1920, 160);
-    spawnEnnemy(0x03, 1920, 360);
-    spawnEnnemy(0x03, 1920, 580);
-    spawnEnnemy(0x03, 1920, 920);
-    spawnEnnemy(0x04, 1920, 500);
+    spawnEnnemy(0x10, 1620, 500);
 }
 
 void GameLogique::runGame() {
@@ -142,6 +149,7 @@ void GameLogique::runGame() {
                 sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
                                      logger);
                 sys.position_system(reg, this->_networkSender, logger);
+                sys.boss_system(reg, this->_networkSender);
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
                 this->spawnEnnemy(0x50, 1920, rand() % 700 + 200);
@@ -366,6 +374,9 @@ void GameLogique::handleClientConnection()
                         switch (type->type) {
                             case EntityType::ENEMY:
                                 this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y, clientId);
+                                break;
+                            case EntityType::BOSS:
+                                this->_networkSender->sendCreateEnemy(0x10, i, position->x, position->y, clientId);
                                 break;
                             case EntityType::PLAYER:
                                 this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);

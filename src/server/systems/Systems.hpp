@@ -117,7 +117,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void boss_system(Registry& reg);
+        void boss_system(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
 
         /**
          * @brief Update the health of all entities based on the damages / regeneration / healing they

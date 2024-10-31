@@ -16,8 +16,11 @@ typedef struct BossPatern_s {
          *
          */
         float speed;
-        float RegenCooldown; // regen cooldown of the boss
-        std::chrono::steady_clock::time_point lastRegenTime; // last regen time of the boss
+        bool up;
+        bool down;
+        float spawnCooldown;
+        std::chrono::steady_clock::time_point lastSpawnTime;
+
 } BossPatern;
 
 
