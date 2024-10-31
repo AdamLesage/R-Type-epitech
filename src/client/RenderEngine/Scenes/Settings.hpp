@@ -96,7 +96,7 @@ namespace RType {
              * @param cfg libconfig
              * @param key_name name of the key needed
              */
-            const char* get_key_value(libconfig::Config& cfg, const char* key_name);
+            const std::string get_key_value(libconfig::Config& cfg, const std::string key_name);
             /**
              * @brief get the value of a key from the cfg file
              *
@@ -104,7 +104,7 @@ namespace RType {
              * @param key_name name of the key to change
              * @param new_value new value for the key
              */
-            int set_key_value(libconfig::Config& cfg, const char* key_name, const char* new_value);
+            int set_key_value(libconfig::Config& cfg, const std::string key_name, const std::string new_value);
 
         protected:
             int selectedOption;                       // The selected option

@@ -70,13 +70,12 @@ RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
 RType::Settings::~Settings() {
 }
 
-const char* RType::Settings::get_key_value(libconfig::Config& cfg,
-                                           const char* key_name) { // get the value of a key from the cfg file
-    const char* value;
+const std::string RType::Settings::get_key_value(libconfig::Config& cfg, const std::string key_name) { // get the value of a key from the cfg file
+    std::string value;
+    std::string keys = "Keys." + key_name + ".value";
 
-    char path[100];
     try {
-        cfg.lookupValue(path, value);
+        cfg.lookupValue(keys.c_str(), value);
         return value;
     } catch (const libconfig::SettingNotFoundException& nfex) {
         std::cerr << "Key not found: " << key_name << std::endl;
@@ -85,20 +84,20 @@ const char* RType::Settings::get_key_value(libconfig::Config& cfg,
 }
 
 int RType::Settings::set_key_value(libconfig::Config& cfg,
-                                   const char* key_name,
-                                   const char* new_value) { // set the value of a key from the cfg file
-    char path[100];
-    libconfig::Setting& setting = cfg.lookup(path);
+                                   const std::string key_name,
+                                   const std::string new_value) { // set the value of a key from the cfg file
+    std::string path = "Keys." + key_name + ".value";
     try {
         if (cfg.exists(path)) {
+            libconfig::Setting& setting = cfg.lookup(path);
             setting = new_value;
             return 0;
         } else {
-            std::cerr << "Key not found: " << key_name << std::endl;
+            std::cerr << "Kesssy not found: " << key_name << std::endl;
             return -1;
         }
     } catch (const libconfig::SettingNotFoundException& nfex) {
-        std::cerr << "Key not found: " << key_name << std::endl;
+        std::cerr << "Ketyuioy not found: " << key_name << std::endl;
         return -1;
     } catch (const libconfig::SettingTypeException& tex) {
         std::cerr << "Invalid type for key: " << key_name << std::endl;
@@ -147,7 +146,7 @@ void RType::Settings::changeKey(std::string key) { // change the key of the sele
         } else {
             newKey2 = "ON";
         }
-        set_key_value(cfg, "Keys7", newKey2.c_str()); // set the value of the key 7 to the new subtitles value
+        set_key_value(cfg, "Keys7", newKey2); // set the value of the key 7 to the new subtitles value
         try {
             cfg.writeFile(configPath.c_str());
         } catch (const libconfig::FileIOException& fioex) {
@@ -169,7 +168,7 @@ void RType::Settings::changeKey(std::string key) { // change the key of the sele
         } else if (key == "COLORBLIND: Achromatopsia") {
             newKey2 = "Normal";
         }
-        set_key_value(cfg, "Keys8", newKey2.c_str()); // set the value of the key 8 to the new colorblind
+        set_key_value(cfg, "Keys8", newKey2); // set the value of the key 8 to the new colorblind
                                                       // value
         try {
             cfg.writeFile(configPath.c_str());
@@ -186,7 +185,7 @@ void RType::Settings::changeKey(std::string key) { // change the key of the sele
             newKey2 = "ON";
         }
         set_key_value(cfg, "Keys9",
-                      newKey2.c_str()); // set the value of the key 9 to the new friendly fire value
+                      newKey2); // set the value of the key 9 to the new friendly fire value
         try {
             cfg.writeFile(configPath.c_str());
         } catch (const libconfig::FileIOException& fioex) {
@@ -240,8 +239,8 @@ void RType::Settings::changeKey(std::string key) { // change the key of the sele
     std::string tmpKey = newKey;
     newKey.clear();
     newKey = tmpKey.substr(0, 11);
-    set_key_value(cfg, ("Keys" + std::to_string(selectedOption + 1)).c_str(),
-                  newKey2.c_str()); // set the value of the selected option to the new key
+    set_key_value(cfg, ("Keys" + std::to_string(selectedOption + 1)),
+                  newKey2); // set the value of the selected option to the new key
     try {
         cfg.writeFile(configPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
@@ -260,7 +259,8 @@ void RType::Settings::displayInput() { // display a sprite for the input of the 
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    std::string shootinput = std::string(get_key_value(cfg, "Keys5"));
+    std::string keys5 = "Keys5";
+    std::string shootinput = std::string(get_key_value(cfg, keys5));
     std::transform(shootinput.begin(), shootinput.end(), shootinput.begin(), ::tolower);
     if (!ShootInputTexture.loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR
                                         + "Keyboard" + PATH_SEPARATOR + "keyboard_" + shootinput + ".png")) {
@@ -271,7 +271,7 @@ void RType::Settings::displayInput() { // display a sprite for the input of the 
 
     for (int i = 0; i < 4; ++i) {
         std::string arrowKey   = "Keys" + std::to_string(i + 1);
-        std::string arrowInput = std::string(get_key_value(cfg, arrowKey.c_str()));
+        std::string arrowInput = std::string(get_key_value(cfg, arrowKey));
         std::transform(arrowInput.begin(), arrowInput.end(), arrowInput.begin(), ::tolower);
         if (!arrowTexture[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR
                                           + "Keyboard" + PATH_SEPARATOR + "keyboard_" + arrowInput
@@ -311,7 +311,8 @@ void RType::Settings::display() {
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    std::string colorblind = std::string(get_key_value(cfg, "Keys8"));
+    std::string Keys8 = "Keys8";
+    std::string colorblind = std::string(get_key_value(cfg, Keys8));
     if (colorblind.find("Deuteranopia") != std::string::npos) {
         window->draw(sprite, &colorblindShader[0]);
     } else if (colorblind.find("Protanopia") != std::string::npos) {
@@ -339,7 +340,7 @@ void RType::Settings::initTextAndSprites() {
         "UP            : ", "DOWN          : ", "LEFT          : ", "RIGHT         : ", "SHOOT         : ",
         "SETTINGS      : ", "SUBTITLES     : ", "COLORBLIND    : ", "FRIENDLY FIRE : "};
     for (int i = 0; i < 9; i++) { // display the options of the settings with the keys
-        optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)).c_str());
+        optionsText[i] += get_key_value(cfg, ("Keys" + std::to_string(i + 1)));
         menuOptions[i].setFont(font);
         menuOptions[i].setFillColor(i == 0 ? sf::Color::Red : sf::Color::White);
         menuOptions[i].setString(optionsText[i]);
