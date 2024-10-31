@@ -25,8 +25,7 @@
 #define PATH_SEPARATOR "/"
 #endif
 
-void getUserInput(int& port, int& frequency)
-{
+void getUserInput(int& port, int& frequency) {
     sf::RenderWindow window(sf::VideoMode(400, 350), "Input Port and Framerate");
 
     sf::Font font;
@@ -60,8 +59,8 @@ void getUserInput(int& port, int& frequency)
     frequencyHintText.setFillColor(sf::Color::Yellow);
 
     // Input strings
-    std::string portStr;
-    std::string freqStr;
+    std::string portStr = std::to_string(port);
+    std::string freqStr = std::to_string(frequency);
 
     // Display current input
     sf::Text portInput("", font, 20);
@@ -85,8 +84,8 @@ void getUserInput(int& port, int& frequency)
     freqBox.setOutlineThickness(2);
     freqBox.setOutlineColor(sf::Color::White);
 
-    bool enterPressed     = false;
-    bool portSelected     = true; // Start with the port field selected
+    bool enterPressed = false;
+    bool portSelected = true; // Start with the port field selected
 
     while (window.isOpen() && !enterPressed) {
         sf::Event event;
@@ -151,8 +150,8 @@ void getUserInput(int& port, int& frequency)
         window.draw(freqBox);
         window.draw(portInput);
         window.draw(freqInput);
-        window.draw(instructionText); // Draw instruction text
-        window.draw(portHintText);    // Draw port hint text
+        window.draw(instructionText);   // Draw instruction text
+        window.draw(portHintText);      // Draw port hint text
         window.draw(frequencyHintText); // Draw frequency hint text
         window.display();
     }
@@ -162,19 +161,28 @@ void getUserInput(int& port, int& frequency)
     frequency = std::stoi(freqStr);
 }
 
+int main(int argc, char** argv) {
+    int port      = 0;
+    int frequency = 60;
 
-int main() {
-    int port;
-    int frequency = 60; // Default value
+    if (argc >= 3) {
+        try {
+            port      = std::stoi(argv[1]);
+            frequency = std::stoi(argv[2]);
 
-    // Call the function that displays the window to enter port and frequency
+            if (port <= 0 || frequency <= 0) {
+                throw std::invalid_argument("Invalid argument");
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Invalid command line arguments. Starting UI for input." << std::endl;
+        }
+    }
     getUserInput(port, frequency);
 
-    std::cout << "Port: " << port << std::endl;
-    std::cout << "Frequency: " << frequency << std::endl;
-
-    // Initialize and start the game
     GameLogique gameLogique(port, frequency);
+
+    std::cout << "Port (via arguments): " << port << std::endl;
+    std::cout << "Frequency (via arguments): " << frequency << std::endl;
     gameLogique.runGame();
 
     return 0;

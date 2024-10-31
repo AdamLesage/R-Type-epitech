@@ -166,6 +166,10 @@ int main(int ac, char** av) {
         host        = clientConnexionHandling->getHost();
         server_port = clientConnexionHandling->getServerPort();
         gameSelected = clientConnexionHandling->getGameSelected();
+        std::cout << "host: " << host << std::endl;
+        std::cout << "server_port: " << server_port << std::endl;
+        std::cout << "gameSelected: " << gameSelected << std::endl;
+
 
         auto networkEngine = loadEngine<RType::NetworkEngine>(networkEngineLoader, "entryPointNetworkEngine");
         networkEngine->setParams(host, server_port, local_port);
