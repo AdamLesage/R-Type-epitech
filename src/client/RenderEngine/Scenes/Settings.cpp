@@ -244,9 +244,9 @@ void RType::Settings::displayInput()
     }
 }
 
-void RType::Settings::runScene()
+void RType::Settings::runScene(float& latency)
 {
-    
+    (void)latency;
 }
 
 void RType::Settings::display() {
