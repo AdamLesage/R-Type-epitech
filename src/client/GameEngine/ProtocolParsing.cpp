@@ -21,6 +21,7 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
     _messageTypeMap = {{"PLAYER_CREATION", {0x01, "player_creation"}},
                        {"PROJECTILE_CREATION", {0x02, "projectile_creation"}},
                        {"ENEMY_CREATION", {0x03, "enemy_creation"}},
+                        {"MISSILE_CREATION", {0x04, "missile_creation"}},
                        {"SHIELD_CREATION", {0x21, "shield_creation"}},
                        {"MACHINEGUN_CREATION", {0x22, "machinegun_creation"}},
                         {"ROCKET_CREATION", {0x23, "rocket_creation"}},
@@ -234,6 +235,44 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
 
         _registry.add_component<Sprite>(entity, Sprite{path, {71, 32}, {0, 0}});
         this->updateIndexFromBinaryData("projectile_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the projectile" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool RType::ProtocolParsing::parseMissileCreation(const std::string& message, int& index) {
+    if (!checkMessageType("MISSILE_CREATION", message, index)) return false;
+
+    unsigned int projectileId;
+    float posX;
+    float posY;
+
+    try {
+        std::memcpy(&projectileId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the projectile creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"projectile"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Direction>(entity, Direction{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+
+        std::string path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "rocket_player.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {165, 66}, {0, 0}});
+        this->updateIndexFromBinaryData("missile_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the projectile" << std::endl;
         return false;
@@ -888,6 +927,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parsePlayerCreation(message, index)) continue;
         if (this->parseProjectileCreation(message, index)) continue;
         if (this->parseEnemyCreation(message, index)) continue;
+        if (this->parseMissileCreation(message, index)) continue;
         if (this->parseShieldCreation(message, index)) continue;
         if (this->parseMachinegunCreation(message, index)) continue;
         if (this->parseRocketCreation(message, index)) continue;

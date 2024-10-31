@@ -371,11 +371,12 @@ void Systems::shoot_system(Registry& reg,
                 reg.add_component<ShootEnnemyMissile>(projectile, ShootEnnemyMissile{3.0f});
                 reg.add_component<Damage_s>(projectile, Damage_s{200});
                 reg.add_component<Velocity_s>(projectile, Velocity_s{0.1f, 0.1f});
+                networkSender->sendCreateMissile(playerId, projectileX, projectileY);
             } else {
                 reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
                 reg.add_component<Damage_s>(projectile, Damage_s{25});
+                networkSender->sendCreateProjectil(playerId, projectileX, projectileY, clientId);
             }
-            networkSender->sendCreateProjectil(playerId, projectileX, projectileY, clientId);
         }
     }
 }
