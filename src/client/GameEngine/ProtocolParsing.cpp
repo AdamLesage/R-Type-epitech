@@ -22,6 +22,7 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
                        {"PROJECTILE_CREATION", {0x02, "projectile_creation"}},
                        {"ENEMY_CREATION", {0x03, "enemy_creation"}},
                         {"MISSILE_CREATION", {0x04, "missile_creation"}},
+                        {"BIG_MISSILE_CREATION", {0x05, "big_missile_creation"}},
                        {"SHIELD_CREATION", {0x21, "shield_creation"}},
                        {"MACHINEGUN_CREATION", {0x22, "machinegun_creation"}},
                         {"ROCKET_CREATION", {0x23, "rocket_creation"}},
@@ -221,7 +222,6 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         _registry.add_component<Rotation>(entity, Rotation{0});
 
         std::string path;
-        auto parentEntity = _registry.entity_from_index(parentId);
         auto parentTag = _registry.get_components<Tag>()[projectileId];
         if (parentTag.has_value() && parentTag.value().tag == "enemy") {
             path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_ennemy.png";
@@ -273,6 +273,56 @@ bool RType::ProtocolParsing::parseMissileCreation(const std::string& message, in
         std::string path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "rocket_player.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {165, 66}, {0, 0}});
         this->updateIndexFromBinaryData("missile_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the projectile" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool RType::ProtocolParsing::parseBigMissileCreation(const std::string& message, int& index) {
+    if (!checkMessageType("BIG_MISSILE_CREATION", message, index)) return false;
+
+    unsigned int projectileId;
+    float posX;
+    float posY;
+    unsigned int parentId;
+
+    try {
+        std::memcpy(&projectileId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+        std::memcpy(&parentId, &message[index + 13], sizeof(unsigned int));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the projectile creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"projectile"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{240, 160});
+        _registry.add_component<Direction>(entity, Direction{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+
+        std::string path;
+        auto parentTag = _registry.get_components<Tag>()[projectileId];
+        if (parentTag.has_value() && parentTag.value().tag == "player") {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + PATH_SEPARATOR + "big_missile_" + std::to_string(parentId + 1) + ".png";
+        } else {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + PATH_SEPARATOR + "big_missile_1.png";
+        }
+        _registry.add_component<Sprite>(entity, Sprite{path, {74, 52}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 74, 52}, {74, 0, 74, 52}, 
+                                                    {148, 0, 74, 52}, {222, 0, 74, 52}, 
+                                                    {296, 0, 74, 52}, {370, 0, 74, 52}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
+        this->updateIndexFromBinaryData("big_missile_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the projectile" << std::endl;
         return false;
@@ -928,6 +978,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parseProjectileCreation(message, index)) continue;
         if (this->parseEnemyCreation(message, index)) continue;
         if (this->parseMissileCreation(message, index)) continue;
+        if (this->parseBigMissileCreation(message, index)) continue;
         if (this->parseShieldCreation(message, index)) continue;
         if (this->parseMachinegunCreation(message, index)) continue;
         if (this->parseRocketCreation(message, index)) continue;

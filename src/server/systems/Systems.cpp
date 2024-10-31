@@ -374,29 +374,37 @@ void Systems::shoot_system(Registry& reg,
         if (elapsed_seconds >= shootingSpeed->shooting_speed * 1000) {
             shoot->shootCooldown = now;
             float projectileX    = pos->x + 10;
-            float projectileY    = pos->y;
 
             entity_t projectile = reg.spawn_entity();
-            reg.add_component<Position_s>(
-                projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
             reg.add_component<Type_s>(projectile, Type_s{EntityType::PLAYER_PROJECTILE});
-            reg.add_component<Size>(projectile, Size{70, 30});
             reg.add_component<ParentId>(projectile, ParentId{playerId});
 
             if (canShootBigMissiles.size() > playerId && canShootBigMissiles[playerId] && canShootBigMissiles[playerId]->number != 0) {
                 canShootBigMissiles[playerId]->number--;
-                reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
-                reg.add_component<Damage_s>(projectile, Damage_s{300});
+                float projectileY    = pos->y - (160 / 2);
+                reg.add_component<Position_s>(
+                    projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
+                reg.add_component<Velocity_s>(projectile, Velocity_s{2.5f, 0.0f});
+                reg.add_component<Damage_s>(projectile, Damage_s{400});
+                reg.add_component<Size>(projectile, Size{240, 160});
                 reg.add_component<IsBigMissile>(projectile, IsBigMissile{true});
-                networkSender->sendCreateProjectil(playerId, projectileX, projectileY, clientId);
+                networkSender->sendCreateBigMissile(playerId, projectileX, projectileY, clientId);
             } else if (canShootMissiles.size() > playerId && canShootMissiles[playerId] && canShootMissiles[playerId]->number != 0) {
+                float projectileY    = pos->y - (70 / 2);
+                reg.add_component<Position_s>(
+                    projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
                 canShootMissiles[playerId]->number--;
                 reg.add_component<ShootEnnemyMissile>(projectile, ShootEnnemyMissile{3.0f});
+                reg.add_component<Size>(projectile, Size{70, 30});
                 reg.add_component<Damage_s>(projectile, Damage_s{200});
                 reg.add_component<Velocity_s>(projectile, Velocity_s{0.1f, 0.1f});
                 networkSender->sendCreateMissile(playerId, projectileX, projectileY);
             } else {
+                float projectileY    = pos->y - (70 / 2);
+                reg.add_component<Position_s>(
+                    projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
                 reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
+                reg.add_component<Size>(projectile, Size{70, 30});
                 reg.add_component<Damage_s>(projectile, Damage_s{25});
                 networkSender->sendCreateProjectil(playerId, projectileX, projectileY, clientId);
             }

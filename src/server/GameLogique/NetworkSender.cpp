@@ -91,6 +91,21 @@ void NetworkSender::sendCreateMissile(int id, float pos_x, float pos_y, int clie
     }
 }
 
+void NetworkSender::sendCreateBigMissile(int id, float pos_x, float pos_y, int parent_id, int clientId)
+{
+    std::array<char, 17> data{};
+    data[0] = 0x05;
+    std::memcpy(&data[1], &id, sizeof(id));
+    std::memcpy(&data[5], &pos_x, sizeof(int));
+    std::memcpy(&data[9], &pos_y, sizeof(int));
+    std::memcpy(&data[13], &parent_id, sizeof(int));
+    if (clientId == -1) {
+        this->_network->sendToAll(data.data(), data.size());
+    } else {
+        this->_network->sendToClient(data.data(), data.size(), clientId);
+    }
+}
+
 void NetworkSender::sendCreateReward(int id, float pos_x, float pos_y, int clientId)
 {
     std::array<char, 13> data{};
