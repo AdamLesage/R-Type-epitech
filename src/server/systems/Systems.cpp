@@ -144,7 +144,8 @@ void Systems::check_entities_collisions(Registry& reg,
                                         RType::Logger& logger,
                                         std::unique_ptr<NetworkSender>& networkSender,
                                         Type_s* entityType1,
-                                        Type_s* entityType2) {
+                                        Type_s* entityType2,
+                                        bool friendlyfire) {
     bool collisionX =
         entityPos1->x < entityPos2->x + entitySize2->x && entityPos1->x + entitySize1->x > entityPos2->x;
     bool collisionY =
@@ -152,7 +153,8 @@ void Systems::check_entities_collisions(Registry& reg,
 
     bool playerTakeDamage =
         (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::ENEMY_PROJECTILE)
-        || (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::ENEMY);
+        || (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::ENEMY) 
+        || (entityType1->type == EntityType::PLAYER  && entityType2->type == EntityType::PLAYER_PROJECTILE && friendlyfire == true && entityId1 != reg.get_components<ParentId_s>()[entityId2]->ParentId);
 
     bool enemyTakeDamage =
         (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE);
@@ -182,6 +184,10 @@ void Systems::check_entities_collisions(Registry& reg,
         }
         // Delete entity that hit the player if it's a projectile
         if (entityType2->type == EntityType::ENEMY_PROJECTILE) {
+            reg.kill_entity(entityId2);
+            networkSender->sendDeleteEntity(entityId2);
+        }
+        if (entityType2->type == EntityType::PLAYER_PROJECTILE) {
             reg.kill_entity(entityId2);
             networkSender->sendDeleteEntity(entityId2);
         }
@@ -251,7 +257,7 @@ struct SpatialHash {
     }
 };
 
-void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger) {
+void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger, bool friendlyfire) {
     auto &positions = reg.get_components<Position_s>();
     auto &sizes = reg.get_components<Size_s>();
     auto &types = reg.get_components<Type_s>();
@@ -289,7 +295,7 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize,
             auto &entityType2 = *types[j];
 
             // Check if the entities are colliding
-            check_entities_collisions(reg, i, &entityPos, &entitySize, j, &entityPos2, &entitySize2, logger, networkSender, &entityType, &entityType2);
+            check_entities_collisions(reg, i, &entityPos, &entitySize, j, &entityPos2, &entitySize2, logger, networkSender, &entityType, &entityType2, friendlyfire);
         }
     }
 }
@@ -327,6 +333,7 @@ void Systems::shoot_system(Registry& reg,
             reg.add_component<Type_s>(projectile, Type_s{EntityType::PLAYER_PROJECTILE});
             reg.add_component<Damage_s>(projectile, Damage_s{25});
             reg.add_component<Size>(projectile, Size{70, 30});
+            reg.add_component<ParentId>(projectile, ParentId{playerId});
 
             networkSender->sendCreateProjectil(projectile, projectileX, projectileY, playerId);
         }
