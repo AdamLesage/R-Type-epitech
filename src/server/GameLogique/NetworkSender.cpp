@@ -173,7 +173,6 @@ void NetworkSender::sendPing(std::string timeCode)
 {
     //finir et ajouter à une méthode à protocol parsing.
     //protocl parsing fichier de config dans le constructeur de game engine, bouger le fichier de config.
-    std::cout << "len: " << strlen(timeCode.c_str()) + 1 << std::endl;
     std::vector<char> data(strlen(timeCode.c_str()) + 1);
     data[0] = 0x99;
     std::memcpy(&data[1], timeCode.c_str(), strlen(timeCode.c_str()));

@@ -299,7 +299,6 @@ bool RType::ProtocolParsing::parseShieldCreation(const std::string& message, int
     }
 
     try {
-        std::cout << "create shield" << std::endl;
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -311,6 +310,15 @@ bool RType::ProtocolParsing::parseShieldCreation(const std::string& message, int
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "shield_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
         this->updateIndexFromBinaryData("shield_creation", index);
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
         return false;
@@ -336,7 +344,6 @@ bool RType::ProtocolParsing::parseMachinegunCreation(const std::string& message,
     }
 
     try {
-        std::cout << "create machinegun" << std::endl;
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -347,6 +354,15 @@ bool RType::ProtocolParsing::parseMachinegunCreation(const std::string& message,
         _registry.add_component<Rotation>(entity, Rotation{0});
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "machinegun_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
         this->updateIndexFromBinaryData("machinegun_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
@@ -373,7 +389,6 @@ bool RType::ProtocolParsing::parseRocketCreation(const std::string& message, int
     }
 
     try {
-        std::cout << "create Rocket" << std::endl;
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -384,6 +399,15 @@ bool RType::ProtocolParsing::parseRocketCreation(const std::string& message, int
         _registry.add_component<Rotation>(entity, Rotation{0});
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "rocket_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
         this->updateIndexFromBinaryData("rocket_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
@@ -410,7 +434,6 @@ bool RType::ProtocolParsing::parseBeamCreation(const std::string& message, int& 
     }
 
     try {
-        std::cout << "create beam" << std::endl;
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -421,6 +444,15 @@ bool RType::ProtocolParsing::parseBeamCreation(const std::string& message, int& 
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "beam_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
         this->updateIndexFromBinaryData("beam_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
