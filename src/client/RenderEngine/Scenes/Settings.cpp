@@ -5,7 +5,6 @@
 ** Settings
 */
 
-
 #include "Settings.hpp"
 RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     this->window = _window;
@@ -19,7 +18,8 @@ RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
         return;
     }
 
-    if (!backgroundTexture.loadFromFile(std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR + "menu.jpg")) {
+    if (!backgroundTexture.loadFromFile(std::string("assets") + PATH_SEPARATOR + "background" + PATH_SEPARATOR
+                                        + "menu.jpg")) {
         std::cerr << "Error loading background" << std::endl;
         return;
     }
@@ -70,7 +70,9 @@ RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
 RType::Settings::~Settings() {
 }
 
-const std::string RType::Settings::get_key_value(libconfig::Config& cfg, const std::string key_name) { // get the value of a key from the cfg file
+const std::string
+RType::Settings::get_key_value(libconfig::Config& cfg,
+                               const std::string key_name) { // get the value of a key from the cfg file
     std::string value;
     std::string keys = "Keys." + key_name + ".value";
 
@@ -90,14 +92,14 @@ int RType::Settings::set_key_value(libconfig::Config& cfg,
     try {
         if (cfg.exists(path)) {
             libconfig::Setting& setting = cfg.lookup(path);
-            setting = new_value;
+            setting                     = new_value;
             return 0;
         } else {
-            std::cerr << "Keys not found: " << key_name << std::endl;
+            std::cerr << "Key not found: " << key_name << std::endl;
             return -1;
         }
     } catch (const libconfig::SettingNotFoundException& nfex) {
-        std::cerr << "Keys not found: " << key_name << std::endl;
+        std::cerr << "Key not found: " << key_name << std::endl;
         return -1;
     } catch (const libconfig::SettingTypeException& tex) {
         std::cerr << "Invalid type for key: " << key_name << std::endl;
@@ -169,7 +171,7 @@ void RType::Settings::changeKey(std::string key) { // change the key of the sele
             newKey2 = "Normal";
         }
         set_key_value(cfg, "Keys8", newKey2); // set the value of the key 8 to the new colorblind
-                                                      // value
+                                              // value
         try {
             cfg.writeFile(configPath.c_str());
         } catch (const libconfig::FileIOException& fioex) {
@@ -259,7 +261,7 @@ void RType::Settings::displayInput() { // display a sprite for the input of the 
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    std::string keys5 = "Keys5";
+    std::string keys5      = "Keys5";
     std::string shootinput = std::string(get_key_value(cfg, keys5));
     std::transform(shootinput.begin(), shootinput.end(), shootinput.begin(), ::tolower);
     if (!ShootInputTexture.loadFromFile(std::string("assets") + PATH_SEPARATOR + "input" + PATH_SEPARATOR
@@ -311,7 +313,8 @@ void RType::Settings::display() {
         std::cerr << "I/O error while reading file." << std::endl;
         return;
     }
-    std::string colorblind = std::string(get_key_value(cfg, "Keys8"));
+    std::string Keys8      = "Keys8";
+    std::string colorblind = std::string(get_key_value(cfg, Keys8));
     if (colorblind.find("Deuteranopia") != std::string::npos) {
         window->draw(sprite, &colorblindShader[0]);
     } else if (colorblind.find("Protanopia") != std::string::npos) {
