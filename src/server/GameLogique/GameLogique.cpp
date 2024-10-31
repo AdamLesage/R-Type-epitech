@@ -33,6 +33,7 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<CanShootMissiles>();
     this->reg.register_component<CanShootBigMissile>();
     this->reg.register_component<IsBigMissile>();
+    this->reg.register_component<Clone>();
 
     try {
         std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type") + PATH_SEPARATOR + std::string("game_config.cfg");
@@ -74,17 +75,10 @@ void GameLogique::updateLevelConfig()
 
 void GameLogique::startGame(int idEntity) {
     if (running == false) {
-        for (size_t i = 0; i != network->getClientCount(); i++) {
-            auto &pos = reg.get_components<Position>()[i];
-            if (pos) {
-                pos->x = 100.f;
-                pos->y = 100 + (100.f * i);
-            }
-            this->_networkSender->sendPositionUpdate(i , 100.f, 100 + (100.f * i));
-            usleep(10000);
-        }
-        sleep(1);
+        clearGame();
+        usleep(100000);
         this->_networkSender->sendStateChange(idEntity, 0x03);
+        sleep(5);
         this->running = true;
     }
 }
@@ -317,6 +311,7 @@ void GameLogique::runGame() {
                 sys.Straight_line_pattern_system(this->reg);
                 sys.player_following_pattern_system(this->reg);
                 sys.shoot_enemy_missile(this->reg);
+                sys.clone_system(this->reg);
                 {
                     std::lock_guard<std::mutex> lock(this->_mutex);
                     sys.shoot_player_pattern_system(this->reg, this->_networkSender);

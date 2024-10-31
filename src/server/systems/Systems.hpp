@@ -33,6 +33,7 @@
 #include "../GameLogique/NetworkSender.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Tag.hpp"
+#include "../../shared/components/Clone.hpp"
 #include <iostream>
 #include <algorithm>
 #include <fstream>
@@ -174,6 +175,15 @@ class Systems {
          * @return void
          */
         void ping_client(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
+
+        /**
+         * @brief clone the velocity of the player
+         *
+         * @param reg The registry containing the components.
+         * @param networkSender The class for sending
+         * @return void
+         */
+        void clone_system(Registry& reg);
 
     private:
         /**
