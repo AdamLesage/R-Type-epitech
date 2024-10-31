@@ -16,6 +16,7 @@
 #include <cstring>
 #include <libconfig.h++>
 #include <string>
+#include "../ARenderEngineScene.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
