@@ -141,6 +141,8 @@ namespace RType {
              */
             std::shared_ptr<IGame> getCurrentGame() const { return _currentGame; }
 
+            void displayEntitiesHealth(sf::RenderWindow& win);
+
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
             std::shared_ptr<sf::RenderWindow> window;
