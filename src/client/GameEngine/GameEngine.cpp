@@ -33,8 +33,10 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Annimation>();
 
     std::string scenesConfigPath = std::string("config") + PATH_SEPARATOR + std::string("scenes") + PATH_SEPARATOR + std::string("sceneText.cfg");
+    std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
     _protocolParsing =
-        std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", scenesConfigPath, _registry);
+        std::make_unique<RType::ProtocolParsing>(protocolPath, scenesConfigPath, _registry);
+
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
     this->_systems = Systems();
@@ -125,6 +127,8 @@ void RType::GameEngine::send(const std::string& message) {
 void RType::GameEngine::handleServerData(const std::string& message) {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
     _protocolParsing->parseData(message);
+    float latency = _protocolParsing->getLatency();
+    this->_mediator->notify("RenderingEngine", "LATENCY " + std::to_string(latency));
 }
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {

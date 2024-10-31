@@ -138,7 +138,7 @@ void RType::Game::DisplaySkipIntro() {
     RenderTexture->draw(skipIntro);
 }
 
-void RType::Game::play() {
+void RType::Game::play(float &latency) {
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) window->close();
         if (event.type == sf::Event::KeyPressed) {
@@ -147,7 +147,11 @@ void RType::Game::play() {
             }
             console->toggleDeveloperConsoleFromEvent(event);
             console->checkInput();
+            if (event.key.code == sf::Keyboard::F3) {
+                toolbar.open();
+            }
         }
+        toolbar.handleEvent(event, *window);
     }
 
     _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
@@ -187,7 +191,22 @@ void RType::Game::play() {
     }
     RenderTexture->display();
     this->handleColorblind();
+    if (toolbar.showFps)
+        metrics.displayFPS(*window);
+    if (toolbar.showCpu)
+        metrics.displayCPU(*window);
+    if (toolbar.showMemory)
+        metrics.displayMemory(*window);
+    if (toolbar.showGpu)
+        metrics.displayGpuUsage(*window);
+    if (toolbar.showNetwork)
+        metrics.displayLatency(*window, latency);
+    if (toolbar.showPlayerPos) {
+        sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
+        metrics.displayPlayerPosition(*window, pos);
+    }
     console->displayDeveloperConsole();
+    toolbar.draw(*window);
     window->display();
 }
 
@@ -213,6 +232,7 @@ void RType::Game::handleColorblind() {
     } else {
         window->draw(sprite, &colorblindShader[4]);
     }
+    window->display();
 }
 
 sf::Vector2f RType::Game::convertToVector2f(const Size& size) {
@@ -259,7 +279,7 @@ void RType::Game::set_texture() {
     }
 }
 
-void RType::Game::runScene() {
+void RType::Game::runScene(float &latency) {
     sf::RectangleShape rectangleshape;
     sf::Texture texture;
 
@@ -289,7 +309,7 @@ void RType::Game::runScene() {
     window->clear();
     if (animationComplete || this->haveCinematic() == false) {
         _mediator->notify("RenderingEngine", "game_launch_music_stop");
-        this->play();
+        play(latency);
         return;
     } else if (animationComplete == false && this->haveCinematic() == true) {
         RenderTexture->draw(rectangleshape);

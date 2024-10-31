@@ -21,8 +21,9 @@ RType::EndMenu::~EndMenu()
 {
 }
 
-void RType::EndMenu::runScene()
+void RType::EndMenu::runScene(float &latency)
 {
+    (void)latency; // Do not used latency
     _window->clear();
     this->displayBackground();
     this->displayEndMenuOptions();

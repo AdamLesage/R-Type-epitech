@@ -475,7 +475,7 @@ void Systems::death_system(Registry& reg, RType::Logger& logger) {
     }
 }
 
-void Systems::wave_pattern_system(Registry& reg, float totalTime, RType::Logger& logger) {
+void Systems::wave_pattern_system(Registry& reg, RType::Logger& logger) {
     (void)logger;
     auto& patterns  = reg.get_components<Wave_pattern>();
     auto& positions = reg.get_components<Position>();
@@ -486,8 +486,11 @@ void Systems::wave_pattern_system(Registry& reg, float totalTime, RType::Logger&
         auto& position = positions[i];
         auto& velocity = velocitys[i];
         if (pattern && position && velocity) {
+            auto now                        = std::chrono::steady_clock::now();
+            std::chrono::duration<float> fs = now - pattern->creation;
+            float elapsed_seconds           = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
             velocity->x = -1;
-            position->y += (pattern->amplitude * std::sin(pattern->frequency * totalTime));
+            position->y += (pattern->amplitude * std::sin(pattern->frequency * (elapsed_seconds / 10)));
         }
         // logger.log(RType::Logger::LogType::INFO, "Player %d shot a projectile", playerId);
     }
@@ -628,4 +631,16 @@ std::array<float, 2> Systems::find_closest_player(Registry& reg, Position* posit
         }
     }
     return (std::array<float, 2>({target_x, target_y}));
+}
+
+
+void Systems::ping_client(Registry& reg, std::unique_ptr<NetworkSender>& networkSender) {
+    (void)reg;
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    std::tm* localtm = std::localtime(&now_c);
+    std::ostringstream oss;
+    oss << std::put_time(localtm, "%d/%H/%M/%S");
+    std::string formatted_time = oss.str();
+    networkSender->sendPing(formatted_time);
 }

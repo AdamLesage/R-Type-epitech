@@ -87,7 +87,7 @@ namespace RType {
             /**
              * @brief Displays the menu.
              */
-            void runScene() override;
+            void runScene(float &latency) override;
 
             void setCamera(std::shared_ptr<Camera> camera);
             /**

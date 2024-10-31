@@ -41,7 +41,7 @@ namespace RType {
              */
             ~EndMenu();
 
-            void runScene() override;
+            void runScene(float &latency) override;
 
             /**
              * @brief Set the game selected
