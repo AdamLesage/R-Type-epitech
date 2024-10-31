@@ -87,7 +87,7 @@ void GameLogique::startGame(int idEntity) {
 
 void GameLogique::spawnCustomEntity(char type, float position_x, float position_y, size_t entity) {
     std::shared_ptr<EntityData> &entityData = this->assetEditorParsing->getEntityData(type);
-    if (entity == -1) {
+    if (entity == 1000000000) {
         entity = this->reg.spawn_entity();
     }
 
@@ -192,7 +192,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             }
             for (auto &it : staticEntities) {
                 if (it->second->pos != nullptr && it->second->pos->x < this->_camera_x) {
-                    this->spawnCustomEntity(type, 1800, it->second->pos->y, -1);
+                    this->spawnCustomEntity(type, 1800, it->second->pos->y, 1000000000);
                     it->second->number = 0;
                 }
             }
@@ -215,7 +215,6 @@ void GameLogique::spawnWave()
 
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
-    std::clock_t endClock      = std::clock();
     std::clock_t spawnClock = std::clock();
     while (1) {
         if (this->running) {
@@ -236,12 +235,9 @@ void GameLogique::runGame() {
                 spawnClock = std::clock();
             }
             if (ennemyAlive == false) {
-                endClock = std::clock();
                 this->handleChangeLevel(_currentLevel + 1);
             }
-        } else {
-            endClock = std::clock();
-        }
+        } 
     }
 }
 
