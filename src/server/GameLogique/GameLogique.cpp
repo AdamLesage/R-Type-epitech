@@ -152,6 +152,7 @@ void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
     std::clock_t endClock      = std::clock();
     std::clock_t spawnClock = std::clock();
+    int friendlyFireCheckCounter = 0;
     std::clock_t pingClock  = std::clock();
 
     while (1) {

@@ -83,9 +83,20 @@ namespace RType {
             void displayInput();
 
             /**
-             * @brief Displays the settings.
+             * @brief Executes the scene with the given latency.
+             * 
+             * This function is responsible for running the scene and handling any
+             * necessary updates or rendering based on the provided latency.
+             * 
+             * @param latency A reference to a float representing the latency to be used
+             *                during the scene execution.
              */
             void runScene(float& latency)  override;
+
+
+            /**
+             * @brief Displays the settings.
+             */
             void display();
             /**
              * @brief get the value of a key from the cfg file
