@@ -42,7 +42,6 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     backgrounds[backgrounds.size() - 1].setTexture(&backgroundTextures[1]);
     backgrounds[backgrounds.size() - 1].setPosition(sf::Vector2f(1920, 0));
 
-
     // Set up colorblind shaders
     std::vector<std::string> shaderNames = {
         "Deuteranopia_shader.frag",
@@ -51,7 +50,6 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
         "Achromatopsia_shader.frag",
         "Normal_shader.frag"
     };
-    // Load all shaders
     try {
         for (size_t i = 0; i < shaderNames.size(); ++i) {
             if (!colorblindShader[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + shaderNames[i], sf::Shader::Fragment)) {
@@ -75,17 +73,13 @@ RType::Game::~Game() {
 
 void RType::Game::loadBackgroundConfig(libconfig::Setting &levelSetting) {
     try {
-        // Retrieve background paths from config file
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
-
-        // Resize backgroundTextures to match the number of backgrounds
         backgrounds.clear();
         backgroundTextures.clear();
         backgroundTextures.resize(backgroundSettings.getLength());
 
-        for (size_t i = 0; i < backgroundTextures.size(); i++) { // Load all backgrounds textures
+        for (size_t i = 0; i < backgroundTextures.size(); i++) {
             libconfig::Setting& backgroundSetting = backgroundSettings[i];
-            // Clean path to be Linux/Windows compatible
             std::string backgroundPath = backgroundSetting["path"];
             int transparency = backgroundSetting["transparency"];
             #ifdef _WIN32
@@ -102,7 +96,7 @@ void RType::Game::loadBackgroundConfig(libconfig::Setting &levelSetting) {
             backgrounds[i].setTexture(&backgroundTextures[i]);
             backgrounds[i].setPosition(sf::Vector2f(0, 0));
             if (transparency != 0) {
-                backgrounds[i].setFillColor(sf::Color(255, 255, 255, transparency)); // Set transparency
+                backgrounds[i].setFillColor(sf::Color(255, 255, 255, transparency));
             }
         }
     } catch (const libconfig::SettingNotFoundException& e) {
@@ -173,12 +167,10 @@ void RType::Game::play(float &latency) {
         this->_currentGame->handleOfflineGame();
     }
 
-
-    // Move backgrounds
     try {
         libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
-        for (size_t i = backgroundSettings.getLength() - 1; i > 0; i--) { // Browse backwards to have the same order than in the config file
+        for (size_t i = backgroundSettings.getLength() - 1; i > 0; i--) {
             int speedX = backgroundSettings[i]["movingSpeedX"];
             int speedY = backgroundSettings[i]["movingSpeedY"];
 
@@ -205,8 +197,13 @@ void RType::Game::play(float &latency) {
         displayPiou();
         piou = false;
     }
+    
     RenderTexture->display();
+    sf::Sprite sprite(RenderTexture->getTexture());
+    window->draw(sprite);
+
     this->handleColorblind();
+
     if (toolbar.showFps)
         metrics.displayFPS(*window);
     if (toolbar.showCpu)
@@ -265,7 +262,7 @@ void RType::Game::set_texture() {
     entity.clear();
     window->clear();
     if (_camera == nullptr) return;
-    if (this->isGameOffline() == true) { // If game is offline, camera is set in the game
+    if (this->isGameOffline() == true) {
         this->_camera = _currentGame->getCamera();
     }
 
@@ -275,14 +272,14 @@ void RType::Game::set_texture() {
 
     for (size_t i = 0; i < _camera->listEntityToDisplay.size(); i++) {
         if (Textures.find(_camera->listEntityToDisplay[i].sprite.spritePath)
-            != Textures.end()) { // If texture already loaded
+            != Textures.end()) {
             entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
             entity[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
                                                  _camera->listEntityToDisplay[i].sprite.rectPos[1],
                                                  _camera->listEntityToDisplay[i].sprite.rectSize[0],
                                                  _camera->listEntityToDisplay[i].sprite.rectSize[1]));
             entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
-        } else { // If texture not loaded
+        } else {
             sf::Texture* texture = new sf::Texture();
             texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath);
             Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, texture));
@@ -378,7 +375,7 @@ bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rec
 
 void RType::Game::setCamera(std::shared_ptr<Camera> camera) {
     if (this->isGameOffline() == true)
-        return; // Camera is loaded from client
+        return;
     _camera = camera;
 }
 
@@ -397,14 +394,13 @@ void RType::Game::setLevel(size_t level) {
 }
 
 bool RType::Game::haveCinematic() {
-    if (_gameSelected == "R-Type") { // For the moment, only R-Type has a cinematic
+    if (_gameSelected == "R-Type") {
         return true;
     }
     return false;
 }
 
 bool RType::Game::isGameOffline() {
-    // Need to fix this method to play offline with R-Type
     if (_gameSelected == "R-Type") {
         return false;
     }
@@ -429,7 +425,6 @@ void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
             hpText.setFillColor(sf::Color::White);
 
             hpText.setPosition(entityInfo.position.x, entityInfo.position.y - 20.0f);
-
             win.draw(hpText);
         }
     }
