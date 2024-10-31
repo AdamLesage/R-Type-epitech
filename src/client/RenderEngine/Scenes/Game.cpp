@@ -27,41 +27,15 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     if (!font.loadFromFile(std::string("assets") + PATH_SEPARATOR + "r-type.ttf")) {
         throw std::runtime_error("Error loading font");
     }
+    _level = 0;
 
     try {
-        // Retrieve background paths from config file
-        libconfig::Setting& backgroundSettings = _cfg.lookup("Menu.Game.backgrounds");
-
-        // Resize backgroundTextures to match the number of backgrounds
-        backgroundTextures.resize(backgroundSettings.getLength());
-
-        for (size_t i = 0; i < backgroundTextures.size(); i++) { // Load all backgrounds textures
-            libconfig::Setting& backgroundSetting = backgroundSettings[i];
-            // Clean path to be Linux/Windows compatible
-            std::string backgroundPath = backgroundSetting["path"];
-            int transparency = backgroundSetting["transparency"];
-            #ifdef _WIN32
-                std::replace(backgroundPath.begin(), backgroundPath.end(), '/', '\\');
-            #else
-                std::replace(backgroundPath.begin(), backgroundPath.end(), '\\', '/');
-            #endif
-
-            if (!backgroundTextures[i].loadFromFile(backgroundPath)) {
-                throw std::runtime_error("Error loading backgroundTexture " + std::to_string(i + 1));
-            }
-
-            backgrounds.push_back(sf::RectangleShape(sf::Vector2f(window->getSize().x, window->getSize().y)));
-            backgrounds[i].setTexture(&backgroundTextures[i]);
-            backgrounds[i].setPosition(sf::Vector2f(0, 0));
-            if (transparency != 0) {
-                backgrounds[i].setFillColor(sf::Color(255, 255, 255, transparency)); // Set transparency
-            }
-        }
-    } catch (const libconfig::SettingNotFoundException& e) {
-        throw std::runtime_error("Error loading background settings");
+        libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
+        this->loadBackgroundConfig(levelSetting);
+        
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Error loading level settings");
     }
-
-
 
     // Background for colorblind filters
     backgrounds.push_back(sf::RectangleShape(sf::Vector2f(1920, 1080)));
@@ -97,6 +71,43 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
 }
 
 RType::Game::~Game() {
+}
+
+void RType::Game::loadBackgroundConfig(libconfig::Setting &levelSetting) {
+    try {
+        // Retrieve background paths from config file
+        libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
+
+        // Resize backgroundTextures to match the number of backgrounds
+        backgrounds.clear();
+        backgroundTextures.clear();
+        backgroundTextures.resize(backgroundSettings.getLength());
+
+        for (size_t i = 0; i < backgroundTextures.size(); i++) { // Load all backgrounds textures
+            libconfig::Setting& backgroundSetting = backgroundSettings[i];
+            // Clean path to be Linux/Windows compatible
+            std::string backgroundPath = backgroundSetting["path"];
+            int transparency = backgroundSetting["transparency"];
+            #ifdef _WIN32
+                std::replace(backgroundPath.begin(), backgroundPath.end(), '/', '\\');
+            #else
+                std::replace(backgroundPath.begin(), backgroundPath.end(), '\\', '/');
+            #endif
+
+            if (!backgroundTextures[i].loadFromFile(backgroundPath)) {
+                throw std::runtime_error("Error loading backgroundTexture " + std::to_string(i + 1));
+            }
+
+            backgrounds.push_back(sf::RectangleShape(sf::Vector2f(window->getSize().x, window->getSize().y)));
+            backgrounds[i].setTexture(&backgroundTextures[i]);
+            backgrounds[i].setPosition(sf::Vector2f(0, 0));
+            if (transparency != 0) {
+                backgrounds[i].setFillColor(sf::Color(255, 255, 255, transparency)); // Set transparency
+            }
+        }
+    } catch (const libconfig::SettingNotFoundException& e) {
+        throw std::runtime_error("Error loading background settings");
+    }
 }
 
 void RType::Game::displayPiou() {
@@ -164,19 +175,24 @@ void RType::Game::play(float &latency) {
 
 
     // Move backgrounds
-    libconfig::Setting& backgroundSettings = _cfg.lookup("Menu.Game.backgrounds");
-    for (size_t i = backgroundSettings.getLength() - 1; i > 0; i--) { // Browse backwards to have the same order than in the config file
-        int speedX = backgroundSettings[i]["movingSpeedX"];
-        int speedY = backgroundSettings[i]["movingSpeedY"];
+    try {
+        libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
+        libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
+        for (size_t i = backgroundSettings.getLength() - 1; i > 0; i--) { // Browse backwards to have the same order than in the config file
+            int speedX = backgroundSettings[i]["movingSpeedX"];
+            int speedY = backgroundSettings[i]["movingSpeedY"];
 
-        backgrounds[i].move(speedX, speedY);
-        if (backgrounds[i].getPosition().x < -1920) backgrounds[i].setPosition(1920, 0);
-        if (backgrounds[i].getPosition().x > 1920) backgrounds[i].setPosition(-1920, 0);
-        if (backgrounds[i].getPosition().y < -1080) backgrounds[i].setPosition(0, 1080);
-        if (backgrounds[i].getPosition().y > 1080) backgrounds[i].setPosition(0, -1080);
+            backgrounds[i].move(speedX, speedY);
+            if (backgrounds[i].getPosition().x < -1920) backgrounds[i].setPosition(1920, 0);
+            if (backgrounds[i].getPosition().x > 1920) backgrounds[i].setPosition(-1920, 0);
+            if (backgrounds[i].getPosition().y < -1080) backgrounds[i].setPosition(0, 1080);
+            if (backgrounds[i].getPosition().y > 1080) backgrounds[i].setPosition(0, -1080);
 
+        }
+        BackgroundClock.restart();
+    } catch (std::exception &e) {
+        std::cerr << "fail to load Game Backgounds" << std::endl;
     }
-    BackgroundClock.restart();
 
     for (size_t i = 0; i < backgrounds.size(); i++) {
         RenderTexture->draw(backgrounds[i]);
@@ -367,6 +383,16 @@ void RType::Game::setCamera(std::shared_ptr<Camera> camera) {
 
 void RType::Game::setMutex(std::shared_ptr<std::mutex> mutex) {
     this->_mutex = mutex;
+}
+
+void RType::Game::setLevel(size_t level) {
+    this->_level = level;
+    try {
+        libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
+        this->loadBackgroundConfig(levelSetting);
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Error loading level settings");
+    }
 }
 
 bool RType::Game::haveCinematic() {

@@ -307,6 +307,11 @@ void RType::Mediator::notifyProtocolParsing(std::string sender, const std::strin
         int number = std::stoi(numberString);
         this->_renderingEngine->setStateGame(number);
     }
+    if (event.find("GameLevel") == 0) {
+        std::string levelString = event.substr(10);
+        int level = std::stoi(levelString);
+        this->_renderingEngine->setLevel(level);
+    }
 }
 
 void RType::Mediator::notify(std::string sender, const std::string& event) {

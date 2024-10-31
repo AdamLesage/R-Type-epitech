@@ -73,6 +73,12 @@ namespace RType {
              * @param gameSelected the game selected
              */
             void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+            /**
+             * @brief Set the level to display
+             *
+             * @param level the new level
+             */
+            void setLevel(size_t level);
 
             /**
              * @brief Return current instance of currentGame, will be called by mediator to reset game

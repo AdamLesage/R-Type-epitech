@@ -157,8 +157,7 @@ void NetworkSender::sendProjectilColision(int id_projectil, int id_entity, int c
     }
 }
 
-void NetworkSender::sendStateChange(int id_entity, char newState, int clientId)
-{
+void NetworkSender::sendStateChange(int id_entity, char newState, int clientId) {
     std::array<char, 6> data{};
     data[0] = 0x37;
     std::memcpy(&data[1], &id_entity, sizeof(id_entity));
@@ -188,6 +187,17 @@ void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int cli
     std::memcpy(&data[1], &id_entity, sizeof(id_entity));
     std::memcpy(&data[5], &x, sizeof(x));
     std::memcpy(&data[9], &y, sizeof(y));
+    if (clientId == -1) {
+        this->_network->sendToAll(data.data(), data.size());
+    } else {
+        this->_network->sendToClient(data.data(), data.size(), clientId);
+    }
+}
+
+void NetworkSender::sendLevelUpdate(unsigned int level, int clientId) {
+    std::array<char, 5> data{};
+    data[0] = 0x3a;
+    std::memcpy(&data[1], &level, sizeof(level));
     if (clientId == -1) {
         this->_network->sendToAll(data.data(), data.size());
     } else {

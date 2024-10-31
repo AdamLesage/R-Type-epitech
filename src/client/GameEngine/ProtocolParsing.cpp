@@ -7,20 +7,10 @@
 
 #include "ProtocolParsing.hpp"
 
-RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, std::string sceneConfigPath, Registry& registry) : _registry(registry) {
+RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& registry) : _registry(registry) {
     try {
         _protocolPath = protocolPath;
         _cfg.readFile(_protocolPath.c_str());
-    } catch (const libconfig::FileIOException& fioex) {
-        std::cerr << "I/O error while reading file." << std::endl;
-    } catch (const libconfig::ParseException& pex) {
-        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
-                  << std::endl;
-    }
-    try {
-        printf("%s\n", sceneConfigPath.c_str());
-        _cfgAssetEditor.readFile(sceneConfigPath.c_str());
-        _assetEditorParsing = std::make_unique<AssetEditorParsing>(_cfgAssetEditor);
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
     } catch (const libconfig::ParseException& pex) {
@@ -43,6 +33,7 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, std::string sc
                        {"PROJECTILE_COLLISION", {0x35, "projectile_collision"}},
                        {"SCORE_UPDATE", {0x36, "score_update"}},
                        {"STATE_CHANGE", {0x37, "state_change"}},
+                       {"LEVEL_UPDATE", {0x3a, "level_update"}},
                        {"PING_CLIENT", {0x99, "ping_client"}}};
 }
 
@@ -674,6 +665,33 @@ bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& i
     return true;
 }
 
+bool RType::ProtocolParsing::parseLevelUpdate(const std::string& message, int& index) {
+    if (!checkMessageType("LEVEL_UPDATE", message, index)) return false;
+
+    unsigned int level;
+
+    try {
+        std::memcpy(&level, &message[index + 1], sizeof(unsigned int));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the level update message" << std::endl;
+        return false;
+    }
+
+    try {
+        _mediator->notify("ProtocolParsing", "GameLevel " + std::to_string(level));
+        this->updateIndexFromBinaryData("level_update", index);
+        loadAssetCfgEditorParsing(level);
+        // Need to implement the method to update the entity state
+    } catch (const std::out_of_range& e) {
+        std::cerr << "Entity not found" << std::endl;
+        return false;
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while updating the level" << std::endl;
+        return false;
+    }
+    return true;
+}
+
 bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& index) {
     if (!checkMessageType("PING_CLIENT", message, index)) return false;
 
@@ -721,7 +739,9 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parseProjectileCollision(message, index)) continue;
         if (this->parseScoreUpdate(message, index)) continue;
         if (this->parseStateChange(message, index)) continue;
+        if (this->parseLevelUpdate(message, index)) continue;
         if (this->parseEntityCreation(message, index)) continue;
+        if (this->parsePingClient(message, index)) continue;
         index += 1;
     }
     return false;
@@ -729,4 +749,40 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
 
 void RType::ProtocolParsing::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
+}
+
+void RType::ProtocolParsing::setGameSelected(const std::string& gameSelected) {
+    try {
+        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + gameSelected + PATH_SEPARATOR + std::string("game_config.cfg");
+        _gameConfig.readFile(gameConfigPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
+    loadAssetCfgEditorParsing(0);
+}
+
+void RType::ProtocolParsing::loadAssetCfgEditorParsing(size_t level)
+{
+    try {
+        libconfig::Setting &levelConfig = _gameConfig.lookup("Menu.Game.level")[level];
+        std::string cfgAssetEditorPath = levelConfig.lookup("sceneConfig");
+        size_t startPos = 0;
+        std::string from = "/";
+        while((startPos = cfgAssetEditorPath.find(from, startPos)) != std::string::npos) {
+            cfgAssetEditorPath.replace(startPos, from.length(), PATH_SEPARATOR);
+            startPos += 2;
+        }
+        _cfgAssetEditor.readFile(cfgAssetEditorPath.c_str());
+        _assetEditorParsing = std::make_unique<AssetEditorParsing>(_cfgAssetEditor);
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    } catch (std::exception &e) {
+        std::cerr << "Parse error: " << e.what() << std::endl;
+    }
 }
