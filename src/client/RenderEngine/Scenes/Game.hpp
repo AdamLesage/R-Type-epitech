@@ -134,8 +134,19 @@ namespace RType {
              */
             std::shared_ptr<IGame> getCurrentGame() const { return _currentGame; }
 
+            /**
+             * @brief Display the enemy health (only when they are hit)
+             *
+             * @param win
+             */
             void displayEnemyHealth(sf::RenderWindow& win);
-            // void displayPlayerHealth();
+
+            /**
+             * @brief Display the player health
+             *
+             * @param win
+             */
+            void displayPlayerHealth(sf::RenderWindow& win);
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
             std::shared_ptr<sf::RenderWindow> window;

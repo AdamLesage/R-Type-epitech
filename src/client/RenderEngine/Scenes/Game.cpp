@@ -187,6 +187,8 @@ void RType::Game::play() {
     RenderTexture->display();
     this->handleColorblind();
     console->displayDeveloperConsole();
+    displayEnemyHealth(*window.get());
+    displayPlayerHealth(*window.get());
     window->display();
 }
 
@@ -300,8 +302,6 @@ void RType::Game::runScene() {
     }
     RenderTexture->display();
     this->handleColorblind();
-    std::cout << "Displaying enemy health" << std::endl;
-    displayEnemyHealth(*window.get());
     window->display();
     handleEvents();
 }
@@ -367,32 +367,61 @@ bool RType::Game::isGameOffline() {
 
 
 void RType::Game::displayEnemyHealth(sf::RenderWindow& win) {
-    (void)win;
-    // Vérifier le nombre d'entités dans le registre
-    std::cout << "Nombre d'entités dans le registry : " << _registry->get_components<Type>().size() << std::endl;
-    
-    // Afficher les composants présents dans chaque SparseArray
-    auto& types = _registry->get_components<Type>();
     auto& healths = _registry->get_components<Health>();
+    auto& positions = _registry->get_components<Position>();
+    auto& controllables = _registry->get_components<Controllable>();
 
-    std::cout << "Composants Type : " << types.size() << " éléments" << std::endl;
-    std::cout << "Composants Health : " << healths.size() << " éléments" << std::endl;
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    sf::Font hpFont;
+    if (!hpFont.loadFromFile(fontPath)) {
+        return;
+    }
 
-    for (size_t i = 0; i < types.size(); ++i) {
-        auto& type = types[i];
+    for (size_t i = 0; i < healths.size(); ++i) {
         auto& health = healths[i];
+        auto& position = positions[i];
+        auto& controllable = controllables[i];
 
-        if (type) {
-            std::cout << "Entity " << i << " - Type trouvé : " << static_cast<int>(type->type) << std::endl;
-        } else {
-            std::cout << "Entity " << i << " - Pas de composant Type" << std::endl;
+        if (health && position && !controllable) {
+            sf::Text hpText;
+            hpText.setFont(hpFont);
+            hpText.setString(std::to_string(health->health) + "/" + std::to_string(health->maxHealth));
+            hpText.setCharacterSize(18);
+            hpText.setFillColor(sf::Color::White);
+
+            hpText.setPosition(position->x, position->y - 20.0f);
+
+            win.draw(hpText);
         }
+    }
+}
 
-        if (health) {
-            std::cout << "Entity " << i << " - Health trouvé : " << health->health 
-                      << "/" << health->maxHealth << std::endl;
-        } else {
-            std::cout << "Entity " << i << " - Pas de composant Health" << std::endl;
+void RType::Game::displayPlayerHealth(sf::RenderWindow& win) {
+    auto& healths = _registry->get_components<Health>();
+    auto& positions = _registry->get_components<Position>();
+    auto& controllables = _registry->get_components<Controllable>();
+
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    sf::Font hpFont;
+    if (!hpFont.loadFromFile(fontPath)) {
+        return;
+    }
+
+    for (size_t i = 0; i < healths.size(); ++i) {
+        auto& health = healths[i];
+        auto& position = positions[i];
+        auto& controllable = controllables[i];
+
+        if (health && position && controllable) {
+            sf::Text hpText;
+            hpText.setFont(hpFont);
+            hpText.setString(std::to_string(health->health));
+            hpText.setCharacterSize(18);
+            hpText.setFillColor(sf::Color::Green);
+
+            hpText.setPosition(position->x + 60.0f, position->y - 20.0f);
+
+            win.draw(hpText);
         }
     }
 }
