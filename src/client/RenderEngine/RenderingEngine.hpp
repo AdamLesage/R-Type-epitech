@@ -51,8 +51,13 @@ namespace RType {
              */
             void setMutex(std::shared_ptr<std::mutex> mutex);
 
+            /**
+             * @brief Set the registry
+             *
+             * @param registry the registry to set to the rendering engine
+             */
             void setRegistry(std::shared_ptr<Registry> registry) {
-                this->_registry = registry; // _registry devrait être un pointeur partagé dans RenderingEngine
+                this->_registry = registry;
             }
 
             /**
