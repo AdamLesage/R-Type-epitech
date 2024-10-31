@@ -20,7 +20,8 @@
 #include <mutex>
 #include <libconfig.h++>
 #include "../ARenderEngineScene.hpp"
-
+#include "../../GameMetrics/Toolbar.hpp"
+#include "../../GameMetrics/GameMetrics.hpp"
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
 #else
@@ -67,12 +68,12 @@ namespace RType {
             /**
              * @brief Displays the cinematic just before the game starts.
              */
-            void runScene() override;
+            void runScene(float &latency) override;
 
             /**
              * @brief Displays the game we are playing.
              */
-            void play();
+            void play(float &latency);
             /**
              * @brief Set the camera to display
              *
@@ -151,6 +152,8 @@ namespace RType {
             std::shared_ptr<sf::RenderTexture> RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
             sf::Event event; // The event of the game
+            GameMetrics metrics;
+            Toolbar toolbar;
     };
 } // namespace RType
 

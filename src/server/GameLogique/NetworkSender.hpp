@@ -124,6 +124,13 @@ class NetworkSender {
         void sendDirectionUpdate(int id_entity, float x, float y, int clientId = -1);
 
 
+        /**
+         * @brief send a ping containing the time code to the clients
+         *
+         * @param timeCode
+         */
+        void sendPing(std::string timeCode);
+
     private:
         std::shared_ptr<NetworkLib::Server> _network;
 };

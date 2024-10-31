@@ -49,6 +49,14 @@ namespace RType {
             void setMutex(std::shared_ptr<std::mutex> mutex);
 
             /**
+             * @brief Set the Latency object
+             *
+             * @param latency
+             */
+            void setLatency(float latency);
+            float _latency;
+
+            /**
              * @brief Set a new State
              * 
              *  @param newState the new state

@@ -18,7 +18,7 @@ RUNNING = [$(YELLOW)~$(RESET)]
 SUCCESS = [$(GREEN)✔$(RESET)]
 FAILURE = [$(RED)✘$(RESET)]
 
-all: asset_editor
+all:
 	@echo "$(RUNNING) Starting project build"
 	@mkdir -p build
 	@cd build && cmake .. && make

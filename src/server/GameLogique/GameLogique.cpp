@@ -129,6 +129,8 @@ void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
     std::clock_t endClock      = std::clock();
     std::clock_t spawnClock = std::clock();
+    std::clock_t pingClock  = std::clock();
+
     while (1) {
         if (this->running) {
             if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {
@@ -145,6 +147,10 @@ void GameLogique::runGame() {
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
                 this->spawnEnnemy(0x50, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
+            }
+            if (static_cast<float>(std::clock() - pingClock) / CLOCKS_PER_SEC > 15) {
+                sys.ping_client(reg, this->_networkSender);
+                pingClock = std::clock();
             }
             if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {
                 endClock = std::clock();
@@ -321,7 +327,6 @@ void GameLogique::handleRecieve() {
                 std::memcpy(&value, &message.first[1], sizeof(int));
                 auto &playerHealth = reg.get_components<Health_s>()[message.second];
                 playerHealth->health = value;
-                
                 break;
             }
             default:
