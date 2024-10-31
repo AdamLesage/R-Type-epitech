@@ -5,16 +5,6 @@
 ** ClientConnexionHandling
 */
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#define LIB_EXTENSION ".dll"
-#define PATH_SEPARATOR "\\"
-#else
-#include <dlfcn.h>
-#define LIB_EXTENSION ".so"
-#define PATH_SEPARATOR "/"
-#endif
-
 #include "ClientConnexionHandling.hpp"
 
 RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsigned short server_port)

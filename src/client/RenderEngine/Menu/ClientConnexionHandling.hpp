@@ -8,10 +8,22 @@
 #ifndef CLIENTCONNEXIONHANDLING_HPP_
 #define CLIENTCONNEXIONHANDLING_HPP_
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <memory>
-#include <string>
+    #if defined(_WIN32) || defined(_WIN64)
+        #include <windows.h>
+        #define LIB_EXTENSION ".dll"
+        #define PATH_SEPARATOR "\\"
+        #define NOMINMAX
+    #else
+        #include <dlfcn.h>
+        #define LIB_EXTENSION ".so"
+        #define PATH_SEPARATOR "/"
+    #endif
+
+    #include <algorithm>
+    #include <iostream>
+    #include <SFML/Graphics.hpp>
+    #include <memory>
+    #include <cstring>
 
 namespace RType {
     /**
