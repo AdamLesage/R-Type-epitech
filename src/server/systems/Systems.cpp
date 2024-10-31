@@ -559,12 +559,37 @@ void Systems::boss_system(Registry& reg, std::unique_ptr<NetworkSender>& network
             if (elapsed_seconds >= pattern->spawnCooldown && pattern->spawnCooldown > 1) {
                 for (int j = 0; j < 5; ++j) {
                     size_t enemy = reg.spawn_entity();
-                    reg.add_component<Position_s>(enemy, Position_s{position->x, (float)j * 200});
-                    reg.add_component<Velocity_s>(enemy, Velocity_s{-1.0f, 0.0f});
-                    reg.add_component<Type_s>(enemy, Type_s{EntityType::ENEMY});
-                    reg.add_component<Health_s>(enemy, Health_s{100, 100});
+                    reg.add_component<Position>(enemy, Position_s{position->x, (float)j * 200});
+                    reg.add_component<Velocity>(enemy, Velocity_s{-1.0f, 0.0f});
+                    reg.add_component<Type>(enemy, Type_s{EntityType::ENEMY});
+                    reg.add_component<Health>(enemy, Health_s{100, 100});
                     reg.add_component<Size>(enemy, Size{50, 50});
-                    networkSender->sendCreateEnemy(0x03, enemy, position->x, j * 200);
+                    reg.add_component<Damage>(enemy, Damage{20});
+                    if (j == 0) {                       
+                        reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
+                        reg.add_component<ShootStraightPattern>(enemy, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+                        networkSender->sendCreateEnemy(0x03, enemy, position->x, j * 200);
+                    }
+                    if (j == 1) {                       
+                        reg.add_component<Wave_pattern>(enemy, Wave_pattern{1.f, 0.02f, std::chrono::steady_clock::now()});
+                        reg.add_component<ShootStraightPattern>(enemy, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+                        networkSender->sendCreateEnemy(0x03, enemy, position->x, j * 200);
+                    }
+                    if (j == 2) {                       
+                        reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
+                        reg.add_component<ShootPlayerPattern>(enemy, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+                        networkSender->sendCreateEnemy(0x03, enemy, position->x, j * 200);
+                    }
+                    if (j == 3) {                       
+                        reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
+                        reg.add_component<ShootStraightPattern>(enemy, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+                        networkSender->sendCreateEnemy(0x03, enemy, position->x, j * 200);
+                    }
+                    if (j == 4) {                       
+                        reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
+                        reg.add_component<PlayerFollowingPattern>(enemy, PlayerFollowingPattern{0.5f});
+                        networkSender->sendCreateEnemy(0x03, enemy, position->x, j * 200);
+                    }
                     printf("Boss spawn enemy: %d\n", j);
                 }
                 pattern->lastSpawnTime = now;
