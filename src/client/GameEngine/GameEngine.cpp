@@ -49,6 +49,7 @@ RType::GameEngine::GameEngine() {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
     }
+    this->_gameSelected = "R-Type";
 }
 
 RType::GameEngine::~GameEngine() {
@@ -69,6 +70,7 @@ void RType::GameEngine::run() {
     auto& renderingEngine = _renderingEngine;
     auto& physicEngine    = _physicEngine;
     auto& audioEngine     = _audioEngine;
+    _mediator->setGameSelected(_gameSelected);
 
     std::thread networkThread([&]() {
         try {
@@ -80,6 +82,7 @@ void RType::GameEngine::run() {
 
     std::thread renderingThread([&]() {
         try {
+            renderingEngine->setGameSelected(_gameSelected);
             renderingEngine->setCamera(this->_camera);
             renderingEngine->setMutex(this->_mutex);
             renderingEngine->run();
@@ -92,7 +95,7 @@ void RType::GameEngine::run() {
         try {
             physicEngine->run();
         } catch (const std::exception& e) {
-            std::cerr << "Error running render engine: " << e.what() << std::endl;
+            std::cerr << "Error running physic engine: " << e.what() << std::endl;
         }
     });
 
@@ -111,7 +114,7 @@ void RType::GameEngine::run() {
         updateCamera();
     }
 
-    networkThread.join();
+    if (_gameSelected == "R-Type") networkThread.join();
     renderingThread.join();
     physicThread.join();
     audioThread.join();

@@ -54,8 +54,6 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
     }
 
     try {
-        games = std::make_shared<Game>(window);
-        games->setMediator(std::shared_ptr<IMediator>(this->_mediator));
         settings = std::make_shared<Settings>(window);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
@@ -202,7 +200,7 @@ void RType::Lobby::displayConnectedPlayer()
             if (!playerTextures[i].loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath)) {
                 throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
             }
-        } catch (std::exception e) {
+        } catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
         }
         playerSprites[i].setTexture(playerTextures[i]);
@@ -246,7 +244,8 @@ void RType::Lobby::runScene(float &latency) {
                 switch (getSelectedOption()) {
                 case 0: // Start game
                     this->_mediator->notify("Mediator", "backgroundMusicStop2");
-                    this->sendStateChange(3);
+                    if (_gameSelected == "R-Type") this->sendStateChange(3); // Send to server to start the game because it is the only online game
+                    else this->_mediator->notify("RenderingEngine", "Start offline game"); // Notify the mediator to start the game
                     break;
                 case 1:
                     settings->displaySettings(false);

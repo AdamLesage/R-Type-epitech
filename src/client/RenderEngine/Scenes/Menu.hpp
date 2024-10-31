@@ -102,7 +102,6 @@ namespace RType {
             std::shared_ptr<Lobby> lobby; // The lobby of the menu
             sf::RenderTexture RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
-            // std::shared_ptr<Game> games;
             float backgroundMusicVolume; // The volume of the background music
     };
 } // namespace RType

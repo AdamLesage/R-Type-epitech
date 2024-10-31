@@ -102,6 +102,13 @@ namespace RType {
              * @param number The volume to set.
             */
             void setVolume(float number);
+            /**
+             * @brief Set the game selected
+             * 
+             * @param gameSelected the game selected
+             */
+            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+
         protected:
             std::shared_ptr<sf::RenderWindow> window; // The window to display the Lobby on.
             int selectedOption; // The selected option
@@ -117,11 +124,11 @@ namespace RType {
             std::shared_ptr<Camera> _camera; // The camera to display
             Registry _registry; 
             Systems _systems;
-            std::shared_ptr<Game> games; //the class game used to display the game
             std::shared_ptr<Settings> settings; //the class settings used to display the settings
             std::shared_ptr<std::mutex> _mutex; 
             sf::RenderTexture RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
+            std::string _gameSelected; // The game selected
             float backgroundMusicVolume; // The volume of the background music
             bool music;
         private:

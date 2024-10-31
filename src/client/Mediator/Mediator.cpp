@@ -68,6 +68,23 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         this->_networkEngine->_client->send(std::string(data, sizeof(data)));
         return;
     }
+    if (event == "Game over offline") {
+        this->_renderingEngine->setStateGame(4); // Game go to end menu screen
+        return;
+    }
+    if (event == "Play again offline") {
+        this->_renderingEngine->getCurrentGameDisplay()->getCurrentGame()->resetGame();
+        this->_renderingEngine->setStateGame(2); // Show current game screen
+        return;
+    }
+    if (event == "Menu offline") {
+        this->_renderingEngine->setStateGame(1); // Show menu screen
+        return;
+    }
+    if (event == "Exit") {
+        this->_renderingEngine->setStateGame(-1); // Exit program
+        return;
+    }
     if (event == "play") { // Start the game
         char data[5];
         data[0]       = 0x41; // Start game in protocol
@@ -75,6 +92,10 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         std::memcpy(&data[1], &player_id, sizeof(int));
         std::string data_str(data, sizeof(data));
         this->_networkEngine->_client->send(data_str);
+        return;
+    }
+    if (event == "Start offline game") {
+        this->_renderingEngine->setStateGame(3); // Start the game
         return;
     }
     if (event.find("create_entity ") == 0) { // Create an entity 
@@ -206,12 +227,16 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
                 /* code */
                 break;
             case 3: {
-                char data[5];
-                data[0]       = 0x41; // Start game in protocol
-                int player_id = 1;
-                std::memcpy(&data[1], &player_id, sizeof(int));
-                std::string data_str(data, sizeof(data));
-                this->_networkEngine->_client->send(data_str);
+                if (_gameSelected == "R-Type") {
+                    char data[5];
+                    data[0]       = 0x41; // Start game in protocol
+                    int player_id = 1;
+                    std::memcpy(&data[1], &player_id, sizeof(int));
+                    std::string data_str(data, sizeof(data));
+                    this->_networkEngine->_client->send(data_str);
+                } else { // Offline game selected do not need to send start game
+                    
+                }
                 break;
             }
             default:

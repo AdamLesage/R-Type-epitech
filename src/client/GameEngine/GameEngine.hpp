@@ -81,6 +81,14 @@ namespace RType {
              */
             void updateCamera();
 
+            /**
+             * @brief Set the game selected by the client.
+             * 
+             * @param gameSelected The game selected by the client.
+             * @return void
+             */
+            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+
         protected:
         private:
             Registry _registry;
@@ -93,6 +101,7 @@ namespace RType {
             std::shared_ptr<AudioEngine> _audioEngine;
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
+            std::string _gameSelected;
     };
 } // namespace RType
 

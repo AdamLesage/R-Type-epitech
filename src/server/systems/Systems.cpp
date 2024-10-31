@@ -629,7 +629,7 @@ std::array<float, 2> Systems::find_closest_player(Registry& reg, Position* posit
         auto& target_type     = types[j];
         if (target_position && target_type && target_type->type == EntityType::PLAYER) {
             float target_distance =
-                abs(target_position->x - position_entity->x) + abs(target_position->y - position_entity->y);
+                std::abs(target_position->x - position_entity->x) + std::abs(target_position->y - position_entity->y);
             if (target_distance < min_target_distance) {
                 min_target_distance = target_distance;
                 target_x            = target_position->x;

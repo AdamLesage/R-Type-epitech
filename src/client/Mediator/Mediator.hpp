@@ -34,6 +34,14 @@ namespace RType {
              * @param sender The sender of the event.
              * @param event The event to notify.
              */
+
+            /**
+             * @brief Set the string for the game selected
+             * 
+             * @param gameSelected the game selected
+             */
+            void setGameSelected(const std::string& gameSelected) override { _gameSelected = gameSelected; }
+
         protected:
             /**
              * @brief Notify the game engine of an event.
@@ -91,6 +99,7 @@ namespace RType {
             std::shared_ptr<RenderingEngine> _renderingEngine;
             std::shared_ptr<PhysicEngine> _physicEngine;
             std::shared_ptr<AudioEngine> _audioEngine;
+            std::string _gameSelected;
     };
 } // namespace RType
 

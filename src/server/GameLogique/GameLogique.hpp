@@ -41,6 +41,13 @@ class GameLogique {
          */
         void runGame();
 
+        /**
+         * @brief Return true if all players are dead else false
+         * @return True if all players are dead else false
+         * @author Adam Lesage
+         */
+        bool areAllPlayersDead();
+
                 /**
          * @brief Check if friendly fire is enabled by reading the configuration file key.cfg.
          *

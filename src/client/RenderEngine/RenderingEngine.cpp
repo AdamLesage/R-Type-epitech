@@ -18,22 +18,29 @@ void RType::RenderingEngine::run() {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
 
     try {
-        this->_menu = std::make_unique<Menu>(window);
+        this->_menu     = std::make_unique<Menu>(window);
         this->_settings = std::make_shared<Settings>(window);
         this->_lobby    = std::make_shared<Lobby>(window);
-        this->_game = std::make_shared<Game>(window);
+        this->_endMenu  = std::make_shared<EndMenu>(window);
+        std::string configPath = std::string("config") + PATH_SEPARATOR + _gameSelected + PATH_SEPARATOR + "game_config.cfg";
+        this->_game = std::make_shared<Game>(window, configPath);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
         exit(84);
     }
     logger.log(RType::Logger::LogType::RTYPEINFO, "Scenes Created");
-    this->_menu->setMediator(_mediator);
     this->_lobby->setMediator(_mediator);
     this->_menu->setMediator(_mediator);
     this->_game->setMediator(_mediator);
+    this->_endMenu->setMediator(_mediator);
+
+    this->_lobby->setGameSelected(_gameSelected);
+    this->_game->setGameSelected(_gameSelected);
+    this->_endMenu->setGameSelected(_gameSelected);
     this->_settings->setMediator(_mediator);
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
+
     this->_game->setMutex(_mutex);
     this->_lobby->setMutex(_mutex);
     window->setFramerateLimit(360);
@@ -52,7 +59,7 @@ void RType::RenderingEngine::run() {
             this->_game->runScene(_latency);
             break;
         case 4:
-            // end of game Menu
+            this->_endMenu->runScene(_latency);
             break;
         case -1:
             window->close();
@@ -61,7 +68,6 @@ void RType::RenderingEngine::run() {
             break;
         }
     }
-    exit(0);
 }
 
 void RType::RenderingEngine::setMediator(std::shared_ptr<IMediator> mediator) {
