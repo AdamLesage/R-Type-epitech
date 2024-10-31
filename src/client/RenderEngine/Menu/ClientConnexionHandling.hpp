@@ -12,6 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace RType {
     /**
@@ -61,67 +62,78 @@ namespace RType {
 
             /**
              * @brief Display the game selection
-             * 
+             *
              * Choices are "R-Type" and "Platformer"
              */
             void displayGameSelection();
 
             /**
              * @brief Retrieve the input text for the host
-             * 
+             *
              * @param event The event to retrieve
              */
-            void retrieveInputTextHost(const sf::Event &event);
+            void retrieveInputTextHost(const sf::Event& event);
 
             /**
              * @brief Retrieve the input text for the port
-             * 
+             *
              * @param event The event to retrieve
              */
-            void retrieveInputTextPort(const sf::Event &event);
+            void retrieveInputTextPort(const sf::Event& event);
 
             /**
              * @brief Retrieve the input game selection
-             * 
+             *
              * Choices are "R-Type" and "Platformer"
-             * 
+             *
              * @param event The event to retrieve
              */
-            void retrieveInputGameSelection(const sf::Event &event);
+            void retrieveInputGameSelection(const sf::Event& event);
 
             /**
              * @brief Get the Host object
-             * 
+             *
              * @return std::string The host
              */
-            std::string getHost() const { return _inputTextHost.getString(); }
+            std::string getHost() const {
+                return _inputTextHost.getString();
+            }
 
             /**
              * @brief Get the Server Port object
-             * 
+             *
              * @return unsigned short The server port
              */
-            unsigned short getServerPort() const { return std::stoi(_inputTextPort.getString().toAnsiString()); }
+            unsigned short getServerPort() const {
+                return std::stoi(_inputTextPort.getString().toAnsiString());
+            }
 
             /**
              * @brief Get the Game Selected object
-             * 
+             *
              * @return std::string The game selected
              */
-            std::string getGameSelected() const { return _gameSelected; }
+            std::string getGameSelected() const {
+                return _gameSelected;
+            }
+
         protected:
         private:
             /**
              * @brief Check if the host and port are valid
-             * 
+             *
              * @return true if the host and port are valid, false otherwise
              */
             bool areHostAndPortValid();
 
             std::shared_ptr<sf::RenderWindow> _window;
             std::string _inputBoxSelected; // Can be "host" or "port" or "gameSelection"
-            std::string _gameSelected; // Can be "R-Type" or "Platformer"
+            std::string _gameSelected;     // Can be "R-Type" or "Platformer"
             bool _invalidPortOrHost;
+            int _gameIndex;
+            std::vector<std::string> _gameList;
+            sf::Clock _interactionClock;                              // Manage fast interactions
+            const sf::Time _interactionDelay = sf::milliseconds(100); // Delay for interactions
 
             sf::Text _inputTextHost;
             sf::Text _inputTextPort;
