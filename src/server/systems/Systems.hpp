@@ -109,7 +109,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param totalTime The count since the start.
          */
-        void wave_pattern_system(Registry& reg, float totalTime, RType::Logger& logger);
+        void wave_pattern_system(Registry& reg, RType::Logger& logger);
 
         /**
          * @brief Update the health of all entities based on the damages / regeneration / healing they
