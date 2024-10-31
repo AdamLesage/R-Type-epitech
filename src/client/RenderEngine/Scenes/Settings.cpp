@@ -22,7 +22,7 @@ RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
         std::cerr << "Error loading background" << std::endl;
         return;
     }
-
+    
     background.setTexture(&backgroundTexture);
     background.setPosition(sf::Vector2f(0, 0));
     background.setSize(sf::Vector2f(1920, 1080));
@@ -99,8 +99,7 @@ void RType::Settings::moveUp() {
     }
 }
 
-
-void Settings::moveDown() {
+void RType::Settings::moveDown() {
     if (selectedOption + 1 < 9) { // for the 9 options of menuOptions such as UP, DOWN, LEFT, RIGHT, SHOOT, SETTINGS, SUBTITLES, COLORBLIND, FRIENDLY FIRE
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
@@ -264,6 +263,7 @@ void RType::Settings::runScene()
     
 }
 
+
 void RType::Settings::display() {
     RenderTexture.clear();
     RenderTexture.draw(background);
@@ -332,8 +332,7 @@ void RType::Settings::initTextAndSprites()
     }
 }
 
-void RType::Settings::displaySettings(bool ingame)
-{
+void RType::Settings::displaySettings(bool ingame) {
     if (!ingame) {
         if (!window) {
             std::cerr << "Error: window is null" << std::endl;
