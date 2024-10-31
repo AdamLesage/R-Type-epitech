@@ -80,13 +80,15 @@ namespace RType {
             /**
              * @brief Displays the menu.
              */
-            void runScene() override;
+            void runScene(float &latency) override;
+
             /**
              * @brief Set the volume of the background music.
              *
              * @param number The volume to set.
             */
             void setVolume(float number);
+
         private:
             int selectedOption; // The selected option
             sf::Font font; // The font used for the menu
@@ -100,7 +102,6 @@ namespace RType {
             std::shared_ptr<Lobby> lobby; // The lobby of the menu
             sf::RenderTexture RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
-            // std::shared_ptr<Game> games;
             float backgroundMusicVolume; // The volume of the background music
     };
 } // namespace RType

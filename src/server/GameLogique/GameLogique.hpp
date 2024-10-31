@@ -16,6 +16,7 @@
 #include "../../shared/components/Velocity.hpp"
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/ShootingSpeed.hpp"
+#include "../../shared/assetEditorParsing/AssetEditorParsing.hpp"
 #include "./NetworkSender.hpp"
 #include "../../shared/utils/Logger.hpp"
 #include <memory>
@@ -41,6 +42,19 @@ class GameLogique {
          */
         void runGame();
 
+        /**
+         * @brief Return true if all players are dead else false
+         * @return True if all players are dead else false
+         * @author Adam Lesage
+         */
+        bool areAllPlayersDead();
+
+                /**
+         * @brief Check if friendly fire is enabled by reading the configuration file key.cfg.
+         *
+         * @return true if friendly fire is enabled, false otherwise.
+         */
+        bool getfriendlyfire();
     protected:
     private:
         Registry reg;
@@ -52,6 +66,7 @@ class GameLogique {
         int frequency;
         RType::Logger logger;
         bool running;
+        bool friendlyfire;
         std::mutex _mutex;
         /**
          * @brief Delete all entity at the end of the game
@@ -92,6 +107,12 @@ class GameLogique {
         void handleClientConnection();
 
         /**
+         * @brief handle the change of level
+         * 
+         */
+        void handleChangeLevel(unsigned int);
+
+        /**
          * @brief handle the Inpute of the client
          *
          * @param message the message send by the client
@@ -99,7 +120,28 @@ class GameLogique {
          */
         std::array<char, 6> retrieveInputKeys();
 
+        /**
+         * @brief update the Level config at level change
+         */
+        void updateLevelConfig();
+
+        /**
+         * @brief add a Enemy on the registry and send a notification to connected client
+         *
+         * @param type the type off entity
+         * @param position_x the x position of the entity
+         * @param position_y the y position of the entity
+         *
+         */
+        void spawnCustomEntity(char type, float position_x, float position_y, size_t entity);
+
         std::map<size_t, size_t> playersId;
+        libconfig::Config _gameConfig;
+        libconfig::Config _levelConfig;
+        std::unique_ptr<AssetEditorParsing> assetEditorParsing;
+        bool ennemyAlive = true;
+        float _camera_x = 1920;
+        unsigned int _currentLevel = 0;
 };
 
 #endif /* !GAMELOGIQUE_HPP_ */

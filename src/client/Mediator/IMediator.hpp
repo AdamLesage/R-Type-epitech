@@ -22,6 +22,13 @@ namespace RType {
              */
             virtual void notify(std::string sender, const std::string& event) = 0;
 
+            /**
+             * @brief Set the string for the game selected
+             * 
+             * @param gameSelected the game selected
+             */
+            virtual void setGameSelected(const std::string& gameSelected) = 0;
+
         protected:
         private:
     };

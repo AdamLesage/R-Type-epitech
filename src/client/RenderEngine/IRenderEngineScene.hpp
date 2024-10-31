@@ -20,7 +20,7 @@ namespace RType {
              * @brief Run the scene
              *
              */
-            virtual void runScene() = 0;
+            virtual void runScene(float &latency) = 0;
             /**
              * @brief Set the mediator of the engine.
              *

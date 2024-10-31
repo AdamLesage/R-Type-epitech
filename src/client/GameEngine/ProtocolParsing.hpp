@@ -14,6 +14,7 @@
 #include <map>
 #include <utility>
 #include <cstring>
+#include <iomanip>
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/systems/Systems.hpp"
@@ -30,7 +31,7 @@
 namespace RType {
     class ProtocolParsing {
         public:
-            ProtocolParsing(std::string protocolPath, std::string sceneConfigPath, Registry& registry);
+            ProtocolParsing(std::string protocolPath, Registry& registry);
             ~ProtocolParsing();
 
             /**
@@ -186,6 +187,15 @@ namespace RType {
             bool parseStateChange(const std::string& message, int& index);
 
             /**
+             * @brief Parses and validates a level update message, adjusting the index and handling level-based actions.
+             *
+             * @param message Reference to the level update message string.
+             * @param index Reference to the current parsing position in the message.
+             * @return true if parsing is successful and the message is valid; false otherwise.
+             */
+            bool parseLevelUpdate(const std::string& message, int& index);
+
+            /**
              * @brief Parse the message to validate and extract information for the corresponding operation.
              * This function is the main function to parse the message.
              *
@@ -195,6 +205,21 @@ namespace RType {
             bool parseData(const std::string& message);
 
             /**
+             * @brief Parse the message to validate and extract information for the corresponding operation.
+             *
+             * @param message The time code to parse.
+             * @param index The index to update.
+             */
+            bool parsePingClient(const std::string& message, int& index);
+
+            /**
+             * @brief Get the Latency object
+             *
+             * @return float
+             */
+            float getLatency() const { return _latency; }
+
+            /**
              * @brief Set the mediator for component communication.
              *
              * Assigns a mediator to facilitate interaction between system components.
@@ -202,6 +227,13 @@ namespace RType {
              * @param mediator A shared pointer to the mediator instance.
              */
             void setMediator(std::shared_ptr<IMediator> mediator);
+            /**
+             * @brief Set the game selected by the client.
+             * 
+             * @param gameSelected The game selected by the client.
+             * @return void
+             */
+            void setGameSelected(const std::string& gameSelected);
         protected:
             /**
              * @brief Check if the message type is valid and if its values are valid.
@@ -219,6 +251,10 @@ namespace RType {
              * @return int The new index.
              */
             int updateIndexFromBinaryData(const std::string& message, int& index);
+            /**
+             * 
+             */
+            void loadAssetCfgEditorParsing(size_t level);
         private:
             // Variables
             std::unique_ptr<AssetEditorParsing> _assetEditorParsing;
@@ -227,7 +263,10 @@ namespace RType {
             libconfig::Config _cfg;
             std::map<std::string, std::pair<int, std::string>> _messageTypeMap;
             Registry& _registry; // Will be used to update the game engine data
+            float _latency;
             std::shared_ptr<IMediator> _mediator;
+             libconfig::Config _gameConfig;
+
     };
 } // namespace RType
 

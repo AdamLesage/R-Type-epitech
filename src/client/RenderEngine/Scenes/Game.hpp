@@ -19,8 +19,12 @@
 #include "../Console/Console.hpp"
 #include <mutex>
 #include <libconfig.h++>
-#include "../ARenderEngineScene.hpp"
 
+#include "Games/DoodleJump.hpp"
+#include "Games/IGame.hpp"
+#include "../ARenderEngineScene.hpp"
+#include "../../GameMetrics/Toolbar.hpp"
+#include "../../GameMetrics/GameMetrics.hpp"
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
 #else
@@ -45,7 +49,7 @@ namespace RType {
              *
              * @param _window The window to display the game on.
              */
-            Game(std::shared_ptr<sf::RenderWindow> _window);
+            Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath);
 
             /**
              * @brief Destroy the Game object.
@@ -67,12 +71,12 @@ namespace RType {
             /**
              * @brief Displays the cinematic just before the game starts.
              */
-            void runScene() override;
+            void runScene(float &latency) override;
 
             /**
              * @brief Displays the game we are playing.
              */
-            void play();
+            void play(float &latency);
             /**
              * @brief Set the camera to display
              *
@@ -83,6 +87,12 @@ namespace RType {
              * @brief set the textures needed from camera to the textures map
              */
             void set_texture();
+            /**
+             * @brief Set the level to display
+             *
+             * @param level the new level
+             */
+            void setLevel(size_t level);
             /**
              * @brief Convert structure Size to a Vector2f
              */
@@ -99,12 +109,37 @@ namespace RType {
             void DisplaySkipIntro();
 
             /**
-             * @brief Sets the mediator, it will be used to communicate with the rendering engine.
+             * @brief Set the mutex
              *
-             * @param mediator The mediator to set.
+             * @param mutex the mutex to set
              */
-
             void setMutex(std::shared_ptr<std::mutex> mutex);
+
+            /**
+             * @brief Handles if colorblind is activated
+             */
+            void handleColorblind();
+
+            /**
+             * @brief Return if the game has a cinematic
+             *
+             * @return true if the game has a cinematic
+             */
+            bool haveCinematic();
+
+            /**
+             * @brief Set the game selected
+             * 
+             * @param gameSelected the game selected
+             */
+            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+
+            /**
+             * @brief Return current instance of currentGame, will be called by mediator to reset game
+             * @return current game instance
+             * @author Adam Lesage
+             */
+            std::shared_ptr<IGame> getCurrentGame() const { return _currentGame; }
 
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
@@ -113,12 +148,20 @@ namespace RType {
             float frameDuration;
             sf::Clock BackgroundClock;
             bool animationComplete;
+            std::string _gameSelected;
             /**
              * @brief Handles the events of the game.
              *
              * This function processes events such as closing the window.
              */
             void handleEvents();
+
+            /**
+             * @brief Check if the game is offline
+             * 
+             * @return true if the game is offline
+             */
+            bool isGameOffline();
 
             /**
              * @brief Loads the texture of the current frame.
@@ -129,6 +172,15 @@ namespace RType {
              * @return false If the texture failed to load.
              */
             bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
+            /**
+             * @brief Loads the Backround for the current level setting
+             *
+             * @param levelSetting The current level setting
+             */
+            void loadBackgroundConfig(libconfig::Setting &levelSetting);
+
+            libconfig::Config _cfg; // The config file
+
             Registry _registry;
             Systems _systems;
             std::shared_ptr<Console> console;
@@ -151,6 +203,10 @@ namespace RType {
             std::shared_ptr<sf::RenderTexture> RenderTexture; // The render texture
             sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
             sf::Event event; // The event of the game
+            std::shared_ptr<IGame> _currentGame;
+            size_t _level;
+            GameMetrics metrics;
+            Toolbar toolbar;
     };
 } // namespace RType
 

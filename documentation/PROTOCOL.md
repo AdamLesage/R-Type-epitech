@@ -182,7 +182,7 @@ This document describes the protocol used to communicate between the server and 
 - **Entity ID:** 4 bytes.
 
 
-## Number connected player 
+## Number connected player
 | Type  | Number Player |
 |-------|---------------|
 | 0x39  | 0x00000001    |
@@ -190,6 +190,19 @@ This document describes the protocol used to communicate between the server and 
 - **Type:** 1 byte (0x39 for "Number player").
 - **number player:** 4 bytes.
 
+## Level update
+| Type  | New Level     |
+|-------|---------------|
+| 0x3a  | 0x00000001    |
+
+- **Type:** 1 byte (0x3a for "New Level").
+- **New Level:** 4 bytes.
+
+## Calculate network latency
+| Type |      Ping      |
+| 0x99 | 0x000003E8     |
+- **Type:** 1 byte (0x99 for "Ping").
+- **ping:** 4 bytes.
 
 # Client-to-Server Protocol: Player Input and Start Game
 

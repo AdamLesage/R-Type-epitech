@@ -32,9 +32,10 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Direction>();
     _registry.register_component<Annimation>();
 
-    std::string scenesConfigPath = std::string("config") + PATH_SEPARATOR + std::string("scenes") + PATH_SEPARATOR + std::string("sceneText.cfg");
+    std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
     _protocolParsing =
-        std::make_unique<RType::ProtocolParsing>("./src/client/GameEngine/protocol_config.cfg", scenesConfigPath, _registry);
+        std::make_unique<RType::ProtocolParsing>(protocolPath, _registry);
+
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
     this->_systems = Systems();
@@ -47,6 +48,7 @@ RType::GameEngine::GameEngine() {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
     }
+    this->_gameSelected = "R-Type";
 }
 
 RType::GameEngine::~GameEngine() {
@@ -67,6 +69,8 @@ void RType::GameEngine::run() {
     auto& renderingEngine = _renderingEngine;
     auto& physicEngine    = _physicEngine;
     auto& audioEngine     = _audioEngine;
+    _mediator->setGameSelected(_gameSelected);
+    _protocolParsing->setGameSelected(_gameSelected);
 
     std::thread networkThread([&]() {
         try {
@@ -78,6 +82,7 @@ void RType::GameEngine::run() {
 
     std::thread renderingThread([&]() {
         try {
+            renderingEngine->setGameSelected(_gameSelected);
             renderingEngine->setCamera(this->_camera);
             renderingEngine->setMutex(this->_mutex);
             renderingEngine->run();
@@ -90,7 +95,7 @@ void RType::GameEngine::run() {
         try {
             physicEngine->run();
         } catch (const std::exception& e) {
-            std::cerr << "Error running render engine: " << e.what() << std::endl;
+            std::cerr << "Error running physic engine: " << e.what() << std::endl;
         }
     });
 
@@ -109,7 +114,7 @@ void RType::GameEngine::run() {
         updateCamera();
     }
 
-    networkThread.join();
+    if (_gameSelected == "R-Type") networkThread.join();
     renderingThread.join();
     physicThread.join();
     audioThread.join();
@@ -122,6 +127,8 @@ void RType::GameEngine::send(const std::string& message) {
 void RType::GameEngine::handleServerData(const std::string& message) {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
     _protocolParsing->parseData(message);
+    float latency = _protocolParsing->getLatency();
+    this->_mediator->notify("RenderingEngine", "LATENCY " + std::to_string(latency));
 }
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {

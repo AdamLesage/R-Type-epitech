@@ -22,6 +22,7 @@ class NetworkSender {
          * @param id The unique identifier of the created player.
          * @param pos_x The x-coordinate of the player's initial position.
          * @param pos_y The y-coordinate of the player's initial position.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendCreatePlayer(int id, float pos_x, float pos_y, int clientId = -1);
 
@@ -32,6 +33,7 @@ class NetworkSender {
          * @param id The unique identifier of the created enemy.
          * @param pos_x The x-coordinate of the enemy's initial position.
          * @param pos_y The y-coordinate of the enemy's initial position.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendCreateEnemy(char type, int id, float pos_x, float pos_y, int clientId = -1);
 
@@ -43,6 +45,7 @@ class NetworkSender {
          * @param pos_y The y-coordinate of the wall's position.
          * @param size_x The width of the wall.
          * @param size_y The height of the wall.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendCreateWall(int id, float pos_x, float pos_y, float size_x, float size_y, int clientId = -1);
 
@@ -53,6 +56,7 @@ class NetworkSender {
          * @param pos_x The x-coordinate of the projectile's position.
          * @param pos_y The y-coordinate of the projectile's position.
          * @param parent_id The identifier of the entity that created or shot the projectile.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendCreateProjectil(int id, float pos_x, float pos_y, int parent_id, int clientId = -1);
 
@@ -62,6 +66,7 @@ class NetworkSender {
          * @param id The unique identifier of the created reward.
          * @param pos_x The x-coordinate of the reward's position.
          * @param pos_y The y-coordinate of the reward's position.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendCreateReward(int id, float pos_x, float pos_y, int clientId = -1);
 
@@ -72,6 +77,7 @@ class NetworkSender {
          * @param id The unique identifier of the created bonus.
          * @param pos_x The x-coordinate of the bonus's position.
          * @param pos_y The y-coordinate of the bonus's position.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendCreateBonus(char type, int id, float pos_x, float pos_y, int clientId = -1);
 
@@ -79,6 +85,7 @@ class NetworkSender {
          * @brief Sends a delete command for an entity to all clients.
          *
          * @param id The unique identifier of the entity to be deleted.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendDeleteEntity(int id, int clientId = -1);
 
@@ -88,6 +95,7 @@ class NetworkSender {
          * @param id The unique identifier of the entity whose position is being updated.
          * @param pos_x The new x-coordinate of the entity's position.
          * @param pos_y The new y-coordinate of the entity's position.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendPositionUpdate(int id, float pos_x, float pos_y, int clientId = -1);
 
@@ -96,6 +104,7 @@ class NetworkSender {
          *
          * @param id The unique identifier of the entity whose health is being updated.
          * @param hp The updated health points of the entity.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendHealthUpdate(int id, int hp, int clientId = -1);
 
@@ -104,6 +113,7 @@ class NetworkSender {
          *
          * @param id_projectil The unique identifier of the projectile involved in the collision.
          * @param id_entity The unique identifier of the entity hit by the projectile.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
          */
         void sendProjectilColision(int id_projectil, int id_entity, int clientId = -1);
         /**
@@ -123,6 +133,15 @@ class NetworkSender {
          */
         void sendDirectionUpdate(int id_entity, float x, float y, int clientId = -1);
 
+        void sendLevelUpdate(unsigned int level, int clientId = -1);
+
+
+        /**
+         * @brief send a ping containing the time code to the clients
+         *
+         * @param timeCode
+         */
+        void sendPing(std::string timeCode);
 
     private:
         std::shared_ptr<NetworkLib::Server> _network;

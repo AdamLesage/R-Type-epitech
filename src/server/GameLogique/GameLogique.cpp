@@ -30,11 +30,43 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<Size>();
     this->reg.register_component<Direction>();
     this->reg.register_component<BossPatern>();
+
+    try {
+        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type") + PATH_SEPARATOR + std::string("game_config.cfg");
+        _gameConfig.readFile(gameConfigPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
+    this->updateLevelConfig();
 }
 
 GameLogique::~GameLogique() {
     receiverThread.join();
     connectionManagmentThread.join();
+}
+
+void GameLogique::updateLevelConfig()
+{
+    try {
+        libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
+        std::string levelConfigPath = levels[this->_currentLevel].lookup("sceneConfig");
+        size_t startPos = 0;
+        std::string from = "/";
+        while((startPos = levelConfigPath.find(from, startPos)) != std::string::npos) {
+            levelConfigPath.replace(startPos, from.length(), PATH_SEPARATOR);
+            startPos += 2;
+        }
+        _levelConfig.readFile(levelConfigPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
+    assetEditorParsing.reset(new AssetEditorParsing(_levelConfig));
 }
 
 void GameLogique::startGame(int idEntity) {
@@ -54,10 +86,45 @@ void GameLogique::startGame(int idEntity) {
     }
 }
 
+void GameLogique::spawnCustomEntity(char type, float position_x, float position_y, size_t entity) {
+    std::shared_ptr<EntityData> &entityData = this->assetEditorParsing->getEntityData(type);
+    if (entity == 1000000000) {
+        entity = this->reg.spawn_entity();
+    }
+
+    this->reg.add_component<Position>(entity, Position{position_x, position_y});
+    this->reg.add_component<Velocity>(entity, Velocity{0, 0});
+    this->reg.add_component<Damage>(entity, Damage{20});
+    if (entityData->health != nullptr) {
+        this->reg.add_component<Health>(entity, Health{entityData->health->health, entityData->health->maxHealth, false, true});
+    }
+    if (entityData->playerFollowingPattern != nullptr) {
+        this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{entityData->playerFollowingPattern->speed});
+    }
+    if (entityData->straightLinePattern != nullptr) {
+        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{entityData->straightLinePattern->speed});
+    }
+    if (entityData->shootPlayerPattern != nullptr) {
+        this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{entityData->shootPlayerPattern->projectileSpeed, entityData->shootPlayerPattern->shootCooldown, entityData->shootPlayerPattern->lastShotTime});
+    }
+    if (entityData->shootStraightPattern != nullptr) {
+        this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, entityData->shootStraightPattern->lastShotTime});
+    }
+    if (entityData->WavePattern != nullptr) {
+        this->reg.add_component<Wave_pattern>(entity, Wave_pattern{entityData->WavePattern->amplitude, entityData->WavePattern->frequency, std::chrono::steady_clock::now()});
+    }
+    if (entityData->size != nullptr) {
+        this->reg.add_component<Size>(entity, Size{entityData->size->x, entityData->size->y});
+    }
+    this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+    this->reg.add_component<Direction>(entity, Direction{0, 0});
+    this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
+}
+
 void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     {
         std::lock_guard<std::mutex> lock(this->_mutex);
-
+        
         size_t entity = this->reg.spawn_entity();
 
         switch (type) {
@@ -77,7 +144,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
             this->reg.add_component<Health>(entity, Health{100, 100, false, true});
             this->reg.add_component<Damage>(entity, Damage{20});
-            this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f});
+            this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
@@ -112,19 +179,40 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             std::cout << "Boss created" << std::endl;
             break;
         default:
-            this->reg.add_component<Position>(entity, Position{position_x, position_y});
-            this->reg.add_component<Velocity>(entity, Velocity{0, 0});
-            this->reg.add_component<Health>(entity, Health{50, 50, false, true});
-            this->reg.add_component<Damage>(entity, Damage{20});
-            this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{-1});
-            this->reg.add_component<ShootStraightPattern>(
-                entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
-            this->reg.add_component<Size>(entity, Size{70, 71});
-            this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            std::map<uint8_t, std::shared_ptr<EntityData>> &entities = this->assetEditorParsing->getEntities();
+
+            std::vector<std::map<uint8_t, std::shared_ptr<EntityData>>::iterator> validEntities;
+            std::vector<std::map<uint8_t, std::shared_ptr<EntityData>>::iterator> staticEntities;
+
+            for (auto it = entities.begin(); it != entities.end(); ++it) {
+                if (it->second->number != -1 && it->second->number != 0) {
+                    validEntities.push_back(it);
+                } else if (it->second->number == -1) {
+                    staticEntities.push_back(it);
+                }
+            }
+
+            if (!validEntities.empty()) {
+                int randomIndex = std::rand() % validEntities.size();
+                auto selectedIt = validEntities[randomIndex];
+                this->spawnCustomEntity(selectedIt->first, position_x, position_y, entity);
+                selectedIt->second->number -= 1;
+            } else {
+                ennemyAlive = false;
+                this->_networkSender->sendCreateEnemy(0x03, entity, position_x, position_y);
+                return;
+            }
+            for (auto &it : staticEntities) {
+                if (it->second->pos != nullptr && it->second->pos->x < this->_camera_x) {
+                    this->spawnCustomEntity(type, 1800, it->second->pos->y, 1000000000);
+                    it->second->number = 0;
+                }
+            }
+            return;
             break;
         }
         this->reg.add_component<Direction>(entity, Direction{0, 0});
-        this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
+        this->_networkSender->sendCreateEnemy(0X03, entity, position_x, position_y);
     }
 }
 
@@ -133,43 +221,116 @@ void GameLogique::spawnWave()
     spawnEnnemy(0x10, 1620, 500);
 }
 
+bool GameLogique::getfriendlyfire() {
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    cfg.readFile(configPath.c_str());
+    std::string friendlyfireStr;
+    const libconfig::Setting& root = cfg.getRoot();
+    const libconfig::Setting& keys = root["Keys"];
+    
+    for (int i = 0; i < keys.getLength(); ++i) {
+        const libconfig::Setting& key = keys[i];
+        std::string name;
+        key.lookupValue("name", name);
+        if (name == "FRIENDLY FIRE") {
+            key.lookupValue("value", friendlyfireStr);
+            break;
+        }
+    }
+
+    if (friendlyfireStr == "ON")
+        return true;
+    return false;
+}
+
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
-    std::clock_t endClock      = std::clock();
     std::clock_t spawnClock = std::clock();
+    int friendlyFireCheckCounter = 0;
+    std::clock_t pingClock  = std::clock();
+
     while (1) {
         if (this->running) {
+            if (friendlyFireCheckCounter == 0) {
+                friendlyfire = getfriendlyfire();
+                friendlyFireCheckCounter = 999;
+            }
+
             if (static_cast<float>(std::clock() - clock) / CLOCKS_PER_SEC > float(1) / float(frequency)) {
                 clock = std::clock();
-                sys.wave_pattern_system(reg, static_cast<float>(clock) / CLOCKS_PER_SEC, logger);
+                sys.wave_pattern_system(reg, logger);
                 sys.Straight_line_pattern_system(this->reg);
                 sys.player_following_pattern_system(this->reg);
                 sys.shoot_player_pattern_system(this->reg, this->_networkSender);
                 sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
                 sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
-                                     logger);
+                                     logger, friendlyfire);
                 sys.position_system(reg, this->_networkSender, logger);
                 sys.boss_system(reg, this->_networkSender);
+                _camera_x += 0.1;
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
-                this->spawnEnnemy(0x50, 1920, rand() % 700 + 200);
+                this->spawnEnnemy(0x61, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
-            if (static_cast<float>(std::clock() - endClock) / CLOCKS_PER_SEC > 100) {
-                endClock = std::clock();
-                clearGame();
-                this->running = false;
-                sleep(1);
-                this->_networkSender->sendStateChange(1, 0x01);
+            if (static_cast<float>(std::clock() - pingClock) / CLOCKS_PER_SEC > 15) {
+                sys.ping_client(reg, this->_networkSender);
+                pingClock = std::clock();
             }
-        } else {
-            endClock = std::clock();
-        }
+            if (this->areAllPlayersDead() == true) {
+                this->clearGame();
+                sleep(1);
+                this->_networkSender->sendStateChange(1, 0x04);
+                this->running = false;
+                this->_currentLevel = 0;
+                this->_networkSender->sendLevelUpdate(this->_currentLevel);
+                this->updateLevelConfig();
+                ennemyAlive = true;
+            }
+
+            if (ennemyAlive == false) {
+                this->handleChangeLevel(_currentLevel + 1);
+            }
+        } 
     }
 }
 
-void GameLogique::clearGame()
+void GameLogique::handleChangeLevel(unsigned int newLevel) {
+    clearGame();
+    ennemyAlive = true;
+    try {
+        libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
+        if (newLevel >= (unsigned int)levels.getLength()) {
+            this->running = false;
+            sleep(1);
+            this->_networkSender->sendStateChange(1, 0x01);
+            this->_currentLevel = 0;
+            this->_networkSender->sendLevelUpdate(this->_currentLevel);
+            this->updateLevelConfig();
+            return;
+        }
+        this->_networkSender->sendLevelUpdate(newLevel);
+        this->_currentLevel = newLevel;
+        this->updateLevelConfig();
+    } catch (std::exception &e) {
+        std::cerr << "failed to load level" << std::endl;
+    }
+}
+
+bool GameLogique::areAllPlayersDead()
 {
+    bool anyPlayerDead = true;
+
+    for (auto& player : reg.get_components<Type>()) {
+        if (player && player->type == EntityType::PLAYER) {
+            anyPlayerDead = false;
+        }
+    }
+    return anyPlayerDead;
+}
+
+void GameLogique::clearGame() {
     auto& types  = reg.get_components<Type>();
 
     for (size_t i = 0; i < types.size(); ++i) {
@@ -229,7 +390,7 @@ std::array<char, 6> GameLogique::retrieveInputKeys() {
 
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
     if (message.first.size() != 6) {
-        std::cout << "Invalid message size" << std::endl;
+        std::cerr << "Invalid message size" << std::endl;
         return;
     }
     if (running == false) return;
@@ -330,11 +491,10 @@ void GameLogique::handleRecieve() {
                 std::memcpy(&value, &message.first[1], sizeof(int));
                 auto &playerHealth = reg.get_components<Health_s>()[message.second];
                 playerHealth->health = value;
-                
                 break;
             }
             default:
-                std::cout << "unknowCommand" << std::endl;
+                std::cerr << "unknowCommand" << std::endl;
                 break;
             }
         }
