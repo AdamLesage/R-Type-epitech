@@ -6,7 +6,7 @@
 */
 
 #include "Settings.hpp"
-Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
+RType::Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     this->window = _window;
     if (!font.loadFromFile("assets/r-type.ttf")) {
         std::cerr << "Error loading font" << std::endl;
@@ -51,10 +51,10 @@ Settings::Settings(std::shared_ptr<sf::RenderWindow> _window) {
     RenderTexture.create(1920, 1080);
 }
 
-Settings::~Settings() {
+RType::Settings::~Settings() {
 }
 
-const char* Settings::get_key_value(libconfig::Config &cfg, const char* key_name) {
+const char* RType::Settings::get_key_value(libconfig::Config &cfg, const char* key_name) {
     const char* value;
 
     char path[100];
@@ -69,7 +69,7 @@ const char* Settings::get_key_value(libconfig::Config &cfg, const char* key_name
     }
 }
 
-int Settings::set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value) {
+int RType::Settings::set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value) {
     char path[100];
     snprintf(path, sizeof(path), "Keys.%s.value", key_name);
     libconfig::Setting &setting = cfg.lookup(path);
@@ -90,7 +90,7 @@ int Settings::set_key_value(libconfig::Config &cfg, const char* key_name, const 
     }
 }
 
-void Settings::moveUp() {
+void RType::Settings::moveUp() {
     if (selectedOption - 1 >= 0) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
@@ -99,7 +99,7 @@ void Settings::moveUp() {
     }
 }
 
-void Settings::moveDown() {
+void RType::Settings::moveDown() {
     if (selectedOption + 1 < 8) {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
@@ -108,11 +108,11 @@ void Settings::moveDown() {
     }
 }
 
-int Settings::getSelectedOption() const {
+int RType::Settings::getSelectedOption() const {
     return selectedOption;
 }
 
-void Settings::changeKey(std::string key) {
+void RType::Settings::changeKey(std::string key) {
     std::string newKey = key.substr(0, 11);
     std::string newKey2;
     libconfig::Config cfg;
@@ -208,7 +208,7 @@ void Settings::changeKey(std::string key) {
     }
 }
 
-void Settings::displayInput()
+void RType::Settings::displayInput()
 {
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
@@ -244,7 +244,12 @@ void Settings::displayInput()
     }
 }
 
-void Settings::display() {
+void RType::Settings::runScene()
+{
+    
+}
+
+void RType::Settings::display() {
     RenderTexture.clear();
     RenderTexture.draw(background);
     RenderTexture.draw(logoSprite);
@@ -280,7 +285,7 @@ void Settings::display() {
 
 }
 
-void Settings::initTextAndSprites()
+void RType::Settings::initTextAndSprites()
 {
     libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
@@ -312,7 +317,8 @@ void Settings::initTextAndSprites()
     }
 }
 
-void Settings::displaySettings(bool ingame) {
+void RType::Settings::displaySettings(bool ingame)
+{
     if (!ingame) {
         if (!window) {
             std::cerr << "Error: window is null" << std::endl;

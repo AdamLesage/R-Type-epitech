@@ -32,7 +32,6 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     try {
         libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
         this->loadBackgroundConfig(levelSetting);
-        this->loadSoundConfig(levelSetting);
         
     } catch (const std::exception& e) {
         throw std::runtime_error("Error loading level settings");
@@ -111,27 +110,6 @@ void RType::Game::loadBackgroundConfig(libconfig::Setting &levelSetting) {
     }
 }
 
-void RType::Game::loadSoundConfig(libconfig::Setting &levelSetting) {
-    try {
-        // Retrieve sounds paths from config file
-        libconfig::Setting& soundSettings = levelSetting.lookup("sounds");
-
-        if (!game_launch_sound.loadFromFile(soundSettings["lauchSound"])) { // Load game launch sound
-            throw std::runtime_error("Error loading game launch sound");
-        }
-
-        if (!shoot_sound.loadFromFile(soundSettings["shootSound"])) { // Load shoot sound
-            throw std::runtime_error("Error loading shoot sound");
-        }
-
-        // Load all sounds
-        game_launch_music.setBuffer(game_launch_sound);
-        shoot_music.setBuffer(shoot_sound);
-    } catch (const libconfig::SettingNotFoundException& e) {
-        throw std::runtime_error("Error loading sound settings");
-    }
-}
-
 void RType::Game::displayPiou() {
     sf::Text piouText;
     piouText.setFont(font);
@@ -157,13 +135,7 @@ void RType::Game::ShootSound() {
     if (keyValue == "ON") {
         piou = true;
     }
-    int random = rand() % 10;
-    if (random == 9) {
-        shoot_music.setVolume(200);
-        shoot_music.play();
-    } else {
-        shoot_music.play();
-    }
+    _mediator->notify("RenderingEngine", "ShootSound");
 }
 
 void RType::Game::DisplaySkipIntro() {
@@ -193,6 +165,7 @@ void RType::Game::play() {
 
     window->clear();
     if (this->isGameOffline() == true) {
+        _currentGame->setMediator(_mediator);
         this->_currentGame->handleOfflineGame();
     }
 
@@ -318,7 +291,8 @@ void RType::Game::runScene() {
 
     if (animationComplete == false && this->haveCinematic() == true) {
         if (currentFrame == 1) {
-            game_launch_music.play();
+            _mediator->notify("RenderingEngine", "backgroundMusicStop2");
+            _mediator->notify("RenderingEngine", "game_launch_music_play");
         }
         if (cinematicsClock->getElapsedTime().asSeconds() > frameDuration) {
             if (!loadFrameTexture(texture, rectangleshape)) {
@@ -330,7 +304,7 @@ void RType::Game::runScene() {
 
     window->clear();
     if (animationComplete || this->haveCinematic() == false) {
-        game_launch_music.stop();
+        _mediator->notify("RenderingEngine", "game_launch_music_stop");
         this->play();
         return;
     } else if (animationComplete == false && this->haveCinematic() == true) {
@@ -396,8 +370,6 @@ void RType::Game::setLevel(size_t level) {
     try {
         libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
         this->loadBackgroundConfig(levelSetting);
-        this->loadSoundConfig(levelSetting);
-        
     } catch (const std::exception& e) {
         throw std::runtime_error("Error loading level settings");
     }

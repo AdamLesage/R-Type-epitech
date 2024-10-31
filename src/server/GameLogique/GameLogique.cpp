@@ -234,6 +234,17 @@ void GameLogique::runGame() {
                 this->spawnEnnemy(0x61, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
+            if (this->areAllPlayersDead() == true) {
+                this->clearGame();
+                sleep(1);
+                this->_networkSender->sendStateChange(1, 0x04);
+                this->running = false;
+                this->_currentLevel = 0;
+                this->_networkSender->sendLevelUpdate(this->_currentLevel);
+                this->updateLevelConfig();
+                ennemyAlive = true;
+            }
+
             if (ennemyAlive == false) {
                 this->handleChangeLevel(_currentLevel + 1);
             }
@@ -261,6 +272,18 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
     } catch (std::exception &e) {
         std::cerr << "failed to load level" << std::endl;
     }
+}
+
+bool GameLogique::areAllPlayersDead()
+{
+    bool anyPlayerDead = true;
+
+    for (auto& player : reg.get_components<Type>()) {
+        if (player && player->type == EntityType::PLAYER) {
+            anyPlayerDead = false;
+        }
+    }
+    return anyPlayerDead;
 }
 
 void GameLogique::clearGame() {
@@ -323,7 +346,7 @@ std::array<char, 6> GameLogique::retrieveInputKeys() {
 
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
     if (message.first.size() != 6) {
-        std::cout << "Invalid message size" << std::endl;
+        std::cerr << "Invalid message size" << std::endl;
         return;
     }
     if (running == false) return;
@@ -428,7 +451,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             default:
-                std::cout << "unknowCommand" << std::endl;
+                std::cerr << "unknowCommand" << std::endl;
                 break;
             }
         }

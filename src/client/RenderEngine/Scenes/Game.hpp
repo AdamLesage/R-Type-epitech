@@ -133,6 +133,13 @@ namespace RType {
              */
             void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
 
+            /**
+             * @brief Return current instance of currentGame, will be called by mediator to reset game
+             * @return current game instance
+             * @author Adam Lesage
+             */
+            std::shared_ptr<IGame> getCurrentGame() const { return _currentGame; }
+
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
             std::shared_ptr<sf::RenderWindow> window;
@@ -170,12 +177,7 @@ namespace RType {
              * @param levelSetting The current level setting
              */
             void loadBackgroundConfig(libconfig::Setting &levelSetting);
-            /**
-             * @brief Loads the sound for the current level setting
-             *
-             * @param levelSetting The current level setting
-             */
-            void loadSoundConfig(libconfig::Setting &levelSetting);
+
             libconfig::Config _cfg; // The config file
 
             Registry _registry;
@@ -193,10 +195,6 @@ namespace RType {
              * find a new entity but just when we find one that is not in our map
              */
             std::unordered_map<std::string, sf::Texture*> Textures; // a map that will stock the textures
-            sf::SoundBuffer game_launch_sound; // The buffer of the game launch sound
-            sf::Sound game_launch_music; // The sound of the game launch
-            sf::SoundBuffer shoot_sound; // The buffer of the shoot sound
-            sf::Sound shoot_music; // The sound of the shoot
             bool isShooting; // A boolean to know if the player is shooting
             sf::Font font; // The font used for the game
             std::shared_ptr<std::mutex> _mutex; 

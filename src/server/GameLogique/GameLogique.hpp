@@ -42,6 +42,13 @@ class GameLogique {
          */
         void runGame();
 
+        /**
+         * @brief Return true if all players are dead else false
+         * @return True if all players are dead else false
+         * @author Adam Lesage
+         */
+        bool areAllPlayersDead();
+
     protected:
     private:
         Registry reg;

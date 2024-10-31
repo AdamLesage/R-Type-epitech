@@ -27,11 +27,6 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
     background.setSize(sf::Vector2f(1920, 1080));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(sf::Vector2f(1920 / 2 - logoTexture.getSize().x / 2, 50));
-    if (!selectBuffer.loadFromFile("assets/Sounds/selectsound.wav")) {
-        std::cerr << "Error loading select sound" << std::endl;
-    } else {
-        selectSound.setBuffer(selectBuffer);
-    }
     std::string optionsText[] = {"1. Lobby", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
         menuOptions[i].setFont(font);
@@ -39,22 +34,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-    std::string soundPath = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "menu.ogg";
-    if (!backgroundBuffer.loadFromFile(soundPath)) {
-        throw std::runtime_error("Error loading select sound");
-    }
-    backgroundMusic.setBuffer(backgroundBuffer);
-    try {
-        // games = std::make_shared<Game>(window);
-        settings = std::make_shared<Settings>(window);
-        lobby    = std::make_shared<Lobby>(window);
-    } catch (const std::runtime_error& e) {
-        std::cerr << e.what() << std::endl;
-        exit(84);
-    }
     selectedOption = 0;
-    backgroundMusic.play();
-    backgroundMusic.setLoop(true);
     std::string shaderPath = std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR;
     if (!colorblindShader[0].loadFromFile(shaderPath + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
@@ -77,6 +57,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
         return;
     }
     RenderTexture.create(1920, 1080);
+    backgroundMusicVolume = 100.0f;
 }
 
 void RType::Menu::draw() {
@@ -93,7 +74,7 @@ void RType::Menu::moveUp() {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
-        selectSound.play();
+        _mediator->notify("RenderingEngine", "selectSound");
     }
 }
 
@@ -102,7 +83,7 @@ void RType::Menu::moveDown() {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
-        selectSound.play();
+        _mediator->notify("RenderingEngine", "selectSound");
     }
 }
 
@@ -111,13 +92,10 @@ int RType::Menu::getSelectedOption() const {
 }
 
 void RType::Menu::adjustVolume(bool increase) {
-    float currentVolume = backgroundMusic.getVolume();
-    if (increase) {
-        currentVolume = std::min(100.0f, currentVolume + 10.0f);
-    } else {
-        currentVolume = std::max(0.0f, currentVolume - 10.0f);
-    }
-    backgroundMusic.setVolume(currentVolume);
+    if (increase)
+        _mediator->notify("RenderingEngine", "adjustVolume True");
+    if (!increase)
+        _mediator->notify("RenderingEngine", "adjustVolume False");
 }
 
 void RType::Menu::handleKeyPress(const sf::Event& event) {
@@ -129,9 +107,13 @@ void RType::Menu::handleKeyPress(const sf::Event& event) {
         adjustVolume(false);
     }
 }
+void RType::Menu::setVolume(float number) {
+    backgroundMusicVolume = number;
+}
 
 void RType::Menu::displaySound() {
-    float currentVolume    = backgroundMusic.getVolume();
+    _mediator->notify("RenderingEngine", "getVolume");
+    float currentVolume    = backgroundMusicVolume;
     float maxVolume        = 100.0f;
     float volumeBarWidth   = 200.0f;
     float volumeBarHeight  = 20.0f;
@@ -213,7 +195,7 @@ void RType::Menu::runScene() {
             case sf::Keyboard::Enter:
                 switch (getSelectedOption()) {
                 case 0:
-                    backgroundMusic.stop();
+                    this->_mediator->notify("Mediator", "backgroundMusicStop");
                     this->sendStateChange(2);
                     return;
                 case 1:
@@ -221,7 +203,7 @@ void RType::Menu::runScene() {
                     break;
                 case 2:
                     this->sendStateChange(-1);
-                    backgroundMusic.stop();
+                    this->_mediator->notify("Mediator", "backgroundMusicStop");
                     return;
                 }
                 break;
