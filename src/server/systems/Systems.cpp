@@ -186,11 +186,11 @@ void Systems::check_entities_collisions(Registry& reg,
                        "Error while getting health or damage component for player");
         }
         // Delete entity that hit the player if it's a projectile
-        if (entityType2->type == EntityType::ENEMY_PROJECTILE) {
+        if (entityType2->type == EntityType::ENEMY_PROJECTILE && playerHealth->isDamageable == true) {
             reg.kill_entity(entityId2);
             networkSender->sendDeleteEntity(entityId2);
         }
-        if (entityType2->type == EntityType::PLAYER_PROJECTILE) {
+        if (entityType2->type == EntityType::PLAYER_PROJECTILE && playerHealth->isDamageable == true) {
             reg.kill_entity(entityId2);
             networkSender->sendDeleteEntity(entityId2);
         }

@@ -212,7 +212,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             break;
         }
         this->reg.add_component<Direction>(entity, Direction{0, 0});
-        this->_networkSender->sendCreateEnemy(0X03, entity, position_x, position_y);
+        this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
     }
 }
 

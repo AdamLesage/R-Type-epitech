@@ -183,6 +183,7 @@ bool RType::Console::isCommand()
         return true;
     }
     if (_input.find("shoot_speed ") == 0) {
+        printf("shoot_speed\n");
         _mediator->notify("RenderingEngine", _input);
         return true;
     }

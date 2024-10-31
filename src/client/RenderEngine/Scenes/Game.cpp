@@ -221,8 +221,8 @@ void RType::Game::play(float &latency) {
         sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
         metrics.displayPlayerPosition(*window, pos);
     }
-    console->displayDeveloperConsole();
     toolbar.draw(*window);
+    console->displayDeveloperConsole();
     window->display();
 }
 
