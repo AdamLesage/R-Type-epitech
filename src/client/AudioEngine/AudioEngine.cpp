@@ -25,7 +25,7 @@ RType::AudioEngine::AudioEngine() {
         throw std::runtime_error("Error loading shoot sound 2");
     }
     shoot_music2.setBuffer(shoot_sound2);
-    std::string lobbyogg = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "lobby.pgg";
+    std::string lobbyogg = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "lobby.ogg";
     if (!backgroundBuffer.loadFromFile(lobbyogg)) {
         throw std::runtime_error("Error loading background music");
     }
