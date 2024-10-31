@@ -217,7 +217,8 @@ void RType::Lobby::displayConnectedPlayer()
     }
 }
 
-void RType::Lobby::runScene() {
+void RType::Lobby::runScene(float &latency) {
+    (void)latency;
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
         return;

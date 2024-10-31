@@ -142,7 +142,7 @@ void RType::Game::DisplaySkipIntro() {
     RenderTexture->draw(skipIntro);
 }
 
-void RType::Game::play() {
+void RType::Game::play(float &latency) {
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) window->close();
         if (event.type == sf::Event::KeyPressed) {
@@ -151,7 +151,11 @@ void RType::Game::play() {
             }
             console->toggleDeveloperConsoleFromEvent(event);
             console->checkInput();
+            if (event.key.code == sf::Keyboard::F3) {
+                toolbar.open();
+            }
         }
+        toolbar.handleEvent(event, *window);
     }
 
     _systems.control_system(_registry, *window.get(), _mediator,
@@ -180,7 +184,7 @@ void RType::Game::play() {
         displayPiou();
         piou = false;
     }
-            libconfig::Config cfg;
+    libconfig::Config cfg;
     std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
     try {
         cfg.readFile(configPath.c_str());
@@ -202,7 +206,22 @@ void RType::Game::play() {
     } else {
         window->draw(sprite, &colorblindShader[4]);
     }
+    if (toolbar.showFps)
+        metrics.displayFPS(*window);
+    if (toolbar.showCpu)
+        metrics.displayCPU(*window);
+    if (toolbar.showMemory)
+        metrics.displayMemory(*window);
+    if (toolbar.showGpu)
+        metrics.displayGpuUsage(*window);
+    if (toolbar.showNetwork)
+        metrics.displayLatency(*window, latency);
+    if (toolbar.showPlayerPos) {
+        sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
+        metrics.displayPlayerPosition(*window, pos);
+    }
     console->displayDeveloperConsole();
+    toolbar.draw(*window);
     window->display();
 }
 
@@ -246,7 +265,7 @@ void RType::Game::set_texture() {
     }
 }
 
-void RType::Game::runScene() {
+void RType::Game::runScene(float &latency) {
     sf::RectangleShape rectangleshape;
     sf::Texture texture;
 
@@ -276,7 +295,7 @@ void RType::Game::runScene() {
     window->clear();
     if (animationComplete) {
         _mediator->notify("RenderingEngine", "game_launch_music_stop");
-        play();
+        play(latency);
         return;
     } else {
         RenderTexture->draw(rectangleshape);

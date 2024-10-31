@@ -83,12 +83,9 @@ namespace RType {
             void displayInput();
 
             /**
-             * @brief Run the scene
-             */
-            void runScene() override;
-            /**
              * @brief Displays the settings.
              */
+            void runScene(float& latency)  override;
             void display();
             /**
              * @brief get the value of a key from the cfg file

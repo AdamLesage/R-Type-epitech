@@ -43,13 +43,13 @@ void RType::RenderingEngine::run() {
         switch (_stateGame)
         {
         case 1:
-            this->_menu->runScene();
+            this->_menu->runScene(_latency);
             break;
         case 2:
-            this->_lobby->runScene();
+            this->_lobby->runScene(_latency);
             break;
         case 3:
-            this->_game->runScene();
+            this->_game->runScene(_latency);
             break;
         case 4:
             // end of game Menu
@@ -74,6 +74,10 @@ void RType::RenderingEngine::setCamera(std::shared_ptr<Camera>& camera) {
 
 void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex) {
     this->_mutex = mutex;
+}
+
+void RType::RenderingEngine::setLatency(float latency) {
+    _latency = latency;
 }
 
 void RType::RenderingEngine::setStateGame(int newState) {

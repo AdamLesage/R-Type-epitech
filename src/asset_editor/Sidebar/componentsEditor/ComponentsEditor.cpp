@@ -309,7 +309,7 @@ void Edition::ComponentsEditor::addComponent()
     if (selectedComponent == "Wave_pattern") {
         this->wavePatternDisplay = std::make_unique<Wave_patternDisplay>();
         this->wavePatternDisplay->initialize(1.0, 0.02);
-        this->_asset->addComponent<Wave_pattern>(Wave_pattern{1.0, 0.02});
+        this->_asset->addComponent<Wave_pattern>(Wave_pattern{1.0, 0.02, std::chrono::steady_clock::now()});
     }
     if (selectedComponent == "Type") {
         this->typeDisplay = std::make_unique<TypeDisplay>();
@@ -429,13 +429,13 @@ void Edition::ComponentsEditor::handleWavePatternInput(const sf::Event &event)
         if (this->wavePatternDisplay->amplitude->checkInput(event)) {
             std::string input = this->wavePatternDisplay->amplitude->getInput();
             if (!input.empty())
-                this->_asset->addComponent<Wave_pattern>(Wave_pattern{std::stof(input), this->_asset->getComponent<Wave_pattern>().frequency});
+                this->_asset->addComponent<Wave_pattern>(Wave_pattern{std::stof(input), this->_asset->getComponent<Wave_pattern>().frequency, std::chrono::steady_clock::now()});
         }
 
         if (this->wavePatternDisplay->frequency->checkInput(event)) {
             std::string input = this->wavePatternDisplay->frequency->getInput();
             if (!input.empty())
-                this->_asset->addComponent<Wave_pattern>(Wave_pattern{this->_asset->getComponent<Wave_pattern>().amplitude, std::stof(input)});
+                this->_asset->addComponent<Wave_pattern>(Wave_pattern{this->_asset->getComponent<Wave_pattern>().amplitude, std::stof(input), std::chrono::steady_clock::now()});
         }
     }
 }
