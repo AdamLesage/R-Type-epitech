@@ -2,14 +2,14 @@
 
 RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window), selectedOption(0) {
     this->window         = _window;
+    music = false;
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
     }
-
     playerTextures.resize(5);
     playerSprites.resize(5);
-    
+    backgroundMusicVolume = 100;
     for (int i = 0; i < 5; ++i) {
         playersNames[i].setFont(font);
         playersNames[i].setString("Player " + std::to_string(i + 1));
@@ -29,11 +29,6 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         playerSprites[i].setPosition((window->getSize().x / 3.0f) + 200, currentY - 10);
     }
 
-    if (!backgroundBuffer.loadFromFile("assets/Sounds/lobby.ogg")) {
-        throw std::runtime_error("Error loading background music");
-    }
-    backgroundMusic.setBuffer(backgroundBuffer);
-
     if (!backgroundTexture.loadFromFile("assets/background/menu.jpg")) {
         throw std::runtime_error("Error loading background texture");
     }
@@ -45,10 +40,6 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
     background.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(window->getSize().x / 2.0f - logoTexture.getSize().x / 2.0f, 50);
-    if (!selectBuffer.loadFromFile("assets/Sounds/selectsound.wav")) {
-        throw std::runtime_error("Error loading select sound");
-    }
-    selectSound.setBuffer(selectBuffer);
 
     std::string optionsText[] = {"1. Play", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
@@ -100,7 +91,7 @@ void RType::Lobby::moveRight() {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
-        selectSound.play();
+        _mediator->notify("RenderingEngine", "selectSound");
     }
 }
 
@@ -109,7 +100,7 @@ void RType::Lobby::moveLeft() {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
-        selectSound.play();
+        _mediator->notify("RenderingEngine", "selectSound");
     }
 }
 
@@ -117,14 +108,15 @@ int RType::Lobby::getSelectedOption() const {
     return selectedOption;
 }
 
+void RType::Lobby::setVolume(float number) {
+    backgroundMusicVolume = number;
+}
+
 void RType::Lobby::adjustVolume(bool increase) {
-    float currentVolume = backgroundMusic.getVolume();
-    if (increase) {
-        currentVolume = std::min(100.0f, currentVolume + 10.0f);
-    } else {
-        currentVolume = std::max(0.0f, currentVolume - 10.0f);
-    }
-    backgroundMusic.setVolume(currentVolume);
+    if (increase)
+        _mediator->notify("RenderingEngine", "adjustVolume2 True");
+    if (!increase)
+        _mediator->notify("RenderingEngine", "adjustVolume2 False");
 }
 
 void RType::Lobby::handleKeyPress(const sf::Event& event) {
@@ -138,7 +130,8 @@ void RType::Lobby::handleKeyPress(const sf::Event& event) {
 }
 
 void RType::Lobby::displaySound() {
-    float currentVolume    = backgroundMusic.getVolume();
+    _mediator->notify("RenderingEngine", "getVolume2");
+    float currentVolume    = backgroundMusicVolume;
     float maxVolume        = 100.0f;
     float volumeBarWidth   = 200.0f;
     float volumeBarHeight  = 20.0f;
@@ -229,11 +222,12 @@ void RType::Lobby::runScene() {
         std::cerr << "Error: window is null" << std::endl;
         return;
     }
-    if (backgroundMusic.getStatus() != sf::Sound::Playing) {
-        backgroundMusic.play();
-        backgroundMusic.setLoop(true);
-    }
     sf::Event event;
+    if (music != true) {
+        music = true;
+        _mediator->notify("RenderingEngine", "backgroundMusicStop");
+        _mediator->notify("RenderingEngine", "backgroundMusicPlay2");
+    }
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
             window->close();
@@ -250,7 +244,7 @@ void RType::Lobby::runScene() {
             case sf::Keyboard::Return:
                 switch (getSelectedOption()) {
                 case 0: // Start game
-                    backgroundMusic.stop();
+                    this->_mediator->notify("Mediator", "backgroundMusicStop2");
                     this->sendStateChange(3);
                     break;
                 case 1:
@@ -258,7 +252,7 @@ void RType::Lobby::runScene() {
                     break;
                 case 2:
                     this->sendStateChange(-1);
-                    backgroundMusic.stop();
+                    this->_mediator->notify("Mediator", "backgroundMusicStop2");
                     window->close();
                     break;
                 }

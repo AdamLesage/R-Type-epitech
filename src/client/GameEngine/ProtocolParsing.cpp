@@ -7,10 +7,20 @@
 
 #include "ProtocolParsing.hpp"
 
-RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& registry) : _registry(registry) {
+RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, std::string sceneConfigPath, Registry& registry) : _registry(registry) {
     try {
         _protocolPath = protocolPath;
         _cfg.readFile(_protocolPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
+                  << std::endl;
+    }
+    try {
+        printf("%s\n", sceneConfigPath.c_str());
+        _cfgAssetEditor.readFile(sceneConfigPath.c_str());
+        _assetEditorParsing = std::make_unique<AssetEditorParsing>(_cfgAssetEditor);
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
     } catch (const libconfig::ParseException& pex) {
@@ -134,6 +144,59 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
     return true;
 }
 
+bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int& index) {
+
+    if (message.length() - index < 13) {
+        return false;
+    }
+    std::shared_ptr<EntityData> &data = _assetEditorParsing->getEntityData(message[index]);
+    if (data == nullptr) {
+        return false;
+    }
+    unsigned int entityId;
+    float posX;
+    float posY;
+
+    try {
+        std::memcpy(&entityId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the player creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        if (data->pos != nullptr) {
+            _registry.add_component<Position>(entity, Position{posX, posY});
+        }
+        if (data->size != nullptr) {
+            _registry.add_component<Size>(entity, Size{data->size->x, data->size->y});
+        }
+        if (data->sprite != nullptr) {
+            _registry.add_component<Sprite>(entity, Sprite{data->sprite->spritePath, data->sprite->rectSize[0], data->sprite->rectSize[1], data->sprite->rectPos[0], data->sprite->rectPos[1]});
+        }
+        if (data->rotation != nullptr) {
+            _registry.add_component<Rotation>(entity, Rotation{data->rotation->rotation});
+        }
+        if (data->annimation != nullptr) {
+            _registry.add_component<Annimation>(entity, Annimation{data->annimation->annimationSpeed ,data->annimation->annimation, 0, std::chrono::steady_clock::now()});
+        }
+        if (data->type != nullptr) {
+            _registry.add_component<Type>(entity, Type{data->type->type});
+        }
+        _registry.add_component<Direction>(entity, Direction{-1, 0});
+
+        this->updateIndexFromBinaryData("enemy_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the player" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message, int& index) {
     if (!checkMessageType("PROJECTILE_CREATION", message, index)) return false;
 
@@ -158,10 +221,10 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         _registry.add_component<Tag>(entity, Tag{"projectile"});
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Damage>(entity, Damage{10});
-        _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
         std::string path =
             std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_1.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {71, 32}, {0, 0}});
@@ -630,6 +693,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parseProjectileCollision(message, index)) continue;
         if (this->parseScoreUpdate(message, index)) continue;
         if (this->parseStateChange(message, index)) continue;
+        if (this->parseEntityCreation(message, index)) continue;
         index += 1;
     }
     return false;
