@@ -29,7 +29,7 @@ namespace Edition {
              * @param assets The assets of the scene
              * @param asset The asset to add
              */
-            AddAsset(std::vector<std::shared_ptr<Asset>>& assets, std::shared_ptr<Asset> asset);
+            AddAsset(std::vector<std::shared_ptr<Edition::Asset>> assets, std::shared_ptr<Asset> asset);
 
             /**
              * @brief Destroy the Add Asset object
@@ -49,6 +49,18 @@ namespace Edition {
              * This will remove the asset from the scene
              */
             void undo() override;
+
+            /**
+             * @brief Redo the command
+             */
+            void redo() override;
+
+            /**
+             * @brief Get the asset
+             * 
+             * @return std::shared_ptr<Asset> The asset
+             */
+            std::shared_ptr<Asset> getAsset() override { return _asset; }
 
         protected:
         private:

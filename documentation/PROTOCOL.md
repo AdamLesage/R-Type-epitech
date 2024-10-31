@@ -43,17 +43,6 @@ This document describes the protocol used to communicate between the server and 
 - **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
 #### From 0x03 to 0x20
 
-## Enemy Creation client -> server 
-| Type  | Entity Type  | Position X   | Position Y   |
-|-------|--------------|--------------|--------------|
-| 0x42  |     0x03     | 0x42f60000   | 0x42960000   |
-
-- **Type:** 1 byte (0x43 for "enemy creation").
-- **Entity Type:** 1 byte (0x03 for "basic ennemy").
-- **Position X:** 4 bytes (e.g., 0x42e00000 for X position of 112.0).
-- **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
-#### From 0x03 to 0x20
-
 ## Bonus Creation
 | Type  | Bonus ID     | Position X   | Position Y   |
 |-------|--------------|--------------|--------------|
@@ -99,14 +88,6 @@ This document describes the protocol used to communicate between the server and 
 | 0x29  | 0x00000001   |
 
 - **Type:** 1 byte (0x29 for "entity deletion").
-- **Entity ID:** 4 bytes (e.g., 0x00000100 for an entity with this ID).
-
-## Entity Deletion client -> server 
-| Type  | Entity ID    |
-|-------|--------------|
-| 0x43  | 0x00000001   |
-
-- **Type:** 1 byte (0x43 for "entity deletion").
 - **Entity ID:** 4 bytes (e.g., 0x00000100 for an entity with this ID).
 
 ## Position Update
@@ -201,7 +182,7 @@ This document describes the protocol used to communicate between the server and 
 - **Entity ID:** 4 bytes.
 
 
-## Number connected player 
+## Number connected player
 | Type  | Number Player |
 |-------|---------------|
 | 0x39  | 0x00000001    |
@@ -209,6 +190,19 @@ This document describes the protocol used to communicate between the server and 
 - **Type:** 1 byte (0x39 for "Number player").
 - **number player:** 4 bytes.
 
+## Level update
+| Type  | New Level     |
+|-------|---------------|
+| 0x3a  | 0x00000001    |
+
+- **Type:** 1 byte (0x3a for "New Level").
+- **New Level:** 4 bytes.
+
+## Calculate network latency
+| Type |      Ping      |
+| 0x99 | 0x000003E8     |
+- **Type:** 1 byte (0x99 for "Ping").
+- **ping:** 4 bytes.
 
 # Client-to-Server Protocol: Player Input and Start Game
 
@@ -241,3 +235,62 @@ This message is sent from the client to the server when the player is ready to s
 | **0x41** | **0x00000100** | **0x01** | **0x00000FA0** |
 - **0x41:** Type (Start Game).
 - **0x00000100:** Player ID.
+
+## Enemy Creation 
+| Type  | Entity Type  | Position X   | Position Y   |
+|-------|--------------|--------------|--------------|
+| 0x42  |     0x03     | 0x42f60000   | 0x42960000   |
+
+- **Type:** 1 byte (0x43 for "enemy creation").
+- **Entity Type:** 1 byte (0x03 for "basic ennemy").
+- **Position X:** 4 bytes (e.g., 0x42e00000 for X position of 112.0).
+- **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
+#### From 0x03 to 0x20
+
+## Entity Deletion
+| Type  | Entity ID    |
+|-------|--------------|
+| 0x43  | 0x00000001   |
+
+- **Type:** 1 byte (0x43 for "entity deletion").
+- **Entity ID:** 4 bytes (e.g., 0x00000100 for an entity with this ID).
+
+## Entity Wave Creation
+| Type  |
+|-------|
+| 0x44  |
+
+- **Type:** 1 byte (0x44 for "Entity Wave Creation").
+
+## Godmode enable/disable 
+| Type  | enable/disable |
+|-------|----------------|
+| 0x45  |   0x01 0x02    |
+
+- **Type:** 1 byte (0x45 for "Godmode enable/disable ").
+- **enable/disable:** 1 byte (0x01 for "enable" 0x02 for "disable").
+
+## set shoot speed 
+| Type  | speed |
+|-------|-------|
+| 0x46  | > 0.1 |
+
+- **Type:** 1 byte (0x46 for "set shoot speed ").
+- **speed:** 4 bytes (0x41a00000 for a speed of 20.0).
+
+## Player Teleportation 
+| Type  | Position X   | Position Y   |
+|-------|--------------|--------------|
+| 0x47  | 0x42f60000   | 0x42960000   |
+
+- **Type:** 1 byte (0x47 for "Player Telportation").
+- **Position X:** 4 bytes (e.g., 0x42e00000 for X position of 112.0).
+- **Position Y:** 4 bytes (e.g., 0x41a00000 for Y position of 20.0).
+
+## set lives 
+| Type  | lives |
+|-------|-------|
+| 0x48  |  >10  |
+
+- **Type:** 1 byte (0x48 for "set lives").
+- **speed:** 4 bytes (0x41a00000 for 20hp / 2 lives).

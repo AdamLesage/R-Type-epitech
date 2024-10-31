@@ -25,6 +25,7 @@
 #include "../../shared/components/ShootStraightPattern.hpp"
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/Direction.hpp"
+#include "../../shared/components/ParentId.hpp"
 #include "../GameLogique/NetworkSender.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Tag.hpp"
@@ -36,6 +37,7 @@
 #include <iostream>
 #include <cmath>
 #include <chrono>
+#include <iomanip>
 
 class Systems {
     public:
@@ -78,11 +80,15 @@ class Systems {
          * @briefHandle the collisions between entities.
          *
          * @param reg The registry containing the components.
+         * @param MapSize The size of the map.
+         * @param networkSender The class for sending
+         * @param logger The logger to log the events.
+         * @param friendlyfire If the players can hurt each other.
          */
         void collision_system(Registry& reg,
                               std::pair<size_t, size_t> MapSize,
                               std::unique_ptr<NetworkSender>& networkSender,
-                              RType::Logger& logger);
+                              RType::Logger& logger, bool friendlyfire);
 
         /**
          * @brief Handles the shoot for the entities.
@@ -93,6 +99,7 @@ class Systems {
          * @param logger The logger to log the events
          */
         void shoot_system(Registry& reg,
+                          u_int32_t clientId,
                           entity_t playerId,
                           std::unique_ptr<NetworkSender>& networkSender,
                           RType::Logger& logger);
@@ -109,7 +116,7 @@ class Systems {
          * @param reg The registry containing the components.
          * @param totalTime The count since the start.
          */
-        void wave_pattern_system(Registry& reg, float totalTime, RType::Logger& logger);
+        void wave_pattern_system(Registry& reg, RType::Logger& logger);
 
         /**
          * @brief Update the health of all entities based on the damages / regeneration / healing they
@@ -154,6 +161,15 @@ class Systems {
          */
         void shoot_player_pattern_system(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
 
+        /**
+         * @brief Ping the client to check if they are still connected
+         *
+         * @param reg The registry containing the components.
+         * @param networkSender The class for sending
+         * @return void
+         */
+        void ping_client(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
+
     private:
         /**
          * @brief Check if an entity is colliding with the borders of the map.
@@ -189,6 +205,7 @@ class Systems {
          * @param networkSender The class for sending.
          * @param entityType1 The type of the first entity.
          * @param entityType2 The type of the second entity.
+         * @param friendlyfire If the players can hurt each other.
          */
         void check_entities_collisions(Registry& reg,
                                        size_t entityId1,
@@ -200,7 +217,8 @@ class Systems {
                                        RType::Logger& logger,
                                        std::unique_ptr<NetworkSender>& networkSender,
                                        Type_s* entityType1,
-                                       Type_s* entityType2);
+                                       Type_s* entityType2,
+                                       bool friendlyfire);
 
         /**
          * @brief Read the file that contains the scores history

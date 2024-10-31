@@ -2,27 +2,19 @@
 
 RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window), selectedOption(0) {
     this->window         = _window;
+    music = false;
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
     }
-
     playerTextures.resize(5);
     playerSprites.resize(5);
-
+    backgroundMusicVolume = 100;
     for (int i = 0; i < 5; ++i) {
         playersNames[i].setFont(font);
         playersNames[i].setString("Player " + std::to_string(i + 1));
         playersNames[i].setCharacterSize(24);
         playersNames[i].setFillColor(sf::Color::White);
-        std::string playerPath = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR
-                                 + "player_" + std::to_string(i + 1) + ".png";
-        if (!playerTextures[i].loadFromFile(playerPath)) {
-            throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
-        }
-        playerSprites[i].setTexture(playerTextures[i]);
-        playerSprites[i].setTextureRect(sf::IntRect(0, 0, 263, 116));
-        playerSprites[i].setScale(0.7, 0.7);
     }
 
     float totalHeight      = window->getSize().y;
@@ -37,11 +29,6 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         playerSprites[i].setPosition((window->getSize().x / 3.0f) + 200, currentY - 10);
     }
 
-    if (!backgroundBuffer.loadFromFile("assets/Sounds/lobby.ogg")) {
-        throw std::runtime_error("Error loading background music");
-    }
-    backgroundMusic.setBuffer(backgroundBuffer);
-
     if (!backgroundTexture.loadFromFile("assets/background/menu.jpg")) {
         throw std::runtime_error("Error loading background texture");
     }
@@ -53,10 +40,6 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
     background.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
     logoSprite.setTexture(logoTexture);
     logoSprite.setPosition(window->getSize().x / 2.0f - logoTexture.getSize().x / 2.0f, 50);
-    if (!selectBuffer.loadFromFile("assets/Sounds/selectsound.wav")) {
-        throw std::runtime_error("Error loading select sound");
-    }
-    selectSound.setBuffer(selectBuffer);
 
     std::string optionsText[] = {"1. Play", "2. Settings", "3. Quit"};
     for (int i = 0; i < 3; ++i) {
@@ -71,8 +54,6 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
     }
 
     try {
-        games = std::make_shared<Game>(window);
-        games->setMediator(std::shared_ptr<IMediator>(this->_mediator));
         settings = std::make_shared<Settings>(window);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
@@ -108,7 +89,7 @@ void RType::Lobby::moveRight() {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption++;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
-        selectSound.play();
+        _mediator->notify("RenderingEngine", "selectSound");
     }
 }
 
@@ -117,7 +98,7 @@ void RType::Lobby::moveLeft() {
         menuOptions[selectedOption].setFillColor(sf::Color::White);
         selectedOption--;
         menuOptions[selectedOption].setFillColor(sf::Color::Red);
-        selectSound.play();
+        _mediator->notify("RenderingEngine", "selectSound");
     }
 }
 
@@ -125,14 +106,15 @@ int RType::Lobby::getSelectedOption() const {
     return selectedOption;
 }
 
+void RType::Lobby::setVolume(float number) {
+    backgroundMusicVolume = number;
+}
+
 void RType::Lobby::adjustVolume(bool increase) {
-    float currentVolume = backgroundMusic.getVolume();
-    if (increase) {
-        currentVolume = std::min(100.0f, currentVolume + 10.0f);
-    } else {
-        currentVolume = std::max(0.0f, currentVolume - 10.0f);
-    }
-    backgroundMusic.setVolume(currentVolume);
+    if (increase)
+        _mediator->notify("RenderingEngine", "adjustVolume2 True");
+    if (!increase)
+        _mediator->notify("RenderingEngine", "adjustVolume2 False");
 }
 
 void RType::Lobby::handleKeyPress(const sf::Event& event) {
@@ -146,7 +128,8 @@ void RType::Lobby::handleKeyPress(const sf::Event& event) {
 }
 
 void RType::Lobby::displaySound() {
-    float currentVolume    = backgroundMusic.getVolume();
+    _mediator->notify("RenderingEngine", "getVolume2");
+    float currentVolume    = backgroundMusicVolume;
     float maxVolume        = 100.0f;
     float volumeBarWidth   = 200.0f;
     float volumeBarHeight  = 20.0f;
@@ -207,102 +190,115 @@ void RType::Lobby::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
-void RType::Lobby::displayLobby() {
+void RType::Lobby::displayConnectedPlayer()
+{
+    float totalHeight      = window->getSize().y;
+    float playerAreaHeight = 500;
+    float playerStartY     = (totalHeight - playerAreaHeight) / 2.0f;
+    for (size_t i = 0; _camera->listEntityToDisplay.size() != i; ++i) {
+        try {
+            if (!playerTextures[i].loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath)) {
+                throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));
+            }
+        } catch (const std::exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+        playerSprites[i].setTexture(playerTextures[i]);
+        playerSprites[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1], _camera->listEntityToDisplay[i].sprite.rectSize[0],  _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+        playerSprites[i].setScale(0.7, 0.7);
+        float verticalSpacing = 100;
+        float currentY = playerStartY + i * verticalSpacing;
+        playersNames[i].setPosition(window->getSize().x / 3.0f, currentY);
+        playerSprites[i].setPosition((window->getSize().x / 3.0f) + 200, currentY - 10);
+        RenderTexture.draw(playersNames[i]);
+        RenderTexture.draw(playerSprites[i]);
+    }
+}
+
+void RType::Lobby::runScene(float &latency) {
+    (void)latency;
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
         return;
     }
-    backgroundMusic.play();
-    backgroundMusic.setLoop(true);
-    while (window->isOpen()) {
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window->close();
-            }
-            handleKeyPress(event);
-            if (event.type == sf::Event::KeyPressed) {
-                switch (event.key.code) {
-                case sf::Keyboard::Right:
-                    moveRight();
+    sf::Event event;
+    if (music != true) {
+        music = true;
+        _mediator->notify("RenderingEngine", "backgroundMusicStop");
+        _mediator->notify("RenderingEngine", "backgroundMusicPlay2");
+    }
+    while (window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window->close();
+        }
+        handleKeyPress(event);
+        if (event.type == sf::Event::KeyPressed) {
+            switch (event.key.code) {
+            case sf::Keyboard::Right:
+                moveRight();
+                break;
+            case sf::Keyboard::Left:
+                moveLeft();
+                break;
+            case sf::Keyboard::Return:
+                switch (getSelectedOption()) {
+                case 0: // Start game
+                    this->_mediator->notify("Mediator", "backgroundMusicStop2");
+                    if (_gameSelected == "R-Type") this->sendStateChange(3); // Send to server to start the game because it is the only online game
+                    else this->_mediator->notify("RenderingEngine", "Start offline game"); // Notify the mediator to start the game
                     break;
-                case sf::Keyboard::Left:
-                    moveLeft();
+                case 1:
+                    settings->displaySettings(false);
                     break;
-                case sf::Keyboard::Return:
-                    switch (getSelectedOption()) {
-                    case 0: // Start game
-                        backgroundMusic.stop();
-                        if (_mediator != nullptr) {
-                            _mediator->notify("RenderingEngine", "play");
-                        } else {
-                            std::cerr << "Error: Mediator is null" << std::endl;
-                        }
-                        games->_mediator = _mediator;
-                        games->setCamera(_camera);
-                        games->setMutex(_mutex);
-                        games->displayGame();
-                        break;
-                    case 1:
-                        settings->displaySettings(false);
-                        break;
-                    case 2:
-                        backgroundMusic.stop();
-                        window->close();
-                        break;
-                    }
-                    break;
-                default:
+                case 2:
+                    this->sendStateChange(-1);
+                    this->_mediator->notify("Mediator", "backgroundMusicStop2");
+                    window->close();
                     break;
                 }
+                break;
+            default:
+                break;
             }
         }
-
-        window->clear();
-        RenderTexture.draw(background);
-        RenderTexture.draw(logoSprite);
-
-        for (const auto& option : menuOptions) {
-            RenderTexture.draw(option);
-        }
-
-        for (int i = 0; i < 5; ++i) {
-            RenderTexture.draw(playersNames[i]);
-            RenderTexture.draw(playerSprites[i]);
-        }
-        displaySound();
-        libconfig::Config cfg;
-        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-        try {
-            cfg.readFile(configPath.c_str());
-        } catch (const libconfig::FileIOException& fioex) {
-            std::cerr << "I/O error while reading file." << std::endl;
-            return;
-        }
-        std::string keyValue = settings->get_key_value(cfg, "Keys7");
-        if (keyValue == "ON") {
-            displaySubtitles();
-        }
-        RenderTexture.display();
-        sf::Sprite sprite(RenderTexture.getTexture());
-        std::string colorblind = settings->get_key_value(cfg, "Keys8");
-        if (colorblind.find("Deuteranopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[0]);
-        } else if (colorblind.find("Protanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[1]);
-        } else if (colorblind.find("Tritanopia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[2]);
-        } else if (colorblind.find("Achromatopsia") != std::string::npos) {
-            window->draw(sprite, &colorblindShader[3]);
-        } else {
-            window->draw(sprite, &colorblindShader[4]);
-        }
-        window->display();
     }
-}
 
-void RType::Lobby::setMediator(std::shared_ptr<RType::IMediator> mediator) {
-    _mediator = mediator;
+    window->clear();
+    RenderTexture.draw(background);
+    RenderTexture.draw(logoSprite);
+
+    for (const auto& option : menuOptions) {
+        RenderTexture.draw(option);
+    }
+    displayConnectedPlayer();
+    displaySound();
+    libconfig::Config cfg;
+    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+    try {
+        cfg.readFile(configPath.c_str());
+    } catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        return;
+    }
+    std::string keyValue = settings->get_key_value(cfg, "Keys7");
+    if (keyValue == "ON") {
+        displaySubtitles();
+    }
+    RenderTexture.display();
+    sf::Sprite sprite(RenderTexture.getTexture());
+    std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    if (colorblind.find("Deuteranopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[0]);
+    } else if (colorblind.find("Protanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[1]);
+    } else if (colorblind.find("Tritanopia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[2]);
+    } else if (colorblind.find("Achromatopsia") != std::string::npos) {
+        window->draw(sprite, &colorblindShader[3]);
+    } else {
+        window->draw(sprite, &colorblindShader[4]);
+    }
+    window->display();
 }
 
 void RType::Lobby::setCamera(std::shared_ptr<Camera> camera) {

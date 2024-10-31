@@ -23,8 +23,10 @@
 
 #ifdef _WIN32
     #include <Windows.h>
+    #define PATH_SEPARATOR "\\"
 #else
     #include <unistd.h>
+    #define PATH_SEPARATOR "/"
 #endif
 
 namespace RType {
@@ -79,10 +81,19 @@ namespace RType {
              */
             void updateCamera();
 
+            /**
+             * @brief Set the game selected by the client.
+             * 
+             * @param gameSelected The game selected by the client.
+             * @return void
+             */
+            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+
         protected:
         private:
             Registry _registry;
             Systems _systems;
+            libconfig::Config _playerConfig;
             std::unique_ptr<RType::ProtocolParsing> _protocolParsing;
             std::shared_ptr<NetworkEngine> _networkEngine;
             std::shared_ptr<RenderingEngine> _renderingEngine;
@@ -90,6 +101,7 @@ namespace RType {
             std::shared_ptr<AudioEngine> _audioEngine;
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
+            std::string _gameSelected;
     };
 } // namespace RType
 
