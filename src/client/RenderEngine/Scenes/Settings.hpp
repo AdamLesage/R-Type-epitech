@@ -83,9 +83,20 @@ namespace RType {
             void displayInput();
 
             /**
-             * @brief Displays the settings.
+             * @brief Executes the scene with the given latency.
+             * 
+             * This function is responsible for running the scene and handling any
+             * necessary updates or rendering based on the provided latency.
+             * 
+             * @param latency A reference to a float representing the latency to be used
+             *                during the scene execution.
              */
             void runScene(float& latency)  override;
+
+
+            /**
+             * @brief Displays the settings.
+             */
             void display();
             /**
              * @brief get the value of a key from the cfg file
@@ -93,7 +104,7 @@ namespace RType {
              * @param cfg libconfig
              * @param key_name name of the key needed
              */
-            const char* get_key_value(libconfig::Config &cfg, const char* key_name);
+            const std::string get_key_value(libconfig::Config& cfg, const std::string key_name);
             /**
              * @brief get the value of a key from the cfg file
              *
@@ -101,29 +112,31 @@ namespace RType {
              * @param key_name name of the key to change
              * @param new_value new value for the key
              */
-            int set_key_value(libconfig::Config &cfg, const char* key_name, const char* new_value);
+            int set_key_value(libconfig::Config& cfg, const std::string key_name, const std::string new_value);
 
         protected:
-            int selectedOption; // The selected option
-            sf::Sound selectSound; // The sound played when selecting an option
+            int selectedOption;                       // The selected option
+            sf::Sound selectSound;                    // The sound played when selecting an option
             std::shared_ptr<sf::RenderWindow> window; // The window to display the settings on
-            sf::Font font; // The font used for the settings
-            sf::Text menuOptions[8]; // The options of the settings so the keys up, down, left, right, shoot, escape, subtitles and colorblind
+            sf::Font font;                            // The font used for the settings
+            sf::Text menuOptions[9]; // The options of the settings so the keys up, down, left, right, shoot,
+                                     // escape, subtitles, colorblind and friendly fire
             sf::Texture logoTexture; // The texture of the logo
-            sf::Sprite logoSprite; // The sprite of the logo
-            sf::Event event; // The event of the settings
-            sf::RectangleShape background; // The background of the settings
-            sf::Texture backgroundTexture; // The texture of the background
-            sf::Texture ShootInputTexture; // The texture of the shoot input
-            sf::Sprite ShootInputSprite; // The sprite of the shoot input
-            sf::Texture arrowTexture[4]; // The texture of the arrows up down left right
-            sf::Sprite arrowSprite[4]; // The sprite of the arrows up down left right
-            std::string newArrowInput; // The new input of the arrow
+            sf::Sprite logoSprite;   // The sprite of the logo
+            sf::Event event;         // The event of the settings
+            sf::RectangleShape background;   // The background of the settings
+            sf::Texture backgroundTexture;   // The texture of the background
+            sf::Texture ShootInputTexture;   // The texture of the shoot input
+            sf::Sprite ShootInputSprite;     // The sprite of the shoot input
+            sf::Texture arrowTexture[4];     // The texture of the arrows up down left right
+            sf::Sprite arrowSprite[4];       // The sprite of the arrows up down left right
+            std::string newArrowInput;       // The new input of the arrow
             sf::RenderTexture RenderTexture; // The render texture of the settings
-            sf::Shader colorblindShader[5]; // The shaders for the colorblind mode (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
+            sf::Shader colorblindShader[5];  // The shaders for the colorblind mode (Deuteranopia, Protanopia,
+                                             // Tritanopia, Achromatopsia, Normal)
 
         private:
     };
-}
+} // namespace RType
 
 #endif /* !SETTINGS_HPP_ */

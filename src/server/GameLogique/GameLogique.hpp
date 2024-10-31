@@ -48,6 +48,12 @@ class GameLogique {
          */
         bool areAllPlayersDead();
 
+                /**
+         * @brief Check if friendly fire is enabled by reading the configuration file key.cfg.
+         *
+         * @return true if friendly fire is enabled, false otherwise.
+         */
+        bool getfriendlyfire();
     protected:
     private:
         Registry reg;
@@ -59,6 +65,7 @@ class GameLogique {
         int frequency;
         RType::Logger logger;
         bool running;
+        bool friendlyfire;
         std::mutex _mutex;
         /**
          * @brief Delete all entity at the end of the game
