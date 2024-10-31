@@ -18,7 +18,7 @@ typedef struct CanShootMissiles_s {
          * @brief CanShootMissiles component, allow the player to shoot a missile
          *
          */
-        size_t number; // is active or not
+        size_t number; // number of missile
 } CanShootMissiles;
 
 #endif /* !CANSHOOTMISSILES_HPP_ */

@@ -31,6 +31,8 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<Direction>();
     this->reg.register_component<ShootEnnemyMissile>();
     this->reg.register_component<CanShootMissiles>();
+    this->reg.register_component<CanShootBigMissile>();
+    this->reg.register_component<IsBigMissile>();
 
     try {
         std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type") + PATH_SEPARATOR + std::string("game_config.cfg");
@@ -414,6 +416,7 @@ void GameLogique::clearGame() {
         this->reg.add_component<Size>(entity, Size{130, 80});
         this->reg.add_component<Direction>(entity, Direction{0, 0});
         this->reg.add_component<CanShootMissiles>(entity, CanShootMissiles{0});
+        this->reg.add_component<CanShootBigMissile>(entity, CanShootBigMissile{0});
         this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));
         this->playersId[numberPlayer] = entity;
         usleep(1000);
@@ -589,6 +592,7 @@ void GameLogique::handleClientConnection()
                     this->reg.add_component<Size>(entity, Size{130, 80});
                     this->reg.add_component<Direction>(entity, Direction{0, 0});
                     this->reg.add_component<CanShootMissiles>(entity, CanShootMissiles{0});
+                    this->reg.add_component<CanShootBigMissile>(entity, CanShootBigMissile{0});
                     this->_networkSender->sendCreatePlayer(clientId, 100.f, 100 + (100.f * clientId));
                     this->playersId[clientId] = entity;
                 }

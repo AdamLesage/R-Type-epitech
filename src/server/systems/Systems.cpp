@@ -173,8 +173,14 @@ void Systems::check_entities_collisions(Registry& reg,
         
 
         if (playerHealth && enemyDamage) {
-            if (playerHealth->isDamageable == true)
-                playerHealth->health -= enemyDamage->damage;
+            if (playerHealth->isDamageable == true) {
+                if (playerHealth->health < enemyDamage->damage) {
+                    playerHealth->health = 0;
+                } else {
+                    playerHealth->health -= enemyDamage->damage;
+                }
+            }
+
             if (playerHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
@@ -197,12 +203,16 @@ void Systems::check_entities_collisions(Registry& reg,
     }
 
     if (enemyTakeDamage && collisionX && collisionY) {
-        logger.log(RType::Logger::RTYPEINFO, "Enemy take damage");
+        // logger.log(RType::Logger::RTYPEINFO, "Enemy take damage");
         auto& enemyHealth      = reg.get_components<Health_s>()[entityId1];
         auto& projectileDamage = reg.get_components<Damage_s>()[entityId2];
-
+        size_t maxHealth = enemyHealth->health;
         if (enemyHealth && projectileDamage) {
-            enemyHealth->health -= projectileDamage->damage;
+            if (projectileDamage->damage > enemyHealth->health) {
+                enemyHealth->health = 0;
+            } else {
+                enemyHealth->health -= projectileDamage->damage;
+            }
             if (enemyHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
@@ -212,9 +222,18 @@ void Systems::check_entities_collisions(Registry& reg,
         } else {
             logger.log(RType::Logger::RTYPEERROR, "Error while getting health or damage component for enemy");
         }
-        // If enemy take damage, it is only a projectile so we delete it
-        reg.kill_entity(entityId2);
-        networkSender->sendDeleteEntity(entityId2);
+        if (reg.get_components<IsBigMissile>().size() > entityId2 && reg.get_components<IsBigMissile>()[entityId2]) {
+            if (projectileDamage->damage <= maxHealth) {
+                reg.kill_entity(entityId2);
+                networkSender->sendDeleteEntity(entityId2);
+            } else {
+                projectileDamage->damage -= maxHealth;
+            }
+        } else if (!(reg.get_components<IsBigMissile>().size() > entityId2 && reg.get_components<IsBigMissile>()[entityId2])) {
+            // If enemy take damage, it is only a projectile so we delete it
+            reg.kill_entity(entityId2);
+            networkSender->sendDeleteEntity(entityId2);
+        }
     }
 
     if (playerTakeBonus && collisionX && collisionY) {
@@ -224,20 +243,17 @@ void Systems::check_entities_collisions(Registry& reg,
 
         if (playerHealth && bonusType) {
             if (bonusType->type == EntityType::POWERUP && bonustag->tag == "shield_bonus") {
-                std::cout << "get shieldBonus" << std::endl;
                 playerHealth->health += 50;
                 networkSender->sendHealthUpdate(entityId1, playerHealth->health);
             }
             if (bonusType->type == EntityType::POWERUP && bonustag->tag == "machinegun_bonus") {
-                std::cout << "get machinegun_bonus" << std::endl;
                 reg.get_components<ShootingSpeed_s>()[entityId1]->shooting_speed *= 0.9;
             }
             if (bonusType->type == EntityType::POWERUP && bonustag->tag == "rocket_bonus") {
-                std::cout << "rocket bonus" << std::endl;
                 reg.get_components<CanShootMissiles>()[entityId1]->number += 3;
             }
             if (bonusType->type == EntityType::POWERUP && bonustag->tag == "beam_bonus") {
-                std::cout << "beam bonus" << std::endl;
+                reg.get_components<CanShootBigMissile>()[entityId1]->number += 1;
             }
         } else {
             logger.log(RType::Logger::RTYPEERROR, "Error while getting health or type component for player");
@@ -344,6 +360,7 @@ void Systems::shoot_system(Registry& reg,
     auto& shoots         = reg.get_components<Shoot>();
     auto& sizes          = reg.get_components<Size>();
     auto& canShootMissiles       = reg.get_components<CanShootMissiles>();
+    auto& canShootBigMissiles       = reg.get_components<CanShootBigMissile>();
 
     auto& pos           = positions[playerId];
     auto& type          = types[playerId];
@@ -366,7 +383,13 @@ void Systems::shoot_system(Registry& reg,
             reg.add_component<Size>(projectile, Size{70, 30});
             reg.add_component<ParentId>(projectile, ParentId{playerId});
 
-            if (canShootMissiles.size() > playerId && canShootMissiles[playerId] && canShootMissiles[playerId]->number != 0) {
+            if (canShootBigMissiles.size() > playerId && canShootBigMissiles[playerId] && canShootBigMissiles[playerId]->number != 0) {
+                canShootBigMissiles[playerId]->number--;
+                reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
+                reg.add_component<Damage_s>(projectile, Damage_s{300});
+                reg.add_component<IsBigMissile>(projectile, IsBigMissile{true});
+                networkSender->sendCreateProjectil(playerId, projectileX, projectileY, clientId);
+            } else if (canShootMissiles.size() > playerId && canShootMissiles[playerId] && canShootMissiles[playerId]->number != 0) {
                 canShootMissiles[playerId]->number--;
                 reg.add_component<ShootEnnemyMissile>(projectile, ShootEnnemyMissile{3.0f});
                 reg.add_component<Damage_s>(projectile, Damage_s{200});

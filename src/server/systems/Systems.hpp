@@ -28,6 +28,8 @@
 #include "../../shared/components/ParentId.hpp"
 #include "../../shared/components/ShootEnnemyMissile.hpp"
 #include "../../shared/components/CanShootMissiles.hpp"
+#include "../../shared/components/CanShootBigMissile.hpp"
+#include "../../shared/components/IsBigMissile.hpp"
 #include "../GameLogique/NetworkSender.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Tag.hpp"
