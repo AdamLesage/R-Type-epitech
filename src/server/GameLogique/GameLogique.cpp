@@ -186,7 +186,6 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             reg.add_component<Size>(entity, Size{325, 125});
             reg.add_component<Type>(entity, Type{EntityType::BOSS});
             reg.add_component<BossPatern>(entity, BossPatern{-1, true, false, 10.0, std::chrono::steady_clock::now()});
-            std::cout << "Boss created" << std::endl;
             break;
         default:
             std::map<uint8_t, std::shared_ptr<EntityData>>& entities =

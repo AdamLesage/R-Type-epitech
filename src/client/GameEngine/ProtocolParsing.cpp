@@ -301,7 +301,6 @@ bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& 
         _registry.add_component<Size>(entity, Size{325, 125});
         _registry.add_component<Direction>(entity, Direction{-1, 0});
         std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "boss" + PATH_SEPARATOR + "boss_2.png";
-        std::cout << "bosse comme un boss" << std::endl;
         _registry.add_component<Sprite>(entity, Sprite{path, {1300, 500}, {0, 0}});
         this->updateIndexFromBinaryData("boss_creation", index);
     } catch (const std::exception& e) {

@@ -131,13 +131,6 @@ bool processEdit(const std::string& _input) {
 
         iss >> command >> entityNum1 >> entityNum2;
 
-        std::cout << "Changing skin of entity " << entityNum1 << " whith skin " << entityNum2 << std::endl;
-            // entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
-            // entity[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
-            //                                      _camera->listEntityToDisplay[i].sprite.rectPos[1],
-            //                                      _camera->listEntityToDisplay[i].sprite.rectSize[0],
-            //                                      _camera->listEntityToDisplay[i].sprite.rectSize[1]));
-
         return true;
     }
 
@@ -183,7 +176,6 @@ bool RType::Console::isCommand()
         return true;
     }
     if (_input.find("shoot_speed ") == 0) {
-        printf("shoot_speed\n");
         _mediator->notify("RenderingEngine", _input);
         return true;
     }

@@ -123,20 +123,20 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void wave1(Registry& reg, std::unique_ptr<NetworkSender>& networkSender, int j);
+        void wave_of_ennemy_from_boss1(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
         
         /**
          * @brief Spawn a wave of enemies
          *
          * @param reg The registry containing the components.
          */
-        void wave2(Registry& reg, std::unique_ptr<NetworkSender>& networkSender, int j);
+        void wave_of_ennemy_from_boss2(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
         /**
          * @brief Spawn a wave of enemies | not created yet
          *
          * @param reg The registry containing the components.
          */
-        void wave3(Registry& reg, std::unique_ptr<NetworkSender>& networkSender, int j);
+        void wave_of_ennemy_from_boss3(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
 
         /**
          * @brief Update the direction of all entities based on their velocity.
