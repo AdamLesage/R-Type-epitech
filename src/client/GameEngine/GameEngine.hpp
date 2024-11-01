@@ -92,6 +92,17 @@ namespace RType {
                 _gameSelected = gameSelected;
             }
 
+            /**
+             * @brief Tell to the game is current selection if online or offline
+             *
+             * @param isOffline True: Offline game, False: Online game
+             * @return void
+             * @author Adam Lesage
+             */
+            void setOfflineMode(bool isOffline) {
+                _isOffline = isOffline;
+            }
+
         protected:
         private:
             Registry _registry;
@@ -105,6 +116,7 @@ namespace RType {
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
             std::string _gameSelected;
+            bool _isOffline = false;
     };
 } // namespace RType
 

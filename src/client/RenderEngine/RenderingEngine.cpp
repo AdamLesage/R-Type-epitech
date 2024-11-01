@@ -98,7 +98,7 @@ void RType::RenderingEngine::setLevel(size_t level) {
     }
 }
 
-void RType::RenderingEngine::setOfflineMode(bool isOffline) const
+void RType::RenderingEngine::setOfflineMode(bool isOffline)
 {
     this->_game->setOfflineMode(isOffline);
 }

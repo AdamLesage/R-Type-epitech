@@ -157,7 +157,10 @@ namespace RType {
              * @author Adam Lesage
              */
             void setOfflineMode(bool isOffline) {
+                std::cout << "Setting online mode" << std::endl;
+                std::cout << "mode: " << (isOffline ? "offline" : "online") << std::endl;
                 _isOffline = isOffline;
+                std::cout << "online mode set to " << (isOffline ? "offline" : "online") << std::endl;
             }
 
         private:
@@ -227,7 +230,7 @@ namespace RType {
             size_t _level;
             GameMetrics metrics;
             Toolbar toolbar;
-            bool _isOffline;
+            bool _isOffline = false;
     };
 } // namespace RType
 

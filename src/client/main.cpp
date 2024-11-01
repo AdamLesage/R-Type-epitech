@@ -180,9 +180,9 @@ int main(int ac, char** av) {
         RType::Mediator* mediator =
             new RType::Mediator(gameEngine, networkEngine, renderingEngine, physicEngine, audioEngine);
         (void)mediator;
-        renderingEngine->setOfflineMode(isOffline);
         gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
         gameEngine->setGameSelected(gameSelected);
+        gameEngine->setOfflineMode(isOffline);
         gameEngine->run();
     } catch (const RType::DLError& e) {
         std::cerr << e.what() << std::endl;

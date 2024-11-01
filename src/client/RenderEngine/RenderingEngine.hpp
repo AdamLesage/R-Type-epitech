@@ -95,7 +95,7 @@ namespace RType {
              * @return void
              * @author Adam Lesage
              */
-            void setOfflineMode(bool isOffline) const;
+            void setOfflineMode(bool isOffline);
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;

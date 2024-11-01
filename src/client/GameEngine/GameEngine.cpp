@@ -85,6 +85,7 @@ void RType::GameEngine::run() {
             renderingEngine->setGameSelected(_gameSelected);
             renderingEngine->setCamera(this->_camera);
             renderingEngine->setMutex(this->_mutex);
+            renderingEngine->setOfflineMode(_isOffline);
             renderingEngine->run();
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;

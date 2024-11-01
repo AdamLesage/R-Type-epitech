@@ -147,7 +147,7 @@ namespace RType {
              * @return bool the value of the boolean _isOffline
              * @author Adam Lesage
              */
-            bool getOfflineSelection() const {
+            bool getOfflineSelection() {
                 return _isOffline;
             }
 
