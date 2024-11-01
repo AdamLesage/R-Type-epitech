@@ -76,10 +76,18 @@ void GameLogique::startGame(int idEntity) {
                 pos->x = 100.f;
                 pos->y = 100 + (100.f * i);
             }
-            this->_networkSender->sendPositionUpdate(i, 100.f, 100 + (100.f * i));
-            usleep(10000);
+            this->_networkSender->sendPositionUpdate(i , 100.f, 100 + (100.f * i));
+            #ifdef _WIN32
+                Sleep(10);
+            #else
+                usleep(10000);
+            #endif
         }
-        sleep(1);
+        #ifdef _WIN32
+            Sleep(1);
+        #else
+            sleep(1);
+        #endif
         this->_networkSender->sendStateChange(idEntity, 0x03);
         this->running = true;
     }
@@ -292,7 +300,11 @@ void GameLogique::runGame() {
             }
             if (this->areAllPlayersDead() == true) {
                 this->clearGame();
-                sleep(1);
+                #ifdef _WIN32
+                    Sleep(1);
+                #else
+                    sleep(1);
+                #endif
                 this->_networkSender->sendStateChange(1, 0x04);
                 this->running       = false;
                 this->_currentLevel = 0;
@@ -315,7 +327,11 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
         libconfig::Setting& levels = this->_gameConfig.lookup("Menu.Game.level");
         if (newLevel >= (unsigned int)levels.getLength()) {
             this->running = false;
-            sleep(1);
+            #ifdef _WIN32
+                Sleep(1);
+            #else
+                sleep(1);
+            #endif
             this->_networkSender->sendStateChange(1, 0x01);
             this->_currentLevel = 0;
             this->_networkSender->sendLevelUpdate(this->_currentLevel);
@@ -345,14 +361,22 @@ void GameLogique::clearGame() {
     auto& types = reg.get_components<Type>();
 
     for (size_t i = 0; i < types.size(); ++i) {
-        auto& type = types[i];
-        usleep(1000);
+        auto &type = types[i];
+        #ifdef _WIN32
+            Sleep(1);
+        #else
+            usleep(1000);
+        #endif
         if (type) {
             this->_networkSender->sendDeleteEntity(i);
             this->reg.kill_entity(i);
         }
     }
-    usleep(1000);
+    #ifdef _WIN32
+        Sleep(1);
+    #else
+        usleep(1000);
+    #endif
     for (size_t numberPlayer = 0; numberPlayer != this->network->getClientCount(); numberPlayer++) {
         entity_t entity = this->reg.spawn_entity();
         this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * numberPlayer), 100.f});
@@ -366,7 +390,11 @@ void GameLogique::clearGame() {
         this->reg.add_component<Direction>(entity, Direction{0, 0});
         this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));
         this->playersId[numberPlayer] = entity;
-        usleep(1000);
+        #ifdef _WIN32
+            Sleep(1);
+        #else
+            usleep(1000);
+        #endif
     }
 }
 
