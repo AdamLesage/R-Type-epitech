@@ -76,6 +76,59 @@ namespace RType {
             bool isEntityAProjectile(EntityRenderInfo currentEntity) const;
 
             /**
+             * @brief Check if entity given has sprite of enemy projectile
+             *
+             * @param currentEntity Entity to check if it is an enemy projectile
+             * @return True if entity is an enemy projectile otherwise false if entity is something else than
+             * a enemy projectile
+             * @author Adam Lesage
+             */
+            bool isEntityAnEnemyProjectile(EntityRenderInfo currentEntity) const;
+
+            /**
+             * @brief Check if entity given has sprite of enemy
+             *
+             * @param currentEntity Entity to check if it is an enemy
+             * @return True if entity is an enemy otherwise false if entity is something else than
+             * a enemy
+             * @author Adam Lesage
+             */
+            bool isEntityAnEnemy(EntityRenderInfo currentEntity) const;
+
+            /**
+             * @brief create an enemy entity
+             *
+             * @return void
+             * @author Adam Lesage
+             */
+            void createEnemy();
+
+            /**
+             * @brief Handle position of enemies and enemy projectiles
+             * 
+             * @return void
+             * @author Adam Lesage
+             */
+            void handleEnemies();
+
+            /**
+             * @brief Enemy will randomly shoot so player have to avoid missiles
+             * 
+             * @return void
+             * @author Adam Lesage
+             */
+            void makeEnemyShoot();
+
+            /**
+             * @brief Create a projectile shot by an enemy
+             *
+             * @param enemyShooter Entity that create the projectile
+             * @return void
+             * @author Adam Lesage
+             */
+            void createEnemyProjectile(EntityRenderInfo enemyShooter);
+
+            /**
              * @brief browse list of entities until player is found
              *
              * @return Current instance of the player in camera
@@ -83,9 +136,35 @@ namespace RType {
              */
             EntityRenderInfo getPlayerFromCamera() const;
 
+            /**
+             * @brief Get number of entities currently alive
+             *
+             * @return Number of enemies
+             * @author Adam Lesage
+             */
+            size_t getEnemyCount() const;
+
+            /**
+             * @brief if an entity take a damage, the entity die
+             * 
+             * @return void
+             * @author Adam Lesage
+             */
+            void handleCollisions();
+
+            /**
+             * @brief check if two entities collides
+             * 
+             * @return true if entities collides, otherwise false
+             * @author Adam Lesage
+             */
+            bool isCollision(const EntityRenderInfo& a, const EntityRenderInfo& b);
+
         protected:
         private:
             sf::Clock _shootClock;
+            sf::Clock _enemyShootClock;
+            sf::Clock _enemySpawnClock;
     };
 } // namespace RType
 
