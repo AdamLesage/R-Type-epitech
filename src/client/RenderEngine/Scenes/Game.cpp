@@ -145,7 +145,7 @@ void RType::Game::DisplaySkipIntro() {
     skipIntro.setPosition(1920 / 2 - 200, 1080 - 100);
     RenderTexture->draw(skipIntro);
 }
-#include <unistd.h>
+
 void RType::Game::play(float &latency) {
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) window->close();
