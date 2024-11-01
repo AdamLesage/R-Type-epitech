@@ -255,7 +255,6 @@ void RType::Lobby::runScene(float& latency) {
                 switch (getSelectedOption()) {
                 case 0: // Start game
                     this->_mediator->notify("Mediator", "backgroundMusicStop2");
-                    std::cout << "Game is: " << (_isOffline == false ? "Online" : "Offline") << std::endl;
                     if (_isOffline == false) {
                         this->sendStateChange(3);
                     } else { // Notify the mediator to start the game offline

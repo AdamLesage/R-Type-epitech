@@ -60,7 +60,8 @@ void RType::RTypeOffline::handleOfflineGame() {
 void RType::RTypeOffline::handleProjectile() {
     // Iterate in reverse to avoid indexing issues when removing elements
     for (int i = this->_camera->listEntityToDisplay.size() - 1; i >= 0; i--) {
-        if (this->isEntityAProjectile(this->_camera->listEntityToDisplay[i])) {
+        if (this->isEntityAProjectile(this->_camera->listEntityToDisplay[i])
+            || this->isEntityAnEnemyProjectile(this->_camera->listEntityToDisplay[i])) {
             EntityRenderInfo& projectile = this->_camera->listEntityToDisplay[i];
 
             // Move projectile
@@ -75,15 +76,19 @@ void RType::RTypeOffline::handleProjectile() {
 
                 // Check if the projectile intersects with the target entity
                 if (isCollision(projectile, target)) {
-                    if (this->isEntityAPlayer(target) && this->isEntityAnEnemyProjectile(projectile) == true) {
+                    if (this->isEntityAPlayer(target)
+                        && this->isEntityAnEnemyProjectile(projectile) == true) {
                         this->gameOver();
                         return;
                     }
 
                     // Handle collision (e.g., remove projectile and affect target if it's an enemy)
-                    if (this->isEntityAnEnemy(target) && this->isEntityAnEnemyProjectile(projectile) == false) {
-                        this->_camera->listEntityToDisplay.erase(this->_camera->listEntityToDisplay.begin() + i);
-                        this->_camera->listEntityToDisplay.erase(this->_camera->listEntityToDisplay.begin() + j);
+                    if (this->isEntityAnEnemy(target)
+                        && this->isEntityAnEnemyProjectile(projectile) == false) {
+                        this->_camera->listEntityToDisplay.erase(this->_camera->listEntityToDisplay.begin()
+                                                                 + i);
+                        this->_camera->listEntityToDisplay.erase(this->_camera->listEntityToDisplay.begin()
+                                                                 + j);
                         break;
                     }
                 }
@@ -129,7 +134,6 @@ void RType::RTypeOffline::handleCollisions() {
         }
     }
 }
-
 
 void RType::RTypeOffline::jump() {
     return;
@@ -312,13 +316,13 @@ void RType::RTypeOffline::handleEnemies() {
 void RType::RTypeOffline::createEnemyProjectile(EntityRenderInfo enemyShooter) {
     EntityRenderInfo enemyProjectile;
     enemyProjectile.position.x = enemyShooter.position.x + enemyShooter.size.x / 2;
-    enemyProjectile.position.y = enemyShooter.position.y - enemyShooter.size.y / 2;
+    enemyProjectile.position.y = enemyShooter.position.y + enemyShooter.size.y / 2;
     enemyProjectile.size       = {150, 100};
     enemyProjectile.sprite.spritePath =
         std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_2.png";
     enemyProjectile.sprite.rectPos  = {0, 0};
     enemyProjectile.sprite.rectSize = {100, 100};
-    enemyProjectile.direction.x     = -4;
+    enemyProjectile.direction.x     = -3;
     enemyProjectile.direction.y     = 0;
     this->_camera->listEntityToDisplay.push_back(enemyProjectile);
 }

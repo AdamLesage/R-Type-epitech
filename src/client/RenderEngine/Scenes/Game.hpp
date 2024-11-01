@@ -142,7 +142,6 @@ namespace RType {
                 if (_gameSelected == "Platformer") {
                     _currentGame = std::make_shared<DoodleJumpOffline>();
                 } else if (_gameSelected == "R-Type") {
-                    std::cout << "create rtype game offline\n";
                     _currentGame = std::make_shared<RTypeOffline>();
                 }
             }
