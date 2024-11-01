@@ -118,6 +118,10 @@ class Systems {
          */
         void wave_pattern_system(Registry& reg, RType::Logger& logger);
 
+        void wave1(Registry& reg, std::unique_ptr<NetworkSender>& networkSender, int j);
+        void wave2(Registry& reg, std::unique_ptr<NetworkSender>& networkSender, int j);
+        void wave3(Registry& reg, std::unique_ptr<NetworkSender>& networkSender, int j);
+
         /**
          * @brief Update the direction of all entities based on their velocity.
          *
