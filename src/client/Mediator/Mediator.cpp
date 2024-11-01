@@ -226,6 +226,10 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
                 this->_renderingEngine->setStateGame(2);
                 /* code */
                 break;
+            case -1: {
+                this->_renderingEngine->setStateGame(-1);
+                break;
+            }
             case 3: {
                 if (_gameSelected == "R-Type") {
                     char data[5];
