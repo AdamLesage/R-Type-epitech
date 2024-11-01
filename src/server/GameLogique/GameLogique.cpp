@@ -8,12 +8,12 @@
 #include "GameLogique.hpp"
 
 GameLogique::GameLogique(size_t port, int _frequency) {
-    this->network        = std::make_shared<NetworkLib::Server>(port);
-    this->_networkSender = std::make_unique<NetworkSender>(this->network);
-    this->receiverThread = std::thread(&GameLogique::handleRecieve, this);
+    this->network                   = std::make_shared<NetworkLib::Server>(port);
+    this->_networkSender            = std::make_unique<NetworkSender>(this->network);
+    this->receiverThread            = std::thread(&GameLogique::handleRecieve, this);
     this->connectionManagmentThread = std::thread(&GameLogique::handleClientConnection, this);
-    this->running        = false;
-    this->frequency      = _frequency;
+    this->running                   = false;
+    this->frequency                 = _frequency;
     this->reg.register_component<Position>();
     this->reg.register_component<Velocity>();
     this->reg.register_component<Tag>();
@@ -36,7 +36,8 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<Clone>();
 
     try {
-        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type") + PATH_SEPARATOR + std::string("game_config.cfg");
+        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type")
+                                     + PATH_SEPARATOR + std::string("game_config.cfg");
         _gameConfig.readFile(gameConfigPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
@@ -52,14 +53,13 @@ GameLogique::~GameLogique() {
     connectionManagmentThread.join();
 }
 
-void GameLogique::updateLevelConfig()
-{
+void GameLogique::updateLevelConfig() {
     try {
-        libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
+        libconfig::Setting& levels  = this->_gameConfig.lookup("Menu.Game.level");
         std::string levelConfigPath = levels[this->_currentLevel].lookup("sceneConfig");
-        size_t startPos = 0;
-        std::string from = "/";
-        while((startPos = levelConfigPath.find(from, startPos)) != std::string::npos) {
+        size_t startPos             = 0;
+        std::string from            = "/";
+        while ((startPos = levelConfigPath.find(from, startPos)) != std::string::npos) {
             levelConfigPath.replace(startPos, from.length(), PATH_SEPARATOR);
             startPos += 2;
         }
@@ -84,7 +84,7 @@ void GameLogique::startGame(int idEntity) {
 }
 
 void GameLogique::spawnCustomEntity(char type, float position_x, float position_y, size_t entity) {
-    std::shared_ptr<EntityData> &entityData = this->assetEditorParsing->getEntityData(type);
+    std::shared_ptr<EntityData>& entityData = this->assetEditorParsing->getEntityData(type);
     if (entity == 1000000000) {
         entity = this->reg.spawn_entity();
     }
@@ -93,22 +93,31 @@ void GameLogique::spawnCustomEntity(char type, float position_x, float position_
     this->reg.add_component<Velocity>(entity, Velocity{0, 0});
     this->reg.add_component<Damage>(entity, Damage{20});
     if (entityData->health != nullptr) {
-        this->reg.add_component<Health>(entity, Health{entityData->health->health, entityData->health->maxHealth, false, true});
+        this->reg.add_component<Health>(
+            entity, Health{entityData->health->health, entityData->health->maxHealth, false, true});
     }
     if (entityData->playerFollowingPattern != nullptr) {
-        this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{entityData->playerFollowingPattern->speed});
+        this->reg.add_component<PlayerFollowingPattern>(
+            entity, PlayerFollowingPattern{entityData->playerFollowingPattern->speed});
     }
     if (entityData->straightLinePattern != nullptr) {
-        this->reg.add_component<StraightLinePattern>(entity, StraightLinePattern{entityData->straightLinePattern->speed});
+        this->reg.add_component<StraightLinePattern>(
+            entity, StraightLinePattern{entityData->straightLinePattern->speed});
     }
     if (entityData->shootPlayerPattern != nullptr) {
-        this->reg.add_component<ShootPlayerPattern>(entity, ShootPlayerPattern{entityData->shootPlayerPattern->projectileSpeed, entityData->shootPlayerPattern->shootCooldown, entityData->shootPlayerPattern->lastShotTime});
+        this->reg.add_component<ShootPlayerPattern>(
+            entity, ShootPlayerPattern{entityData->shootPlayerPattern->projectileSpeed,
+                                       entityData->shootPlayerPattern->shootCooldown,
+                                       entityData->shootPlayerPattern->lastShotTime});
     }
     if (entityData->shootStraightPattern != nullptr) {
-        this->reg.add_component<ShootStraightPattern>(entity, ShootStraightPattern{2.0, 2.0, entityData->shootStraightPattern->lastShotTime});
+        this->reg.add_component<ShootStraightPattern>(
+            entity, ShootStraightPattern{2.0, 2.0, entityData->shootStraightPattern->lastShotTime});
     }
     if (entityData->WavePattern != nullptr) {
-        this->reg.add_component<Wave_pattern>(entity, Wave_pattern{entityData->WavePattern->amplitude, entityData->WavePattern->frequency, std::chrono::steady_clock::now()});
+        this->reg.add_component<Wave_pattern>(entity, Wave_pattern{entityData->WavePattern->amplitude,
+                                                                   entityData->WavePattern->frequency,
+                                                                   std::chrono::steady_clock::now()});
     }
     if (entityData->size != nullptr) {
         this->reg.add_component<Size>(entity, Size{entityData->size->x, entityData->size->y});
@@ -121,7 +130,7 @@ void GameLogique::spawnCustomEntity(char type, float position_x, float position_
 void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     {
         std::lock_guard<std::mutex> lock(this->_mutex);
-        
+
         size_t entity = this->reg.spawn_entity();
 
         switch (type) {
@@ -141,7 +150,8 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Velocity>(entity, Velocity{-1, 0});
             this->reg.add_component<Health>(entity, Health{100, 100, false, true});
             this->reg.add_component<Damage>(entity, Damage{20});
-            this->reg.add_component<Wave_pattern>(entity, Wave_pattern{1.f, 0.02f, std::chrono::steady_clock::now()});
+            this->reg.add_component<Wave_pattern>(entity,
+                                                  Wave_pattern{1.f, 0.02f, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
@@ -165,7 +175,8 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
         default:
-            std::map<uint8_t, std::shared_ptr<EntityData>> &entities = this->assetEditorParsing->getEntities();
+            std::map<uint8_t, std::shared_ptr<EntityData>>& entities =
+                this->assetEditorParsing->getEntities();
 
             std::vector<std::map<uint8_t, std::shared_ptr<EntityData>>::iterator> validEntities;
             std::vector<std::map<uint8_t, std::shared_ptr<EntityData>>::iterator> staticEntities;
@@ -184,11 +195,22 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
                 this->spawnCustomEntity(selectedIt->first, position_x, position_y, entity);
                 selectedIt->second->number -= 1;
             } else {
-                ennemyAlive = false;
+                bool enemyExists = false; // check if there is still an enemy 
+                for (auto& types : reg.get_components<Type>()) {
+                    if (types && types->type == EntityType::ENEMY) {
+                        enemyExists = true;
+                        ennemyAlive = enemyExists;
+                        break;
+                    }
+                }
                 this->_networkSender->sendCreateEnemy(0x03, entity, position_x, position_y);
-                return;
+
+                if (!enemyExists) {
+                    ennemyAlive = false;
+                    return;
+                }
             }
-            for (auto &it : staticEntities) {
+            for (auto& it : staticEntities) {
                 if (it->second->pos != nullptr && it->second->pos->x < this->_camera_x) {
                     this->spawnCustomEntity(type, 1800, it->second->pos->y, 1000000000);
                     it->second->number = 0;
@@ -259,8 +281,7 @@ void GameLogique::spawnBonus(char type, float position_x, float position_y) {
     }
 }
 
-void GameLogique::spawnWave()
-{
+void GameLogique::spawnWave() {
     spawnEnnemy(0x03, 1920, 10);
     spawnEnnemy(0x03, 1920, 160);
     spawnEnnemy(0x03, 1920, 360);
@@ -339,7 +360,7 @@ void GameLogique::runGame() {
                 this->clearGame();
                 sleep(1);
                 this->_networkSender->sendStateChange(1, 0x04);
-                this->running = false;
+                this->running       = false;
                 this->_currentLevel = 0;
                 this->_networkSender->sendLevelUpdate(this->_currentLevel);
                 this->updateLevelConfig();
@@ -349,7 +370,7 @@ void GameLogique::runGame() {
             if (ennemyAlive == false) {
                 this->handleChangeLevel(_currentLevel + 1);
             }
-        } 
+        }
     }
 }
 
@@ -357,7 +378,7 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
     clearGame();
     ennemyAlive = true;
     try {
-        libconfig::Setting &levels = this->_gameConfig.lookup("Menu.Game.level");
+        libconfig::Setting& levels = this->_gameConfig.lookup("Menu.Game.level");
         if (newLevel >= (unsigned int)levels.getLength()) {
             this->running = false;
             sleep(1);
@@ -370,13 +391,12 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
         this->_networkSender->sendLevelUpdate(newLevel);
         this->_currentLevel = newLevel;
         this->updateLevelConfig();
-    } catch (std::exception &e) {
+    } catch (std::exception& e) {
         std::cerr << "failed to load level" << std::endl;
     }
 }
 
-bool GameLogique::areAllPlayersDead()
-{
+bool GameLogique::areAllPlayersDead() {
     bool anyPlayerDead = true;
 
     for (auto& player : reg.get_components<Type>()) {
@@ -388,10 +408,10 @@ bool GameLogique::areAllPlayersDead()
 }
 
 void GameLogique::clearGame() {
-    auto& types  = reg.get_components<Type>();
+    auto& types = reg.get_components<Type>();
 
     for (size_t i = 0; i < types.size(); ++i) {
-        auto &type = types[i];
+        auto& type = types[i];
         usleep(1000);
         if (type) {
             this->_networkSender->sendDeleteEntity(i);
@@ -416,7 +436,6 @@ void GameLogique::clearGame() {
         this->playersId[numberPlayer] = entity;
         usleep(1000);
     }
-    
 }
 
 std::array<char, 6> GameLogique::retrieveInputKeys() {
@@ -461,7 +480,8 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
 
     auto& velocities = reg.get_components<Velocity_s>();
     auto& types      = reg.get_components<Type>();
-    if ((unsigned int)velocities.size() <= this->playersId[message.second] && this->playersId[message.second] <= (unsigned int)types.size()) {
+    if ((unsigned int)velocities.size() <= this->playersId[message.second]
+        && this->playersId[message.second] <= (unsigned int)types.size()) {
         std::cerr << "Invalid entity ID: " << this->playersId[message.second] << std::endl;
         return;
     }
@@ -526,7 +546,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x45: {
-                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                auto& playerHealth = reg.get_components<Health_s>()[message.second];
                 if (message.first[1] == 0x01) {
                     playerHealth->isDamageable = false;
                 }
@@ -538,7 +558,7 @@ void GameLogique::handleRecieve() {
             case 0x46: {
                 float value;
                 std::memcpy(&value, &message.first[1], sizeof(float));
-                auto& speed  = reg.get_components<ShootingSpeed_s>();
+                auto& speed                           = reg.get_components<ShootingSpeed_s>();
                 speed[message.second]->shooting_speed = value;
                 break;
             }
@@ -546,16 +566,16 @@ void GameLogique::handleRecieve() {
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
-                auto& position  = reg.get_components<Position_s>()[message.second];
-                position->x = pos_x;
-                position->y = pos_y;
+                auto& position = reg.get_components<Position_s>()[message.second];
+                position->x    = pos_x;
+                position->y    = pos_y;
                 _networkSender->sendPositionUpdate(message.second, pos_x, pos_y);
                 break;
             }
             case 0x48: {
                 int value;
                 std::memcpy(&value, &message.first[1], sizeof(int));
-                auto &playerHealth = reg.get_components<Health_s>()[message.second];
+                auto& playerHealth   = reg.get_components<Health_s>()[message.second];
                 playerHealth->health = value;
                 break;
             }
@@ -567,10 +587,8 @@ void GameLogique::handleRecieve() {
     }
 }
 
-void GameLogique::handleClientConnection()
-{
-    while (1)
-    {
+void GameLogique::handleClientConnection() {
+    while (1) {
         if (network->hasNewClientConnected()) {
             size_t clientId = network->popNewConnectedClient();
             {
@@ -592,28 +610,31 @@ void GameLogique::handleClientConnection()
                     this->playersId[clientId] = entity;
                 }
 
-                auto& positions  = reg.get_components<Position_s>();
-                auto& types  = reg.get_components<Type>();
+                auto& positions = reg.get_components<Position_s>();
+                auto& types     = reg.get_components<Type>();
 
                 for (size_t i = 0; i < positions.size() && i < types.size(); ++i) {
-                    auto &position = positions[i];
-                    auto &type = types[i];
+                    auto& position = positions[i];
+                    auto& type     = types[i];
                     if (type && position && (i != clientId || running)) {
                         switch (type->type) {
-                            case EntityType::ENEMY:
-                                this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y, clientId);
-                                break;
-                            case EntityType::PLAYER:
-                                this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
-                                break;
-                            case EntityType::PLAYER_PROJECTILE:
-                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
-                                break;
-                            case EntityType::ENEMY_PROJECTILE:
-                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
-                                break;
-                            default:
-                                break;
+                        case EntityType::ENEMY:
+                            this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y,
+                                                                  clientId);
+                            break;
+                        case EntityType::PLAYER:
+                            this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
+                            break;
+                        case EntityType::PLAYER_PROJECTILE:
+                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
+                                                                      clientId);
+                            break;
+                        case EntityType::ENEMY_PROJECTILE:
+                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
+                                                                      clientId);
+                            break;
+                        default:
+                            break;
                         }
                     }
                 }
