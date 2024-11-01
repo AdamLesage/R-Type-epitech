@@ -38,6 +38,8 @@ void RType::RTypeOffline::handleOfflineGame()
         entity.direction.y = 0;
         this->_camera->listEntityToDisplay.push_back(entity);
     }
+
+    
 }
 
 void RType::RTypeOffline::jump()

@@ -2,7 +2,8 @@
 
 RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window), selectedOption(0) {
     this->window         = _window;
-    music = false;
+    this->_isOffline     = false;
+    music                = false;
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
@@ -59,23 +60,33 @@ RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window)
         std::cerr << e.what() << std::endl;
         exit(84);
     }
-    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[0].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Deuteranopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Protanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[1].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Protanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading protanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Tritanopia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[2].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Tritanopia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading tritanopia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Achromatopsia_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[3].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Achromatopsia_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading achromatopsia shader" << std::endl;
         return;
     }
-    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + "Normal_shader.frag", sf::Shader::Fragment)) {
+    if (!colorblindShader[4].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR
+                                              + "Normal_shader.frag",
+                                          sf::Shader::Fragment)) {
         std::cerr << "Error loading normal shader" << std::endl;
         return;
     }
@@ -111,10 +122,8 @@ void RType::Lobby::setVolume(float number) {
 }
 
 void RType::Lobby::adjustVolume(bool increase) {
-    if (increase)
-        _mediator->notify("RenderingEngine", "adjustVolume2 True");
-    if (!increase)
-        _mediator->notify("RenderingEngine", "adjustVolume2 False");
+    if (increase) _mediator->notify("RenderingEngine", "adjustVolume2 True");
+    if (!increase) _mediator->notify("RenderingEngine", "adjustVolume2 False");
 }
 
 void RType::Lobby::handleKeyPress(const sf::Event& event) {
@@ -190,8 +199,7 @@ void RType::Lobby::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
-void RType::Lobby::displayConnectedPlayer()
-{
+void RType::Lobby::displayConnectedPlayer() {
     float totalHeight      = window->getSize().y;
     float playerAreaHeight = 500;
     float playerStartY     = (totalHeight - playerAreaHeight) / 2.0f;
@@ -204,10 +212,13 @@ void RType::Lobby::displayConnectedPlayer()
             std::cerr << e.what() << std::endl;
         }
         playerSprites[i].setTexture(playerTextures[i]);
-        playerSprites[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1], _camera->listEntityToDisplay[i].sprite.rectSize[0],  _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+        playerSprites[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
+                                                    _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                                                    _camera->listEntityToDisplay[i].sprite.rectSize[0],
+                                                    _camera->listEntityToDisplay[i].sprite.rectSize[1]));
         playerSprites[i].setScale(0.7, 0.7);
         float verticalSpacing = 100;
-        float currentY = playerStartY + i * verticalSpacing;
+        float currentY        = playerStartY + i * verticalSpacing;
         playersNames[i].setPosition(window->getSize().x / 3.0f, currentY);
         playerSprites[i].setPosition((window->getSize().x / 3.0f) + 200, currentY - 10);
         RenderTexture.draw(playersNames[i]);
@@ -215,7 +226,7 @@ void RType::Lobby::displayConnectedPlayer()
     }
 }
 
-void RType::Lobby::runScene(float &latency) {
+void RType::Lobby::runScene(float& latency) {
     (void)latency;
     if (!window) {
         std::cerr << "Error: window is null" << std::endl;
@@ -244,8 +255,12 @@ void RType::Lobby::runScene(float &latency) {
                 switch (getSelectedOption()) {
                 case 0: // Start game
                     this->_mediator->notify("Mediator", "backgroundMusicStop2");
-                    if (_gameSelected == "R-Type") this->sendStateChange(3); // Send to server to start the game because it is the only online game
-                    else this->_mediator->notify("RenderingEngine", "Start offline game"); // Notify the mediator to start the game
+                    std::cout << "Game is: " << (_isOffline == false ? "Online" : "Offline") << std::endl;
+                    if (_isOffline == false) {
+                        this->sendStateChange(3);
+                    } else { // Notify the mediator to start the game offline
+                        this->_mediator->notify("RenderingEngine", "Start offline game");
+                    }
                     break;
                 case 1:
                     settings->displaySettings(false);

@@ -157,11 +157,11 @@ namespace RType {
              * @author Adam Lesage
              */
             void setOfflineMode(bool isOffline) {
-                std::cout << "Setting online mode" << std::endl;
-                std::cout << "mode: " << (isOffline ? "offline" : "online") << std::endl;
-                _isOffline = isOffline;
-                std::cout << "online mode set to " << (isOffline ? "offline" : "online") << std::endl;
+                _isGameOffline = isOffline;
             }
+
+        protected:
+            bool _isGameOffline;
 
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
@@ -218,8 +218,7 @@ namespace RType {
              * find a new entity but just when we find one that is not in our map
              */
             std::unordered_map<std::string, sf::Texture*> Textures; // a map that will stock the textures
-            bool isShooting; // A boolean to know if the player is shooting
-            sf::Font font;   // The font used for the game
+            sf::Font font;                                          // The font used for the game
             std::shared_ptr<std::mutex> _mutex;
             bool piou = false; // A boolean to know wd need to display the piou sound
             std::shared_ptr<sf::RenderTexture> RenderTexture; // The render texture
@@ -230,7 +229,6 @@ namespace RType {
             size_t _level;
             GameMetrics metrics;
             Toolbar toolbar;
-            bool _isOffline = false;
     };
 } // namespace RType
 

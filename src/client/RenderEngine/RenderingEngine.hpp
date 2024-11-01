@@ -108,6 +108,7 @@ namespace RType {
             Logger logger;
             int _stateGame = 1;
             std::string _gameSelected;
+            bool _isOffline;
     };
 } // namespace RType
 

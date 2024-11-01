@@ -16,7 +16,6 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
 {
     this->window         = _window;
     this->_mediator      = nullptr;
-    isShooting = false;
 
     try {
         _cfg.readFile(scenePath.c_str());
@@ -67,7 +66,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     RenderTexture->create(1920, 1080);
     BackgroundClock.restart();
     _camera = std::make_shared<Camera>();
-    _isOffline = false;
+    _isGameOffline = false;
 
     if (_gameSelected == "Platformer") _currentGame = std::make_shared<DoodleJumpOffline>();
     else if (_gameSelected == "R-Type") _currentGame = std::make_shared<RTypeOffline>();
@@ -406,12 +405,12 @@ bool RType::Game::haveCinematic() {
 }
 
 bool RType::Game::isGameOffline() {
-    // if (_isOffline == true) {
-    //     return true;
-    // } else if (_isOffline == false && _gameSelected == "Platformer") { // Platformer can only be played offline
-    //     return true;
-    // } else {
-    //     return false;
-    // }
+    if (_isGameOffline == true) {
+        return true;
+    } else if (_isGameOffline == false && _gameSelected == "Platformer") { // Platformer can only be played offline
+        return true;
+    } else {
+        return false;
+    }
     return false;
 }

@@ -95,6 +95,7 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         return;
     }
     if (event == "Start offline game") {
+        std::cout << "starting offline\n";
         this->_renderingEngine->setStateGame(3); // Start the game
         return;
     }

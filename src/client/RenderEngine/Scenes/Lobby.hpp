@@ -109,6 +109,17 @@ namespace RType {
              */
             void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
 
+            /**
+             * @brief Tell to the game is current selection if online or offline
+             *
+             * @param isOffline True: Offline game, False: Online game
+             * @return void
+             * @author Adam Lesage
+             */
+            void setOfflineMode(bool isOffline) {
+                _isOffline = isOffline;
+            }
+
         protected:
             std::shared_ptr<sf::RenderWindow> window; // The window to display the Lobby on.
             int selectedOption; // The selected option
@@ -131,6 +142,7 @@ namespace RType {
             std::string _gameSelected; // The game selected
             float backgroundMusicVolume; // The volume of the background music
             bool music;
+            bool _isOffline;
         private:
             /**
              * @brief Displays the connected Player

@@ -40,6 +40,9 @@ void RType::RenderingEngine::run() {
     this->_settings->setMediator(_mediator);
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
+    this->_game->setOfflineMode(_isOffline);
+    std::cout << "Game is: " << (_isOffline == false ? "Online" : "Offline") << std::endl;
+    this->_lobby->setOfflineMode(_isOffline);
 
     this->_game->setMutex(_mutex);
     this->_lobby->setMutex(_mutex);
@@ -100,7 +103,7 @@ void RType::RenderingEngine::setLevel(size_t level) {
 
 void RType::RenderingEngine::setOfflineMode(bool isOffline)
 {
-    this->_game->setOfflineMode(isOffline);
+    this->_isOffline = isOffline;
 }
 
 extern "C" RType::RenderingEngine* entryPointRenderingEngine() {
