@@ -41,7 +41,6 @@ void RType::RenderingEngine::run() {
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
     this->_game->setOfflineMode(_isOffline);
-    std::cout << "Game is: " << (_isOffline == false ? "Online" : "Offline") << std::endl;
     this->_lobby->setOfflineMode(_isOffline);
 
     this->_game->setMutex(_mutex);
@@ -86,6 +85,11 @@ void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex) {
 }
 
 void RType::RenderingEngine::setLatency(float latency) {
+    // if game is offline, no need to show latency
+    if (_isOffline == true) {
+        _latency = 0;
+        return;
+    }
     _latency = latency;
 }
 

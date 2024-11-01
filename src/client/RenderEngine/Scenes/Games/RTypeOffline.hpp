@@ -51,6 +51,12 @@ namespace RType {
             void handleInput() override;
 
             /**
+             * @brief Manage projectile, move their positions according to their directions
+             * @author Adam Lesage
+             */
+            void handleProjectile();
+
+            /**
              * @brief Check if entity given has sprite of player
              *
              * @param currentEntity Entity to check if it is a player
@@ -59,8 +65,27 @@ namespace RType {
              */
             bool isEntityAPlayer(EntityRenderInfo currentEntity) const;
 
+            /**
+             * @brief Check if entity given has sprite of projectile
+             *
+             * @param currentEntity Entity to check if it is a projectile
+             * @return True if entity is a projectile otherwise false if entity is something else than a
+             * projectile
+             * @author Adam Lesage
+             */
+            bool isEntityAProjectile(EntityRenderInfo currentEntity) const;
+
+            /**
+             * @brief browse list of entities until player is found
+             *
+             * @return Current instance of the player in camera
+             * @author Adam Lesage
+             */
+            EntityRenderInfo getPlayerFromCamera() const;
+
         protected:
         private:
+            sf::Clock _shootClock;
     };
 } // namespace RType
 
