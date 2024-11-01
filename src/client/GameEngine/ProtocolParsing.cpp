@@ -182,6 +182,9 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
             _registry.add_component<Type>(entity, Type{data->type->type});
         }
         _registry.add_component<Direction>(entity, Direction{-1, 0});
+        if (data->health != nullptr) {
+            _registry.add_component<Health>(entity, Health{data->health->health, data->health->health, false, true});
+        }
 
         this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception& e) {
@@ -220,6 +223,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
 
         std::string path;
         auto parentTag = _registry.get_components<Tag>()[projectileId];
@@ -269,6 +273,7 @@ bool RType::ProtocolParsing::parseMissileCreation(const std::string& message, in
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
 
         std::string path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "rocket_player.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {165, 66}, {0, 0}});
@@ -309,6 +314,7 @@ bool RType::ProtocolParsing::parseBigMissileCreation(const std::string& message,
         _registry.add_component<Size>(entity, Size{240, 160});
         _registry.add_component<Direction>(entity, Direction{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
 
         std::string path;
         auto parentTag = _registry.get_components<Tag>()[projectileId];
@@ -396,6 +402,7 @@ bool RType::ProtocolParsing::parseShieldCreation(const std::string& message, int
         _registry.add_component<Tag>(entity, Tag{"bonus"});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "shield_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
         this->updateIndexFromBinaryData("shield_creation", index);
@@ -441,6 +448,7 @@ bool RType::ProtocolParsing::parseMachinegunCreation(const std::string& message,
         _registry.add_component<Tag>(entity, Tag{"bonus"});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "machinegun_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
         std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
@@ -486,6 +494,7 @@ bool RType::ProtocolParsing::parseRocketCreation(const std::string& message, int
         _registry.add_component<Tag>(entity, Tag{"bonus"});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "rocket_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
         std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
@@ -531,6 +540,7 @@ bool RType::ProtocolParsing::parseBeamCreation(const std::string& message, int& 
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Tag>(entity, Tag{"bonus"});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
         path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "beam_bonus.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
         std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
@@ -615,6 +625,7 @@ bool RType::ProtocolParsing::parseRewardCreation(const std::string& message, int
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
         this->updateIndexFromBinaryData("reward_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the reward" << std::endl;
