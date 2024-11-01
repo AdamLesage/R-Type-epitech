@@ -13,6 +13,7 @@
 #include "./Error/DLError.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
+#define NOMINMAX
 #include <windows.h>
 #else
 #include <dlfcn.h>

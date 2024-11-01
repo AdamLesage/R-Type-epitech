@@ -10,6 +10,11 @@
 #include <sstream>
 #include <iomanip>
 
+#ifdef _WIN32
+    PDH_HQUERY cpuQuery;
+    PDH_HCOUNTER cpuTotal;
+#endif
+
 GameMetrics::GameMetrics()
 {
 #ifdef _WIN32
@@ -167,7 +172,7 @@ void GameMetrics::displayCPU(sf::RenderWindow& window)
              std::stringstream ss;
             ss << std::fixed << std::setprecision(2) << counterVal.doubleValue;
             std::string cpuUsage = "CPU Usage: " + ss.str() + " %";
-            text.setString(cpuUSage);
+            text.setString(cpuUsage);
         }
     } else {
         text.setString("Failed to retrieve CPU usage.");
