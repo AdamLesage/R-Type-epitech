@@ -198,8 +198,8 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
                 selectedIt->second->number -= 1;
             } else {
                 bool enemyExists = false; // check if there is still an enemy 
-                for (auto& type : reg.get_components<Type>()) {
-                    if (type && type->type == EntityType::ENEMY) {
+                for (auto& types : reg.get_components<Type>()) {
+                    if (types && types->type == EntityType::ENEMY) {
                         enemyExists = true;
                         ennemyAlive = enemyExists;
                         break;
