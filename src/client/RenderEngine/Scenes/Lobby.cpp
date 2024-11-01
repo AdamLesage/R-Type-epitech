@@ -202,6 +202,7 @@ void RType::Lobby::displayConnectedPlayer()
             }
         } catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
+            return;
         }
         playerSprites[i].setTexture(playerTextures[i]);
         playerSprites[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0], _camera->listEntityToDisplay[i].sprite.rectPos[1], _camera->listEntityToDisplay[i].sprite.rectSize[0],  _camera->listEntityToDisplay[i].sprite.rectSize[1]));
@@ -264,6 +265,7 @@ void RType::Lobby::runScene(float &latency) {
     }
 
     window->clear();
+    RenderTexture.clear();
     RenderTexture.draw(background);
     RenderTexture.draw(logoSprite);
 

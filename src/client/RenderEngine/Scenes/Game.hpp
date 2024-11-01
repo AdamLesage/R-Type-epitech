@@ -146,7 +146,7 @@ namespace RType {
              *
              * @param win the window to display the health texts on
              */
-            void displayEntitiesHealth(sf::RenderWindow& win);
+            void displayEntitiesHealth(std::shared_ptr<sf::RenderTexture> renderTexture);
 
         private:
             std::unique_ptr<sf::Clock> cinematicsClock;
@@ -156,6 +156,10 @@ namespace RType {
             sf::Clock BackgroundClock;
             bool animationComplete;
             std::string _gameSelected;
+
+
+            sf::RectangleShape rectangleshape;
+            sf::Texture texture;
             /**
              * @brief Handles the events of the game.
              *
@@ -178,7 +182,7 @@ namespace RType {
              * @return true If the texture was loaded successfully.
              * @return false If the texture failed to load.
              */
-            bool loadFrameTexture(sf::Texture& texture, sf::RectangleShape& shape);
+            bool loadFrameTexture();
             /**
              * @brief Loads the Backround for the current level setting
              *

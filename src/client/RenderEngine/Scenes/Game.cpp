@@ -145,7 +145,7 @@ void RType::Game::DisplaySkipIntro() {
     skipIntro.setPosition(1920 / 2 - 200, 1080 - 100);
     RenderTexture->draw(skipIntro);
 }
-
+#include <unistd.h>
 void RType::Game::play(float &latency) {
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) window->close();
@@ -164,67 +164,73 @@ void RType::Game::play(float &latency) {
 
     _systems.control_system(_registry, *window.get(), _mediator, std::bind(&RType::Game::ShootSound, this));
 
-    window->clear();
-    if (this->isGameOffline() == true) {
+
+    if (this->isGameOffline()) {
         _currentGame->setMediator(_mediator);
-        this->_currentGame->handleOfflineGame();
+        _currentGame->handleOfflineGame();
     }
 
-    // Move backgrounds
+    window->clear();
+    RenderTexture->clear();
     try {
         libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
-        for (size_t i = backgroundSettings.getLength() - 1; i > 0; i--) { // Browse backwards to have the same order than in the config file
+        
+        for (size_t i = 0; i < (size_t)backgroundSettings.getLength(); ++i) {
             int speedX = backgroundSettings[i]["movingSpeedX"];
             int speedY = backgroundSettings[i]["movingSpeedY"];
-
+            
             backgrounds[i].move(speedX, speedY);
-            if (backgrounds[i].getPosition().x < -1920) backgrounds[i].setPosition(1920, 0);
-            if (backgrounds[i].getPosition().x > 1920) backgrounds[i].setPosition(-1920, 0);
-            if (backgrounds[i].getPosition().y < -1080) backgrounds[i].setPosition(0, 1080);
-            if (backgrounds[i].getPosition().y > 1080) backgrounds[i].setPosition(0, -1080);
+            sf::Vector2f pos = backgrounds[i].getPosition();
+            if (pos.x < -1920) backgrounds[i].setPosition(1920, pos.y);
+            if (pos.x > 1920) backgrounds[i].setPosition(-1920, pos.y);
+            if (pos.y < -1080) backgrounds[i].setPosition(pos.x, 1080);
+            if (pos.y > 1080) backgrounds[i].setPosition(pos.x, -1080);
 
+            RenderTexture->draw(backgrounds[i]);
         }
-        BackgroundClock.restart();
     } catch (std::exception &e) {
-        std::cerr << "fail to load Game Backgounds" << std::endl;
+        std::cerr << "Failed to load game backgrounds: " << e.what() << std::endl;
     }
 
-    for (size_t i = 0; i < backgrounds.size(); i++) {
-        RenderTexture->draw(backgrounds[i]);
-    }
     this->set_texture();
-    for (int i = 0; i < (int)entity.size(); i++) {
-        RenderTexture->draw(entity[i]);
+    for (auto& ent : entity) {
+        RenderTexture->draw(ent);
     }
+
     if (piou) {
         displayPiou();
         piou = false;
     }
-    
-    RenderTexture->display();
+
     console->displayDeveloperConsole();
-    sf::Sprite sprite(RenderTexture->getTexture());
-    window->draw(sprite);
+    toolbar.draw(RenderTexture);
 
-    this->handleColorblind();
-
-    if (toolbar.showFps)
-        metrics.displayFPS(*window);
-    if (toolbar.showCpu)
-        metrics.displayCPU(*window);
-    if (toolbar.showMemory)
-        metrics.displayMemory(*window);
-    if (toolbar.showGpu)
-        metrics.displayGpuUsage(*window);
-    if (toolbar.showNetwork)
-        metrics.displayLatency(*window, latency);
+    if (toolbar.showFps) {
+        metrics.displayFPS(RenderTexture);
+    }   
+    if (toolbar.showCpu) {
+        metrics.displayCPU(RenderTexture);
+    }
+    if (toolbar.showMemory) {
+        metrics.displayMemory(RenderTexture);
+    }
+    if (toolbar.showGpu) {
+        metrics.displayGpuUsage(RenderTexture);
+    }
+    if (toolbar.showNetwork) {
+      metrics.displayLatency(RenderTexture, latency);
+    }
     if (toolbar.showPlayerPos) {
         sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
-        metrics.displayPlayerPosition(*window, pos);
+        metrics.displayPlayerPosition(RenderTexture, pos);
     }
-    toolbar.draw(*window);
-    displayEntitiesHealth(*window);
+    
+    displayEntitiesHealth(RenderTexture);
+    RenderTexture->display();
+    sf::Sprite sprite(RenderTexture->getTexture());
+    window->draw(sprite);
+    this->handleColorblind();
     window->display();
 }
 
@@ -284,9 +290,9 @@ void RType::Game::set_texture() {
                                                  _camera->listEntityToDisplay[i].sprite.rectSize[1]));
             entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
         } else { // If texture not loaded
-            sf::Texture* texture = new sf::Texture();
-            texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath);
-            Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, texture));
+            sf::Texture* _texture = new sf::Texture();
+            _texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath);
+            Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, _texture));
             entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
             entity[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
                                                  _camera->listEntityToDisplay[i].sprite.rectPos[1],
@@ -298,9 +304,6 @@ void RType::Game::set_texture() {
 }
 
 void RType::Game::runScene(float &latency) {
-    sf::RectangleShape rectangleshape;
-    sf::Texture texture;
-
     if (this->cinematicsClock == nullptr) {
         cinematicsClock = std::make_unique<sf::Clock>();
         console->setMediator(std::shared_ptr<IMediator>(this->_mediator));
@@ -317,30 +320,33 @@ void RType::Game::runScene(float &latency) {
             _mediator->notify("RenderingEngine", "game_launch_music_play");
         }
         if (cinematicsClock->getElapsedTime().asSeconds() > frameDuration) {
-            if (!loadFrameTexture(texture, rectangleshape)) {
+            if (!loadFrameTexture()) {
                 return;
             }
             cinematicsClock->restart();
         }
     }
 
-    window->clear();
     if (animationComplete || this->haveCinematic() == false) {
         _mediator->notify("RenderingEngine", "game_launch_music_stop");
         play(latency);
         return;
     } else if (animationComplete == false && this->haveCinematic() == true) {
+        handleEvents();
+        window->clear();
+        RenderTexture->clear();
         RenderTexture->draw(rectangleshape);
         this->DisplaySkipIntro();
+        RenderTexture->display();
     }
     if (piou) {
         displayPiou();
         piou = false;
     }
-    RenderTexture->display();
+    sf::Sprite sprite(RenderTexture->getTexture());
+    window->draw(sprite);
     this->handleColorblind();
     window->display();
-    handleEvents();
 }
 
 void RType::Game::handleEvents() {
@@ -355,7 +361,7 @@ void RType::Game::handleEvents() {
     }
 }
 
-bool RType::Game::loadFrameTexture(sf::Texture& texture, sf::RectangleShape& rectangleshape) {
+bool RType::Game::loadFrameTexture() {
     frameDuration = 1.0f / 12.0f;
     std::ostringstream oss;
     oss << "assets" << PATH_SEPARATOR << "game_launch" << PATH_SEPARATOR << "Sans titre (1)_" << std::setw(3)
@@ -412,7 +418,7 @@ bool RType::Game::isGameOffline() {
     return true;
 }
 
-void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
+void RType::Game::displayEntitiesHealth(std::shared_ptr<sf::RenderTexture> renderTexture) {
     if (_camera == nullptr) return;
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
@@ -430,7 +436,7 @@ void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
             hpText.setFillColor(sf::Color::White);
 
             hpText.setPosition(entityInfo.position.x, entityInfo.position.y - 20.0f);
-            win.draw(hpText);
+            renderTexture->draw(hpText);
         }
     }
 }

@@ -137,21 +137,21 @@ void Toolbar::displayMetrics(const std::string optionName)
     }
 }
 
-void Toolbar::draw(sf::RenderWindow& window)
+void Toolbar::draw(std::shared_ptr<sf::RenderTexture> renderTexture)
 {
     if (isVisible) {
-        window.draw(toolbarShape);
-        window.draw(text);
+        renderTexture->draw(toolbarShape);
+        renderTexture->draw(text);
     }
     if (dropdownOpen) {
-        window.draw(dropdownShape);
+        renderTexture->draw(dropdownShape);
         for (auto& [name, textOption] : menuOptions) {
             if (name == hoveredOpt) {
                 textOption.setFillColor(sf::Color::Red);
             } else {
                 textOption.setFillColor(sf::Color::White);
             }
-            window.draw(textOption);
+            renderTexture->draw(textOption);
         }
     }
 }

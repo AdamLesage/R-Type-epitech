@@ -13,6 +13,7 @@
 #include <map>
 #include <string>
 #include "GameMetrics.hpp"
+#include <memory>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -30,7 +31,7 @@ class Toolbar {
          * 
          * @param window window to draw-in.
          */
-        void draw(sf::RenderWindow& window);
+        void draw(std::shared_ptr<sf::RenderTexture> renderTexture);
 
         /**
          * @brief Draw the toolbar.

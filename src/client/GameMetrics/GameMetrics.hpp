@@ -13,6 +13,7 @@
     #include <fstream>
     #include <string>
     #include "../../shared/entities/Entity.hpp"
+    #include <memory>
     #ifdef _WIN32
     #define NOMINMAX
         #include <windows.h>
@@ -66,21 +67,21 @@ class GameMetrics {
          * 
          * @param window
          */
-        void displayFPS(sf::RenderWindow& window);
+        void displayFPS(std::shared_ptr<sf::RenderTexture> renderTexture);
 
         /**
          * @brief Display CPU information 
          * 
          * @param window
          */
-        void displayCPU(sf::RenderWindow& window);
+        void displayCPU(std::shared_ptr<sf::RenderTexture> renderTexture);
 
         /**
          * @brief Display Memory used
          * 
          * @param window
          */
-        void displayMemory(sf::RenderWindow& window);
+        void displayMemory(std::shared_ptr<sf::RenderTexture> renderTexture);
 
         /**
          * @brief Display player position
@@ -88,14 +89,14 @@ class GameMetrics {
          * @param window
          * @param pos
          */
-        void displayPlayerPosition(sf::RenderWindow& window, sf::Vector2f pos);
+        void displayPlayerPosition(std::shared_ptr<sf::RenderTexture> renderTexture, sf::Vector2f pos);
 
         /**
          * @brief Display GPU usage
          * 
          * @param window
          */
-        void displayGpuUsage(sf::RenderWindow& window);
+        void displayGpuUsage(std::shared_ptr<sf::RenderTexture> renderTexture);
 
         /**
          * @brief Display Latency
@@ -103,9 +104,10 @@ class GameMetrics {
          * @param window
          * @param latency
          */
-        void displayLatency(sf::RenderWindow& window, float& latency);
+        void displayLatency(std::shared_ptr<sf::RenderTexture> renderTexture, float& latency);
     private:
         std::size_t getMemoryUsage();
+        sf::Font font;
 };
 
 #endif /* !GAMEMETRICS_HPP_ */
