@@ -672,6 +672,7 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string& message, int
 
         // Check if the entity has a position component
         auto optionalPositionComponent = _registry.get_components<Position>()[entity];
+        this->updateIndexFromBinaryData("position_update", index);
         if (optionalPositionComponent.has_value()
             == false) { // If the entity doesn't have a position component, add it
             _registry.add_component<Position>(entity, Position{posX, posY});
@@ -681,7 +682,6 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string& message, int
         // Remove the old position component and add the new one to update the position
         _registry.remove_component<Position>(entity);
         _registry.add_component<Position>(entity, Position{posX, posY});
-        this->updateIndexFromBinaryData("position_update", index);
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found for position update" << std::endl;
         return false;

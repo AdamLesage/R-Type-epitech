@@ -14,6 +14,7 @@
     #include <string>
     #include "../../shared/entities/Entity.hpp"
     #ifdef _WIN32
+    #define NOMINMAX
         #include <windows.h>
         #include <psapi.h>
         #include <comdef.h>
@@ -31,8 +32,8 @@
     #endif
 
     #ifdef _WIN32
-        PDH_HQUERY cpuQuery;
-        PDH_HCOUNTER cpuTotal;
+        extern PDH_HQUERY cpuQuery;
+        extern PDH_HCOUNTER cpuTotal;
     #endif
 
     #if defined(_WIN32) || defined(_WIN64)
