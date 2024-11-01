@@ -22,8 +22,9 @@
 #include <mutex>
 
 #ifdef _WIN32
-#include <Windows.h>
-#define PATH_SEPARATOR "\\"
+    #define NOMINMAX
+    #include <windows.h>
+    #define PATH_SEPARATOR "\\"
 #else
 #include <unistd.h>
 #define PATH_SEPARATOR "/"

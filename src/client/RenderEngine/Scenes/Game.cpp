@@ -72,8 +72,6 @@ void RType::Game::loadBackgroundConfig(libconfig::Setting& levelSetting) {
     try {
         // Retrieve background paths from config file
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
-
-        // Resize backgroundTextures to match the number of backgrounds
         backgrounds.clear();
         backgroundTextures.clear();
         backgroundTextures.resize(backgroundSettings.getLength());
@@ -199,7 +197,11 @@ void RType::Game::play(float& latency) {
         displayPiou();
         piou = false;
     }
+    
     RenderTexture->display();
+    sf::Sprite sprite(RenderTexture->getTexture());
+    window->draw(sprite);
+
     this->handleColorblind();
 
     // Only display metrics if game is online
@@ -216,6 +218,7 @@ void RType::Game::play(float& latency) {
         console->displayDeveloperConsole();
         toolbar.draw(*window);
     }
+    displayEntitiesHealth(*window);
     window->display();
 }
 
@@ -405,3 +408,27 @@ bool RType::Game::isGameOffline() {
     }
     return false;
 }
+
+void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
+    if (_camera == nullptr) return;
+
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    sf::Font hpFont;
+    if (!hpFont.loadFromFile(fontPath)) {
+        return;
+    }
+
+    for (const auto& entityInfo : _camera->listEntityToDisplay) {
+        if (entityInfo.health.health > 0) {
+            sf::Text hpText;
+            hpText.setFont(hpFont);
+            hpText.setString(std::to_string(entityInfo.health.health) + "/" + std::to_string(entityInfo.health.maxHealth));
+            hpText.setCharacterSize(18);
+            hpText.setFillColor(sf::Color::White);
+
+            hpText.setPosition(entityInfo.position.x, entityInfo.position.y - 20.0f);
+            win.draw(hpText);
+        }
+    }
+}
+
