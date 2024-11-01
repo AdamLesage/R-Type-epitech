@@ -22,6 +22,7 @@
 #include "../shared/utils/Logger.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
+#define NOMINMAX
 #include <windows.h>
 #define LIB_EXTENSION ".dll"
 #define PATH_SEPARATOR "\\"
