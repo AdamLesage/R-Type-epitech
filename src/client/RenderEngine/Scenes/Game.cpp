@@ -61,9 +61,9 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
         throw std::runtime_error("Error loading shaders");
     }
     settings      = std::make_shared<Settings>(window);
-    console       = std::make_shared<Console>(window, RenderTexture);
     RenderTexture = std::make_shared<sf::RenderTexture>();
     RenderTexture->create(1920, 1080);
+    console       = std::make_shared<Console>(window, RenderTexture);
     BackgroundClock.restart();
     _camera = std::make_shared<Camera>();
     _currentGame = std::make_shared<DoodleJump>();
@@ -203,6 +203,7 @@ void RType::Game::play(float &latency) {
     }
     
     RenderTexture->display();
+    console->displayDeveloperConsole();
     sf::Sprite sprite(RenderTexture->getTexture());
     window->draw(sprite);
 
@@ -222,7 +223,6 @@ void RType::Game::play(float &latency) {
         sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
         metrics.displayPlayerPosition(*window, pos);
     }
-    console->displayDeveloperConsole();
     toolbar.draw(*window);
     displayEntitiesHealth(*window);
     window->display();
