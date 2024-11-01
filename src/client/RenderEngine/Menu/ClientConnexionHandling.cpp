@@ -311,7 +311,7 @@ void RType::ClientConnexionHandling::displayModeOffline() {
     if (buttonBounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         button.setFillColor(colorHover);
 
-        // Vérifie si le bouton est cliqué et que le délai est respecté
+        // If button is clicked and can be clicked
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickClock.getElapsedTime() > debounceTime) {
             _isOffline = !_isOffline;
             clickClock.restart();

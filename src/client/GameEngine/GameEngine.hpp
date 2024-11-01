@@ -22,11 +22,11 @@
 #include <mutex>
 
 #ifdef _WIN32
-    #include <Windows.h>
-    #define PATH_SEPARATOR "\\"
+#include <Windows.h>
+#define PATH_SEPARATOR "\\"
 #else
-    #include <unistd.h>
-    #define PATH_SEPARATOR "/"
+#include <unistd.h>
+#define PATH_SEPARATOR "/"
 #endif
 
 namespace RType {
@@ -83,11 +83,14 @@ namespace RType {
 
             /**
              * @brief Set the game selected by the client.
-             * 
+             *
              * @param gameSelected The game selected by the client.
              * @return void
+             * @author Adam Lesage
              */
-            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+            void setGameSelected(const std::string& gameSelected) {
+                _gameSelected = gameSelected;
+            }
 
         protected:
         private:

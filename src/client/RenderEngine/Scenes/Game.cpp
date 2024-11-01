@@ -403,9 +403,11 @@ bool RType::Game::haveCinematic() {
 }
 
 bool RType::Game::isGameOffline() {
-    // Need to fix this method to play offline with R-Type
-    if (_gameSelected == "R-Type") {
+    if (_isOffline == true) {
+        return true;
+    } else if (_isOffline == false && _gameSelected == "Platformer") { // Platformer can only be played offline
+        return true;
+    } else {
         return false;
     }
-    return true;
 }

@@ -136,7 +136,6 @@ namespace RType {
              * @brief Displays the connected Player
              */
             void displayConnectedPlayer();
-            Logger _logger;
     };
 
 } // namespace RType

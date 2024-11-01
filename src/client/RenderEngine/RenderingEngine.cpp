@@ -98,6 +98,11 @@ void RType::RenderingEngine::setLevel(size_t level) {
     }
 }
 
+void RType::RenderingEngine::setOfflineMode(bool isOffline) const
+{
+    this->_game->setOfflineMode(isOffline);
+}
+
 extern "C" RType::RenderingEngine* entryPointRenderingEngine() {
     return (new RType::RenderingEngine());
 }

@@ -77,6 +77,15 @@ namespace RType {
             void displayGameSelection();
 
             /**
+             * @brief display button to toggle mode offline
+             *
+             * Can click on button to toggle mode offline
+             *
+             * @author Adam Lesage
+             */
+            void displayModeOffline();
+
+            /**
              * @brief Retrieve the input text for the host
              *
              * @param event The event to retrieve
@@ -133,13 +142,14 @@ namespace RType {
             }
 
             /**
-             * @brief display button to toggle mode offline
+             * @brief Get the instance of _isOffline
              *
-             * Can click on button to toggle mode offline
-             *
+             * @return bool the value of the boolean _isOffline
              * @author Adam Lesage
              */
-            void displayModeOffline();
+            bool getOfflineSelection() const {
+                return _isOffline;
+            }
 
         protected:
         private:
