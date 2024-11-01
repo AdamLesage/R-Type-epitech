@@ -17,14 +17,13 @@
 
 #include "ClientConnexionHandling.hpp"
 
-RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsigned short server_port)
-{
+RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsigned short server_port) {
     _window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "R-Type");
     _window->setFramerateLimit(60);
-    _inputBoxSelected = "host";
+    _inputBoxSelected  = "host";
     _invalidPortOrHost = false;
-    _gameSelected = "R-Type";
-
+    _gameSelected      = "R-Type";
+    _isOffline         = false;
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     _font.loadFromFile(fontPath);
@@ -38,15 +37,12 @@ RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsign
     _inputTextPort.setFont(_font);
     _inputTextPort.setCharacterSize(24);
     _inputTextPort.setFillColor(sf::Color::White);
-
 }
 
-RType::ClientConnexionHandling::~ClientConnexionHandling()
-{
+RType::ClientConnexionHandling::~ClientConnexionHandling() {
 }
 
-void RType::ClientConnexionHandling::displayConnexionWindow()
-{
+void RType::ClientConnexionHandling::displayConnexionWindow() {
     while (_window->isOpen()) {
         sf::Event event;
         while (_window->pollEvent(event)) {
@@ -64,14 +60,15 @@ void RType::ClientConnexionHandling::displayConnexionWindow()
         this->displaySubmitButton();
         this->displayError();
         this->displayGameSelection();
+        this->displayModeOffline();
         _window->display();
     }
 }
 
-void RType::ClientConnexionHandling::displayBackground()
-{
+void RType::ClientConnexionHandling::displayBackground() {
     sf::Texture texture;
-    std::string spritePath = "assets" + std::string(PATH_SEPARATOR) + "background" + std::string(PATH_SEPARATOR) + "menu.jpg";
+    std::string spritePath =
+        "assets" + std::string(PATH_SEPARATOR) + "background" + std::string(PATH_SEPARATOR) + "menu.jpg";
     if (!texture.loadFromFile(spritePath)) {
         std::cerr << "Failed to load texture from " << spritePath << std::endl;
         return;
@@ -81,8 +78,7 @@ void RType::ClientConnexionHandling::displayBackground()
     _window->draw(background);
 }
 
-void RType::ClientConnexionHandling::displayInputTextHost()
-{
+void RType::ClientConnexionHandling::displayInputTextHost() {
     sf::Text labelHost;
     labelHost.setFont(_font);
     labelHost.setString("Host");
@@ -103,7 +99,7 @@ void RType::ClientConnexionHandling::displayInputTextHost()
     inputTextHost.setOutlineColor(sf::Color::Red);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-    sf::FloatRect bounds = inputTextHost.getGlobalBounds();
+    sf::FloatRect bounds  = inputTextHost.getGlobalBounds();
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "host";
@@ -116,8 +112,7 @@ void RType::ClientConnexionHandling::displayInputTextHost()
     _window->draw(_inputTextHost);
 }
 
-void RType::ClientConnexionHandling::displayInputTextPort()
-{
+void RType::ClientConnexionHandling::displayInputTextPort() {
     sf::Text labelPort;
     labelPort.setFont(_font);
     labelPort.setString("Port");
@@ -138,7 +133,7 @@ void RType::ClientConnexionHandling::displayInputTextPort()
     inputTextPort.setOutlineColor(sf::Color::Red);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-    sf::FloatRect bounds = inputTextPort.getGlobalBounds();
+    sf::FloatRect bounds  = inputTextPort.getGlobalBounds();
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "port";
@@ -151,9 +146,7 @@ void RType::ClientConnexionHandling::displayInputTextPort()
     _window->draw(_inputTextPort);
 }
 
-
-void RType::ClientConnexionHandling::displaySubmitButton()
-{
+void RType::ClientConnexionHandling::displaySubmitButton() {
     sf::RectangleShape submitButtonRect(sf::Vector2f(100, 50));
     submitButtonRect.setFillColor(sf::Color::Red);
     submitButtonRect.setPosition(1920 / 2 - 50, 1080 / 2 + 250);
@@ -165,16 +158,18 @@ void RType::ClientConnexionHandling::displaySubmitButton()
     submitButton.setFillColor(sf::Color::White);
     submitButton.setStyle(sf::Text::Bold);
     submitButton.setOutlineColor(sf::Color::Red);
-    submitButton.setPosition(
-        submitButtonRect.getPosition().x + (submitButtonRect.getSize().x - submitButton.getLocalBounds().width) / 2,
-        submitButtonRect.getPosition().y + (submitButtonRect.getSize().y - submitButton.getLocalBounds().height) / 2 - submitButton.getLocalBounds().top
-    );
+    submitButton.setPosition(submitButtonRect.getPosition().x
+                                 + (submitButtonRect.getSize().x - submitButton.getLocalBounds().width) / 2,
+                             submitButtonRect.getPosition().y
+                                 + (submitButtonRect.getSize().y - submitButton.getLocalBounds().height) / 2
+                                 - submitButton.getLocalBounds().top);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-    sf::FloatRect bounds = submitButtonRect.getGlobalBounds();
+    sf::FloatRect bounds  = submitButtonRect.getGlobalBounds();
 
-    if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos)) == true) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+    if ((sf::Mouse::isButtonPressed(sf::Mouse::Left)
+         && bounds.contains(static_cast<sf::Vector2f>(mousePos)) == true)
+        || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
         if (this->areHostAndPortValid() == true) {
             _window->close();
             return;
@@ -187,8 +182,7 @@ void RType::ClientConnexionHandling::displaySubmitButton()
     _window->draw(submitButton);
 }
 
-void RType::ClientConnexionHandling::displayError()
-{
+void RType::ClientConnexionHandling::displayError() {
     if (_invalidPortOrHost == false) {
         return;
     }
@@ -203,8 +197,7 @@ void RType::ClientConnexionHandling::displayError()
     _window->draw(error);
 }
 
-void RType::ClientConnexionHandling::displayGameSelection()
-{
+void RType::ClientConnexionHandling::displayGameSelection() {
     sf::Text labelGame;
     labelGame.setFont(_font);
     labelGame.setString("Game");
@@ -225,7 +218,7 @@ void RType::ClientConnexionHandling::displayGameSelection()
     inputTextGame.setOutlineColor(sf::Color::Red);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
-    sf::FloatRect bounds = inputTextGame.getGlobalBounds();
+    sf::FloatRect bounds  = inputTextGame.getGlobalBounds();
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
         _inputBoxSelected = "gameSelection";
@@ -243,9 +236,7 @@ void RType::ClientConnexionHandling::displayGameSelection()
     _window->draw(gameText);
 }
 
-
-void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event &event)
-{
+void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event& event) {
     if (_inputBoxSelected == "host" && event.type == sf::Event::TextEntered) {
         if (event.text.unicode == 8 && !_inputTextHost.getString().isEmpty()) {
             // Remove the last character if backspace
@@ -259,11 +250,10 @@ void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event &even
     }
 }
 
-void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event &event)
-{
+void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event& event) {
     if (_inputBoxSelected == "port" && event.type == sf::Event::TextEntered) {
         if (event.text.unicode == 8 && !_inputTextPort.getString().isEmpty()) {
-            // Remove the last character if backspace   
+            // Remove the last character if backspace
             std::string currentText = _inputTextPort.getString();
             currentText.pop_back();
             _inputTextPort.setString(currentText);
@@ -274,25 +264,22 @@ void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event &even
     }
 }
 
-void RType::ClientConnexionHandling::retrieveInputGameSelection(const sf::Event &event)
-{
+void RType::ClientConnexionHandling::retrieveInputGameSelection(const sf::Event& event) {
     if (_inputBoxSelected == "gameSelection" && event.type == sf::Event::KeyPressed) {
         switch (event.key.code) {
-            case sf::Keyboard::Right:
-                _gameSelected = "Platformer";
-                break;
-            case sf::Keyboard::Left:
-                _gameSelected = "R-Type";
-                break;
-            default:
-                break;
+        case sf::Keyboard::Right:
+            _gameSelected = "Platformer";
+            break;
+        case sf::Keyboard::Left:
+            _gameSelected = "R-Type";
+            break;
+        default:
+            break;
         }
     }
 }
 
-
-bool RType::ClientConnexionHandling::areHostAndPortValid()
-{
+bool RType::ClientConnexionHandling::areHostAndPortValid() {
     if ((int)this->getServerPort() < 1024 || (int)this->getServerPort() > 65534) {
         std::cerr << "Port must be between 1024 and 65535" << std::endl;
         return false;
@@ -302,4 +289,49 @@ bool RType::ClientConnexionHandling::areHostAndPortValid()
         return false;
     }
     return true;
+}
+
+void RType::ClientConnexionHandling::displayModeOffline() {
+    static sf::Clock clickClock;
+    const sf::Time debounceTime = sf::milliseconds(200);
+
+    // create button shape
+    sf::RectangleShape button(sf::Vector2f(150, 60));
+    button.setPosition(1920 / 2 - button.getSize().x / 2, 1080 / 2 - 175);
+    button.setOutlineThickness(3);
+    button.setOutlineColor(sf::Color::White);
+
+    sf::Color colorNormal = _isOffline ? sf::Color(200, 50, 50) : sf::Color(50, 200, 50);
+    sf::Color colorHover  = _isOffline ? sf::Color(255, 100, 100) : sf::Color(100, 255, 100);
+
+    sf::Vector2i mousePos      = sf::Mouse::getPosition(*_window);
+    sf::FloatRect buttonBounds = button.getGlobalBounds();
+
+    // If mouse is hover
+    if (buttonBounds.contains(static_cast<sf::Vector2f>(mousePos))) {
+        button.setFillColor(colorHover);
+
+        // Vérifie si le bouton est cliqué et que le délai est respecté
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clickClock.getElapsedTime() > debounceTime) {
+            _isOffline = !_isOffline;
+            clickClock.restart();
+        }
+    } else {
+        button.setFillColor(colorNormal);
+    }
+
+    // Button text
+    sf::Text buttonText;
+    buttonText.setFont(_font);
+    buttonText.setString(_isOffline ? "Offline" : "Online");
+    buttonText.setCharacterSize(24);
+    buttonText.setFillColor(sf::Color::White);
+
+    sf::FloatRect textBounds = buttonText.getLocalBounds();
+    buttonText.setPosition(
+        button.getPosition().x + (button.getSize().x - textBounds.width) / 2 - textBounds.left,
+        button.getPosition().y + (button.getSize().y - textBounds.height) / 2 - textBounds.top);
+
+    _window->draw(button);
+    _window->draw(buttonText);
 }
