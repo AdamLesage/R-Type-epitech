@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2024
 ** R-Type-epitech
 ** File description:
-** DoodleJump
+** RType
 */
 
-#ifndef DOODLEJUMP_HPP_
-#define DOODLEJUMP_HPP_
+#ifndef RTYPEOFFLINE_HPP_
+#define RTYPEOFFLINE_HPP_
 
 #include <iostream>
 #include <memory>
@@ -16,23 +16,12 @@
 
 namespace RType {
     /**
-     * @brief DoodleJump class
-     * 
-     * This class is the DoodleJump game
-     * 
-     * @class DoodleJump and inherits from AGame
+     * @brief RTypeOffline class is the logic loaded from client for offline mode gameplay
      */
-    class DoodleJump : public AGame {
+    class RTypeOffline : public AGame {
         public:
-            /**
-             * @brief Construct a new DoodleJump object
-             */
-            DoodleJump();
-
-            /**
-             * @brief Destroy the DoodleJump object
-             */
-            ~DoodleJump();
+            RTypeOffline();
+            ~RTypeOffline();
 
             /**
              * @brief handle offline game, meaning there is no communication with the server
@@ -55,13 +44,10 @@ namespace RType {
              * @brief handle input, can be input from keyboard or mouse
              */
             void handleInput() override;
+
         protected:
         private:
-            float _initialYPosition;
-            float _jumpVelocity;
-            bool _canJump;
-            bool _canApplyGravity;
     };
 }
 
-#endif /* !DOODLEJUMP_HPP_ */
+#endif /* !RTYPEOFFLINE_HPP_ */

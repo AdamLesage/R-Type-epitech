@@ -20,7 +20,8 @@
 #include <mutex>
 #include <libconfig.h++>
 
-#include "Games/DoodleJump.hpp"
+#include "Games/DoodleJumpOffline.hpp"
+#include "Games/RTypeOffline.hpp"
 #include "Games/IGame.hpp"
 #include "../ARenderEngineScene.hpp"
 #include "../../GameMetrics/Toolbar.hpp"

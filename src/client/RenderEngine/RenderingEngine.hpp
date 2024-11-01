@@ -105,7 +105,7 @@ namespace RType {
             std::shared_ptr<EndMenu> _endMenu;
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
-            RType::Logger logger;
+            Logger logger;
             int _stateGame = 1;
             std::string _gameSelected;
     };

@@ -67,7 +67,9 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     RenderTexture->create(1920, 1080);
     BackgroundClock.restart();
     _camera = std::make_shared<Camera>();
-    _currentGame = std::make_shared<DoodleJump>();
+
+    if (_gameSelected == "Platformer") _currentGame = std::make_shared<DoodleJumpOffline>();
+    else if (_gameSelected == "R-Type") _currentGame = std::make_shared<RTypeOffline>();
 }
 
 RType::Game::~Game() {

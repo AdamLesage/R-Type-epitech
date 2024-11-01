@@ -97,7 +97,7 @@ namespace RType {
             Registry _registry;
             Systems _systems;
             libconfig::Config _playerConfig;
-            std::unique_ptr<RType::ProtocolParsing> _protocolParsing;
+            std::unique_ptr<ProtocolParsing> _protocolParsing;
             std::shared_ptr<NetworkEngine> _networkEngine;
             std::shared_ptr<RenderingEngine> _renderingEngine;
             std::shared_ptr<PhysicEngine> _physicEngine;
