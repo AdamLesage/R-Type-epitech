@@ -7,28 +7,23 @@
 
 #include "MoveAsset.hpp"
 
-Edition::MoveAsset::MoveAsset(std::shared_ptr<Asset> asset, int dx, int dy)
-{
+Edition::MoveAsset::MoveAsset(std::shared_ptr<Asset> asset, int dx, int dy) {
     _asset = asset;
-    _dx = dx;
-    _dy = dy;
+    _dx    = dx;
+    _dy    = dy;
 }
 
-Edition::MoveAsset::~MoveAsset()
-{
+Edition::MoveAsset::~MoveAsset() {
 }
 
-void Edition::MoveAsset::execute()
-{
+void Edition::MoveAsset::execute() {
     _asset->move(_dx, _dy);
 }
 
-void Edition::MoveAsset::undo()
-{
+void Edition::MoveAsset::undo() {
     _asset->move(-_dx, -_dy);
 }
 
-void Edition::MoveAsset::redo()
-{
+void Edition::MoveAsset::redo() {
     _asset->move(_dx, _dy);
 }

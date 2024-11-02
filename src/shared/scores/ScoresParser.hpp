@@ -8,16 +8,16 @@
 #ifndef RTYPE_SCORESPARSER_HPP
 #define RTYPE_SCORESPARSER_HPP
 
-    #include <string>
-    #include <map>
-    #include <libconfig.h++>
-    #include <vector>
+#include <string>
+#include <map>
+#include <libconfig.h++>
+#include <vector>
 
-    #if defined(_WIN32) || defined(_WIN64)
-        #define PATH_SEPARATOR "\\"
-    #else
-        #define PATH_SEPARATOR "/"
-    #endif
+#if defined(_WIN32) || defined(_WIN64)
+#define PATH_SEPARATOR "\\"
+#else
+#define PATH_SEPARATOR "/"
+#endif
 
 namespace RType {
     class ScoresParser {
@@ -53,7 +53,7 @@ namespace RType {
             void saveScore(const std::string& playerName, size_t score);
 
         private:
-            std::string _filepath; // The path to the configuration file.
+            std::string _filepath;  // The path to the configuration file.
             libconfig::Config _cfg; // The configuration object.
 
             /**

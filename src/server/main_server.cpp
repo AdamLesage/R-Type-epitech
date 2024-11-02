@@ -25,8 +25,7 @@
 #define PATH_SEPARATOR "/"
 #endif
 
-void getUserInput(int& port, int& frequency)
-{
+void getUserInput(int& port, int& frequency) {
     sf::RenderWindow window(sf::VideoMode(400, 350), "Input Port and Framerate");
 
     sf::Font font;
@@ -85,8 +84,8 @@ void getUserInput(int& port, int& frequency)
     freqBox.setOutlineThickness(2);
     freqBox.setOutlineColor(sf::Color::White);
 
-    bool enterPressed     = false;
-    bool portSelected     = true; // Start with the port field selected
+    bool enterPressed = false;
+    bool portSelected = true; // Start with the port field selected
 
     while (window.isOpen() && !enterPressed) {
         sf::Event event;
@@ -151,8 +150,8 @@ void getUserInput(int& port, int& frequency)
         window.draw(freqBox);
         window.draw(portInput);
         window.draw(freqInput);
-        window.draw(instructionText); // Draw instruction text
-        window.draw(portHintText);    // Draw port hint text
+        window.draw(instructionText);   // Draw instruction text
+        window.draw(portHintText);      // Draw port hint text
         window.draw(frequencyHintText); // Draw frequency hint text
         window.display();
     }
@@ -161,7 +160,6 @@ void getUserInput(int& port, int& frequency)
     port      = std::stoi(portStr);
     frequency = std::stoi(freqStr);
 }
-
 
 int main() {
     int port;

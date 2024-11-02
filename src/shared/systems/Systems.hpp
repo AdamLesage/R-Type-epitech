@@ -78,7 +78,7 @@ class Systems {
          *
          * @param reg The registry containing the components.
          */
-        void direction_system(Registry& reg, libconfig::Config &playerConfig);
+        void direction_system(Registry& reg, libconfig::Config& playerConfig);
         /**
          * @brief Update the annimation of all entity
          *

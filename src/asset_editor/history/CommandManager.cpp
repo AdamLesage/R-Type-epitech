@@ -7,24 +7,20 @@
 
 #include "CommandManager.hpp"
 
-Edition::CommandManager::CommandManager()
-{
+Edition::CommandManager::CommandManager() {
 }
 
-Edition::CommandManager::~CommandManager()
-{
+Edition::CommandManager::~CommandManager() {
 }
 
-void Edition::CommandManager::createAsset(std::shared_ptr<Edition::Asset> asset)
-{
+void Edition::CommandManager::createAsset(std::shared_ptr<Edition::Asset> asset) {
     _undoAssets.push_back(asset);
 
-    // Clear the redo 
+    // Clear the redo
     _redoAssets.clear();
 }
 
-void Edition::CommandManager::undo()
-{
+void Edition::CommandManager::undo() {
     if (_undoAssets.empty()) { // Nothing to undo
         return;
     }
@@ -34,8 +30,7 @@ void Edition::CommandManager::undo()
     _redoAssets.push_back(asset);
 }
 
-void Edition::CommandManager::redo()
-{
+void Edition::CommandManager::redo() {
     if (_redoAssets.empty()) { // Nothing to redo
         return;
     }

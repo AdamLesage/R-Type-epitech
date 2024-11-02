@@ -7,18 +7,15 @@
 
 #include "RemoveAsset.hpp"
 
-Edition::RemoveAsset::RemoveAsset(std::vector<std::shared_ptr<Asset>>& assets)
-{
+Edition::RemoveAsset::RemoveAsset(std::vector<std::shared_ptr<Asset>>& assets) {
     _assets = assets;
-    _asset = nullptr;
+    _asset  = nullptr;
 }
 
-Edition::RemoveAsset::~RemoveAsset()
-{
+Edition::RemoveAsset::~RemoveAsset() {
 }
 
-void Edition::RemoveAsset::execute()
-{
+void Edition::RemoveAsset::execute() {
     if (_assets.empty()) // No asset to remove
         return;
 
@@ -26,8 +23,7 @@ void Edition::RemoveAsset::execute()
     _assets.pop_back();
 }
 
-void Edition::RemoveAsset::undo()
-{
+void Edition::RemoveAsset::undo() {
     if (_asset == nullptr) // No asset to add
         return;
 

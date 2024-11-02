@@ -7,15 +7,14 @@
 
 #include "SelectBar.hpp"
 
-Edition::SelectBar::SelectBar(std::vector<std::string> selectOption, float x, float y, int maxWidth)
-{
+Edition::SelectBar::SelectBar(std::vector<std::string> selectOption, float x, float y, int maxWidth) {
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
         std::cerr << "Erreur lors du chargement de la police " << fontPath << std::endl;
         return;
     }
-    float startX = x;
-    float startY = y;
+    float startX     = x;
+    float startY     = y;
     _selectionOption = selectOption;
     for (size_t i = 0; i < _selectionOption.size(); i++) {
         if (x + 150 - startX >= maxWidth) {
@@ -47,8 +46,7 @@ Edition::SelectBar::SelectBar(std::vector<std::string> selectOption, float x, fl
     _selectionButton[0].setFillColor(sf::Color(125, 125, 125));
 }
 
-Edition::SelectBar::~SelectBar()
-{
+Edition::SelectBar::~SelectBar() {
 }
 
 void Edition::SelectBar::display(std::shared_ptr<sf::RenderWindow> window) {
@@ -68,11 +66,10 @@ std::vector<std::string> Edition::SelectBar::getSelectOption() {
     return _selectionOption;
 }
 int Edition::SelectBar::findSelectedIndex() {
-    return selectedOptionIndex;               
+    return selectedOptionIndex;
 }
 
-std::string Edition::SelectBar::findSelectedOption()
-{
+std::string Edition::SelectBar::findSelectedOption() {
     return (this->_selectionOption[this->selectedOptionIndex]);
 }
 
@@ -81,7 +78,8 @@ bool Edition::SelectBar::handleEvent(const sf::Event event) {
         for (size_t i = 0; i < _selectionButton.size(); i++) {
             sf::RectangleShape& button = _selectionButton[i];
 
-            if (button.getGlobalBounds().contains(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y))) {
+            if (button.getGlobalBounds().contains(static_cast<float>(event.mouseMove.x),
+                                                  static_cast<float>(event.mouseMove.y))) {
                 button.setFillColor(sf::Color(100, 100, 100));
             } else {
                 button.setFillColor(sf::Color::Transparent);

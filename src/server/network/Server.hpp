@@ -48,15 +48,15 @@ namespace NetworkLib {
 
             /**
              * @brief Send a message to a specific client.
-             * 
+             *
              * @param message The message data to be sent.
              * @param size The size of the message.
              * @param clientID The ID of the client to whom the message is being sent.
-            */
+             */
             void sendToClient(const char* message, size_t size, uint32_t clientID) override;
             /**
              * @brief Broadcast a message to all connected clients.
-             * 
+             *
              * @param message The message data to be sent.
              * @param size The size of the message.
              */
@@ -92,20 +92,20 @@ namespace NetworkLib {
             void start_receive();
             /**
              * @brief Handle errors occurring on the remote client-side, potentially indicating disconnection.
-             * 
+             *
              * @param remote_endpoint The remote client endpoint that caused the error.
              */
             void handle_remote_error(const boost::asio::ip::udp::endpoint remote_endpoint);
             /**
              * @brief Handle the completion of a receive operation, process the data, and handle any errors.
-             * 
+             *
              * @param error The error code indicating the success or failure of the receive operation.
              * @param bytes_transferred The number of bytes received.
              */
             void handle_receive(const std::error_code& error, std::size_t bytes_transferred);
             /**
              * @brief Handle the completion of a send operation, log or process errors if necessary.
-             * 
+             *
              * @param message The message that was sent.
              * @param error The error code indicating the success or failure of the send operation.
              * @param bytes_transferred The number of bytes sent.
@@ -121,28 +121,28 @@ namespace NetworkLib {
 
             /**
              * @brief Get the client ID for a given endpoint or create a new one if it does not exist.
-             * 
+             *
              * @param endpoint The UDP endpoint of the client.
              * @return The client ID (int32_t).
              */
             int32_t get_or_create_client_id(boost::asio::ip::udp::endpoint endpoint);
             /**
              * @brief Trigger disconnection handlers for a specific client ID.
-             * 
+             *
              * @param id The ID of the disconnected client.
              */
             void on_client_disconnected(int32_t id);
 
             /**
              * @brief Send a message to a specific client using a vector of char.
-             * 
+             *
              * @param message The message data to send.
              * @param target_endpoint The client's endpoint.
              */
             void send(std::vector<char> message, boost::asio::ip::udp::endpoint target_endpoint);
             /**
              * @brief Send a message to a specific client using a char array.
-             * 
+             *
              * @param message The message data to send.
              * @param size The size of the message.
              * @param target_endpoint The client's endpoint.

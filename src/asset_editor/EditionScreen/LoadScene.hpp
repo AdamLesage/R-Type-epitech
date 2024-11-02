@@ -26,11 +26,11 @@ namespace Edition {
         public:
             /**
              * @brief Construct a new Load Scene object
-             * 
+             *
              * @param scenePath The path of the scene to load
              * @param assets The assets to load
              */
-            LoadScene(std::string &scenePath, std::vector<std::shared_ptr<Edition::Asset>> assets);
+            LoadScene(std::string& scenePath, std::vector<std::shared_ptr<Edition::Asset>> assets);
 
             /**
              * @brief Destroy the Load Scene object
@@ -39,7 +39,7 @@ namespace Edition {
 
             /**
              * @brief Load the scene with the given name
-             * 
+             *
              * @return std::vector<std::shared_ptr<Edition::Asset>> The assets loaded
              */
             std::vector<std::shared_ptr<Edition::Asset>> load();
@@ -48,48 +48,48 @@ namespace Edition {
         private:
             /**
              * @brief Load the entity code
-             * 
+             *
              * @param entity The entity given from config file
              * @param asset The asset to load and attach the entity code
              */
-            void loadEntityCode(libconfig::Setting &entity, std::shared_ptr<Edition::Asset> asset);
+            void loadEntityCode(libconfig::Setting& entity, std::shared_ptr<Edition::Asset> asset);
 
             /**
              * @brief Load the entity code
-             * 
+             *
              * @param components The components given from config file
              * @param asset The asset to load and attach the component
              */
-            void loadComponentSize(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset);
+            void loadComponentSize(libconfig::Setting& components, std::shared_ptr<Edition::Asset> asset);
 
             /**
              * @brief Load the component position
-             * 
+             *
              * @param components The components given from config file
              * @param asset The asset to load and attach the component
              */
-            void loadComponentPosition(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset);
+            void loadComponentPosition(libconfig::Setting& components, std::shared_ptr<Edition::Asset> asset);
 
             /**
              * @brief Load the component rotation
-             * 
+             *
              * @param components The components given from config file
              * @param asset The asset to load and attach the component
              */
-            void loadComponentRotation(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset);
+            void loadComponentRotation(libconfig::Setting& components, std::shared_ptr<Edition::Asset> asset);
 
             /**
              * @brief Load the component sprite
-             * 
+             *
              * @param components The components given from config file
              * @param asset The asset to load and attach the component
              */
-            void loadComponentSprite(libconfig::Setting &components, std::shared_ptr<Edition::Asset> asset);
+            void loadComponentSprite(libconfig::Setting& components, std::shared_ptr<Edition::Asset> asset);
 
             std::string _scenePath;
             libconfig::Config _cfg;
             std::vector<std::shared_ptr<Edition::Asset>> _assets;
     };
-}
+} // namespace Edition
 
 #endif /* !LOADSCENE_HPP_ */

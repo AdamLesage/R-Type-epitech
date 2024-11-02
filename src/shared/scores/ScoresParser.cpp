@@ -19,13 +19,13 @@ ScoresParser::ScoresParser() {
 std::map<std::string, size_t> ScoresParser::getLatestScores() {
     std::map<std::string, size_t> scores;
     try {
-        const libconfig::Setting& root = _cfg.getRoot();
+        const libconfig::Setting& root          = _cfg.getRoot();
         const libconfig::Setting& scoresSetting = root["scores"];
 
         for (int i = 0; i < scoresSetting.getLength(); ++i) {
             std::string name = scoresSetting[i]["name"];
-            int value = scoresSetting[i]["value"];
-            scores[name] = value;
+            int value        = scoresSetting[i]["value"];
+            scores[name]     = value;
         }
     } catch (const libconfig::SettingNotFoundException& e) {
         std::cerr << "Scores setting not found: " << e.what() << '\n';
@@ -36,12 +36,12 @@ std::map<std::string, size_t> ScoresParser::getLatestScores() {
 std::map<std::string, size_t> ScoresParser::getHighscores() {
     std::map<std::string, size_t> highscores;
     try {
-        const libconfig::Setting& root = _cfg.getRoot();
+        const libconfig::Setting& root              = _cfg.getRoot();
         const libconfig::Setting& highscoresSetting = root["highscores"];
 
         for (int i = 0; i < highscoresSetting.getLength(); ++i) {
             std::string name = highscoresSetting[i]["name"];
-            int value = highscoresSetting[i]["value"];
+            int value        = highscoresSetting[i]["value"];
             highscores[name] = value;
         }
     } catch (const libconfig::SettingNotFoundException& e) {
@@ -65,7 +65,7 @@ void ScoresParser::saveScore(const std::string& playerName, size_t score) {
     for (const auto& [name, value] : latestScores) {
         libconfig::Setting& scoreSetting = scoresSetting.add(libconfig::Setting::TypeGroup);
         scoreSetting.add("name", libconfig::Setting::TypeString) = name;
-        scoreSetting.add("value", libconfig::Setting::TypeInt) = static_cast<int>(value);
+        scoreSetting.add("value", libconfig::Setting::TypeInt)   = static_cast<int>(value);
     }
 
     updateHighscores(playerName, score);
@@ -93,7 +93,7 @@ void ScoresParser::updateHighscores(const std::string& playerName, size_t score)
     for (const auto& [name, value] : sortedHighscores) {
         libconfig::Setting& highscoreSetting = highscoresSetting.add(libconfig::Setting::TypeGroup);
         highscoreSetting.add("name", libconfig::Setting::TypeString) = name;
-        highscoreSetting.add("value", libconfig::Setting::TypeInt) = static_cast<int>(value);
+        highscoreSetting.add("value", libconfig::Setting::TypeInt)   = static_cast<int>(value);
     }
 }
 
@@ -103,8 +103,7 @@ void ScoresParser::loadConfig() {
     } catch (const libconfig::FileIOException& e) {
         std::cerr << "Error reading file: " << _filepath << '\n';
     } catch (const libconfig::ParseException& e) {
-        std::cerr << "Parse error at " << e.getFile() << ":" << e.getLine()
-                  << " - " << e.getError() << '\n';
+        std::cerr << "Parse error at " << e.getFile() << ":" << e.getLine() << " - " << e.getError() << '\n';
     }
 }
 

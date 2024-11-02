@@ -17,9 +17,9 @@ namespace Edition {
 
     /**
      * @brief Toolbar of the Asset Editor
-     * 
+     *
      * This toolbar will be used to display different tools that can be used to edit the scene
-     * 
+     *
      * Tools will be used to modify the scene
      */
     class Toolbar {
@@ -36,48 +36,52 @@ namespace Edition {
 
             /**
              * @brief Display every toolbar buttons
-             * 
+             *
              * This will display every toolbar buttons that are in the toolbar
-             * 
+             *
              * @param window The window of the Asset Editor
              */
-            void displayToolbarButtons(sf::RenderWindow &window);
-
+            void displayToolbarButtons(sf::RenderWindow& window);
 
             /**
              * @brief Display the toolbar container
-             * 
+             *
              * This will display the toolbar container that will contain all the tools
-             * 
+             *
              * @param window The window of the Asset Editor
              */
-            void displayToolbarContainer(sf::RenderWindow &window);
+            void displayToolbarContainer(sf::RenderWindow& window);
 
             /**
              * @brief Draw the toolbar
-             * 
+             *
              * @param window The window of the Asset Editor
              */
-            void draw(sf::RenderWindow &window);
+            void draw(sf::RenderWindow& window);
 
             /**
              * @brief Set the current selection
-             * 
+             *
              * @param selection The current selection
              */
-            void setCurrentSelection(CurrentSelection selection) { _currentSelection = selection; }
+            void setCurrentSelection(CurrentSelection selection) {
+                _currentSelection = selection;
+            }
 
             /**
              * @brief Get the current selection
-             * 
+             *
              * @return CurrentSelection The current selection
              */
-            CurrentSelection getCurrentSelection() { return _currentSelection; }
+            CurrentSelection getCurrentSelection() {
+                return _currentSelection;
+            }
+
         protected:
         private:
             std::vector<ToolbarButton> _toolbarButtons;
             CurrentSelection _currentSelection;
     };
-}
+} // namespace Edition
 
 #endif /* !TOOLBAR_HPP_ */

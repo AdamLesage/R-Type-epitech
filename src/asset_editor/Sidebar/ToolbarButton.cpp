@@ -6,14 +6,14 @@
 */
 
 #if defined(_WIN32) || defined(_WIN64)
-    #define NOMINMAX
-    #include <windows.h>
-    #define LIB_EXTENSION ".dll"
-    #define PATH_SEPARATOR "\\"
+#define NOMINMAX
+#include <windows.h>
+#define LIB_EXTENSION ".dll"
+#define PATH_SEPARATOR "\\"
 #else
-    #include <dlfcn.h>
-    #define LIB_EXTENSION ".so"
-    #define PATH_SEPARATOR "/"
+#include <dlfcn.h>
+#define LIB_EXTENSION ".so"
+#define PATH_SEPARATOR "/"
 #endif
 
 #include "ToolbarButton.hpp"
@@ -55,7 +55,7 @@ Edition::ToolbarButton::ToolbarButton(std::string buttonIconAssetPath, sf::Vecto
         backgroundBounds.top + (backgroundBounds.height - iconBounds.height * scaleY) / 2);
 }
 
-std::string Edition::ToolbarButton::update(sf::RenderWindow& window, CurrentSelection &currentSelection) {
+std::string Edition::ToolbarButton::update(sf::RenderWindow& window, CurrentSelection& currentSelection) {
     static sf::Clock clickCooldownClock;
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
     sf::FloatRect bounds       = _backgroundRectangle.getGlobalBounds();
@@ -79,15 +79,24 @@ std::string Edition::ToolbarButton::update(sf::RenderWindow& window, CurrentSele
         }
         return "hovered";
     } else {
-        std::string selectionStr = _buttonIconAssetPath.substr(_buttonIconAssetPath.find_last_of(PATH_SEPARATOR) + 1);
-        if (selectionStr == "undo.png" && currentSelection == UNDO) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
-        else if (selectionStr == "redo.png" && currentSelection == REDO) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
-        else if (selectionStr == "save.png" && currentSelection == SAVE) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
-        else if (selectionStr == "delete.png" && currentSelection == DELETE) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
-        else if (selectionStr == "move.png" && currentSelection == MOVE) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
-        else if (selectionStr == "zoom.png" && currentSelection == ZOOM) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
-        else if (selectionStr == "dezoom.png" && currentSelection == DEZOOM) _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
-        else _backgroundRectangle.setFillColor(_backgroundColor);
+        std::string selectionStr =
+            _buttonIconAssetPath.substr(_buttonIconAssetPath.find_last_of(PATH_SEPARATOR) + 1);
+        if (selectionStr == "undo.png" && currentSelection == UNDO)
+            _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "redo.png" && currentSelection == REDO)
+            _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "save.png" && currentSelection == SAVE)
+            _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "delete.png" && currentSelection == DELETE)
+            _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "move.png" && currentSelection == MOVE)
+            _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "zoom.png" && currentSelection == ZOOM)
+            _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else if (selectionStr == "dezoom.png" && currentSelection == DEZOOM)
+            _backgroundRectangle.setFillColor(sf::Color(100, 100, 100));
+        else
+            _backgroundRectangle.setFillColor(_backgroundColor);
     }
     return "";
 }

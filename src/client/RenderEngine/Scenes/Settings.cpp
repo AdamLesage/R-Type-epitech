@@ -290,8 +290,7 @@ void RType::Settings::displayInput() { // display a sprite for the input of the 
     }
 }
 
-void RType::Settings::runScene(float& latency)
-{
+void RType::Settings::runScene(float& latency) {
     (void)latency;
 }
 
