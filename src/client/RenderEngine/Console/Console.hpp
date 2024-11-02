@@ -24,7 +24,7 @@
 namespace RType {
     class Console {
         public:
-            Console(std::shared_ptr<sf::RenderWindow> _window,std::shared_ptr<sf::RenderTexture> _RenderTexture);
+            Console(std::shared_ptr<sf::RenderWindow> _window, std::shared_ptr<sf::RenderTexture> _RenderTexture);
             ~Console();
 
             /**

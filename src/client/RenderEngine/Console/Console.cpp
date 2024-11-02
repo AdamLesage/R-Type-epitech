@@ -29,8 +29,8 @@ RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, std::shared_p
     }
     secondContainer.setOutlineColor(sf::Color(150, 150, 150));
     secondContainer.setOutlineThickness(3);
-    secondContainer.setFillColor(sf::Color(20, 20, 20, 180)); // Same fill color
-    container.setFillColor(sf::Color(20, 20, 20, 180));
+    secondContainer.setFillColor(sf::Color(20, 20, 20, 100)); // More translucent fill color
+    container.setFillColor(sf::Color(20, 20, 20, 100));
     fps = 0;
     FPS.setFillColor(sf::Color::White);
     FPS.setOutlineColor(sf::Color::Black);
@@ -52,7 +52,7 @@ void RType::Console::displayFPS()
     float deltaTime = clock.restart().asSeconds();
     fps = 1.0f / deltaTime;  // Calcul des FPS
     FPS.setString(std::to_string(fps));
-    RenderTexture->draw(FPS);
+    window->draw(FPS);
 }
 
 void RType::Console::displayDeveloperConsole() {
@@ -96,11 +96,11 @@ void RType::Console::displayContainer() {
     secondContainer.setPosition(0, consoleHeight);
     _inputText.setPosition(10, consoleHeight);
 
-    RenderTexture->draw(container);
-    RenderTexture->draw(secondContainer);
-    RenderTexture->draw(_inputText);
+    window->draw(container);
+    window->draw(secondContainer);
+    window->draw(_inputText);
     for (std::size_t i = 0; i < History.size(); i++) {
-        RenderTexture->draw(History[i]);
+        window->draw(History[i]);
     }
 }
 
@@ -130,13 +130,6 @@ bool processEdit(const std::string& _input) {
         int entityNum1, entityNum2;
 
         iss >> command >> entityNum1 >> entityNum2;
-
-        std::cout << "Changing skin of entity " << entityNum1 << " whith skin " << entityNum2 << std::endl;
-            // entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
-            // entity[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
-            //                                      _camera->listEntityToDisplay[i].sprite.rectPos[1],
-            //                                      _camera->listEntityToDisplay[i].sprite.rectSize[0],
-            //                                      _camera->listEntityToDisplay[i].sprite.rectSize[1]));
 
         return true;
     }
@@ -276,7 +269,7 @@ void RType::Console::displayCloseContainerButton() {
     closeBtn.setFillColor(sf::Color(255, 0, 0, 128));
 
     closeBtn.setPosition(closeBtnPosX - 2, 2);
-    RenderTexture->draw(closeBtn);
+    window->draw(closeBtn);
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
         if (closeBtn.getGlobalBounds().contains(static_cast<float>(mousePos.x),
