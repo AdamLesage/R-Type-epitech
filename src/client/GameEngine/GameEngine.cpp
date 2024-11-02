@@ -108,7 +108,7 @@ void RType::GameEngine::run() {
     });
 
     // Wait for all threads to finish
-    while (1) {
+    while (_running) {
         this->_systems.annimation_system(this->_registry);
         this->_systems.direction_system(_registry, _playerConfig);
         updateCamera();

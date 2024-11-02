@@ -421,6 +421,7 @@ bool RType::Game::isGameOffline() {
 }
 
 void RType::Game::displayEntitiesHealth(std::shared_ptr<sf::RenderTexture> renderTexture) {
+    std::lock_guard<std::mutex> lock(*this->_mutex.get());
     if (_camera == nullptr) return;
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";

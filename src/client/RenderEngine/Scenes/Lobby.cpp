@@ -192,6 +192,7 @@ void RType::Lobby::displaySubtitles() {
 
 void RType::Lobby::displayConnectedPlayer()
 {
+    std::lock_guard<std::mutex> lock(*this->_mutex.get());
     float totalHeight      = window->getSize().y;
     float playerAreaHeight = 500;
     float playerStartY     = (totalHeight - playerAreaHeight) / 2.0f;

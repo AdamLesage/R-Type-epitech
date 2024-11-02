@@ -18,7 +18,7 @@ RType::NetworkEngine::~NetworkEngine() {
 }
 
 void RType::NetworkEngine::run() {
-    while (1) {
+    while (_running) {
         std::this_thread::sleep_for(
             std::chrono::milliseconds(10)); // Add a small delay to avoid blocking the loop
         this->updateData();
@@ -45,6 +45,10 @@ void RType::NetworkEngine::setParams(std::string host,
                                      unsigned short server_port,
                                      unsigned short local_port) {
     _client = std::make_unique<NetworkLib::Client>(host, server_port, local_port);
+}
+
+void RType::NetworkEngine::setEnd() {
+    _running = false;
 }
 
 extern "C" RType::NetworkEngine* entryPointNetworkEngine() {

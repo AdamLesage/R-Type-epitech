@@ -355,7 +355,7 @@ void GameLogique::runGame() {
                 this->spawnEnnemy(0x61, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
             }
-            if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 10) {
+            if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 20) {
                 char bonusType = 0x21 +  rand() % 4;
                 this->spawnBonus(bonusType, rand() % 1920, rand() % 1080);
                 bonusClock = std::clock();
