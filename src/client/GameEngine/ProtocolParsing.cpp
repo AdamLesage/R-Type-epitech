@@ -27,8 +27,9 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
                        {"MACHINEGUN_CREATION", {0x22, "machinegun_creation"}},
                         {"ROCKET_CREATION", {0x23, "rocket_creation"}},
                        {"BEAM_CREATION", {0x24, "beam_creation"}},
-                       {"WALL_CREATION", {0x25, "wall_creation"}},
-                       {"REWARD_CREATION", {0x26, "reward_creation"}},
+                       {"CLONE_CREATION", {0x25, "beam_creation"}},
+                       {"WALL_CREATION", {0x26, "wall_creation"}},
+                       {"REWARD_CREATION", {0x27, "reward_creation"}},
                        {"ENTITY_DELETION", {0x29, "entity_deletion"}},
                        {"POSITION_UPDATE", {0x30, "position_update"}},
                        {"HEALTH_UPDATE", {0x31, "health_update"}},
@@ -565,6 +566,42 @@ bool RType::ProtocolParsing::parseBeamCreation(const std::string& message, int& 
     return true;
 }
 
+bool RType::ProtocolParsing::parseCloneCreation(const std::string& message, int& index) {
+    if (!checkMessageType("CLONE_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+        std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + std::string("bot_friend.png");
+        _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
+        this->updateIndexFromBinaryData("beam_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
+    return true;
+}
+
 bool RType::ProtocolParsing::parseWallCreation(const std::string& message, int& index) {
     if (!checkMessageType("WALL_CREATION", message, index)) return false;
 
@@ -999,6 +1036,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parseMachinegunCreation(message, index)) continue;
         if (this->parseRocketCreation(message, index)) continue;
         if (this->parseBeamCreation(message, index)) continue;
+        if (this->parseCloneCreation(message, index)) continue;
         if (this->parseWallCreation(message, index)) continue;
         if (this->parseRewardCreation(message, index)) continue;
         if (this->parseEntityDeletion(message, index)) continue;

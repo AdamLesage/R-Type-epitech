@@ -248,7 +248,7 @@ void GameLogique::spawnBonus(char type, float position_x, float position_y) {
             this->reg.add_component<Health>(entity, Health{1, 1, false, false});
             this->reg.add_component<Damage>(entity, Damage{0});
             break;
-         case 0x22:
+        case 0x22:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Tag>(entity, Tag{"machinegun_bonus"});
             this->reg.add_component<Direction>(entity, Direction{1, 0});
@@ -257,7 +257,7 @@ void GameLogique::spawnBonus(char type, float position_x, float position_y) {
             this->reg.add_component<Health>(entity, Health{1, 1, false, false});
             this->reg.add_component<Damage>(entity, Damage{0});
             break;
-         case 0x23:
+        case 0x23:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Tag>(entity, Tag{"rocket_bonus"});
             this->reg.add_component<Direction>(entity, Direction{1, 0});
@@ -266,9 +266,18 @@ void GameLogique::spawnBonus(char type, float position_x, float position_y) {
             this->reg.add_component<Health>(entity, Health{1, 1, false, false});
             this->reg.add_component<Damage>(entity, Damage{0});
             break;
-         case 0x24:
+        case 0x24:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
             this->reg.add_component<Tag>(entity, Tag{"beam_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        case 0x25:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"clone_bonus"});
             this->reg.add_component<Direction>(entity, Direction{1, 0});
             this->reg.add_component<Size>(entity, Size{35, 30});
             this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
@@ -356,7 +365,7 @@ void GameLogique::runGame() {
                 spawnClock = std::clock();
             }
             if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 20) {
-                char bonusType = 0x21 +  rand() % 4;
+                char bonusType = 0x21 +  rand() % 5;
                 this->spawnBonus(bonusType, rand() % 1920, rand() % 1080);
                 bonusClock = std::clock();
             }

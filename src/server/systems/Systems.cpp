@@ -255,7 +255,7 @@ void Systems::check_entities_collisions(Registry& reg,
             if (bonusType->type == EntityType::POWERUP && bonustag->tag == "beam_bonus") {
                 reg.get_components<CanShootBigMissile>()[entityId1]->number += 1;
             }
-            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "beam_bonus") {
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "clone_bonus") {
                 entity_t entity = reg.spawn_entity();
                 reg.add_component<Clone>(entity, Clone{entityId1});
                 reg.add_component<Position>(entity, Position{entityPos1->x, entityPos1->y + 100});
