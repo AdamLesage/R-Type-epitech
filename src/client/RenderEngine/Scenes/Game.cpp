@@ -217,8 +217,8 @@ void RType::Game::play(float& latency) {
         }
         console->displayDeveloperConsole();
         toolbar.draw(*window);
+        displayEntitiesHealth(*window);
     }
-    displayEntitiesHealth(*window);
     window->display();
 }
 

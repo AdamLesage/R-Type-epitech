@@ -80,6 +80,7 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
     }
     if (event == "Exit") {
         this->_renderingEngine->setStateGame(-1); // Exit program
+        exit(0);
         return;
     }
     if (event == "play") { // Start the game

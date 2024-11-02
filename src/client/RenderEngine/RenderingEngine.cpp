@@ -8,6 +8,7 @@
 #include "RenderingEngine.hpp"
 
 RType::RenderingEngine::RenderingEngine() {
+    _latency = 0;
 }
 
 RType::RenderingEngine::~RenderingEngine() {
