@@ -182,8 +182,12 @@ int main(int ac, char** av) {
         gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
         gameEngine->setGameSelected(gameSelected);
         gameEngine->run();
+        
     } catch (const RType::DLError& e) {
         std::cerr << e.what() << std::endl;
+        return (84);
+    } catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
         return (84);
     }
     return (0);

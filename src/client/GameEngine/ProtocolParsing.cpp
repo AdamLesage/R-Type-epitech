@@ -13,9 +13,11 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
         _cfg.readFile(_protocolPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error("Parse error");
     }
 
     _messageTypeMap = {{"PLAYER_CREATION", {0x01, "player_creation"}},
@@ -1088,9 +1090,11 @@ void RType::ProtocolParsing::loadAssetCfgEditorParsing(size_t level)
         _assetEditorParsing = std::make_unique<AssetEditorParsing>(_cfgAssetEditor);
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error("Parse error");
     } catch (std::exception &e) {
         std::cerr << "Parse error: " << e.what() << std::endl;
     }
