@@ -174,8 +174,16 @@ int main() {
     std::cout << "Frequency: " << frequency << std::endl;
 
     // Initialize and start the game
-    GameLogique gameLogique(port, frequency);
-    gameLogique.runGame();
+    try {
+        GameLogique gameLogique(port, frequency);
+        gameLogique.runGame();
+    } catch (const std::runtime_error &e) {
+        std::cerr << "Error on Game Logique: " << e.what() << std::endl;
+        return 84;
+    }  catch (const std::exception &e) {
+        std::cerr << "Error on Game Logique: " << e.what() << std::endl;
+        return 84;
+    } 
 
     return 0;
 }

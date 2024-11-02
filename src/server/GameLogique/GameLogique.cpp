@@ -10,8 +10,6 @@
 GameLogique::GameLogique(size_t port, int _frequency) {
     this->network                   = std::make_shared<NetworkLib::Server>(port);
     this->_networkSender            = std::make_unique<NetworkSender>(this->network);
-    this->receiverThread            = std::thread(&GameLogique::handleRecieve, this);
-    this->connectionManagmentThread = std::thread(&GameLogique::handleClientConnection, this);
     this->running                   = false;
     this->frequency                 = _frequency;
     this->reg.register_component<Position>();
@@ -40,12 +38,16 @@ GameLogique::GameLogique(size_t port, int _frequency) {
                                      + PATH_SEPARATOR + std::string("game_config.cfg");
         _gameConfig.readFile(gameConfigPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
-        std::cerr << "I/O error while reading file." << std::endl;
+                std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading Game config file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error(std::string("Parse error at ") + pex.getFile());
     }
     this->updateLevelConfig();
+    this->receiverThread            = std::thread(&GameLogique::handleRecieve, this);
+    this->connectionManagmentThread = std::thread(&GameLogique::handleClientConnection, this);
 }
 
 GameLogique::~GameLogique() {
@@ -65,10 +67,11 @@ void GameLogique::updateLevelConfig() {
         }
         _levelConfig.readFile(levelConfigPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
-        std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading level config file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error(std::string("Parse error at ") + pex.getFile());
     }
     assetEditorParsing.reset(new AssetEditorParsing(_levelConfig));
 }
