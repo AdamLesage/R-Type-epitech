@@ -20,6 +20,7 @@
 #include "./NetworkSender.hpp"
 #include "../../shared/utils/Logger.hpp"
 #include <memory>
+#include "../../shared/components/ScoreValue.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"

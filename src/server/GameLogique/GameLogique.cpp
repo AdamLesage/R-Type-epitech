@@ -155,6 +155,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
                 entity, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            this->reg.add_component<ScoreValue>(entity, ScoreValue{10});
             break;
         case 0x04:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
@@ -165,6 +166,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
                                                   Wave_pattern{1.f, 0.02f, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            this->reg.add_component<ScoreValue>(entity, ScoreValue{10});
             break;
         case 0x05:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
@@ -174,6 +176,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<PlayerFollowingPattern>(entity, PlayerFollowingPattern{0.5f});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            this->reg.add_component<ScoreValue>(entity, ScoreValue{10});
             break;
         case 0x06:
             this->reg.add_component<Position>(entity, Position{position_x, position_y});
@@ -184,6 +187,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
                 entity, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+            this->reg.add_component<ScoreValue>(entity, ScoreValue{10});
             break;
         case 0x10:
             reg.add_component<Position>(entity, Position{position_x, position_y});
@@ -194,6 +198,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             reg.add_component<Size>(entity, Size{325, 125});
             reg.add_component<Type>(entity, Type{EntityType::BOSS});
             reg.add_component<BossPatern>(entity, BossPatern{-1, true, false, 10.0, std::chrono::steady_clock::now()});
+            reg.add_component<ScoreValue>(entity, ScoreValue{30});
             break;
         default:
             std::map<uint8_t, std::shared_ptr<EntityData>>& entities =
