@@ -168,7 +168,7 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
             _registry.add_component<Size>(entity, Size{data->size->x, data->size->y});
         }
         if (data->sprite != nullptr) {
-            _registry.add_component<Sprite>(entity, Sprite{data->sprite->spritePath, data->sprite->rectSize[0], data->sprite->rectSize[1], data->sprite->rectPos[0], data->sprite->rectPos[1]});
+            _registry.add_component<Sprite>(entity, Sprite{data->sprite->spritePath, {data->sprite->rectSize[0], data->sprite->rectSize[1]}, {data->sprite->rectPos[0], data->sprite->rectPos[1]}});
         }
         if (data->rotation != nullptr) {
             _registry.add_component<Rotation>(entity, Rotation{data->rotation->rotation});

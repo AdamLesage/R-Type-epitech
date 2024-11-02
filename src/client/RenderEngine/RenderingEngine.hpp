@@ -87,6 +87,15 @@ namespace RType {
              * @author Adam Lesage
              */
             std::shared_ptr<Game> getCurrentGameDisplay() const { return _game; }
+
+            /**
+             * @brief Tell to the game is current selection if online or offline
+             *
+             * @param isOffline True: Offline game, False: Online game
+             * @return void
+             * @author Adam Lesage
+             */
+            void setOfflineMode(bool isOffline);
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;
@@ -96,9 +105,10 @@ namespace RType {
             std::shared_ptr<EndMenu> _endMenu;
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
-            RType::Logger logger;
+            Logger logger;
             int _stateGame = 1;
             std::string _gameSelected;
+            bool _isOffline;
     };
 } // namespace RType
 

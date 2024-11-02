@@ -5,8 +5,8 @@
 ** DoodleJump
 */
 
-#ifndef DOODLEJUMP_HPP_
-#define DOODLEJUMP_HPP_
+#ifndef DOODLEJUMPOFFLINE_HPP_
+#define DOODLEJUMPOFFLINE_HPP_
 
 #include <iostream>
 #include <memory>
@@ -16,23 +16,23 @@
 
 namespace RType {
     /**
-     * @brief DoodleJump class
+     * @brief DoodleJumpOffline class
      * 
-     * This class is the DoodleJump game
+     * This class is the DoodleJumpOffline game
      * 
-     * @class DoodleJump and inherits from AGame
+     * @class DoodleJumpOffline and inherits from AGame
      */
-    class DoodleJump : public AGame {
+    class DoodleJumpOffline : public AGame {
         public:
             /**
-             * @brief Construct a new DoodleJump object
+             * @brief Construct a new DoodleJumpOffline object
              */
-            DoodleJump();
+            DoodleJumpOffline();
 
             /**
-             * @brief Destroy the DoodleJump object
+             * @brief Destroy the DoodleJumpOffline object
              */
-            ~DoodleJump();
+            ~DoodleJumpOffline();
 
             /**
              * @brief handle offline game, meaning there is no communication with the server
@@ -64,4 +64,4 @@ namespace RType {
     };
 }
 
-#endif /* !DOODLEJUMP_HPP_ */
+#endif /* !DOODLEJUMPOFFLINE_HPP_ */
