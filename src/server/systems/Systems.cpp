@@ -582,6 +582,8 @@ void Systems::wave_of_ennemy_from_boss2(Registry& reg, std::unique_ptr<NetworkSe
 
 void Systems::wave_of_ennemy_from_boss3(Registry& reg, std::unique_ptr<NetworkSender>& networkSender)
 {
+    (void)reg;
+    (void)networkSender;
 }
 
 void Systems::boss_system(Registry& reg, std::unique_ptr<NetworkSender>& networkSender)

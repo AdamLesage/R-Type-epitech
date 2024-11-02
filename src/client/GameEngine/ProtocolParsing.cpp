@@ -276,8 +276,6 @@ bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& 
     unsigned int bossId;
     float posX;
     float posY;
-    float width;
-    float height;
 
     try {
         std::memcpy(&bossId, &message[index + 1], sizeof(unsigned int));
