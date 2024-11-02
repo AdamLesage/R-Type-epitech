@@ -195,7 +195,7 @@ void RType::Lobby::displayConnectedPlayer()
     float totalHeight      = window->getSize().y;
     float playerAreaHeight = 500;
     float playerStartY     = (totalHeight - playerAreaHeight) / 2.0f;
-    for (size_t i = 0; _camera->listEntityToDisplay.size() != i; ++i) {
+    for (size_t i = 0; _camera->listEntityToDisplay.size() != i && i != playerSprites.size(); ++i) {
         try {
             if (!playerTextures[i].loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath)) {
                 throw std::runtime_error("Error loading playerTexture " + std::to_string(i + 1));

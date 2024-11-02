@@ -89,7 +89,7 @@ void NetworkLib::Server::sendToAll(const char* message, size_t size) {
     std::chrono::duration<float> fs = now - lastPacketSend;
     float elapsed_seconds = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
 
-    if (packetToSend.size() >= 1000 || elapsed_seconds > 100) {
+    if (packetToSend.size() >= 1000 || elapsed_seconds > 50) {
         lastPacketSend = std::chrono::steady_clock::now();
         for (auto client : clients)
             send(packetToSend, client.second);

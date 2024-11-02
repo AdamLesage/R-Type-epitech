@@ -170,13 +170,12 @@ void RType::Game::play(float &latency) {
         _currentGame->handleOfflineGame();
     }
 
-    window->clear();
     RenderTexture->clear();
     try {
         libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
         
-        for (size_t i = 0; i < (size_t)backgroundSettings.getLength(); ++i) {
+        for (size_t i = 0; i < (size_t)backgroundSettings.getLength() && backgrounds.size() != i; ++i) {
             int speedX = backgroundSettings[i]["movingSpeedX"];
             int speedY = backgroundSettings[i]["movingSpeedY"];
             
@@ -227,6 +226,7 @@ void RType::Game::play(float &latency) {
     }
     
     displayEntitiesHealth(RenderTexture);
+    window->clear();
     RenderTexture->display();
     sf::Sprite sprite(RenderTexture->getTexture());
     window->draw(sprite);
@@ -270,7 +270,6 @@ sf::Vector2f RType::Game::convertToVector2fb(const Position& pos) {
 void RType::Game::set_texture() {
     std::lock_guard<std::mutex> lock(*this->_mutex.get());
     entity.clear();
-    window->clear();
     if (_camera == nullptr) return;
     if (this->isGameOffline() == true) { // If game is offline, camera is set in the game
         this->_camera = _currentGame->getCamera();
@@ -291,13 +290,16 @@ void RType::Game::set_texture() {
             entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
         } else { // If texture not loaded
             sf::Texture* _texture = new sf::Texture();
-            _texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath);
-            Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, _texture));
-            entity[i].setTexture(Textures[_camera->listEntityToDisplay[i].sprite.spritePath]);
-            entity[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
-                                                 _camera->listEntityToDisplay[i].sprite.rectPos[1],
-                                                 _camera->listEntityToDisplay[i].sprite.rectSize[0],
-                                                 _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+            if (!_texture->loadFromFile(_camera->listEntityToDisplay[i].sprite.spritePath)) {
+                std::cerr << "Failed to load texture: " << _camera->listEntityToDisplay[i].sprite.spritePath << std::endl;
+            } else {
+                Textures.insert(std::make_pair(_camera->listEntityToDisplay[i].sprite.spritePath, _texture));
+                entity[i].setTexture(_texture);
+                entity[i].setTextureRect(sf::IntRect(_camera->listEntityToDisplay[i].sprite.rectPos[0],
+                                                    _camera->listEntityToDisplay[i].sprite.rectPos[1],
+                                                    _camera->listEntityToDisplay[i].sprite.rectSize[0],
+                                                    _camera->listEntityToDisplay[i].sprite.rectSize[1]));
+            }
             entity[i].setPosition(convertToVector2fb(_camera->listEntityToDisplay[i].position));
         }
     }

@@ -75,13 +75,13 @@ void GameLogique::updateLevelConfig() {
 
 void GameLogique::startGame(int idEntity) {
     if (running == false) {
-        clearGame();
         #ifdef _WIN32
-            Sleep(10);
+            Sleep(1);
         #else
-            usleep(10000);
+            usleep(1000);
         #endif
         this->_networkSender->sendStateChange(idEntity, 0x03);
+        clearGame();
         #ifdef _WIN32
             Sleep(3000)
         #else
@@ -380,6 +380,7 @@ void GameLogique::runGame() {
             }
 
             if (ennemyAlive == false) {
+                std::lock_guard<std::mutex> lock(this->_mutex);
                 this->handleChangeLevel(_currentLevel + 1);
             }
         }
@@ -394,16 +395,26 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
         if (newLevel >= (unsigned int)levels.getLength()) {
             this->running = false;
             #ifdef _WIN32
-                Sleep(1000);
+                Sleep(10);
             #else
-                sleep(1);
+                usleep(10000);
             #endif
             this->_networkSender->sendStateChange(1, 0x01);
             this->_currentLevel = 0;
+            #ifdef _WIN32
+                Sleep(10);
+            #else
+                usleep(10000);
+            #endif
             this->_networkSender->sendLevelUpdate(this->_currentLevel);
             this->updateLevelConfig();
             return;
         }
+        #ifdef _WIN32
+            Sleep(10);
+        #else
+            usleep(10000);
+        #endif
         this->_networkSender->sendLevelUpdate(newLevel);
         this->_currentLevel = newLevel;
         this->updateLevelConfig();
@@ -574,12 +585,14 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x45: {
-                auto& playerHealth = reg.get_components<Health_s>()[message.second];
-                if (message.first[1] == 0x01) {
-                    playerHealth->isDamageable = false;
-                }
-                if (message.first[1] == 0x02) {
-                    playerHealth->isDamageable = true;
+                auto& playerHealth = reg.get_components<Health_s>()[this->playersId[message.second]];
+                if (playerHealth) {
+                    if (message.first[1] == 0x01) {
+                        playerHealth->isDamageable = false;
+                    }
+                    if (message.first[1] == 0x02) {
+                        playerHealth->isDamageable = true;
+                    }
                 }
                 break;
             }
@@ -587,24 +600,32 @@ void GameLogique::handleRecieve() {
                 float value;
                 std::memcpy(&value, &message.first[1], sizeof(float));
                 auto& speed                           = reg.get_components<ShootingSpeed_s>();
-                speed[message.second]->shooting_speed = value;
+                if (this->playersId[message.second] < speed.size() && speed[this->playersId[message.second]]) {
+                    speed[this->playersId[message.second]]->shooting_speed = value;
+                }
                 break;
             }
             case 0x47: {
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
-                auto& position = reg.get_components<Position_s>()[message.second];
-                position->x    = pos_x;
-                position->y    = pos_y;
-                _networkSender->sendPositionUpdate(message.second, pos_x, pos_y);
+                if (reg.get_components<Position_s>().size() > this->playersId[message.second]) {
+                    auto &position = reg.get_components<Position_s>()[this->playersId[message.second]];
+                    position->x    = pos_x;
+                    position->y    = pos_y;
+                    _networkSender->sendPositionUpdate(this->playersId[message.second], pos_x, pos_y);
+                }
                 break;
             }
             case 0x48: {
                 int value;
                 std::memcpy(&value, &message.first[1], sizeof(int));
-                auto& playerHealth   = reg.get_components<Health_s>()[message.second];
-                playerHealth->health = value;
+                if (this->playersId[message.second] < reg.get_components<Health_s>().size()) {
+                    auto& playerHealth   = reg.get_components<Health_s>()[this->playersId[message.second]];
+                    if (playerHealth) {
+                        playerHealth->health = value;
+                    }
+                }
                 break;
             }
             default:
