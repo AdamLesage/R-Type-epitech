@@ -73,7 +73,7 @@ void RType::EndMenu::displayEndMenuOptions()
         optionText.setFont(_font);
         optionText.setString(_options[i]);
         optionText.setCharacterSize(30);
-        optionText.setFillColor(i == _selectedOption ? sf::Color::Red : sf::Color::White);
+        optionText.setFillColor(i == _selectedOption ? sf::Color::Red : sf::Color::Magenta);
         optionText.setPosition(100, 200 + i * 50);
         _window->draw(optionText);
     }
