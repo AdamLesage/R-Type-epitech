@@ -20,7 +20,8 @@
 #include <mutex>
 #include <libconfig.h++>
 
-#include "Games/DoodleJump.hpp"
+#include "Games/DoodleJumpOffline.hpp"
+#include "Games/RTypeOffline.hpp"
 #include "Games/IGame.hpp"
 #include "../ARenderEngineScene.hpp"
 #include "../../GameMetrics/Toolbar.hpp"
@@ -59,44 +60,47 @@ namespace RType {
             /**
              * @brief Displays the subtitle of a shoot.
              */
-
             void displayPiou();
 
             /**
              * @brief Plays the shoot sound.
              */
-
             void ShootSound();
 
             /**
              * @brief Displays the cinematic just before the game starts.
              */
-            void runScene(float &latency) override;
+            void runScene(float& latency) override;
 
             /**
              * @brief Displays the game we are playing.
              */
-            void play(float &latency);
+            void play(float& latency);
+
             /**
              * @brief Set the camera to display
              *
              * @param camera the camera to set
              */
             void setCamera(std::shared_ptr<Camera> camera);
+
             /**
              * @brief set the textures needed from camera to the textures map
              */
             void set_texture();
+
             /**
              * @brief Set the level to display
              *
              * @param level the new level
              */
             void setLevel(size_t level);
+
             /**
              * @brief Convert structure Size to a Vector2f
              */
             sf::Vector2f convertToVector2f(const Size& size);
+
             /**
              * @brief Convert structure Position to a Vector2f
              */
@@ -129,17 +133,41 @@ namespace RType {
 
             /**
              * @brief Set the game selected
-             * 
+             *
              * @param gameSelected the game selected
              */
-            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+            void setGameSelected(const std::string& gameSelected) {
+                _gameSelected = gameSelected;
+
+                if (_gameSelected == "Platformer") {
+                    _currentGame = std::make_shared<DoodleJumpOffline>();
+                } else if (_gameSelected == "R-Type") {
+                    _currentGame = std::make_shared<RTypeOffline>();
+                }
+            }
 
             /**
              * @brief Return current instance of currentGame, will be called by mediator to reset game
              * @return current game instance
              * @author Adam Lesage
              */
-            std::shared_ptr<IGame> getCurrentGame() const { return _currentGame; }
+            std::shared_ptr<IGame> getCurrentGame() const {
+                return _currentGame;
+            }
+
+            /**
+             * @brief Tell to the game is current selection if online or offline
+             *
+             * @param isOffline True: Offline game, False: Online game
+             * @return void
+             * @author Adam Lesage
+             */
+            void setOfflineMode(bool isOffline) {
+                _isGameOffline = isOffline;
+            }
+
+        protected:
+            bool _isGameOffline;
 
             /**
              * @brief Display the entities health
@@ -165,7 +193,7 @@ namespace RType {
 
             /**
              * @brief Check if the game is offline
-             * 
+             *
              * @return true if the game is offline
              */
             bool isGameOffline();
@@ -184,32 +212,32 @@ namespace RType {
              *
              * @param levelSetting The current level setting
              */
-            void loadBackgroundConfig(libconfig::Setting &levelSetting);
+            void loadBackgroundConfig(libconfig::Setting& levelSetting);
 
             libconfig::Config _cfg; // The config file
 
             Registry _registry;
             Systems _systems;
             std::shared_ptr<Console> console;
-            std::shared_ptr<Settings> settings; //the class settings used to display the settings
+            std::shared_ptr<Settings> settings;          // the class settings used to display the settings
             std::vector<sf::RectangleShape> backgrounds; // The backgrounds of the game
             std::vector<sf::Texture> backgroundTextures; // The textures of the backgrounds
-            std::vector<sf::RectangleShape> players; // The players of the game
-            std::vector<sf::RectangleShape> entity; // The entities of the game
-            std::vector<sf::Texture> playerTextures; // The textures of the players
-            std::shared_ptr<Camera> _camera; // The camera to display
+            std::vector<sf::RectangleShape> players;     // The players of the game
+            std::vector<sf::RectangleShape> entity;      // The entities of the game
+            std::vector<sf::Texture> playerTextures;     // The textures of the players
+            std::shared_ptr<Camera> _camera;             // The camera to display
             /**
              * @brief map that will stock the textures, It will allow us to not load a texture every time we
              * find a new entity but just when we find one that is not in our map
              */
             std::unordered_map<std::string, sf::Texture*> Textures; // a map that will stock the textures
-            bool isShooting; // A boolean to know if the player is shooting
-            sf::Font font; // The font used for the game
-            std::shared_ptr<std::mutex> _mutex; 
+            sf::Font font;                                          // The font used for the game
+            std::shared_ptr<std::mutex> _mutex;
             bool piou = false; // A boolean to know wd need to display the piou sound
             std::shared_ptr<sf::RenderTexture> RenderTexture; // The render texture
-            sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia, Achromatopsia, Normal)
-            sf::Event event; // The event of the game
+            sf::Shader colorblindShader[5]; // The colorblind shader (Deuteranopia, Protanopia, Tritanopia,
+                                            // Achromatopsia, Normal)
+            sf::Event event;                // The event of the game
             std::shared_ptr<IGame> _currentGame;
             size_t _level;
             GameMetrics metrics;

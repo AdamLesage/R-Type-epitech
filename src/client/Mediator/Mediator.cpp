@@ -50,10 +50,7 @@ void RType::Mediator::notifyNetworkEngine(std::string sender, const std::string&
     (void)event;
     if (sender != "NetworkEngine") return;
 
-    // if (event.rfind("updateData", 0) == 0) {
-    //     event = event.substr(9); // Remove "updateData"
     this->_gameEngine->handleServerData(event);
-    // }
 }
 
 void RType::Mediator::notifyRenderingEngine(std::string sender, const std::string& event) {

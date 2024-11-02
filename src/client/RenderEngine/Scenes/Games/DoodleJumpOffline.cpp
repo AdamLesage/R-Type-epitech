@@ -2,12 +2,12 @@
 ** EPITECH PROJECT, 2024
 ** R-Type-epitech
 ** File description:
-** DoodleJump
+** DoodleJumpOffline
 */
 
-#include "DoodleJump.hpp"
+#include "DoodleJumpOffline.hpp"
 
-RType::DoodleJump::DoodleJump()
+RType::DoodleJumpOffline::DoodleJumpOffline()
 {
     _camera = std::make_shared<Camera>();
     _isJumping = false;
@@ -15,11 +15,11 @@ RType::DoodleJump::DoodleJump()
     _canApplyGravity = false;
 }
 
-RType::DoodleJump::~DoodleJump()
+RType::DoodleJumpOffline::~DoodleJumpOffline()
 {
 }
 
-void RType::DoodleJump::handleOfflineGame()
+void RType::DoodleJumpOffline::handleOfflineGame()
 {
     bool isPlayerInList = false;
     const size_t NUMBER_PLATFORM = 25;
@@ -112,7 +112,7 @@ void RType::DoodleJump::handleOfflineGame()
     this->applyGravity();
 }
 
-void RType::DoodleJump::applyGravity()
+void RType::DoodleJumpOffline::applyGravity()
 {
     const float GRAVITY = 2.0f;
 
@@ -183,7 +183,7 @@ void RType::DoodleJump::applyGravity()
     }
 }
 
-void RType::DoodleJump::jump()
+void RType::DoodleJumpOffline::jump()
 {
     // Empêcher les sauts supplémentaires pendant le saut actuel
     if (!_canJump)
@@ -205,7 +205,7 @@ void RType::DoodleJump::jump()
     }
 }
 
-void RType::DoodleJump::handleInput()
+void RType::DoodleJumpOffline::handleInput()
 {
     // Handle key pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
