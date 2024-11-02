@@ -77,18 +77,18 @@ void GameLogique::startGame(int idEntity) {
                 pos->x = 100.f;
                 pos->y = 100 + (100.f * i);
             }
-            this->_networkSender->sendPositionUpdate(i , 100.f, 100 + (100.f * i));
-            #ifdef _WIN32
-                Sleep(10);
-            #else
-                usleep(10000);
-            #endif
+            this->_networkSender->sendPositionUpdate(i, 100.f, 100 + (100.f * i));
+#ifdef _WIN32
+            Sleep(10);
+#else
+            usleep(10000);
+#endif
         }
-        #ifdef _WIN32
-            Sleep(1);
-        #else
-            sleep(1);
-        #endif
+#ifdef _WIN32
+        Sleep(1);
+#else
+        sleep(1);
+#endif
         this->_networkSender->sendStateChange(idEntity, 0x03);
         this->running = true;
     }
@@ -192,12 +192,14 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
         case 0x10:
             reg.add_component<Position>(entity, Position{position_x, position_y});
             reg.add_component<Tag>(entity, Tag{"boss"});
-            reg.add_component<Health>(entity, Health{1000, 100, false, false}); // We can destroy the boss with a projectile
+            reg.add_component<Health>(
+                entity, Health{1000, 100, false, false}); // We can destroy the boss with a projectile
             reg.add_component<Damage>(entity, Damage{10});
             reg.add_component<Velocity>(entity, Velocity{0, 0});
             reg.add_component<Size>(entity, Size{325, 125});
             reg.add_component<Type>(entity, Type{EntityType::BOSS});
-            reg.add_component<BossPatern>(entity, BossPatern{-1, true, false, 10.0, std::chrono::steady_clock::now()});
+            reg.add_component<BossPatern>(
+                entity, BossPatern{-1, true, false, 10.0, std::chrono::steady_clock::now()});
             reg.add_component<ScoreValue>(entity, ScoreValue{30});
             break;
         default:
@@ -221,7 +223,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
                 this->spawnCustomEntity(selectedIt->first, position_x, position_y, entity);
                 selectedIt->second->number -= 1;
             } else {
-                bool enemyExists = false; // check if there is still an enemy 
+                bool enemyExists = false; // check if there is still an enemy
                 for (auto& types : reg.get_components<Type>()) {
                     if (types && types->type == EntityType::ENEMY) {
                         enemyExists = true;
@@ -250,8 +252,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     }
 }
 
-void GameLogique::spawnWave()
-{
+void GameLogique::spawnWave() {
     spawnEnnemy(0x10, 1620, 500);
 }
 
@@ -262,7 +263,7 @@ bool GameLogique::getfriendlyfire() {
     std::string friendlyfireStr;
     const libconfig::Setting& root = cfg.getRoot();
     const libconfig::Setting& keys = root["Keys"];
-    
+
     for (int i = 0; i < keys.getLength(); ++i) {
         const libconfig::Setting& key = keys[i];
         std::string name;
@@ -273,21 +274,20 @@ bool GameLogique::getfriendlyfire() {
         }
     }
 
-    if (friendlyfireStr == "ON")
-        return true;
+    if (friendlyfireStr == "ON") return true;
     return false;
 }
 
 void GameLogique::runGame() {
-    std::clock_t clock      = std::clock();
-    std::clock_t spawnClock = std::clock();
+    std::clock_t clock           = std::clock();
+    std::clock_t spawnClock      = std::clock();
     int friendlyFireCheckCounter = 0;
-    std::clock_t pingClock  = std::clock();
+    std::clock_t pingClock       = std::clock();
 
     while (1) {
         if (this->running) {
             if (friendlyFireCheckCounter == 0) {
-                friendlyfire = getfriendlyfire();
+                friendlyfire             = getfriendlyfire();
                 friendlyFireCheckCounter = 999;
             }
 
@@ -314,11 +314,11 @@ void GameLogique::runGame() {
             }
             if (this->areAllPlayersDead() == true) {
                 this->clearGame();
-                #ifdef _WIN32
-                    Sleep(1);
-                #else
-                    sleep(1);
-                #endif
+#ifdef _WIN32
+                Sleep(1);
+#else
+                sleep(1);
+#endif
                 this->_networkSender->sendStateChange(1, 0x04);
                 this->running       = false;
                 this->_currentLevel = 0;
@@ -341,11 +341,11 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
         libconfig::Setting& levels = this->_gameConfig.lookup("Menu.Game.level");
         if (newLevel >= (unsigned int)levels.getLength()) {
             this->running = false;
-            #ifdef _WIN32
-                Sleep(1);
-            #else
-                sleep(1);
-            #endif
+#ifdef _WIN32
+            Sleep(1);
+#else
+            sleep(1);
+#endif
             this->_networkSender->sendStateChange(1, 0x01);
             this->_currentLevel = 0;
             this->_networkSender->sendLevelUpdate(this->_currentLevel);
@@ -375,22 +375,22 @@ void GameLogique::clearGame() {
     auto& types = reg.get_components<Type>();
 
     for (size_t i = 0; i < types.size(); ++i) {
-        auto &type = types[i];
-        #ifdef _WIN32
-            Sleep(1);
-        #else
-            usleep(1000);
-        #endif
+        auto& type = types[i];
+#ifdef _WIN32
+        Sleep(1);
+#else
+        usleep(1000);
+#endif
         if (type) {
             this->_networkSender->sendDeleteEntity(i);
             this->reg.kill_entity(i);
         }
     }
-    #ifdef _WIN32
-        Sleep(1);
-    #else
-        usleep(1000);
-    #endif
+#ifdef _WIN32
+    Sleep(1);
+#else
+    usleep(1000);
+#endif
     for (size_t numberPlayer = 0; numberPlayer != this->network->getClientCount(); numberPlayer++) {
         entity_t entity = this->reg.spawn_entity();
         this->reg.add_component<Position>(entity, Position_s{100.f + (100.f * numberPlayer), 100.f});
@@ -404,11 +404,11 @@ void GameLogique::clearGame() {
         this->reg.add_component<Direction>(entity, Direction{0, 0});
         this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));
         this->playersId[numberPlayer] = entity;
-        #ifdef _WIN32
-            Sleep(1);
-        #else
-            usleep(1000);
-        #endif
+#ifdef _WIN32
+        Sleep(1);
+#else
+        usleep(1000);
+#endif
     }
 }
 
@@ -583,23 +583,27 @@ void GameLogique::handleClientConnection() {
                     auto& type     = types[i];
                     if (type && position && (i != clientId || running)) {
                         switch (type->type) {
-                            case EntityType::ENEMY:
-                                this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y, clientId);
-                                break;
-                            case EntityType::BOSS:
-                                this->_networkSender->sendCreateEnemy(0x10, i, position->x, position->y, clientId);
-                                break;
-                            case EntityType::PLAYER:
-                                this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
-                                break;
-                            case EntityType::PLAYER_PROJECTILE:
-                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
-                                break;
-                            case EntityType::ENEMY_PROJECTILE:
-                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
-                                break;
-                            default:
-                                break;
+                        case EntityType::ENEMY:
+                            this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y,
+                                                                  clientId);
+                            break;
+                        case EntityType::BOSS:
+                            this->_networkSender->sendCreateEnemy(0x10, i, position->x, position->y,
+                                                                  clientId);
+                            break;
+                        case EntityType::PLAYER:
+                            this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
+                            break;
+                        case EntityType::PLAYER_PROJECTILE:
+                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
+                                                                      clientId);
+                            break;
+                        case EntityType::ENEMY_PROJECTILE:
+                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
+                                                                      clientId);
+                            break;
+                        default:
+                            break;
                         }
                     }
                 }

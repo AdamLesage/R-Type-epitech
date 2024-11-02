@@ -40,12 +40,12 @@ namespace Edition {
 
             /**
              * @brief Handles toolbar event such as button clicks
-             * 
+             *
              * This function will handle actions such as undo, redo, save, delete, move, zoom and dezoom
-             * 
+             *
              * @param event The SFML event to process.
              */
-            void handleToolbarEvents(const sf::Event &event);
+            void handleToolbarEvents(const sf::Event& event);
 
             /**
              * @brief Display toolbar events
@@ -56,14 +56,14 @@ namespace Edition {
         private:
             /**
              * @brief Handles drag-and-drop events for textures.
-             * 
-             * Updates the rectangle shape position based on mouse events 
+             *
+             * Updates the rectangle shape position based on mouse events
              * and manages the texture loading and unloading.
-             * 
+             *
              * @param event The SFML event to process.
              * @param texturePath The path of the texture to be dragged.
              */
-            void manageDragAndDrop(sf::Event &event, std::string &texturPath);
+            void manageDragAndDrop(sf::Event& event, std::string& texturPath);
 
             std::shared_ptr<sf::RenderWindow> _window;
             std::shared_ptr<RightSidebar> _rightSidebar;
@@ -74,6 +74,6 @@ namespace Edition {
             EditionScreen _editionScreen;
             size_t _lastEntityCode;
     };
-}
+} // namespace Edition
 
 #endif /* !ASSETEDITOR_HPP_ */

@@ -41,11 +41,11 @@ namespace RType {
              */
             ~EndMenu();
 
-            void runScene(float &latency) override;
+            void runScene(float& latency) override;
 
             /**
              * @brief Set the game selected
-             * 
+             *
              * @param gameSelected the game selected
              */
             void setGameSelected(const std::string& gameSelected);
@@ -59,17 +59,18 @@ namespace RType {
              * @brief Display options wich can be: Play again, Menu, Exit
              */
             void displayEndMenuOptions();
+
         protected:
         private:
             libconfig::Config _cfg; // The config file
             std::shared_ptr<sf::RenderWindow> _window;
             std::string _gameSelected;
             std::array<std::string, 3> _options; // Play again, Menu, Exit
-            unsigned short int _selectedOption; 
+            unsigned short int _selectedOption;
             sf::Font _font;
-            bool _upKeyPressed = false;
+            bool _upKeyPressed   = false;
             bool _downKeyPressed = false;
     };
-}
+} // namespace RType
 
 #endif /* !ENDMENU_HPP_ */

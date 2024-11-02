@@ -30,7 +30,8 @@ RType::AudioEngine::AudioEngine() {
         throw std::runtime_error("Error loading background music");
     }
     backgroundMusic2.setBuffer(backgroundBuffer);
-    std::string select = std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "selectsound.wav";
+    std::string select =
+        std::string("assets") + PATH_SEPARATOR + "Sounds" + PATH_SEPARATOR + "selectsound.wav";
     if (!selectBuffer.loadFromFile(select)) {
         throw std::runtime_error("Error loading select sound");
     }

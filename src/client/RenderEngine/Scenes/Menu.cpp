@@ -34,7 +34,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-    selectedOption = 0;
+    selectedOption         = 0;
     std::string shaderPath = std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR;
     if (!colorblindShader[0].loadFromFile(shaderPath + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
@@ -94,10 +94,8 @@ int RType::Menu::getSelectedOption() const {
 }
 
 void RType::Menu::adjustVolume(bool increase) {
-    if (increase)
-        _mediator->notify("RenderingEngine", "adjustVolume True");
-    if (!increase)
-        _mediator->notify("RenderingEngine", "adjustVolume False");
+    if (increase) _mediator->notify("RenderingEngine", "adjustVolume True");
+    if (!increase) _mediator->notify("RenderingEngine", "adjustVolume False");
 }
 
 void RType::Menu::handleKeyPress(const sf::Event& event) {
@@ -176,7 +174,7 @@ void RType::Menu::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
-void RType::Menu::runScene(float &latency) {
+void RType::Menu::runScene(float& latency) {
     (void)latency;
     sf::Event event;
     while (window->pollEvent(event)) {
@@ -230,7 +228,7 @@ void RType::Menu::runScene(float &latency) {
     }
     RenderTexture.display();
     sf::Sprite sprite(RenderTexture.getTexture());
-        std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    std::string colorblind = settings->get_key_value(cfg, "Keys8");
     if (colorblind.find("Deuteranopia") != std::string::npos) {
         window->draw(sprite, &colorblindShader[0]);
     } else if (colorblind.find("Protanopia") != std::string::npos) {
@@ -254,7 +252,7 @@ void RType::Menu::displayHighscores() {
         highscores["No highscores yet"] = 0;
     }
 
-    int screenWidth = RenderTexture.getSize().x;
+    int screenWidth   = RenderTexture.getSize().x;
     int baseYPosition = RenderTexture.getSize().y / 2 - 300;
 
     sf::Text highScoresTitle;
@@ -269,7 +267,7 @@ void RType::Menu::displayHighscores() {
 
     RenderTexture.draw(highScoresTitle);
 
-    int i = 0;
+    int i           = 0;
     int scoreStartY = baseYPosition + 70;
     for (const auto& [name, value] : highscores) {
         sf::Text score;
@@ -294,7 +292,7 @@ void RType::Menu::displayLastScores() {
         latestScores["No scores yet"] = 0;
     }
 
-    int screenWidth = RenderTexture.getSize().x;
+    int screenWidth   = RenderTexture.getSize().x;
     int baseYPosition = RenderTexture.getSize().y / 2 - 50;
 
     sf::Text lastScoresTitle;
@@ -309,7 +307,7 @@ void RType::Menu::displayLastScores() {
 
     RenderTexture.draw(lastScoresTitle);
 
-    int i = 0;
+    int i           = 0;
     int scoreStartY = baseYPosition + 60;
     for (const auto& [name, value] : latestScores) {
         sf::Text score;

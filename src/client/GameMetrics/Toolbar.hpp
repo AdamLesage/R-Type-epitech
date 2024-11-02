@@ -27,7 +27,7 @@ class Toolbar {
 
         /**
          * @brief Draw the toolbar.
-         * 
+         *
          * @param window window to draw-in.
          */
         void draw(sf::RenderWindow& window);
@@ -39,7 +39,7 @@ class Toolbar {
 
         /**
          * @brief Handles the events of the toolbar.
-         * 
+         *
          * @param event event informations.
          * @param window window to interact with.
          */
@@ -52,14 +52,14 @@ class Toolbar {
 
         /**
          * @brief Update the option hovered by the mouse
-         * 
+         *
          * @param window window to interact with.
          */
         void updateHoveredOption(sf::RenderWindow& window);
 
         /**
          * @brief Display metrics
-         * 
+         *
          * @param optionName option's name
          */
         void displayMetrics(const std::string optionName);

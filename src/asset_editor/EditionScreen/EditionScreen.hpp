@@ -26,9 +26,9 @@ namespace Edition {
 
     /**
      * @brief Edition Screen of the Asset Editor
-     * 
+     *
      * This screen will be used to display the scene and the assets
-     * 
+     *
      * The user will be able to drag and drop assets in the scene
      */
     class EditionScreen {
@@ -45,21 +45,21 @@ namespace Edition {
 
             /**
              * @brief Draw the Edition Screen
-             * 
+             *
              * @param window The window of the Asset Editor
              */
-            void draw(sf::RenderWindow &window);
+            void draw(sf::RenderWindow& window);
 
             /**
              * @brief Handle the events of the Edition Screen
-             * 
+             *
              * @param event The event to handle
              */
-            std::shared_ptr<Edition::Asset> handleEvent(const sf::Event &event, sf::RenderWindow &window);
+            std::shared_ptr<Edition::Asset> handleEvent(const sf::Event& event, sf::RenderWindow& window);
 
             /**
              * @brief Display dialog to save the scene
-             * 
+             *
              * @param window The window of the Asset Editor
              * @return true if the user saved the scene, false if the dialog was closed
              */
@@ -67,21 +67,21 @@ namespace Edition {
 
             /**
              * @brief Save the scene
-             * 
+             *
              * @param event The event to handle
              */
-            void retrieveInputSaveScene(const sf::Event &event);
+            void retrieveInputSaveScene(const sf::Event& event);
 
             /**
              * @brief Load the scene
-             * 
+             *
              * @param event The event to handle
              */
-            void retrieveInputLoadScene(const sf::Event &event);
+            void retrieveInputLoadScene(const sf::Event& event);
 
             /**
              * @brief Display dialog to delete the scene
-             * 
+             *
              * @param window The window of the Asset Editor
              * @return true if the user deleted the scene, false if the dialog was closed
              */
@@ -89,7 +89,7 @@ namespace Edition {
 
             /**
              * @brief Display dialog to load the scene
-             * 
+             *
              * @param window The window of the Asset Editor
              * @return true if the user loaded the scene, false if the dialog was closed
              */
@@ -97,10 +97,10 @@ namespace Edition {
 
             /**
              * @brief Save the scene in a cfg file with the given name
-             * 
+             *
              * @param sceneName The name of the scene to load
              */
-            void saveScene(const std::string &sceneName);
+            void saveScene(const std::string& sceneName);
 
             /**
              * @brief Delete every entities in the scene
@@ -118,15 +118,16 @@ namespace Edition {
              */
             float getViewLeftEdge();
             /** @brief Load the scene with the given name
-             * 
+             *
              * @param sceneName The name of the scene to load
              */
-            void loadScene(const std::string &sceneName);
+            void loadScene(const std::string& sceneName);
 
             /**
              * @brief The command manager
              */
             CommandManager commandManager;
+
         private:
             sf::RectangleShape _centralArea;
             sf::Text _inputSaveText;
@@ -134,10 +135,10 @@ namespace Edition {
             float _zoomFactor;
             sf::Vector2f _centralAreaPosition;
             sf::Vector2f _centralAreaSize;
-            bool _isInArea = false;
+            bool _isInArea      = false;
             float _viewLeftEdge = 0;
             sf::Text _inputLoadText;
     };
-}
+} // namespace Edition
 
 #endif /* !EDITIONSCREEN_HPP_ */

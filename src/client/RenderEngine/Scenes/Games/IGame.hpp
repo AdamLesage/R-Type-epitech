@@ -16,7 +16,7 @@
 namespace RType {
     /**
      * @brief IGame class
-     * 
+     *
      * This class is the interface for all games
      */
     class IGame {
@@ -76,9 +76,10 @@ namespace RType {
              * @author Adam Lesage
              */
             virtual void resetGame() = 0;
+
         protected:
         private:
     };
-}
+} // namespace RType
 
 #endif /* !IGAME_HPP_ */

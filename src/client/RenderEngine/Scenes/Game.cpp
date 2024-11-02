@@ -197,7 +197,7 @@ void RType::Game::play(float& latency) {
         displayPiou();
         piou = false;
     }
-    
+
     RenderTexture->display();
     sf::Sprite sprite(RenderTexture->getTexture());
     window->draw(sprite);
@@ -422,7 +422,8 @@ void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
         if (entityInfo.health.health > 0) {
             sf::Text hpText;
             hpText.setFont(hpFont);
-            hpText.setString(std::to_string(entityInfo.health.health) + "/" + std::to_string(entityInfo.health.maxHealth));
+            hpText.setString(std::to_string(entityInfo.health.health) + "/"
+                             + std::to_string(entityInfo.health.maxHealth));
             hpText.setCharacterSize(18);
             hpText.setFillColor(sf::Color::White);
 
@@ -431,4 +432,3 @@ void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
         }
     }
 }
-

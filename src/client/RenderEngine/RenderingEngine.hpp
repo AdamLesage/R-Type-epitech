@@ -60,19 +60,25 @@ namespace RType {
 
             /**
              * @brief Set a new State
-             * 
+             *
              *  @param newState the new state
              */
             void setStateGame(int newState);
-            std::shared_ptr<Menu> getMenu() const { return _menu; }
-            std::shared_ptr<Lobby> getLobby() const { return _lobby; }
+            std::shared_ptr<Menu> getMenu() const {
+                return _menu;
+            }
+            std::shared_ptr<Lobby> getLobby() const {
+                return _lobby;
+            }
 
             /**
              * @brief Set the game selected
-             * 
+             *
              * @param gameSelected the game selected
              */
-            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+            void setGameSelected(const std::string& gameSelected) {
+                _gameSelected = gameSelected;
+            }
             /**
              * @brief Set the level to display
              *
@@ -86,7 +92,9 @@ namespace RType {
              * @return current game instance
              * @author Adam Lesage
              */
-            std::shared_ptr<Game> getCurrentGameDisplay() const { return _game; }
+            std::shared_ptr<Game> getCurrentGameDisplay() const {
+                return _game;
+            }
 
             /**
              * @brief Tell to the game is current selection if online or offline
@@ -96,6 +104,7 @@ namespace RType {
              * @author Adam Lesage
              */
             void setOfflineMode(bool isOffline);
+
         private:
             std::shared_ptr<Menu> _menu;
             std::shared_ptr<sf::RenderWindow> window;

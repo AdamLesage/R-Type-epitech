@@ -17,9 +17,9 @@
 namespace RType {
     /**
      * @brief DoodleJumpOffline class
-     * 
+     *
      * This class is the DoodleJumpOffline game
-     * 
+     *
      * @class DoodleJumpOffline and inherits from AGame
      */
     class DoodleJumpOffline : public AGame {
@@ -36,7 +36,7 @@ namespace RType {
 
             /**
              * @brief handle offline game, meaning there is no communication with the server
-             * 
+             *
              * Everything is calculated on the client side
              */
             void handleOfflineGame() override;
@@ -55,6 +55,7 @@ namespace RType {
              * @brief handle input, can be input from keyboard or mouse
              */
             void handleInput() override;
+
         protected:
         private:
             float _initialYPosition;
@@ -62,6 +63,6 @@ namespace RType {
             bool _canJump;
             bool _canApplyGravity;
     };
-}
+} // namespace RType
 
 #endif /* !DOODLEJUMPOFFLINE_HPP_ */

@@ -15,23 +15,23 @@
 namespace Edition {
     /**
      * @brief Current selection of the toolbar
-     * 
+     *
      * This will be used to know which tool is currently selected
      */
     enum CurrentSelection { UNDO, REDO, SAVE, LOAD, DELETE, MOVE, ZOOM, DEZOOM };
 
     /**
      * @brief Toolbar Button of the Asset Editor
-     * 
+     *
      * This button will be used to display different buttons in the toolbar
-     * 
+     *
      * Buttons will be used to modify the scene
      */
     class ToolbarButton {
         public:
             /**
              * @brief Construct a new Toolbar Button object
-             * 
+             *
              * @param buttonIconAssetPath The path to the icon of the button
              * @param position The position of the button
              */
@@ -44,18 +44,18 @@ namespace Edition {
 
             /**
              * @brief Update the button with hover and click events
-             * 
+             *
              * @param window The window of the Asset Editor
              * @return icon path if the button is hovered, empty string otherwise
              */
-            std::string update(sf::RenderWindow& window, CurrentSelection &currentSelection);
+            std::string update(sf::RenderWindow& window, CurrentSelection& currentSelection);
 
             /**
              * @brief Draw the button
-             * 
+             *
              * @param window The window of the Asset Editor
              */
-            void draw(sf::RenderWindow &window);
+            void draw(sf::RenderWindow& window);
 
         protected:
         private:
@@ -67,6 +67,6 @@ namespace Edition {
             sf::RectangleShape _backgroundRectangle;
             sf::Sprite _buttonIconSprite;
     };
-}
+} // namespace Edition
 
 #endif /* !TOOLBARBUTTON_HPP_ */

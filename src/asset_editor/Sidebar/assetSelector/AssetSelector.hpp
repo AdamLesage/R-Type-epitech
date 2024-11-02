@@ -38,7 +38,7 @@ namespace Edition {
             ~AssetSelector();
             /**
              * @brief display the AssetSelector on the window
-             * 
+             *
              * @param window the window of the assetEditor
              */
             void display();
@@ -50,37 +50,38 @@ namespace Edition {
 
             /**
              * @brief Handles sprite selection based on mouse events.
-             * 
+             *
              * @param event The mouse event to process.
              * @return A string indicating the result of the selection (e.g., sprite ID).
              */
             std::string handlePickSprite(const sf::Event& event);
+
         protected:
         private:
             /**
              * @brief load the assets of the project
-             * 
+             *
              * @param assetPath the directory path
              */
-            void findAndLoadAsset(const std::string &assetPath);
+            void findAndLoadAsset(const std::string& assetPath);
             /**
              * @brief Updates the rectangle shape properties for selection indication.
-             * 
-             * Adjusts the position, size, or appearance of the rectangle based on 
+             *
+             * Adjusts the position, size, or appearance of the rectangle based on
              * the current state.
              */
             void updateRectangleShape();
 
             std::unordered_map<std::string, std::map<std::string, std::shared_ptr<sf::Texture>>> assetMap;
-            std::vector<std::pair<std::string ,std::shared_ptr<sf::RectangleShape>>> displayShape;
+            std::vector<std::pair<std::string, std::shared_ptr<sf::RectangleShape>>> displayShape;
             std::array<std::string, 3> extensions = {".png", ".jpg", ".jpeg"};
             sf::View AssetSelectorView;
-            float scrollOffset = 0;
+            float scrollOffset      = 0;
             const float scrollSpeed = 20;
-            float maxScrollOffset = 0;
+            float maxScrollOffset   = 0;
             std::unique_ptr<SelectBar> selectBar;
             std::shared_ptr<sf::RenderWindow> _window;
     };
-}
+} // namespace Edition
 
 #endif /* !ASSETSELECTOR_HPP_ */

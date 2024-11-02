@@ -105,7 +105,7 @@ namespace RType {
 
             /**
              * @brief Handle position of enemies and enemy projectiles
-             * 
+             *
              * @return void
              * @author Adam Lesage
              */
@@ -113,7 +113,7 @@ namespace RType {
 
             /**
              * @brief Enemy will randomly shoot so player have to avoid missiles
-             * 
+             *
              * @return void
              * @author Adam Lesage
              */
@@ -146,7 +146,7 @@ namespace RType {
 
             /**
              * @brief if an entity take a damage, the entity die
-             * 
+             *
              * @return void
              * @author Adam Lesage
              */
@@ -154,7 +154,7 @@ namespace RType {
 
             /**
              * @brief check if two entities collides
-             * 
+             *
              * @return true if entities collides, otherwise false
              * @author Adam Lesage
              */

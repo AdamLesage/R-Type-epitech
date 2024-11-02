@@ -17,14 +17,14 @@ namespace Edition {
 
     /**
      * @brief Move Asset Command
-     * 
+     *
      * This command will be used to move an asset in the scene
      */
     class MoveAsset : public ICommand {
         public:
             /**
              * @brief Construct a new Move Asset object
-             * 
+             *
              * @param asset The asset to move
              * @param dx The x offset
              * @param dy The y offset
@@ -38,31 +38,33 @@ namespace Edition {
 
             /**
              * @brief Execute the command
-             * 
+             *
              * This will move the asset
              */
             void execute() override;
 
             /**
              * @brief Undo the command
-             * 
+             *
              * This will move the asset back
              */
             void undo() override;
 
             /**
              * @brief Redo the command
-             * 
+             *
              * This will move the asset again
              */
             void redo() override;
 
             /**
              * @brief Get the asset
-             * 
+             *
              * @return std::shared_ptr<Asset> The asset
              */
-            std::shared_ptr<Asset> getAsset() override { return _asset; }
+            std::shared_ptr<Asset> getAsset() override {
+                return _asset;
+            }
 
         protected:
         private:
@@ -81,6 +83,6 @@ namespace Edition {
              */
             int _dy;
     };
-}
+} // namespace Edition
 
 #endif /* !MOVEASSET_HPP_ */

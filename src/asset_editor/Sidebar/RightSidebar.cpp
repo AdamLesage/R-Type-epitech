@@ -1,31 +1,28 @@
 #include "RightSidebar.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
-    #define NOMINMAX
-    #include <windows.h>
-    #define LIB_EXTENSION ".dll"
-    #define PATH_SEPARATOR "\\"
+#define NOMINMAX
+#include <windows.h>
+#define LIB_EXTENSION ".dll"
+#define PATH_SEPARATOR "\\"
 #else
-    #include <dlfcn.h>
-    #define LIB_EXTENSION ".so"
-    #define PATH_SEPARATOR "/"
+#include <dlfcn.h>
+#define LIB_EXTENSION ".so"
+#define PATH_SEPARATOR "/"
 #endif
 
-Edition::RightSidebar::RightSidebar()
-{
+Edition::RightSidebar::RightSidebar() {
     _currentSidebarSelection = "Assets";
-    _isSidebarOpen = true;
-    this->componentsEditor = std::make_unique<ComponentsEditor>();
+    _isSidebarOpen           = true;
+    this->componentsEditor   = std::make_unique<ComponentsEditor>();
 }
 
-Edition::RightSidebar::~RightSidebar()
-{
+Edition::RightSidebar::~RightSidebar() {
 }
 
-void Edition::RightSidebar::toggleSidebar()
-{
+void Edition::RightSidebar::toggleSidebar() {
     static auto lastToggleTime = std::chrono::steady_clock::now();
-    auto currentTime = std::chrono::steady_clock::now();
+    auto currentTime           = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastToggleTime);
 
     if (duration.count() >= 200) { // 200 milliseconds = 0.2 seconds
@@ -34,11 +31,10 @@ void Edition::RightSidebar::toggleSidebar()
     }
 }
 
-void Edition::RightSidebar::drawContainer(std::shared_ptr<sf::RenderWindow> window)
-{
+void Edition::RightSidebar::drawContainer(std::shared_ptr<sf::RenderWindow> window) {
     static float currentWidth = window->getSize().x * 0.25;
-    float targetWidth = _isSidebarOpen ? window->getSize().x * 0.25 : 0;
-    float transitionSpeed = 10.0f; // Adjust this value for faster/slower transition
+    float targetWidth         = _isSidebarOpen ? window->getSize().x * 0.25 : 0;
+    float transitionSpeed     = 10.0f; // Adjust this value for faster/slower transition
 
     if (currentWidth != targetWidth) {
         if (currentWidth < targetWidth) {
@@ -63,13 +59,12 @@ void Edition::RightSidebar::drawContainer(std::shared_ptr<sf::RenderWindow> wind
     window->draw(sidebar);
 }
 
-void Edition::RightSidebar::drawCloseContainer(std::shared_ptr<sf::RenderWindow> window)
-{
+void Edition::RightSidebar::drawCloseContainer(std::shared_ptr<sf::RenderWindow> window) {
     // Display a close button at the top left of the sidebar with a size of 50x50
-    unsigned int closeSize = 50;
+    unsigned int closeSize    = 50;
     static float closeButtonX = window->getSize().x * 0.75;
-    float targetX = _isSidebarOpen ? window->getSize().x * 0.75 : window->getSize().x - closeSize;
-    float transitionSpeed = 10.0f; // Adjust this value for faster/slower transition
+    float targetX             = _isSidebarOpen ? window->getSize().x * 0.75 : window->getSize().x - closeSize;
+    float transitionSpeed     = 10.0f; // Adjust this value for faster/slower transition
 
     if (closeButtonX != targetX) {
         if (closeButtonX < targetX) {
@@ -95,8 +90,10 @@ void Edition::RightSidebar::drawCloseContainer(std::shared_ptr<sf::RenderWindow>
     font.loadFromFile(fontPath);
     sf::Text closeText;
     closeText.setFont(font);
-    if (_isSidebarOpen == true) closeText.setString(">>");
-    else closeText.setString("<<");
+    if (_isSidebarOpen == true)
+        closeText.setString(">>");
+    else
+        closeText.setString("<<");
     closeText.setCharacterSize(30);
     closeText.setFillColor(sf::Color::White);
     closeText.setPosition(closeButtonX + closeSize / 2 - 10, 5);
@@ -104,8 +101,8 @@ void Edition::RightSidebar::drawCloseContainer(std::shared_ptr<sf::RenderWindow>
     // If the close button is clicked, toggle the sidebar
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
-        if (mousePos.x >= closeButtonX && mousePos.x <= closeButtonX + closeSize
-            && mousePos.y >= 0 && (unsigned int)mousePos.y <= closeSize) {
+        if (mousePos.x >= closeButtonX && mousePos.x <= closeButtonX + closeSize && mousePos.y >= 0
+            && (unsigned int)mousePos.y <= closeSize) {
             this->toggleSidebar();
             return;
         }
@@ -115,10 +112,9 @@ void Edition::RightSidebar::drawCloseContainer(std::shared_ptr<sf::RenderWindow>
     window->draw(closeText);
 }
 
-void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindow> window)
-{
-    int gap = 10;
-    int padding = 20;
+void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindow> window) {
+    int gap      = 10;
+    int padding  = 20;
     float startX = window->getSize().x * 0.75 + 75;
     float startY = 0;
 
@@ -153,11 +149,14 @@ void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindo
 
         // Check if the mouse is over the current element
         sf::Vector2i mousePos = sf::Mouse::getPosition(*window.get());
-        if (mousePos.x >= background.getPosition().x && mousePos.x <= background.getPosition().x + background.getSize().x &&
-            mousePos.y >= background.getPosition().y && mousePos.y <= background.getPosition().y + background.getSize().y) {
-            background.setFillColor(sf::Color(100, 100, 100));  // Hover effect
+        if (mousePos.x >= background.getPosition().x
+            && mousePos.x <= background.getPosition().x + background.getSize().x
+            && mousePos.y >= background.getPosition().y
+            && mousePos.y <= background.getPosition().y + background.getSize().y) {
+            background.setFillColor(sf::Color(100, 100, 100)); // Hover effect
 
-            // If the mouse is over the current element and the left button is pressed, set the current selection to the current element
+            // If the mouse is over the current element and the left button is pressed, set the current
+            // selection to the current element
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 this->setCurrentSidebarSelection(_sidebarSelections[i]);
                 background.setFillColor(sf::Color(175, 175, 175));
@@ -180,8 +179,7 @@ void Edition::RightSidebar::displayTabSelections(std::shared_ptr<sf::RenderWindo
     }
 }
 
-std::string Edition::RightSidebar::handleEvent(const sf::Event& event)
-{
+std::string Edition::RightSidebar::handleEvent(const sf::Event& event) {
     if (this->_currentSidebarSelection != "Components") {
         this->assetSelector->handleEvent(event);
         return this->assetSelector->handlePickSprite(event);
@@ -190,13 +188,11 @@ std::string Edition::RightSidebar::handleEvent(const sf::Event& event)
     return "";
 }
 
-void Edition::RightSidebar::updateSelectedEntity(std::shared_ptr<Edition::Asset> asset)
-{
+void Edition::RightSidebar::updateSelectedEntity(std::shared_ptr<Edition::Asset> asset) {
     this->componentsEditor->updateSelectedEntity(asset);
 }
 
-void Edition::RightSidebar::draw(std::shared_ptr<sf::RenderWindow> window)
-{
+void Edition::RightSidebar::draw(std::shared_ptr<sf::RenderWindow> window) {
     if (this->assetSelector.get() == nullptr) {
         assetSelector.reset(new AssetSelector(window));
     }

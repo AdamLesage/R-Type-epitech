@@ -7,22 +7,19 @@
 
 #include "AssetEditor.hpp"
 
-Edition::AssetEditor::AssetEditor()
-{
+Edition::AssetEditor::AssetEditor() {
     _window = std::make_shared<sf::RenderWindow>();
     _window->create(sf::VideoMode(1920, 1080), "Asset Editor", sf::Style::Titlebar | sf::Style::Close);
-    _rightSidebar = std::make_shared<RightSidebar>();
-    _toolbar = Toolbar();
-    _editionScreen = EditionScreen();
+    _rightSidebar   = std::make_shared<RightSidebar>();
+    _toolbar        = Toolbar();
+    _editionScreen  = EditionScreen();
     _lastEntityCode = 50; // Starting to 50 to avoid used code in PROTOCOL.md
 }
 
-Edition::AssetEditor::~AssetEditor()
-{
+Edition::AssetEditor::~AssetEditor() {
 }
 
-void Edition::AssetEditor::run()
-{
+void Edition::AssetEditor::run() {
     while (_window->isOpen()) {
         sf::Event event;
         while (_window->pollEvent(event)) {
@@ -49,10 +46,10 @@ void Edition::AssetEditor::run()
     }
 }
 
-void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &texturPath)
-{
+void Edition::AssetEditor::manageDragAndDrop(sf::Event& event, std::string& texturPath) {
     if (!texturPath.empty() && !mouseTexture) {
-        mousePickRect = std::make_unique<sf::RectangleShape>(sf::Vector2f(_window->getSize().x * 0.20f, 100.f));
+        mousePickRect =
+            std::make_unique<sf::RectangleShape>(sf::Vector2f(_window->getSize().x * 0.20f, 100.f));
         mousePathTexture = texturPath;
 
         mouseTexture = std::make_unique<sf::Texture>();
@@ -62,24 +59,20 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
         } else {
             mousePickRect->setTexture(mouseTexture.get());
         }
-        mousePickRect->setPosition(
-            event.mouseButton.x - mousePickRect->getSize().x / 2,
-            event.mouseButton.y - mousePickRect->getSize().y / 2
-        );
+        mousePickRect->setPosition(event.mouseButton.x - mousePickRect->getSize().x / 2,
+                                   event.mouseButton.y - mousePickRect->getSize().y / 2);
     }
     if (event.type == sf::Event::Closed) {
         _window->close();
     }
     if (event.type == sf::Event::MouseButtonReleased) {
-        if (mousePickRect != nullptr && !mousePathTexture.empty() && _lastEntityCode < 100) { // Limit the number of entities to 100
+        if (mousePickRect != nullptr && !mousePathTexture.empty()
+            && _lastEntityCode < 100) { // Limit the number of entities to 100
             sf::Vector2i mousePosition = sf::Mouse::getPosition(*_window.get());
-            sf::Vector2f worldPosition = _window->mapPixelToCoords(mousePosition, this->_editionScreen.getView());
+            sf::Vector2f worldPosition =
+                _window->mapPixelToCoords(mousePosition, this->_editionScreen.getView());
             std::shared_ptr<Edition::Asset> asset = std::make_shared<Edition::Asset>(
-                worldPosition.x,
-                worldPosition.y,
-                mousePathTexture,
-                _lastEntityCode
-            );
+                worldPosition.x, worldPosition.y, mousePathTexture, _lastEntityCode);
             _lastEntityCode++;
             this->_editionScreen.commandManager.createAsset(asset);
         }
@@ -89,27 +82,29 @@ void Edition::AssetEditor::manageDragAndDrop(sf::Event &event, std::string &text
     }
     if (event.type == sf::Event::MouseMoved) {
         if (mousePickRect) {
-            mousePickRect->setPosition(
-                event.mouseMove.x - mousePickRect->getSize().x / 2,
-                event.mouseMove.y - mousePickRect->getSize().y / 2
-            );
+            mousePickRect->setPosition(event.mouseMove.x - mousePickRect->getSize().x / 2,
+                                       event.mouseMove.y - mousePickRect->getSize().y / 2);
         }
     }
 }
 
-void Edition::AssetEditor::handleToolbarEvents(const sf::Event &event)
-{
+void Edition::AssetEditor::handleToolbarEvents(const sf::Event& event) {
     // Handle undo and redo from keyboard input
     if (event.type == sf::Event::KeyPressed) {
-        if ((event.key.code == sf::Keyboard::Z) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
+        if ((event.key.code == sf::Keyboard::Z)
+            && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
             this->_toolbar.setCurrentSelection(CurrentSelection::UNDO);
         }
-        if ((event.key.code == sf::Keyboard::Y) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
+        if ((event.key.code == sf::Keyboard::Y)
+            && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
             this->_toolbar.setCurrentSelection(CurrentSelection::REDO);
         }
     }
 
-    if (this->_toolbar.getCurrentSelection() == CurrentSelection::MOVE) // Client can move on the edition screen without any asset selected
+    if (this->_toolbar.getCurrentSelection()
+        == CurrentSelection::MOVE) // Client can move on the edition screen without any asset selected
         return;
 
     if (this->_toolbar.getCurrentSelection() == CurrentSelection::UNDO) {
@@ -131,8 +126,7 @@ void Edition::AssetEditor::handleToolbarEvents(const sf::Event &event)
     }
 }
 
-void Edition::AssetEditor::displayToolbarEvents()
-{
+void Edition::AssetEditor::displayToolbarEvents() {
     if (this->_toolbar.getCurrentSelection() == CurrentSelection::MOVE) {
         return; // Display the move cursor
     } else if (this->_toolbar.getCurrentSelection() == CurrentSelection::UNDO) {

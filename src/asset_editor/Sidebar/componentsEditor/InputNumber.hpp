@@ -21,7 +21,7 @@ namespace Edition {
         public:
             /**
              * @brief Construct a new InputNumber object
-             * 
+             *
              * @param size The size of the input field
              * @param pos The position of the input field
              * @param title The title or label of the input field (default is an empty string)
@@ -30,14 +30,15 @@ namespace Edition {
             ~InputNumber();
             /**
              * @brief Check user input when the input field is selected
-             * 
+             *
              * @param event The event to check
              * @return true if the input is valid, false otherwise
              */
-            bool checkInput(const sf::Event &event) override;
+            bool checkInput(const sf::Event& event) override;
+
         protected:
         private:
     };
-};
+}; // namespace Edition
 
 #endif /* !INPUTNUMBER_HPP_ */

@@ -23,5 +23,4 @@ typedef struct BossPatern_s {
 
 } BossPatern;
 
-
 #endif /* !BOSS_HPP_ */

@@ -33,7 +33,7 @@ namespace Edition {
         public:
             /**
              * @brief Construct a new Asset object
-             * 
+             *
              * @param x The x position of the asset
              * @param y The y position of the asset
              * @param assetPath The path to the asset
@@ -47,7 +47,7 @@ namespace Edition {
 
             /**
              * @brief Move the asset
-             * 
+             *
              * @param dx The x offset
              * @param dy The y offset
              */
@@ -55,66 +55,69 @@ namespace Edition {
 
             /**
              * @brief Draw the asset
-             * 
+             *
              * @param window The window of the Asset Editor
              */
-            void draw(sf::RenderWindow &window);
+            void draw(sf::RenderWindow& window);
 
             /**
              * @brief Get the entity code of the asset
-             * 
+             *
              * Entity code is the code given in PROTOCOL.md for each entity
-             * 
+             *
              * @return The entity code
              */
-            std::string getEntityCode() const { return _entityCode; }
+            std::string getEntityCode() const {
+                return _entityCode;
+            }
 
             /**
              * @brief Set the entity code of the asset
-             * 
+             *
              * @param code The entity code to set
              */
-            void setEntityCode(std::string code) { _entityCode = code; }
+            void setEntityCode(std::string code) {
+                _entityCode = code;
+            }
 
             /**
              * @brief Get the global bounds of the asset.
-             * 
+             *
              * @return The bounding rectangle of the asset as an sf::FloatRect.
              */
             sf::FloatRect getGlobalBounds();
 
             /**
              * @brief Set the texture of the sprite.
-             * 
+             *
              * @param assetPath The path to the asset.
              */
             void setSpriteTexture(std::string assetPath);
 
             /**
              * @brief Adds a component to the asset.
-             * 
+             *
              * @tparam T The type of the component being added.
              * @param component The component to be added to the asset.
              */
-            template<typename T>
-            void addComponent(T &&component) {
+            template <typename T> void addComponent(T&& component) {
                 _components[std::type_index(typeid(std::decay_t<T>))] = std::forward<T>(component);
             }
             /**
              * @brief Retrieves a component of the specified type from the asset.
-             * 
+             *
              * @tparam T The type of the component to retrieve.
              * @return A reference to the component of the specified type.
              * @throws std::runtime_error If the component of the specified type is not found.
              */
-            template<typename T>
-            T& getComponent() {
+            template <typename T> T& getComponent() {
                 auto it = _components.find(std::type_index(typeid(std::decay_t<T>)));
                 if (it == _components.end()) {
                     throw std::runtime_error("Component of this type not found");
                 }
                 return std::any_cast<T&>(it->second);
             }
+
         private:
             /**
              * @brief The position of the asset
@@ -131,12 +134,11 @@ namespace Edition {
              */
             Rotation _rotation;
 
-
             /**
              * @brief The path to the asset
              */
             std::string _assetPath;
-            sf::Texture *_spriteTexture;
+            sf::Texture* _spriteTexture;
             sf::RectangleShape _sprite;
             std::map<std::type_index, std::any> _components;
             std::string _entityCode;
