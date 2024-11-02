@@ -12,6 +12,8 @@
 #include <SFML/Audio.hpp>
 #include <memory>
 #include "Lobby.hpp"
+#include "../../../shared/scores/ScoresParser.hpp"
+
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -88,6 +90,20 @@ namespace RType {
              * @param number The volume to set.
             */
             void setVolume(float number);
+
+            /**
+             * @brief Display the last scores from the config/scores.cfg file.
+             * 
+             * @author BxptisteM
+             */
+            void displayLastScores();
+
+            /**
+             * @brief Display the highscores from the config/scores.cfg file.
+             *
+             * @author BxptisteM
+             */
+            void displayHighscores();
 
         private:
             int selectedOption; // The selected option
