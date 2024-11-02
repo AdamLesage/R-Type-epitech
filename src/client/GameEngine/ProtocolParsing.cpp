@@ -21,6 +21,7 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
     _messageTypeMap = {{"PLAYER_CREATION", {0x01, "player_creation"}},
                        {"PROJECTILE_CREATION", {0x02, "projectile_creation"}},
                        {"ENEMY_CREATION", {0x03, "enemy_creation"}},
+                       {"BOSS_CREATION", {0x10, "boss_creation"}},
                        {"BONUS_CREATION", {0x21, "bonus_creation"}},
                        {"WALL_CREATION", {0x25, "wall_creation"}},
                        {"REWARD_CREATION", {0x26, "reward_creation"}},
@@ -262,6 +263,46 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
         this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+
+bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& index) {
+    if (!checkMessageType("BOSS_CREATION", message, index)) return false;
+
+    unsigned int bossId;
+    float posX;
+    float posY;
+
+    try {
+        std::memcpy(&bossId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the boss creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"boss"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Health>(entity, Health{100, 100, false, false}); // We can destroy the boss with a projectile
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Level>(entity, Level{1});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{325, 125});
+        _registry.add_component<Direction>(entity, Direction{-1, 0});
+        std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "boss" + PATH_SEPARATOR + "boss_2.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {1300, 500}, {0, 0}});
+        this->updateIndexFromBinaryData("boss_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the boss" << std::endl;
         return false;
     }
 
@@ -727,6 +768,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parsePlayerCreation(message, index)) continue;
         if (this->parseProjectileCreation(message, index)) continue;
         if (this->parseEnemyCreation(message, index)) continue;
+        if (this->parseBossCreation(message, index)) continue;
         if (this->parseBonusCreation(message, index)) continue;
         if (this->parseWallCreation(message, index)) continue;
         if (this->parseRewardCreation(message, index)) continue;
