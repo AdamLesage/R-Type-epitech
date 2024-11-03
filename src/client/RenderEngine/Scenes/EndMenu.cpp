@@ -23,6 +23,12 @@ RType::EndMenu::~EndMenu()
 
 void RType::EndMenu::runScene(float &latency)
 {
+    sf::Event event;
+    while (_window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            this->sendStateChange(-1);
+        }
+    }
     (void)latency; // Do not used latency
     _window->clear();
     this->displayBackground();

@@ -89,6 +89,16 @@ class GameLogique {
          *
          */
         void spawnEnnemy(char type, float position_x, float position_y);
+
+        /**
+         * @brief add a Bonus on the registry and send a notification to connected client
+         *
+         * @param type the type off bonus
+         * @param position_x the x position of the bonus
+         * @param position_y the y position of the bonus
+         *
+         */
+        void spawnBonus(char type, float position_x, float position_y);
         /**
          * @brief spawn a wave of ennemy
          *

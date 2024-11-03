@@ -79,6 +79,8 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
         return;
     }
     if (event == "Exit") {
+        this->_gameEngine->setEnd();
+        this->_networkEngine->setEnd();
         this->_renderingEngine->setStateGame(-1); // Exit program
         exit(0);
         return;
@@ -222,8 +224,13 @@ void RType::Mediator::notifyRenderingEngine(std::string sender, const std::strin
                 break;
             case 2:
                 this->_renderingEngine->setStateGame(2);
-                /* code */
                 break;
+            case -1: {
+                this->_gameEngine->setEnd();
+                this->_networkEngine->setEnd();
+                this->_renderingEngine->setStateGame(-1);
+                break;
+            }
             case 3: {
                 if (_gameSelected == "R-Type") {
                     char data[5];

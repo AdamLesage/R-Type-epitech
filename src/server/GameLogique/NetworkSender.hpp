@@ -68,6 +68,27 @@ class NetworkSender {
         void sendCreateProjectil(int id, float pos_x, float pos_y, int parent_id, int clientId = -1);
 
         /**
+         * @brief Sends the creation of a missile to all clients.
+         *
+         * @param id The unique identifier of the created missile.
+         * @param pos_x The x-coordinate of the missile's position.
+         * @param pos_y The y-coordinate of the missile's position.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
+         */
+        void sendCreateMissile(int id, float pos_x, float pos_y, int clientId = -1);
+
+        /**
+         * @brief Sends the creation of a big missile to all clients.
+         *
+         * @param id The unique identifier of the created big missile.
+         * @param pos_x The x-coordinate of the big missile's position.
+         * @param pos_y The y-coordinate of the big missile's position.
+         * @param parent_id The identifier of the entity that created or shoot the big missile.
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
+         */
+        void sendCreateBigMissile(int id, float pos_x, float pos_y, int parent_id, int clientId = -1);
+
+        /**
          * @brief Sends the creation of a reward (e.g., collectible) to all clients.
          *
          * @param id The unique identifier of the created reward.

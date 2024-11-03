@@ -7,24 +7,32 @@
 
 #include "ProtocolParsing.hpp"
 
-RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& registry) : _registry(registry) {
+RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& registry, std::shared_ptr<std::mutex> mutex) : _registry(registry) {
     try {
         _protocolPath = protocolPath;
         _cfg.readFile(_protocolPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error("Parse error");
     }
 
     _messageTypeMap = {{"PLAYER_CREATION", {0x01, "player_creation"}},
                        {"PROJECTILE_CREATION", {0x02, "projectile_creation"}},
                        {"ENEMY_CREATION", {0x03, "enemy_creation"}},
+                        {"MISSILE_CREATION", {0x04, "missile_creation"}},
+                        {"BIG_MISSILE_CREATION", {0x05, "big_missile_creation"}},
                        {"BOSS_CREATION", {0x10, "boss_creation"}},
-                       {"BONUS_CREATION", {0x21, "bonus_creation"}},
-                       {"WALL_CREATION", {0x25, "wall_creation"}},
-                       {"REWARD_CREATION", {0x26, "reward_creation"}},
+                       {"SHIELD_CREATION", {0x21, "shield_creation"}},
+                       {"MACHINEGUN_CREATION", {0x22, "machinegun_creation"}},
+                        {"ROCKET_CREATION", {0x23, "rocket_creation"}},
+                       {"BEAM_CREATION", {0x24, "beam_creation"}},
+                       {"CLONE_CREATION", {0x25, "beam_creation"}},
+                       {"WALL_CREATION", {0x26, "wall_creation"}},
+                       {"REWARD_CREATION", {0x27, "reward_creation"}},
                        {"ENTITY_DELETION", {0x29, "entity_deletion"}},
                        {"POSITION_UPDATE", {0x30, "position_update"}},
                        {"HEALTH_UPDATE", {0x31, "health_update"}},
@@ -37,13 +45,14 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
                        {"LEVEL_UPDATE", {0x3a, "level_update"}},
                        {"PING_CLIENT", {0x99, "ping_client"}},
                        {"SHOOT_SOUND", {0x98, "shoot_sound"}}};
+    _mutex = mutex;
 }
 
 RType::ProtocolParsing::~ProtocolParsing() {
 }
 
 int RType::ProtocolParsing::updateIndexFromBinaryData(const std::string& message, int& index) {
-    int totalSize;
+    int totalSize = 0;
 
     try {
         totalSize = _cfg.lookup("protocol").lookup(message).lookup("total_size");
@@ -62,11 +71,13 @@ bool RType::ProtocolParsing::checkMessageType(const std::string& messageType,
                                               const std::string& message,
                                               int& index) {
     // Check if message is for the current parsing function such as current type (0xXX) is correct
-    if (static_cast<uint8_t>(message[index]) != _messageTypeMap[messageType].first) return false;
-
+    if (_messageTypeMap.find(messageType) != _messageTypeMap.end()) {
+        if (static_cast<uint8_t>(message[index]) != _messageTypeMap[messageType].first) return false;
+    } else {
+        return false;
+    }
     // Check if the message type is a byte
     if (sizeof(message[index]) != sizeof(uint8_t)) return false;
-
     // Compare message size with the expected size in the protocol config file
     if (!_cfg.exists("protocol")) {
         return false;
@@ -81,7 +92,8 @@ bool RType::ProtocolParsing::checkMessageType(const std::string& messageType,
     }
     try {
         int totalSize = element.lookup("total_size");
-        if (static_cast<int>(message.length()) - index < totalSize) { // Check if the message size is correct
+        if (index < 0 || index >= static_cast<int>(message.length()) ||
+            static_cast<int>(message.length()) - index < totalSize) {
             return false;
         }
     } catch (const std::invalid_argument& e) {
@@ -111,24 +123,28 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
     }
 
     try {
-        entity_t entity = _registry.spawn_entity();
-        _registry.add_component<Position>(entity, Position{posX, posY});
-        _registry.add_component<Tag>(entity, Tag{"player"});
-        _registry.add_component<Controllable>(entity, Controllable{true, false, false, false, false});
-        _registry.add_component<Scale>(entity, Scale{1});
-        _registry.add_component<Health>(entity, Health{100, 100, true, true});
-        _registry.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
-        _registry.add_component<ShootingSpeed>(entity, ShootingSpeed{0.5});
-        _registry.add_component<Damage>(entity, Damage{10});
-        _registry.add_component<Level>(entity, Level{1});
-        _registry.add_component<Rotation>(entity, Rotation{0});
-        _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        _registry.add_component<Size>(entity, Size{130, 80});
-        _registry.add_component<Type>(entity, Type{EntityType::PLAYER});
-        _registry.add_component<Direction>(entity, Direction{1, 0});
-        std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
-                           + std::to_string(playerId + 1) + ".png";
-        _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
+        {
+            std::lock_guard<std::mutex> lock(*this->_mutex.get());
+            entity_t entity = _registry.spawn_entity();
+            _registry.add_component<Position>(entity, Position{posX, posY});
+            _registry.add_component<Tag>(entity, Tag{"player"});
+            _registry.add_component<Controllable>(entity, Controllable{true, false, false, false, false});
+            _registry.add_component<Scale>(entity, Scale{1});
+            _registry.add_component<Health>(entity, Health{100, 100, true, true});
+            _registry.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
+            _registry.add_component<ShootingSpeed>(entity, ShootingSpeed{0.5});
+            _registry.add_component<Damage>(entity, Damage{10});
+            _registry.add_component<Level>(entity, Level{1});
+            _registry.add_component<Rotation>(entity, Rotation{0});
+            _registry.add_component<Velocity>(entity, Velocity{0, 0});
+            _registry.add_component<Size>(entity, Size{130, 80});
+            _registry.add_component<Type>(entity, Type{EntityType::PLAYER});
+            _registry.add_component<Direction>(entity, Direction{1, 0});
+            std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
+                            + std::to_string(playerId + 1) + ".png";
+            _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
+
+        }
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
@@ -161,6 +177,7 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         if (data->pos != nullptr) {
             _registry.add_component<Position>(entity, Position{posX, posY});
@@ -181,6 +198,9 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
             _registry.add_component<Type>(entity, Type{data->type->type});
         }
         _registry.add_component<Direction>(entity, Direction{-1, 0});
+        if (data->health != nullptr) {
+            _registry.add_component<Health>(entity, Health{data->health->health, data->health->health, false, true});
+        }
 
         this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception& e) {
@@ -210,6 +230,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"projectile"});
@@ -219,10 +240,114 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
-        std::string path =
-            std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_1.png";
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+
+        std::string path;
+        auto parentTag = _registry.get_components<Tag>()[projectileId];
+        if (parentTag.has_value() && parentTag.value().tag == "enemy") {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_ennemy.png";
+        }
+        if (parentTag.has_value() && parentTag.value().tag == "player") {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + PATH_SEPARATOR + "missile_" + std::to_string(parentId + 1) + ".png";
+        }
+        else {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_ennemy.png";
+        }
+
         _registry.add_component<Sprite>(entity, Sprite{path, {71, 32}, {0, 0}});
         this->updateIndexFromBinaryData("projectile_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the projectile" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool RType::ProtocolParsing::parseMissileCreation(const std::string& message, int& index) {
+    if (!checkMessageType("MISSILE_CREATION", message, index)) return false;
+
+    unsigned int projectileId;
+    float posX;
+    float posY;
+
+    try {
+        std::memcpy(&projectileId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the projectile creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"projectile"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Direction>(entity, Direction{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+
+        std::string path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "rocket_player.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {165, 66}, {0, 0}});
+        this->updateIndexFromBinaryData("missile_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the projectile" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool RType::ProtocolParsing::parseBigMissileCreation(const std::string& message, int& index) {
+    if (!checkMessageType("BIG_MISSILE_CREATION", message, index)) return false;
+
+    unsigned int projectileId;
+    float posX;
+    float posY;
+    unsigned int parentId;
+
+    try {
+        std::memcpy(&projectileId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+        std::memcpy(&parentId, &message[index + 13], sizeof(unsigned int));
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the projectile creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Tag>(entity, Tag{"projectile"});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Damage>(entity, Damage{10});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Size>(entity, Size{240, 160});
+        _registry.add_component<Direction>(entity, Direction{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+
+        std::string path;
+        auto parentTag = _registry.get_components<Tag>()[projectileId];
+        if (parentTag.has_value() && parentTag.value().tag == "player") {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + PATH_SEPARATOR + "big_missile_" + std::to_string(parentId + 1) + ".png";
+        } else {
+            path = std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + PATH_SEPARATOR + "big_missile_1.png";
+        }
+        _registry.add_component<Sprite>(entity, Sprite{path, {74, 52}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 74, 52}, {74, 0, 74, 52}, 
+                                                    {148, 0, 74, 52}, {222, 0, 74, 52}, 
+                                                    {296, 0, 74, 52}, {370, 0, 74, 52}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
+        this->updateIndexFromBinaryData("big_missile_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the projectile" << std::endl;
         return false;
@@ -248,6 +373,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"enemy"});
@@ -270,6 +396,52 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
     return true;
 }
 
+bool RType::ProtocolParsing::parseShieldCreation(const std::string& message, int& index) {
+    if (!checkMessageType("SHIELD_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+    std::string path;
+
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "shield_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        this->updateIndexFromBinaryData("shield_creation", index);
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
+    return true;
+}
 
 bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& index) {
     if (!checkMessageType("BOSS_CREATION", message, index)) return false;
@@ -310,9 +482,149 @@ bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& 
     return true;
 }
 
-bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int& index) {
-    if (!checkMessageType("BONUS_CREATION", message, index)) return false;
+bool RType::ProtocolParsing::parseMachinegunCreation(const std::string& message, int& index) {
+    if (!checkMessageType("MACHINEGUN_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+    std::string path;
 
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "machinegun_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
+        this->updateIndexFromBinaryData("machinegun_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool RType::ProtocolParsing::parseRocketCreation(const std::string& message, int& index) {
+    if (!checkMessageType("ROCKET_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+    std::string path;
+
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "rocket_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
+        this->updateIndexFromBinaryData("rocket_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool RType::ProtocolParsing::parseBeamCreation(const std::string& message, int& index) {
+    if (!checkMessageType("BEAM_CREATION", message, index)) return false;
+    unsigned int bonusId;
+    float posX;
+    float posY;
+    std::string path;
+
+    try {
+        std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
+        std::memcpy(&posX, &message[index + 5], sizeof(float));
+        std::memcpy(&posY, &message[index + 9], sizeof(float));
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
+        return false;
+    }
+
+    try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        entity_t entity = _registry.spawn_entity();
+        _registry.add_component<Position>(entity, Position{posX, posY});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
+        _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
+        _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+        path = std::string("assets") + PATH_SEPARATOR + "bonus" + PATH_SEPARATOR + "beam_bonus.png";
+        _registry.add_component<Sprite>(entity, Sprite{path, {35, 30}, {0, 0}});
+        std::vector<std::array<int, 4>> annimation = {{0, 0, 32, 32}, {32, 0, 32, 32}, 
+                                                    {64, 0, 32, 32}, {96, 0, 32, 32}, 
+                                                    {128, 0, 32, 32}, {160, 0, 32, 32},
+                                                    {192, 0, 32, 32}, {224, 0, 32, 32}, 
+                                                    {256, 0, 32, 32}, {288, 0, 32, 32},
+                                                    {320, 0, 32, 32}, {352, 0, 32, 32},
+                                                    {384, 0, 32, 32}, {416, 0, 32, 32},
+                                                    {448, 0, 32, 32}};
+        _registry.add_component<Annimation>(entity, Annimation{0.1, annimation, 0, std::chrono::steady_clock::now()});
+        this->updateIndexFromBinaryData("beam_creation", index);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while creating the bonus" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool RType::ProtocolParsing::parseCloneCreation(const std::string& message, int& index) {
+    if (!checkMessageType("CLONE_CREATION", message, index)) return false;
     unsigned int bonusId;
     float posX;
     float posY;
@@ -321,24 +633,30 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int&
         std::memcpy(&bonusId, &message[index + 1], sizeof(unsigned int));
         std::memcpy(&posX, &message[index + 5], sizeof(float));
         std::memcpy(&posY, &message[index + 9], sizeof(float));
+
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while parsing the bonus creation message" << std::endl;
         return false;
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
-        _registry.add_component<Tag>(entity, Tag{"bonus"});
-        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Direction>(entity, Direction{1, 0});
+        _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Scale>(entity, Scale{1});
+        _registry.add_component<Tag>(entity, Tag{"bonus"});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        this->updateIndexFromBinaryData("bonus_creation", index);
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
+        std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + std::string("bot_friend.png");
+        _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
+        this->updateIndexFromBinaryData("beam_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
         return false;
     }
-
     return true;
 }
 
@@ -363,6 +681,7 @@ bool RType::ProtocolParsing::parseWallCreation(const std::string& message, int& 
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"wall"});
@@ -401,13 +720,15 @@ bool RType::ProtocolParsing::parseRewardCreation(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        this->updateIndexFromBinaryData("reward_creation", index);
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"reward"});
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        this->updateIndexFromBinaryData("reward_creation", index);
+        _registry.add_component<Health>(entity, Health{0, 0, false, true});
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the reward" << std::endl;
         return false;
@@ -429,9 +750,10 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        this->updateIndexFromBinaryData("entity_deletion", index);
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
-        this->updateIndexFromBinaryData("entity_deletion", index);
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found for deletion" << std::endl;
         return false;
@@ -460,6 +782,7 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string& message, int
     }
 
     try {
+        this->updateIndexFromBinaryData("position_update", index);
         entity_t entity = _registry.entity_from_index(entityId);
 
         // Check if the entity has a position component
@@ -473,7 +796,6 @@ bool RType::ProtocolParsing::parsePositionUpdate(const std::string& message, int
         // Remove the old position component and add the new one to update the position
         _registry.remove_component<Position>(entity);
         _registry.add_component<Position>(entity, Position{posX, posY});
-        this->updateIndexFromBinaryData("position_update", index);
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found for position update" << std::endl;
         return false;
@@ -500,6 +822,7 @@ bool RType::ProtocolParsing::parseHealthUpdate(const std::string& message, int& 
     }
 
     try {
+        this->updateIndexFromBinaryData("health_update", index);
         entity_t entity              = _registry.entity_from_index(entityId);
         auto optionalHealthComponent = _registry.get_components<Health>()[entity];
 
@@ -514,7 +837,6 @@ bool RType::ProtocolParsing::parseHealthUpdate(const std::string& message, int& 
         } else {
             _registry.add_component<Health>(entity, Health{health, 100, true, true});
         }
-        this->updateIndexFromBinaryData("health_update", index);
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found for health update" << std::endl;
         return false;
@@ -543,6 +865,7 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const std::string& message, in
     }
 
     try {
+        this->updateIndexFromBinaryData("direction_update", index);
         entity_t entity                 = _registry.entity_from_index(entityId);
         auto optionalDirectionComponent = _registry.get_components<Direction>()[entity];
 
@@ -556,9 +879,8 @@ bool RType::ProtocolParsing::parseDirectionUpdate(const std::string& message, in
         } else {
             _registry.add_component<Direction>(entity, Direction{directionX, directionY});
         }
-        this->updateIndexFromBinaryData("direction_update", index);
     } catch (const std::out_of_range& e) {
-        std::cerr << "Entity not found" << std::endl;
+        std::cerr << "Entity not found direction update" << std::endl;
         return false;
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while updating the direction" << std::endl;
@@ -583,11 +905,11 @@ bool RType::ProtocolParsing::parseObjectCollection(const std::string& message, i
     }
 
     try {
+        this->updateIndexFromBinaryData("object_collection", index);
         entity_t playerEntity = _registry.entity_from_index(playerId);
         entity_t objectEntity = _registry.entity_from_index(objectId);
         (void)playerEntity;
         (void)objectEntity;
-        this->updateIndexFromBinaryData("object_collection", index);
         // Need to implement a mediator notification to the RenderEngine to create an animation for the object
         // collection
     } catch (const std::out_of_range& e) {
@@ -646,7 +968,7 @@ bool RType::ProtocolParsing::parseProjectileCollision(const std::string& message
         this->updateIndexFromBinaryData("projectile_collision", index);
         // Need to implement the method to update the entity health and destroy the projectile
     } catch (const std::out_of_range& e) {
-        std::cerr << "Entity not found" << std::endl;
+        std::cerr << "Entity not found projectile collision" << std::endl;
         return false;
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while updating the projectile collision" << std::endl;
@@ -700,12 +1022,11 @@ bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& i
 
     try {
         _mediator->notify("ProtocolParsing", "GameState " + std::to_string(int(state)));
-        entity_t entity = _registry.entity_from_index(entityId);
-        (void)entity;
+        (void)entityId;
         this->updateIndexFromBinaryData("state_change", index);
         // Need to implement the method to update the entity state
     } catch (const std::out_of_range& e) {
-        std::cerr << "Entity not found" << std::endl;
+        std::cerr << "Entity not found state change" << std::endl;
         return false;
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while updating the state" << std::endl;
@@ -733,7 +1054,7 @@ bool RType::ProtocolParsing::parseLevelUpdate(const std::string& message, int& i
         loadAssetCfgEditorParsing(level);
         // Need to implement the method to update the entity state
     } catch (const std::out_of_range& e) {
-        std::cerr << "Entity not found" << std::endl;
+        std::cerr << "Entity not found level update" << std::endl;
         return false;
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while updating the level" << std::endl;
@@ -777,8 +1098,14 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parsePlayerCreation(message, index)) continue;
         if (this->parseProjectileCreation(message, index)) continue;
         if (this->parseEnemyCreation(message, index)) continue;
+        if (this->parseMissileCreation(message, index)) continue;
+        if (this->parseBigMissileCreation(message, index)) continue;
+        if (this->parseShieldCreation(message, index)) continue;
+        if (this->parseMachinegunCreation(message, index)) continue;
+        if (this->parseRocketCreation(message, index)) continue;
+        if (this->parseBeamCreation(message, index)) continue;
+        if (this->parseCloneCreation(message, index)) continue;
         if (this->parseBossCreation(message, index)) continue;
-        if (this->parseBonusCreation(message, index)) continue;
         if (this->parseWallCreation(message, index)) continue;
         if (this->parseRewardCreation(message, index)) continue;
         if (this->parseEntityDeletion(message, index)) continue;
@@ -831,9 +1158,11 @@ void RType::ProtocolParsing::loadAssetCfgEditorParsing(size_t level)
         _assetEditorParsing = std::make_unique<AssetEditorParsing>(_cfgAssetEditor);
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error("Parse error");
     } catch (std::exception &e) {
         std::cerr << "Parse error: " << e.what() << std::endl;
     }

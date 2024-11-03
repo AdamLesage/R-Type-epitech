@@ -10,8 +10,6 @@
 GameLogique::GameLogique(size_t port, int _frequency) {
     this->network                   = std::make_shared<NetworkLib::Server>(port);
     this->_networkSender            = std::make_unique<NetworkSender>(this->network);
-    this->receiverThread            = std::thread(&GameLogique::handleRecieve, this);
-    this->connectionManagmentThread = std::thread(&GameLogique::handleClientConnection, this);
     this->running                   = false;
     this->frequency                 = _frequency;
     this->reg.register_component<Position>();
@@ -29,6 +27,11 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<ShootStraightPattern>();
     this->reg.register_component<Size>();
     this->reg.register_component<Direction>();
+    this->reg.register_component<ShootEnnemyMissile>();
+    this->reg.register_component<CanShootMissiles>();
+    this->reg.register_component<CanShootBigMissile>();
+    this->reg.register_component<IsBigMissile>();
+    this->reg.register_component<Clone>();
     this->reg.register_component<BossPatern>();
 
     try {
@@ -36,12 +39,16 @@ GameLogique::GameLogique(size_t port, int _frequency) {
                                      + PATH_SEPARATOR + std::string("game_config.cfg");
         _gameConfig.readFile(gameConfigPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
-        std::cerr << "I/O error while reading file." << std::endl;
+                std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading Game config file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error(std::string("Parse error at ") + pex.getFile());
     }
     this->updateLevelConfig();
+    this->receiverThread            = std::thread(&GameLogique::handleRecieve, this);
+    this->connectionManagmentThread = std::thread(&GameLogique::handleClientConnection, this);
 }
 
 GameLogique::~GameLogique() {
@@ -61,35 +68,29 @@ void GameLogique::updateLevelConfig() {
         }
         _levelConfig.readFile(levelConfigPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
-        std::cerr << "I/O error while reading file." << std::endl;
+        throw std::runtime_error("I/O error while reading level config file.");
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
+        throw std::runtime_error(std::string("Parse error at ") + pex.getFile());
     }
     assetEditorParsing.reset(new AssetEditorParsing(_levelConfig));
 }
 
 void GameLogique::startGame(int idEntity) {
     if (running == false) {
-        for (size_t i = 0; i != network->getClientCount(); i++) {
-            auto& pos = reg.get_components<Position>()[i];
-            if (pos) {
-                pos->x = 100.f;
-                pos->y = 100 + (100.f * i);
-            }
-            this->_networkSender->sendPositionUpdate(i , 100.f, 100 + (100.f * i));
-            #ifdef _WIN32
-                Sleep(10);
-            #else
-                usleep(10000);
-            #endif
-        }
         #ifdef _WIN32
             Sleep(1);
         #else
-            sleep(1);
+            usleep(1000);
         #endif
         this->_networkSender->sendStateChange(idEntity, 0x03);
+        clearGame();
+        #ifdef _WIN32
+            Sleep(3000)
+        #else
+            sleep(3);
+        #endif
         this->running = true;
     }
 }
@@ -134,6 +135,14 @@ void GameLogique::spawnCustomEntity(char type, float position_x, float position_
         this->reg.add_component<Size>(entity, Size{entityData->size->x, entityData->size->y});
     }
     this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+    if (entityData->bossPatern != nullptr) {
+        this->reg.add_component<BossPatern>(
+            entity, BossPatern{entityData->bossPatern->speed, entityData->bossPatern->up,
+                               entityData->bossPatern->down, entityData->bossPatern->spawnCooldown,
+                               std::chrono::steady_clock::now()});
+        this->reg.add_component<Position>(entity, Position{1500, position_y});
+        reg.add_component<Type>(entity, Type{EntityType::ENEMY});
+    }
     this->reg.add_component<Direction>(entity, Direction{0, 0});
     this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
 }
@@ -218,7 +227,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             } else {
                 bool enemyExists = false; // check if there is still an enemy 
                 for (auto& types : reg.get_components<Type>()) {
-                    if (types && types->type == EntityType::ENEMY) {
+                    if (types && (types->type == EntityType::ENEMY || types->type == EntityType::BOSS)) {
                         enemyExists = true;
                         ennemyAlive = enemyExists;
                         break;
@@ -245,8 +254,73 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
     }
 }
 
-void GameLogique::spawnWave()
-{
+void GameLogique::spawnBonus(char type, float position_x, float position_y) {
+    {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+
+        size_t entity = this->reg.spawn_entity();
+
+        switch (type) {
+        case 0x21:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"shield_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        case 0x22:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"machinegun_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        case 0x23:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"rocket_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        case 0x24:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"beam_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        case 0x25:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"clone_bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{35, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        default:
+            this->reg.add_component<Position>(entity, Position{position_x, position_y});
+            this->reg.add_component<Tag>(entity, Tag{"bonus"});
+            this->reg.add_component<Direction>(entity, Direction{1, 0});
+            this->reg.add_component<Size>(entity, Size{70, 30});
+            this->reg.add_component<Type>(entity, Type{EntityType::POWERUP});
+            this->reg.add_component<Health>(entity, Health{1, 1, false, false});
+            this->reg.add_component<Damage>(entity, Damage{0});
+            break;
+        }
+        this->_networkSender->sendCreateBonus(type, entity, position_x, position_y);
+    }
+}
+
+void GameLogique::spawnWave() {
     spawnEnnemy(0x10, 1620, 500);
 }
 
@@ -276,6 +350,7 @@ bool GameLogique::getfriendlyfire() {
 void GameLogique::runGame() {
     std::clock_t clock      = std::clock();
     std::clock_t spawnClock = std::clock();
+    std::clock_t bonusClock = std::clock();
     int friendlyFireCheckCounter = 0;
     std::clock_t pingClock  = std::clock();
 
@@ -291,17 +366,27 @@ void GameLogique::runGame() {
                 sys.wave_pattern_system(reg, logger);
                 sys.Straight_line_pattern_system(this->reg);
                 sys.player_following_pattern_system(this->reg);
-                sys.shoot_player_pattern_system(this->reg, this->_networkSender);
-                sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
-                sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
-                                     logger, friendlyfire);
+                sys.shoot_enemy_missile(this->reg);
+                sys.clone_system(this->reg);
+                {
+                    std::lock_guard<std::mutex> lock(this->_mutex);
+                    sys.shoot_player_pattern_system(this->reg, this->_networkSender);
+                    sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
+                    sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
+                                        logger, friendlyfire);
+                    sys.boss_system(reg, this->_networkSender);
+                }
                 sys.position_system(reg, this->_networkSender, logger);
-                sys.boss_system(reg, this->_networkSender);
                 _camera_x += 0.1;
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
                 this->spawnEnnemy(0x61, 1920, rand() % 700 + 200);
                 spawnClock = std::clock();
+            }
+            if (static_cast<float>(std::clock() - bonusClock) / CLOCKS_PER_SEC > 20) {
+                char bonusType = 0x21 +  rand() % 5;
+                this->spawnBonus(bonusType, rand() % 1920, rand() % 1080);
+                bonusClock = std::clock();
             }
             if (static_cast<float>(std::clock() - pingClock) / CLOCKS_PER_SEC > 15) {
                 sys.ping_client(reg, this->_networkSender);
@@ -310,7 +395,7 @@ void GameLogique::runGame() {
             if (this->areAllPlayersDead() == true) {
                 this->clearGame();
                 #ifdef _WIN32
-                    Sleep(1);
+                    Sleep(1000);
                 #else
                     sleep(1);
                 #endif
@@ -337,16 +422,26 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
         if (newLevel >= (unsigned int)levels.getLength()) {
             this->running = false;
             #ifdef _WIN32
-                Sleep(1);
+                Sleep(10);
             #else
-                sleep(1);
+                usleep(10000);
             #endif
-            this->_networkSender->sendStateChange(1, 0x01);
+            this->_networkSender->sendStateChange(1, 0x04);
             this->_currentLevel = 0;
+            #ifdef _WIN32
+                Sleep(10);
+            #else
+                usleep(10000);
+            #endif
             this->_networkSender->sendLevelUpdate(this->_currentLevel);
             this->updateLevelConfig();
             return;
         }
+        #ifdef _WIN32
+            Sleep(10);
+        #else
+            usleep(10000);
+        #endif
         this->_networkSender->sendLevelUpdate(newLevel);
         this->_currentLevel = newLevel;
         this->updateLevelConfig();
@@ -367,6 +462,7 @@ bool GameLogique::areAllPlayersDead() {
 }
 
 void GameLogique::clearGame() {
+    std::lock_guard<std::mutex> lock(this->_mutex);
     auto& types = reg.get_components<Type>();
 
     for (size_t i = 0; i < types.size(); ++i) {
@@ -397,6 +493,8 @@ void GameLogique::clearGame() {
         this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
         this->reg.add_component<Size>(entity, Size{130, 80});
         this->reg.add_component<Direction>(entity, Direction{0, 0});
+        this->reg.add_component<CanShootMissiles>(entity, CanShootMissiles{0});
+        this->reg.add_component<CanShootBigMissile>(entity, CanShootBigMissile{0});
         this->_networkSender->sendCreatePlayer(numberPlayer, 100.f, 100 + (100.f * numberPlayer));
         this->playersId[numberPlayer] = entity;
         #ifdef _WIN32
@@ -408,31 +506,39 @@ void GameLogique::clearGame() {
 }
 
 std::array<char, 6> GameLogique::retrieveInputKeys() {
-    libconfig::Config cfg;
-    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-    cfg.readFile(configPath.c_str());
-    std::string keyStr;
-    std::array<char, 6> inputKeys;
-    const libconfig::Setting& root = cfg.getRoot();
-    const libconfig::Setting& keys = root["Keys"];
+    try
+    {
+        libconfig::Config cfg;
+        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+        cfg.readFile(configPath.c_str());
+        std::string keyStr;
+        std::array<char, 6> inputKeys;
+        const libconfig::Setting& root = cfg.getRoot();
+        const libconfig::Setting& keys = root["Keys"];
 
-    // Map to associate key names with their respective index in the array
-    std::unordered_map<std::string, int> keyMap = {{"up", 0},    {"down", 1},  {"left", 2},
-                                                   {"right", 3}, {"shoot", 4}, {"settings", 5}};
+        // Map to associate key names with their respective index in the array
+        std::unordered_map<std::string, int> keyMap = {{"up", 0},    {"down", 1},  {"left", 2},
+                                                    {"right", 3}, {"shoot", 4}, {"settings", 5}};
 
-    for (int i = 0; i < keys.getLength(); ++i) {
-        const libconfig::Setting& key = keys[i];
-        std::string name;
-        key.lookupValue("name", name);
-        auto it = keyMap.find(name);
+        for (int i = 0; i < keys.getLength(); ++i) {
+            const libconfig::Setting& key = keys[i];
+            std::string name;
+            key.lookupValue("name", name);
+            auto it = keyMap.find(name);
 
-        // If the key name is found in the map, assign the value
-        if (it != keyMap.end()) {
-            key.lookupValue("value", keyStr);
-            inputKeys[it->second] = keyStr[0];
+            // If the key name is found in the map, assign the value
+            if (it != keyMap.end()) {
+                key.lookupValue("value", keyStr);
+                inputKeys[it->second] = keyStr[0];
+            }
         }
+        return inputKeys;        
     }
-    return inputKeys;
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return {'Z', 'S', 'Q', 'D', 'X', 'P'};
+    }
 }
 
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
@@ -446,33 +552,32 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
     char input = 0;
     memcpy(&id, &(message.first[1]), sizeof(int));
     input = message.first[5];
+    {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        auto& velocities = reg.get_components<Velocity_s>();
+        auto& types      = reg.get_components<Type>();
+        if ((unsigned int)velocities.size() <= this->playersId[message.second]
+            && this->playersId[message.second] <= (unsigned int)types.size()) {
+            std::cerr << "Invalid entity ID: " << this->playersId[message.second] << std::endl;
+            return;
+        }
+        auto& velocitie = velocities[this->playersId[message.second]];
+        auto& type      = types[this->playersId[message.second]];
+        if (type->type != EntityType::PLAYER) {
+            return;
+        }
+        std::array<char, 6> keys = retrieveInputKeys();
 
-    auto& velocities = reg.get_components<Velocity_s>();
-    auto& types      = reg.get_components<Type>();
-    if ((unsigned int)velocities.size() <= this->playersId[message.second]
-        && this->playersId[message.second] <= (unsigned int)types.size()) {
-        std::cerr << "Invalid entity ID: " << this->playersId[message.second] << std::endl;
-        return;
-    }
-    auto& velocitie = velocities[this->playersId[message.second]];
-    auto& type      = types[this->playersId[message.second]];
-    if (type->type != EntityType::PLAYER) {
-        return;
-    }
-    std::array<char, 6> keys = retrieveInputKeys();
-
-    if (input == keys[0]) { // UP
-        velocitie->y = -2;
-    } else if (input == keys[1]) { // DOWN
-        velocitie->y = 2;
-    } else if (input == keys[2]) { // RIGHT
-        velocitie->x = 2;
-    } else if (input == keys[3]) { // LEFT
-        velocitie->x = -2;
-    } else if (input == keys[4]) { // SHOOT
-        {
-            std::lock_guard<std::mutex> lock(this->_mutex);
-            this->sys.shoot_system(reg, this->playersId[message.second], this->_networkSender, logger);
+        if (input == keys[0]) { // UP
+            velocitie->y = -2;
+        } else if (input == keys[1]) { // DOWN
+            velocitie->y = 2;
+        } else if (input == keys[2]) { // RIGHT
+            velocitie->x = 2;
+        } else if (input == keys[3]) { // LEFT
+            velocitie->x = -2;
+        } else if (input == keys[4]) { // SHOOT
+                this->sys.shoot_system(reg, message.second, this->playersId[message.second], this->_networkSender, logger);
         }
     }
 }
@@ -481,21 +586,33 @@ void GameLogique::handleRecieve() {
     while (1) {
         if (network->hasMessages()) {
             std::pair<std::string, uint32_t> message = network->popMessage();
+            if (message.first.empty()) continue;
             switch (message.first[0]) {
             case 0x41:
                 startGame(this->playersId[message.second]);
                 break;
             case 0x40:
+                if (running == false) break;
                 handleClientInput(message);
                 break;
             case 0x42: {
+                if (running == false) break;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
                 spawnEnnemy(message.first[1], static_cast<float>(pos_x), static_cast<float>(pos_y));
                 break;
             }
+            case 0x21: {
+                if (running == false) break;
+                int pos_x, pos_y;
+                std::memcpy(&pos_x, &message.first[2], sizeof(int));
+                std::memcpy(&pos_y, &message.first[6], sizeof(int));
+                spawnBonus(message.first[1], static_cast<float>(pos_x), static_cast<float>(pos_y));
+                break;
+            }
             case 0x43: {
+                if (running == false) break;
                 int entityId;
                 std::memcpy(&entityId, &message.first[1], sizeof(int));
                 entity_t entity = reg.entity_from_index(entityId);
@@ -504,41 +621,56 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x44: {
+                if (running == false) break;
                 spawnWave();
                 break;
             }
             case 0x45: {
-                auto& playerHealth = reg.get_components<Health_s>()[message.second];
-                if (message.first[1] == 0x01) {
-                    playerHealth->isDamageable = false;
-                }
-                if (message.first[1] == 0x02) {
-                    playerHealth->isDamageable = true;
+                if (running == false) break;
+                auto& playerHealth = reg.get_components<Health_s>()[this->playersId[message.second]];
+                if (playerHealth) {
+                    if (message.first[1] == 0x01) {
+                        playerHealth->isDamageable = false;
+                    }
+                    if (message.first[1] == 0x02) {
+                        playerHealth->isDamageable = true;
+                    }
                 }
                 break;
             }
             case 0x46: {
+                if (running == false) break;
                 float value;
                 std::memcpy(&value, &message.first[1], sizeof(float));
                 auto& speed                           = reg.get_components<ShootingSpeed_s>();
-                speed[message.second]->shooting_speed = value;
+                if (this->playersId[message.second] < speed.size() && speed[this->playersId[message.second]]) {
+                    speed[this->playersId[message.second]]->shooting_speed = value;
+                }
                 break;
             }
             case 0x47: {
+                if (running == false) break;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
-                auto& position = reg.get_components<Position_s>()[message.second];
-                position->x    = pos_x;
-                position->y    = pos_y;
-                _networkSender->sendPositionUpdate(message.second, pos_x, pos_y);
+                if (reg.get_components<Position_s>().size() > this->playersId[message.second]) {
+                    auto &position = reg.get_components<Position_s>()[this->playersId[message.second]];
+                    position->x    = pos_x;
+                    position->y    = pos_y;
+                    _networkSender->sendPositionUpdate(this->playersId[message.second], pos_x, pos_y);
+                }
                 break;
             }
             case 0x48: {
+                if (running == false) break;
                 int value;
                 std::memcpy(&value, &message.first[1], sizeof(int));
-                auto& playerHealth   = reg.get_components<Health_s>()[message.second];
-                playerHealth->health = value;
+                if (this->playersId[message.second] < reg.get_components<Health_s>().size()) {
+                    auto& playerHealth   = reg.get_components<Health_s>()[this->playersId[message.second]];
+                    if (playerHealth) {
+                        playerHealth->health = value;
+                    }
+                }
                 break;
             }
             default:
@@ -566,6 +698,8 @@ void GameLogique::handleClientConnection() {
                     this->reg.add_component<Type>(entity, Type{EntityType::PLAYER});
                     this->reg.add_component<Size>(entity, Size{130, 80});
                     this->reg.add_component<Direction>(entity, Direction{0, 0});
+                    this->reg.add_component<CanShootMissiles>(entity, CanShootMissiles{0});
+                    this->reg.add_component<CanShootBigMissile>(entity, CanShootBigMissile{0});
                     this->_networkSender->sendCreatePlayer(clientId, 100.f, 100 + (100.f * clientId));
                     this->playersId[clientId] = entity;
                 }

@@ -58,6 +58,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
     }
     RenderTexture.create(1920, 1080);
     backgroundMusicVolume = 100.0f;
+    this->settings = std::make_shared<Settings>(window);
 }
 
 void RType::Menu::draw() {
@@ -179,7 +180,7 @@ void RType::Menu::runScene(float &latency) {
     sf::Event event;
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
-            window->close();
+            sendStateChange(-1);
         }
         handleKeyPress(event);
 
@@ -200,7 +201,7 @@ void RType::Menu::runScene(float &latency) {
                     this->sendStateChange(2);
                     return;
                 case 1:
-                    this->settings->display();
+                    this->settings->displaySettings(false);
                     break;
                 case 2:
                     this->sendStateChange(-1);

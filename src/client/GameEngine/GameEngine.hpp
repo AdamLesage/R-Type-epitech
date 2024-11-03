@@ -104,6 +104,8 @@ namespace RType {
                 _isOffline = isOffline;
             }
 
+            void setEnd() {_running = false;}
+
         protected:
         private:
             Registry _registry;
@@ -117,6 +119,7 @@ namespace RType {
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
             std::string _gameSelected;
+            bool _running = true;
             bool _isOffline = false;
     };
 } // namespace RType

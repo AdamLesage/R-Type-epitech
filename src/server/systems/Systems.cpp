@@ -145,7 +145,8 @@ void Systems::check_entities_collisions(Registry& reg,
                                         std::unique_ptr<NetworkSender>& networkSender,
                                         Type_s* entityType1,
                                         Type_s* entityType2,
-                                        bool friendlyfire) {
+                                        bool friendlyfire)
+{
     bool collisionX =
         entityPos1->x < entityPos2->x + entitySize2->x && entityPos1->x + entitySize1->x > entityPos2->x;
     bool collisionY =
@@ -159,11 +160,14 @@ void Systems::check_entities_collisions(Registry& reg,
     bool enemyTakeDamage =
         (entityType1->type == EntityType::ENEMY && entityType2->type == EntityType::PLAYER_PROJECTILE);
 
+    bool playerTakeBonus =
+        (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::POWERUP);
+
     bool bossTakeDamage =
         (entityType1->type == EntityType::BOSS && entityType2->type == EntityType::PLAYER_PROJECTILE);
 
     if (collisionX == false || collisionY == false
-        || (playerTakeDamage == false && enemyTakeDamage == false && bossTakeDamage == false)) { // No collision
+        || (playerTakeDamage == false && enemyTakeDamage == false && bossTakeDamage == false && playerTakeBonus == false)) { // No collision
         return;
     }
 
@@ -173,8 +177,14 @@ void Systems::check_entities_collisions(Registry& reg,
         
 
         if (playerHealth && enemyDamage) {
-            if (playerHealth->isDamageable == true)
-                playerHealth->health -= enemyDamage->damage;
+            if (playerHealth->isDamageable == true) {
+                if (playerHealth->health < enemyDamage->damage) {
+                    playerHealth->health = 0;
+                } else {
+                    playerHealth->health -= enemyDamage->damage;
+                }
+            }
+
             if (playerHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
@@ -197,12 +207,16 @@ void Systems::check_entities_collisions(Registry& reg,
     }
 
     if (enemyTakeDamage && collisionX && collisionY) {
-        logger.log(RType::Logger::RTYPEINFO, "Enemy take damage");
+        // logger.log(RType::Logger::RTYPEINFO, "Enemy take damage");
         auto& enemyHealth      = reg.get_components<Health_s>()[entityId1];
         auto& projectileDamage = reg.get_components<Damage_s>()[entityId2];
-
+        size_t maxHealth = enemyHealth->health;
         if (enemyHealth && projectileDamage) {
-            enemyHealth->health -= projectileDamage->damage;
+            if (projectileDamage->damage > enemyHealth->health) {
+                enemyHealth->health = 0;
+            } else {
+                enemyHealth->health -= projectileDamage->damage;
+            }
             if (enemyHealth->health <= 0) {
                 reg.kill_entity(entityId1);
                 networkSender->sendDeleteEntity(entityId1);
@@ -212,7 +226,52 @@ void Systems::check_entities_collisions(Registry& reg,
         } else {
             logger.log(RType::Logger::RTYPEERROR, "Error while getting health or damage component for enemy");
         }
-        // If enemy take damage, it is only a projectile so we delete it
+        if (reg.get_components<IsBigMissile>().size() > entityId2 && reg.get_components<IsBigMissile>()[entityId2]) {
+            if (projectileDamage->damage <= maxHealth) {
+                reg.kill_entity(entityId2);
+                networkSender->sendDeleteEntity(entityId2);
+            } else {
+                projectileDamage->damage -= maxHealth;
+            }
+        } else if (!(reg.get_components<IsBigMissile>().size() > entityId2 && reg.get_components<IsBigMissile>()[entityId2])) {
+            // If enemy take damage, it is only a projectile so we delete it
+            reg.kill_entity(entityId2);
+            networkSender->sendDeleteEntity(entityId2);
+        }
+    }
+
+    if (playerTakeBonus && collisionX && collisionY) {
+        auto& playerHealth = reg.get_components<Health_s>()[entityId1];
+        auto& bonusType    = reg.get_components<Type_s>()[entityId2];
+        auto& bonustag    = reg.get_components<Tag_s>()[entityId2];
+
+        if (playerHealth && bonusType) {
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "shield_bonus") {
+                playerHealth->health += 50;
+                networkSender->sendHealthUpdate(entityId1, playerHealth->health);
+            }
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "machinegun_bonus") {
+                reg.get_components<ShootingSpeed_s>()[entityId1]->shooting_speed *= 0.9;
+            }
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "rocket_bonus") {
+                reg.get_components<CanShootMissiles>()[entityId1]->number += 3;
+            }
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "beam_bonus") {
+                reg.get_components<CanShootBigMissile>()[entityId1]->number += 1;
+            }
+            if (bonusType->type == EntityType::POWERUP && bonustag->tag == "clone_bonus") {
+                entity_t entity = reg.spawn_entity();
+                reg.add_component<Clone>(entity, Clone{entityId1});
+                reg.add_component<Position>(entity, Position{entityPos1->x, entityPos1->y + 100});
+                reg.add_component<Velocity>(entity, Velocity{0, 0});
+                reg.add_component<Type>(entity, Type{EntityType::PLAYER});
+                reg.add_component<Size>(entity, Size{130, 80});
+                reg.add_component<Health>(entity, Health{1, 1, false, true});
+                networkSender->sendCreatePlayer(4, entityPos1->x, entityPos1->y + 100);
+            }
+        } else {
+            logger.log(RType::Logger::RTYPEERROR, "Error while getting health or type component for player");
+        }
         reg.kill_entity(entityId2);
         networkSender->sendDeleteEntity(entityId2);
     }
@@ -280,7 +339,10 @@ struct SpatialHash {
     }
 };
 
-void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger, bool friendlyfire) {
+void Systems::collision_system(Registry& reg,
+                              std::pair<size_t, size_t> MapSize,
+                              std::unique_ptr<NetworkSender>& networkSender,
+                              RType::Logger& logger, bool friendlyfire) {
     auto &positions = reg.get_components<Position_s>();
     auto &sizes = reg.get_components<Size_s>();
     auto &types = reg.get_components<Type_s>();
@@ -324,42 +386,116 @@ void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize,
 }
 
 void Systems::shoot_system(Registry& reg,
+                           u_int32_t clientId,
                            entity_t playerId,
                            std::unique_ptr<NetworkSender>& networkSender,
                            RType::Logger& logger) {
     (void)logger;
+    bool haveShoot = false;
     auto& positions      = reg.get_components<Position_s>();
     auto& types          = reg.get_components<Type_s>();
     auto& shootingSpeeds = reg.get_components<ShootingSpeed_s>();
     auto& shoots         = reg.get_components<Shoot>();
     auto& sizes          = reg.get_components<Size>();
+    auto& canShootMissiles       = reg.get_components<CanShootMissiles>();
+    auto& canShootBigMissiles       = reg.get_components<CanShootBigMissile>();
 
     auto& pos           = positions[playerId];
     auto& type          = types[playerId];
     auto& shootingSpeed = shootingSpeeds[playerId];
     auto& shoot         = shoots[playerId];
     auto& size          = sizes[playerId];
-
     if (type && type->type == EntityType::PLAYER && shoot->canShoot) {
         auto now                        = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = now - shoot->shootCooldown;
         float elapsed_seconds           = std::chrono::duration_cast<std::chrono::milliseconds>(fs).count();
         if (elapsed_seconds >= shootingSpeed->shooting_speed * 1000) {
+            haveShoot = true;
             shoot->shootCooldown = now;
             float projectileX    = pos->x + 10;
-            float projectileY    = pos->y;
 
             entity_t projectile = reg.spawn_entity();
-            reg.add_component<Position_s>(
-                projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
-            reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
             reg.add_component<Type_s>(projectile, Type_s{EntityType::PLAYER_PROJECTILE});
-            reg.add_component<Damage_s>(projectile, Damage_s{25});
-            reg.add_component<Size>(projectile, Size{70, 30});
             reg.add_component<ParentId>(projectile, ParentId{playerId});
 
-            networkSender->sendShootSound();
-            networkSender->sendCreateProjectil(projectile, projectileX, projectileY, playerId);
+            if (canShootBigMissiles.size() > playerId && canShootBigMissiles[playerId] && canShootBigMissiles[playerId]->number != 0) {
+                canShootBigMissiles[playerId]->number--;
+                float projectileY    = pos->y - (160 / 2);
+                reg.add_component<Position_s>(
+                    projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
+                reg.add_component<Velocity_s>(projectile, Velocity_s{2.5f, 0.0f});
+                reg.add_component<Damage_s>(projectile, Damage_s{400});
+                reg.add_component<Size>(projectile, Size{240, 160});
+                reg.add_component<IsBigMissile>(projectile, IsBigMissile{true});
+                networkSender->sendCreateBigMissile(playerId, projectileX, projectileY, clientId);
+                networkSender->sendShootSound();
+            } else if (canShootMissiles.size() > playerId && canShootMissiles[playerId] && canShootMissiles[playerId]->number != 0) {
+                float projectileY    = pos->y - (30 / 2);
+                reg.add_component<Position_s>(
+                    projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
+                canShootMissiles[playerId]->number--;
+                reg.add_component<ShootEnnemyMissile>(projectile, ShootEnnemyMissile{3.0f});
+                reg.add_component<Size>(projectile, Size{70, 30});
+                reg.add_component<Damage_s>(projectile, Damage_s{200});
+                reg.add_component<Velocity_s>(projectile, Velocity_s{0.1f, 0.1f});
+                networkSender->sendCreateMissile(playerId, projectileX, projectileY);
+                networkSender->sendShootSound();
+            } else {
+                float projectileY    = pos->y - (30 / 2);
+                reg.add_component<Position_s>(
+                    projectile, Position_s{projectileX + (size->x / 2), projectileY + (size->y / 2) - (30 / 2)});
+                reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
+                reg.add_component<Size>(projectile, Size{70, 30});
+                reg.add_component<Damage_s>(projectile, Damage_s{25});
+                networkSender->sendCreateProjectil(playerId, projectileX, projectileY, clientId);
+                networkSender->sendShootSound();
+            }
+        }
+    }
+    if (haveShoot) {
+        auto& clones  = reg.get_components<Clone>();
+        for (size_t i = 0; i < clones.size(); ++i) {
+            auto &clone = clones[i];
+            if (clone && clone->playerId == playerId) {
+                auto& clonePos = positions[i];
+                auto& cloneSize = sizes[i];
+                if (clonePos && cloneSize) {
+                    entity_t projectile = reg.spawn_entity();
+                    reg.add_component<Type_s>(projectile, Type_s{EntityType::PLAYER_PROJECTILE});
+                    reg.add_component<ParentId>(projectile, ParentId{i});
+                    float projectileY    = clonePos->y - (30 / 2);
+                    reg.add_component<Position_s>(
+                        projectile, Position_s{clonePos->x + 10 + (cloneSize->x / 2), projectileY + (cloneSize->y / 2) - (30 / 2)});
+                    reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
+                    reg.add_component<Size>(projectile, Size{70, 30});
+                    reg.add_component<Damage_s>(projectile, Damage_s{10});
+            networkSender->sendCreateProjectil(i, clonePos->x + 10 + (cloneSize->x / 2), projectileY, 4);
+                }
+            }
+        }
+    }
+}
+
+void Systems::shoot_enemy_missile(Registry& reg) {
+    auto& missiles  = reg.get_components<ShootEnnemyMissile>();
+    auto& velocitys = reg.get_components<Velocity>();
+    auto& positions = reg.get_components<Position>();
+
+    for (size_t i = 0; i < missiles.size(); ++i) {
+        auto& missile  = missiles[i];
+        auto& velocity = velocitys[i];
+        auto& position = positions[i];
+
+        if (missile && velocity && position) {
+            std::array<float, 2> target_pos = this->find_closest_entity(reg, &(*position), EntityType::ENEMY);
+            velocity->x                     = target_pos[0] - position->x;
+            velocity->y                     = target_pos[1] - position->y;
+            float magnitude = std::sqrt((velocity->x * velocity->x) + (velocity->y * velocity->y));
+
+            if (magnitude > 0) {
+                velocity->x = (velocity->x / magnitude) * missile->speed;
+                velocity->y = (velocity->y / magnitude) * missile->speed;
+            }
         }
     }
 }
@@ -654,7 +790,7 @@ void Systems::player_following_pattern_system(Registry& reg) {
         auto& position = positions[i];
 
         if (pattern && velocity && position) {
-            std::array<float, 2> target_pos = this->find_closest_player(reg, &(*position));
+            std::array<float, 2> target_pos = this->find_closest_entity(reg, &(*position), EntityType::PLAYER);
             velocity->x                     = target_pos[0] - position->x;
             velocity->y                     = target_pos[1] - position->y;
             float magnitude = std::sqrt((velocity->x * velocity->x) + (velocity->y * velocity->y));
@@ -719,7 +855,7 @@ void Systems::shoot_player_pattern_system(Registry& reg, std::unique_ptr<Network
             if (elapsed_seconds >= pattern->shootCooldown) {
                 pattern->lastShotTime = now;
 
-                std::array<float, 2> target_pos          = this->find_closest_player(reg, &(*position));
+                std::array<float, 2> target_pos          = this->find_closest_entity(reg, &(*position), EntityType::PLAYER);
                 std::array<float, 2> projectile_velocity = {target_pos[0] - position->x,
                                                             target_pos[1] - position->y};
                 float magnitude = std::sqrt((projectile_velocity[0] * projectile_velocity[0])
@@ -742,7 +878,24 @@ void Systems::shoot_player_pattern_system(Registry& reg, std::unique_ptr<Network
     }
 }
 
-std::array<float, 2> Systems::find_closest_player(Registry& reg, Position* position_entity) {
+void Systems::clone_system(Registry& reg) {
+    auto& clones  = reg.get_components<Clone>();
+    auto& velocities = reg.get_components<Velocity>();
+
+    for (size_t i = 0; i < clones.size(); ++i) {
+        auto &clone = clones[i];
+        if (clone) {
+            auto &velocityClone = velocities[i];
+            auto &velocityPlayer = velocities[clone->playerId];
+            if (velocityClone && velocityPlayer) {
+                velocityClone->x = velocityPlayer->x;
+                velocityClone->y = velocityPlayer->y;
+            }
+        }
+    }
+}
+
+std::array<float, 2> Systems::find_closest_entity(Registry& reg, Position* position_entity, EntityType type) {
     float min_target_distance = 1000000;
     float target_x            = 0;
     float target_y            = 0;
@@ -752,7 +905,7 @@ std::array<float, 2> Systems::find_closest_player(Registry& reg, Position* posit
     for (size_t j = 0; j < positions.size(); ++j) {
         auto& target_position = positions[j];
         auto& target_type     = types[j];
-        if (target_position && target_type && target_type->type == EntityType::PLAYER) {
+        if (target_position && target_type && target_type->type == type) {
             float target_distance =
                 std::abs(target_position->x - position_entity->x) + std::abs(target_position->y - position_entity->y);
             if (target_distance < min_target_distance) {

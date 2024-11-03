@@ -27,9 +27,14 @@
 #include "../../shared/components/Direction.hpp"
 #include "../../shared/components/Boss.hpp"
 #include "../../shared/components/ParentId.hpp"
+#include "../../shared/components/ShootEnnemyMissile.hpp"
+#include "../../shared/components/CanShootMissiles.hpp"
+#include "../../shared/components/CanShootBigMissile.hpp"
+#include "../../shared/components/IsBigMissile.hpp"
 #include "../GameLogique/NetworkSender.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Tag.hpp"
+#include "../../shared/components/Clone.hpp"
 #include <iostream>
 #include <algorithm>
 #include <fstream>
@@ -100,10 +105,12 @@ class Systems {
          * @param logger The logger to log the events
          */
         void shoot_system(Registry& reg,
+                          u_int32_t clientId,
                           entity_t playerId,
                           std::unique_ptr<NetworkSender>& networkSender,
                           RType::Logger& logger);
 
+        void shoot_enemy_missile(Registry& reg);
         /**
          * @brief Handle the save of the score of the player.
          * @param reg
@@ -197,6 +204,15 @@ class Systems {
          */
         void ping_client(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
 
+        /**
+         * @brief clone the velocity of the player
+         *
+         * @param reg The registry containing the components.
+         * @param networkSender The class for sending
+         * @return void
+         */
+        void clone_system(Registry& reg);
+
     private:
         /**
          * @brief Check if an entity is colliding with the borders of the map.
@@ -283,7 +299,7 @@ class Systems {
          * @param position_entity the position of the entity
          * @return return the pos of the closest player
          */
-        std::array<float, 2> find_closest_player(Registry& reg, Position* position_entity);
+        std::array<float, 2> find_closest_entity(Registry& reg, Position* position_entity, EntityType type);
 };
 
 #endif /* !SYSTEMS_HPP_ */
