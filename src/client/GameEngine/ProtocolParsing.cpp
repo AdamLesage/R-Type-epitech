@@ -185,7 +185,7 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
             _registry.add_component<Type>(entity, Type{data->type->type});
         }
         _registry.add_component<Direction>(entity, Direction{-1, 0});
-
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
@@ -223,6 +223,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Score>(entity, Score{0});
         std::string path =
             std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_1.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {71, 32}, {0, 0}});
@@ -265,6 +266,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
         _registry.add_component<Direction>(entity, Direction{-1, 0});
         std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "enemy_2.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {33, 36}, {0, 0}});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
@@ -306,6 +308,7 @@ bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& 
         std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "boss"
                            + PATH_SEPARATOR + "boss_2.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {1300, 500}, {0, 0}});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("boss_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the boss" << std::endl;
@@ -338,6 +341,7 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int&
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("bonus_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
@@ -376,6 +380,7 @@ bool RType::ProtocolParsing::parseWallCreation(const std::string& message, int& 
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Health>(
             entity, Health{100, 100, false, false}); // We can destroy the wall with a projectile
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("wall_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the wall" << std::endl;
@@ -412,6 +417,7 @@ bool RType::ProtocolParsing::parseRewardCreation(const std::string& message, int
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("reward_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the reward" << std::endl;
@@ -439,12 +445,18 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
 
-        auto& entities = _registry.get_components<Score>();
-        for (auto& entityWithScore : entities) {
-            if (!entityWithScore.has_value() || extraData == 0)
+        auto& scoreComponents = _registry.get_components<Score>();
+        auto& typeComponents = _registry.get_components<Type>();
+
+        for (size_t i = 0; i < scoreComponents.size(); ++i) {
+            if (!scoreComponents[i].has_value() || extraData == 0)
                 continue;
-            Score& score = entityWithScore.value();
-            score.score += extraData;
+
+            if (typeComponents[i] && typeComponents[i]->type == EntityType::PLAYER) {
+                Score& score = scoreComponents[i].value();
+                score.score += extraData;
+                std::cout << "Score updated for PLAYER entity: " << score.score << std::endl;
+            }
         }
 
         this->updateIndexFromBinaryData("entity_deletion", index);
