@@ -310,6 +310,8 @@ void RType::Mediator::notifyProtocolParsing(std::string sender, const std::strin
         int level = std::stoi(levelString);
         this->_renderingEngine->setLevel(level);
     }
+    if (event == "ShootSound")
+        this->_audioEngine->ShootSound();
 }
 
 void RType::Mediator::notify(std::string sender, const std::string& event) {

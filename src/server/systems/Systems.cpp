@@ -358,6 +358,7 @@ void Systems::shoot_system(Registry& reg,
             reg.add_component<Size>(projectile, Size{70, 30});
             reg.add_component<ParentId>(projectile, ParentId{playerId});
 
+            networkSender->sendShootSound();
             networkSender->sendCreateProjectil(projectile, projectileX, projectileY, playerId);
         }
     }

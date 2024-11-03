@@ -35,7 +35,8 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
                        {"SCORE_UPDATE", {0x36, "score_update"}},
                        {"STATE_CHANGE", {0x37, "state_change"}},
                        {"LEVEL_UPDATE", {0x3a, "level_update"}},
-                       {"PING_CLIENT", {0x99, "ping_client"}}};
+                       {"PING_CLIENT", {0x99, "ping_client"}},
+                       {"SHOOT_SOUND", {0x98, "shoot_sound"}}};
 }
 
 RType::ProtocolParsing::~ProtocolParsing() {
@@ -675,6 +676,14 @@ bool RType::ProtocolParsing::parseScoreUpdate(const std::string& message, int& i
     return true;
 }
 
+bool RType::ProtocolParsing::parseShootSound(const std::string& message, int& index) {
+    if (!checkMessageType("SHOOT_SOUND", message, index)) return false;
+
+    _mediator->notify("ProtocolParsing", "ShootSound");
+    this->updateIndexFromBinaryData("shoot_sound", index); // Ajoutez cette ligne pour mettre à jour l'index
+    return true;
+}
+
 bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& index) {
     if (!checkMessageType("STATE_CHANGE", message, index)) return false;
 
@@ -784,6 +793,7 @@ bool RType::ProtocolParsing::parseData(const std::string& message) {
         if (this->parseLevelUpdate(message, index)) continue;
         if (this->parseEntityCreation(message, index)) continue;
         if (this->parsePingClient(message, index)) continue;
+        if (this->parseShootSound(message, index)) continue;
         index += 1;
     }
     return false;

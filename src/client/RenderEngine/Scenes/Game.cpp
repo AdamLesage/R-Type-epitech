@@ -128,7 +128,6 @@ void RType::Game::ShootSound() {
     if (keyValue == "ON") {
         piou = true;
     }
-    _mediator->notify("RenderingEngine", "ShootSound");
 }
 
 void RType::Game::DisplaySkipIntro() {
