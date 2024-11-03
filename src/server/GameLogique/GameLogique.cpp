@@ -86,6 +86,7 @@ void GameLogique::startGame(int idEntity) {
         #endif
         this->_networkSender->sendStateChange(idEntity, 0x03);
         clearGame();
+        clearGame();
         #ifdef _WIN32
             Sleep(3000);
         #else

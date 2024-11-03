@@ -109,7 +109,7 @@ bool RType::ProtocolParsing::checkMessageType(const std::string& messageType,
 bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int& index) {
     if (!checkMessageType("PLAYER_CREATION", message, index)) return false;
 
-    unsigned int playerId;
+    unsigned int playerId = 0;
     float posX;
     float posY;
 
@@ -140,7 +140,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
             _registry.add_component<Size>(entity, Size{130, 80});
             _registry.add_component<Type>(entity, Type{EntityType::PLAYER});
             _registry.add_component<Direction>(entity, Direction{1, 0});
-            if (playerId <= 4)
+            if (playerId <= 5)
                 playerId = 0;
             std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
                             + std::to_string(playerId + 1) + ".png";
