@@ -15,6 +15,7 @@
 #include <libconfig.h++>
 #include <SFML/Graphics.hpp>
 
+#include "../../Camera.hpp"
 #include "../ARenderEngineScene.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -60,8 +61,21 @@ namespace RType {
              */
             void displayEndMenuOptions();
 
+            /**
+             * @brief Set the camera to display
+             *
+             * @param camera the camera to set
+             */
+            void setCamera(std::shared_ptr<Camera> camera);
+
+            /**
+             * @brief Display final score on end menu
+             */
+            void displayFinalScore();
+
         protected:
         private:
+            std::shared_ptr<Camera> _camera;
             libconfig::Config _cfg; // The config file
             std::shared_ptr<sf::RenderWindow> _window;
             std::string _gameSelected;

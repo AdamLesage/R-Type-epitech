@@ -24,6 +24,7 @@ void RType::EndMenu::runScene(float& latency) {
     _window->clear();
     this->displayBackground();
     this->displayEndMenuOptions();
+    this->displayFinalScore();
     _window->display();
 }
 
@@ -105,5 +106,74 @@ void RType::EndMenu::displayEndMenuOptions() {
         } else {
             std::cerr << "Unsupported action from client";
         }
+    }
+}
+
+void RType::EndMenu::setCamera(std::shared_ptr<Camera> camera)
+{
+    _camera = camera;
+}
+
+void RType::EndMenu::displayFinalScore()
+{
+    if (_camera == nullptr) {
+        std::cerr << "[Debug] _camera is nullptr, aborting displayFinalScore." << std::endl;
+        return;
+    }
+
+    sf::RenderWindow& win = *_window;
+    std::vector<sf::Text> finalScores;
+    sf::Text scoreTitle;
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    float totalWidth = 0.0f;
+    sf::Font scoreFont;
+
+    if (!scoreFont.loadFromFile(fontPath)) {
+        std::cerr << "Failed to load font from path: " << fontPath << std::endl;
+        return;
+    }
+    scoreTitle.setFont(scoreFont);
+    scoreTitle.setString("Final Score:");
+    scoreTitle.setCharacterSize(48);
+    scoreTitle.setFillColor(sf::Color::White);
+
+    std::cerr << "[Debug] Loading scores from _camera->listEntityToDisplay." << std::endl;
+    for (const auto& entityInfo : _camera->listEntityToDisplay) {
+        std::cerr << "[Debug] Checking entity with score: " << entityInfo.score.score << std::endl;
+        if (entityInfo.score.score > 0) {
+            sf::Text finalScore;
+            finalScore.setFont(scoreFont);
+            finalScore.setString(std::to_string(entityInfo.score.score));
+            finalScore.setCharacterSize(38);
+            finalScore.setFillColor(sf::Color::White);
+
+            float textWidth = finalScore.getLocalBounds().width;
+            totalWidth += finalScore.getLocalBounds().width + 10;
+            std::cerr << "[Debug] Added score " << entityInfo.score.score 
+                      << " with width " << textWidth << ". Total width now: " << totalWidth << std::endl;
+            finalScores.push_back(finalScore);
+        }
+    }
+
+    if (finalScores.empty()) {
+        std::cerr << "[Debug] No scores to display, finalScores vector is empty." << std::endl;
+        return;
+    }
+
+    float startX = (win.getSize().x - totalWidth) / 2.0f;
+    float yOffset = 80.0f;
+
+    float titleX = (win.getSize().x - scoreTitle.getLocalBounds().width) / 2.0f;
+    scoreTitle.setPosition(titleX, 10.0f);
+    win.draw(scoreTitle);
+
+    std::cerr << "[Debug] Drawing scores starting at X position: " << startX 
+              << ", Y offset: " << yOffset << std::endl;
+    for (auto& finalScore : finalScores) {
+        std::cerr << "[Debug] Drawing score at position X: " << startX 
+                  << ", Y: " << yOffset << " with text: " << finalScore.getString().toAnsiString() << std::endl;
+        finalScore.setPosition(startX, yOffset);
+        win.draw(finalScore);
+        startX += finalScore.getLocalBounds().width + 10;
     }
 }

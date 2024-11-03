@@ -42,6 +42,7 @@ void RType::RenderingEngine::run() {
     this->_settings->setMediator(_mediator);
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
+    this->_endMenu->setCamera(_camera);
     this->_game->setOfflineMode(_isOffline);
     this->_lobby->setOfflineMode(_isOffline);
 
