@@ -428,6 +428,7 @@ void Systems::shoot_system(Registry& reg,
                 reg.add_component<Size>(projectile, Size{240, 160});
                 reg.add_component<IsBigMissile>(projectile, IsBigMissile{true});
                 networkSender->sendCreateBigMissile(playerId, projectileX, projectileY, clientId);
+                networkSender->sendShootSound();
             } else if (canShootMissiles.size() > playerId && canShootMissiles[playerId] && canShootMissiles[playerId]->number != 0) {
                 float projectileY    = pos->y - (30 / 2);
                 reg.add_component<Position_s>(
@@ -438,6 +439,7 @@ void Systems::shoot_system(Registry& reg,
                 reg.add_component<Damage_s>(projectile, Damage_s{200});
                 reg.add_component<Velocity_s>(projectile, Velocity_s{0.1f, 0.1f});
                 networkSender->sendCreateMissile(playerId, projectileX, projectileY);
+                networkSender->sendShootSound();
             } else {
                 float projectileY    = pos->y - (30 / 2);
                 reg.add_component<Position_s>(
@@ -446,6 +448,7 @@ void Systems::shoot_system(Registry& reg,
                 reg.add_component<Size>(projectile, Size{70, 30});
                 reg.add_component<Damage_s>(projectile, Damage_s{25});
                 networkSender->sendCreateProjectil(playerId, projectileX, projectileY, clientId);
+                networkSender->sendShootSound();
             }
         }
     }
@@ -466,7 +469,6 @@ void Systems::shoot_system(Registry& reg,
                     reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
                     reg.add_component<Size>(projectile, Size{70, 30});
                     reg.add_component<Damage_s>(projectile, Damage_s{10});
-                    networkSender->sendShootSound();
             networkSender->sendCreateProjectil(i, clonePos->x + 10 + (cloneSize->x / 2), projectileY, 4);
                 }
             }
