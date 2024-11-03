@@ -425,14 +425,15 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
     if (!checkMessageType("ENTITY_DELETION", message, index)) return false;
 
     int entityId;
+    size_t extraData;
 
     try {
         std::memcpy(&entityId, &message[index + 1], sizeof(int));
+        std::memcpy(&extraData, &message[index + 1 + sizeof(int)], sizeof(size_t));
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while parsing the entity deletion message" << std::endl;
         return false;
     }
-
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
