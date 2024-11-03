@@ -113,6 +113,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"player"});
+        _registry.add_component<Name>(entity, Name{});
         _registry.add_component<Controllable>(entity, Controllable{true, false, false, false, false});
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Health>(entity, Health{100, 100, true, true});

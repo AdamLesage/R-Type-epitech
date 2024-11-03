@@ -19,6 +19,7 @@
 #include "../../shared/entities/Entity.hpp"
 #include "../../shared/systems/Systems.hpp"
 #include "../../shared/components/Size.hpp"
+#include "../../shared/components/Name.hpp"
 #include "../../shared/components/Sprite.hpp"
 #include "../../shared/assetEditorParsing/AssetEditorParsing.hpp"
 

@@ -12,6 +12,7 @@
 #include "../systems/Systems.hpp"
 #include "../network/Server.hpp"
 #include "../../shared/components/Tag.hpp"
+#include "../../shared/components/Name.hpp"
 #include "../../shared/components/Position.hpp"
 #include "../../shared/components/Velocity.hpp"
 #include "../../shared/components/Shoot.hpp"
