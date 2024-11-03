@@ -14,6 +14,7 @@
 #include <map>
 #include <utility>
 #include <cstring>
+#include <mutex>
 #include <iomanip>
 #include "../../shared/registry/Registry.hpp"
 #include "../../shared/entities/Entity.hpp"
@@ -31,7 +32,7 @@
 namespace RType {
     class ProtocolParsing {
         public:
-            ProtocolParsing(std::string protocolPath, Registry& registry);
+            ProtocolParsing(std::string protocolPath, Registry& registry, std::shared_ptr<std::mutex> mutex);
             ~ProtocolParsing();
 
             /**
@@ -310,7 +311,8 @@ namespace RType {
             Registry& _registry; // Will be used to update the game engine data
             float _latency;
             std::shared_ptr<IMediator> _mediator;
-             libconfig::Config _gameConfig;
+            libconfig::Config _gameConfig;
+            std::shared_ptr<std::mutex> _mutex;
 
     };
 } // namespace RType

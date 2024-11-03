@@ -7,7 +7,7 @@
 
 #include "ProtocolParsing.hpp"
 
-RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& registry) : _registry(registry) {
+RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& registry, std::shared_ptr<std::mutex> mutex) : _registry(registry) {
     try {
         _protocolPath = protocolPath;
         _cfg.readFile(_protocolPath.c_str());
@@ -43,6 +43,7 @@ RType::ProtocolParsing::ProtocolParsing(std::string protocolPath, Registry& regi
                        {"STATE_CHANGE", {0x37, "state_change"}},
                        {"LEVEL_UPDATE", {0x3a, "level_update"}},
                        {"PING_CLIENT", {0x99, "ping_client"}}};
+    _mutex = mutex;
 }
 
 RType::ProtocolParsing::~ProtocolParsing() {
@@ -120,24 +121,27 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
     }
 
     try {
-        entity_t entity = _registry.spawn_entity();
-        _registry.add_component<Position>(entity, Position{posX, posY});
-        _registry.add_component<Tag>(entity, Tag{"player"});
-        _registry.add_component<Controllable>(entity, Controllable{true, false, false, false, false});
-        _registry.add_component<Scale>(entity, Scale{1});
-        _registry.add_component<Health>(entity, Health{100, 100, true, true});
-        _registry.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
-        _registry.add_component<ShootingSpeed>(entity, ShootingSpeed{0.5});
-        _registry.add_component<Damage>(entity, Damage{10});
-        _registry.add_component<Level>(entity, Level{1});
-        _registry.add_component<Rotation>(entity, Rotation{0});
-        _registry.add_component<Velocity>(entity, Velocity{0, 0});
-        _registry.add_component<Size>(entity, Size{130, 80});
-        _registry.add_component<Type>(entity, Type{EntityType::PLAYER});
-        _registry.add_component<Direction>(entity, Direction{1, 0});
-        std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
-                           + std::to_string(playerId + 1) + ".png";
-        _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
+        {
+            std::lock_guard<std::mutex> lock(*this->_mutex.get());
+            entity_t entity = _registry.spawn_entity();
+            _registry.add_component<Position>(entity, Position{posX, posY});
+            _registry.add_component<Tag>(entity, Tag{"player"});
+            _registry.add_component<Controllable>(entity, Controllable{true, false, false, false, false});
+            _registry.add_component<Scale>(entity, Scale{1});
+            _registry.add_component<Health>(entity, Health{100, 100, true, true});
+            _registry.add_component<Shoot>(entity, Shoot{true, std::chrono::steady_clock::now()});
+            _registry.add_component<ShootingSpeed>(entity, ShootingSpeed{0.5});
+            _registry.add_component<Damage>(entity, Damage{10});
+            _registry.add_component<Level>(entity, Level{1});
+            _registry.add_component<Rotation>(entity, Rotation{0});
+            _registry.add_component<Velocity>(entity, Velocity{0, 0});
+            _registry.add_component<Size>(entity, Size{130, 80});
+            _registry.add_component<Type>(entity, Type{EntityType::PLAYER});
+            _registry.add_component<Direction>(entity, Direction{1, 0});
+            std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
+                            + std::to_string(playerId + 1) + ".png";
+            _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
+        }
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
@@ -170,6 +174,7 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         if (data->pos != nullptr) {
             _registry.add_component<Position>(entity, Position{posX, posY});
@@ -222,6 +227,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"projectile"});
@@ -272,6 +278,7 @@ bool RType::ProtocolParsing::parseMissileCreation(const std::string& message, in
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"projectile"});
@@ -313,6 +320,7 @@ bool RType::ProtocolParsing::parseBigMissileCreation(const std::string& message,
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"projectile"});
@@ -362,6 +370,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"enemy"});
@@ -402,6 +411,7 @@ bool RType::ProtocolParsing::parseShieldCreation(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -448,6 +458,7 @@ bool RType::ProtocolParsing::parseMachinegunCreation(const std::string& message,
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -494,6 +505,7 @@ bool RType::ProtocolParsing::parseRocketCreation(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -540,6 +552,7 @@ bool RType::ProtocolParsing::parseBeamCreation(const std::string& message, int& 
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -585,6 +598,7 @@ bool RType::ProtocolParsing::parseCloneCreation(const std::string& message, int&
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Direction>(entity, Direction{1, 0});
@@ -625,6 +639,7 @@ bool RType::ProtocolParsing::parseWallCreation(const std::string& message, int& 
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"wall"});
@@ -663,6 +678,7 @@ bool RType::ProtocolParsing::parseRewardCreation(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         this->updateIndexFromBinaryData("reward_creation", index);
         entity_t entity = _registry.spawn_entity();
         _registry.add_component<Position>(entity, Position{posX, posY});
@@ -692,6 +708,7 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
     }
 
     try {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
         this->updateIndexFromBinaryData("entity_deletion", index);
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);

@@ -33,12 +33,12 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Annimation>();
 
     std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
-    _protocolParsing =
-        std::make_unique<RType::ProtocolParsing>(protocolPath, _registry);
 
     this->_camera = std::make_shared<Camera>();
     this->_mutex  = std::make_shared<std::mutex>();
     this->_systems = Systems();
+    _protocolParsing =
+        std::make_unique<RType::ProtocolParsing>(protocolPath, _registry, _mutex);
     try {
         std::string playerConfigPath = std::string("config") + PATH_SEPARATOR + std::string("player.cfg");
         _playerConfig.readFile(playerConfigPath.c_str());
