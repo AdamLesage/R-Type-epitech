@@ -482,6 +482,7 @@ void GameLogique::handleRecieve() {
     while (1) {
         if (network->hasMessages()) {
             std::pair<std::string, uint32_t> message = network->popMessage();
+
             switch (message.first[0]) {
             case 0x41:
                 startGame(this->playersId[message.second]);
@@ -540,6 +541,13 @@ void GameLogique::handleRecieve() {
                 std::memcpy(&value, &message.first[1], sizeof(int));
                 auto& playerHealth   = reg.get_components<Health_s>()[message.second];
                 playerHealth->health = value;
+                break;
+            }
+            case 0x50: {
+                std::string playerName = message.first.substr(1);
+                playerNames[message.second] = std::make_pair(playerName, 0);
+                std::string logMsg = "Player joined with name: " + playerName;
+                logger.log(RType::Logger::LogType::RTYPEINFO, logMsg.c_str());
                 break;
             }
             default:

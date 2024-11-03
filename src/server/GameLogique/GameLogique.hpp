@@ -137,6 +137,7 @@ class GameLogique {
         void spawnCustomEntity(char type, float position_x, float position_y, size_t entity);
 
         std::map<size_t, size_t> playersId;
+        std::map<size_t, std::pair<std::string, size_t>> playerNames;
         libconfig::Config _gameConfig;
         libconfig::Config _levelConfig;
         std::unique_ptr<AssetEditorParsing> assetEditorParsing;

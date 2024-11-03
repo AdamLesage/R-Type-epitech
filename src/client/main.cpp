@@ -103,6 +103,14 @@ bool isNumber(const std::string& s) {
     return !s.empty() && std::find_if(s.begin(), s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }
 
+void sendPlayerName(const std::string& playerName, std::shared_ptr<RType::GameEngine> gameEngine) {
+    std::string message;
+    message.push_back(0x50);  // Code for message containing player's name
+    message += playerName;
+    gameEngine->send(message);
+    std::cout << "Sending player name: " << playerName << std::endl;
+}
+
 int main(int ac, char** av) {
     // errorHandling(ac, av);
     (void)ac;
@@ -186,8 +194,8 @@ int main(int ac, char** av) {
         gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
         gameEngine->setGameSelected(gameSelected);
         gameEngine->setOfflineMode(isOffline);
-        gameEngine->setUserName(userName);
         gameEngine->run();
+        sendPlayerName(userName, gameEngine);
     } catch (const RType::DLError& e) {
         std::cerr << e.what() << std::endl;
         return (84);
