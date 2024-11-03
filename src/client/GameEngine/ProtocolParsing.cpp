@@ -434,9 +434,19 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
         std::cerr << "An error occurred while parsing the entity deletion message" << std::endl;
         return false;
     }
+
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
+
+        auto& entities = _registry.get_components<Score>();
+        for (auto& entityWithScore : entities) {
+            if (!entityWithScore.has_value() || extraData == 0)
+                continue;
+            Score& score = entityWithScore.value();
+            score.score += extraData;
+        }
+
         this->updateIndexFromBinaryData("entity_deletion", index);
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found for deletion" << std::endl;

@@ -20,6 +20,9 @@
 #include "ProtocolParsing.hpp"
 #include "../Camera.hpp"
 #include <mutex>
+#include "../../shared/components/Score.hpp"
+#include "../../shared/components/ScoreValue.hpp"
+
 
 #ifdef _WIN32
 #define NOMINMAX
