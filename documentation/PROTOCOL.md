@@ -83,11 +83,11 @@ This document describes the protocol used to communicate between the server and 
 
 
 ## Entity Deletion
-| Type  | Entity ID    |
-|-------|--------------|
-| 0x29  | 0x00000001   |
+| Type  | Entity ID    | ExtraData (Worth of the killed entity) |
+|-------|--------------|----------------------------------------|
+| 0x29  | 0x00000001   |           0x0000000000001234           |
 
-- **Type:** 1 byte (0x29 for "entity deletion").
+- **Type:** 4 byte (0x29 for "entity deletion").
 - **Entity ID:** 4 bytes (e.g., 0x00000100 for an entity with this ID).
 
 ## Position Update

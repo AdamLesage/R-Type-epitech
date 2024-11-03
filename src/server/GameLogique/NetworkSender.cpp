@@ -98,10 +98,11 @@ void NetworkSender::sendCreateBonus(char type, int id, float pos_x, float pos_y,
     }
 }
 
-void NetworkSender::sendDeleteEntity(int id, int clientId) {
-    std::array<char, 5> data{};
+void NetworkSender::sendDeleteEntity(int id, int clientId, size_t extraData) {
+    std::array<char, 5 + sizeof(size_t)> data{};
     data[0] = 0x29;
     std::memcpy(&data[1], &id, sizeof(int));
+    std::memcpy(&data[5], &extraData, sizeof(size_t));
     if (clientId == -1) {
         this->_network->sendToAll(data.data(), data.size());
     } else {

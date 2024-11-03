@@ -425,9 +425,11 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
     if (!checkMessageType("ENTITY_DELETION", message, index)) return false;
 
     int entityId;
+    size_t extraData;
 
     try {
         std::memcpy(&entityId, &message[index + 1], sizeof(int));
+        std::memcpy(&extraData, &message[index + 1 + sizeof(int)], sizeof(size_t));
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while parsing the entity deletion message" << std::endl;
         return false;
@@ -436,6 +438,15 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
+
+        auto& entities = _registry.get_components<Score>();
+        for (auto& entityWithScore : entities) {
+            if (!entityWithScore.has_value() || extraData == 0)
+                continue;
+            Score& score = entityWithScore.value();
+            score.score += extraData;
+        }
+
         this->updateIndexFromBinaryData("entity_deletion", index);
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found for deletion" << std::endl;
@@ -748,11 +759,11 @@ bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& in
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
 
     std::tm localtm;
-#ifdef _WIN32
-    gmtime_s(&localtm, &now_c);
-#else
-    gmtime_r(&now_c, &localtm);
-#endif
+    #ifdef _WIN32
+        gmtime_s(&localtm, &now_c);
+    #else
+        gmtime_r(&now_c, &localtm);
+    #endif
 
     char buffer[100];
     std::strftime(buffer, sizeof(buffer), "%d/%H/%M/%S", &localtm);

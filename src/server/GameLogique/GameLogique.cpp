@@ -30,6 +30,8 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<Size>();
     this->reg.register_component<Direction>();
     this->reg.register_component<BossPatern>();
+    this->reg.register_component<ScoreValue>();
+    this->reg.register_component<Score>();
 
     try {
         std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type")
@@ -78,17 +80,17 @@ void GameLogique::startGame(int idEntity) {
                 pos->y = 100 + (100.f * i);
             }
             this->_networkSender->sendPositionUpdate(i, 100.f, 100 + (100.f * i));
-#ifdef _WIN32
-            Sleep(10);
-#else
-            usleep(10000);
-#endif
-        }
-#ifdef _WIN32
-        Sleep(1);
-#else
-        sleep(1);
-#endif
+            #ifdef _WIN32
+                        Sleep(10);
+            #else
+                        usleep(10000);
+            #endif
+                    }
+            #ifdef _WIN32
+                    Sleep(1);
+            #else
+                    sleep(1);
+            #endif
         this->_networkSender->sendStateChange(idEntity, 0x03);
         this->running = true;
     }
@@ -133,8 +135,14 @@ void GameLogique::spawnCustomEntity(char type, float position_x, float position_
     if (entityData->size != nullptr) {
         this->reg.add_component<Size>(entity, Size{entityData->size->x, entityData->size->y});
     }
+
     this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
     this->reg.add_component<Direction>(entity, Direction{0, 0});
+
+    if (this->reg.get_components<Type>()[entity]->type == EntityType::ENEMY) {
+        this->reg.add_component<ScoreValue>(entity, ScoreValue{15});
+    }
+
     this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
 }
 
@@ -244,6 +252,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
                     it->second->number = 0;
                 }
             }
+            this->reg.add_component<ScoreValue>(entity, ScoreValue{10});
             return;
             break;
         }
@@ -314,11 +323,11 @@ void GameLogique::runGame() {
             }
             if (this->areAllPlayersDead() == true) {
                 this->clearGame();
-#ifdef _WIN32
-                Sleep(1);
-#else
-                sleep(1);
-#endif
+                #ifdef _WIN32
+                                Sleep(1);
+                #else
+                                sleep(1);
+                #endif
                 this->_networkSender->sendStateChange(1, 0x04);
                 this->running       = false;
                 this->_currentLevel = 0;
