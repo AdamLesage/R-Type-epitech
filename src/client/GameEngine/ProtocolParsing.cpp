@@ -439,12 +439,18 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
 
-        auto& entities = _registry.get_components<Score>();
-        for (auto& entityWithScore : entities) {
-            if (!entityWithScore.has_value() || extraData == 0)
+        auto& scoreComponents = _registry.get_components<Score>();
+        auto& typeComponents = _registry.get_components<Type>();
+
+        for (size_t i = 0; i < scoreComponents.size(); ++i) {
+            if (!scoreComponents[i].has_value() || extraData == 0)
                 continue;
-            Score& score = entityWithScore.value();
-            score.score += extraData;
+
+            if (typeComponents[i] && typeComponents[i]->type == EntityType::PLAYER) {
+                Score& score = scoreComponents[i].value();
+                score.score += extraData;
+                std::cout << "Score updated for PLAYER entity: " << score.score << std::endl;
+            }
         }
 
         this->updateIndexFromBinaryData("entity_deletion", index);
