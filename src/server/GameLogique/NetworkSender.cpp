@@ -209,6 +209,17 @@ void NetworkSender::sendPing(std::string timeCode)
     this->_network->sendToAll(data.data(), data.size());
 }
 
+void NetworkSender::sendShootSound(int clientId)
+{
+    std::array<char, 1> data{};
+    data[0] = 0x98;
+    if (clientId == -1) {
+        this->_network->sendToAll(data.data(), data.size());
+    } else {
+        this->_network->sendToClient(data.data(), data.size(), clientId);
+    }
+}
+
 void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId)
 {
     std::array<char, 13> data{};

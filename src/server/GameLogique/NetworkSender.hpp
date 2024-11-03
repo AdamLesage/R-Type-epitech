@@ -27,6 +27,13 @@ class NetworkSender {
         void sendCreatePlayer(int id, float pos_x, float pos_y, int clientId = -1);
 
         /**
+         * @brief Sends a sound to all clients.
+         *
+         * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning all clients.
+         */
+        void sendShootSound(int clientId = -1);
+
+        /**
          * @brief Sends the creation of an enemy to all clients.
          *
          * @param type The type or class of the created enemy.

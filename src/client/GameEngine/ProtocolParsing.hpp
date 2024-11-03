@@ -229,6 +229,15 @@ namespace RType {
              * @brief Parse the message to validate and extract information for the corresponding operation
              * and manage the corresponding request (creation, deletion, update)
              *
+             * @param message given by the server. (binary data)
+             * @return true if the parsing is successful and the message is valid, false otherwise.
+             */
+            bool parseShootSound(const std::string& message, int& index);
+
+            /**
+             * @brief Parse the message to validate and extract information for the corresponding operation
+             * and manage the corresponding request (creation, deletion, update)
+             *
              * @param message A pointer to a C-string containing the message to be parsed.
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */

@@ -466,7 +466,8 @@ void Systems::shoot_system(Registry& reg,
                     reg.add_component<Velocity_s>(projectile, Velocity_s{3.0f, 0.0f});
                     reg.add_component<Size>(projectile, Size{70, 30});
                     reg.add_component<Damage_s>(projectile, Damage_s{10});
-                    networkSender->sendCreateProjectil(i, clonePos->x + 10 + (cloneSize->x / 2), projectileY, 4);
+                    networkSender->sendShootSound();
+            networkSender->sendCreateProjectil(i, clonePos->x + 10 + (cloneSize->x / 2), projectileY, 4);
                 }
             }
         }
