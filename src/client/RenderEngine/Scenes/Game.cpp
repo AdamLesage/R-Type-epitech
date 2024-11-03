@@ -144,7 +144,9 @@ void RType::Game::DisplaySkipIntro() {
 
 void RType::Game::play(float& latency) {
     while (window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) window->close();
+        if (event.type == sf::Event::Closed) {
+            sendStateChange(-1);
+        }
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape) {
                 settings->displaySettings(true);
