@@ -252,7 +252,6 @@ void RType::Game::handleColorblind() {
     } else {
         window->draw(sprite, &colorblindShader[4]);
     }
-    window->display();
 }
 
 sf::Vector2f RType::Game::convertToVector2f(const Size& size) {

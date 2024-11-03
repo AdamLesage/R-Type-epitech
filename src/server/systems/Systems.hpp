@@ -105,7 +105,7 @@ class Systems {
          * @param logger The logger to log the events
          */
         void shoot_system(Registry& reg,
-                          u_int32_t clientId,
+                          size_t clientId,
                           entity_t playerId,
                           std::unique_ptr<NetworkSender>& networkSender,
                           RType::Logger& logger);
