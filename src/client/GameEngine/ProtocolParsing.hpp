@@ -21,6 +21,7 @@
 #include "../../shared/systems/Systems.hpp"
 #include "../../shared/components/Size.hpp"
 #include "../../shared/components/Sprite.hpp"
+#include "../../shared/components/Id.hpp"
 #include "../../shared/assetEditorParsing/AssetEditorParsing.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)

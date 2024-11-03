@@ -142,6 +142,7 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
             std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
                             + std::to_string(playerId + 1) + ".png";
             _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
+
         }
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception& e) {
@@ -1012,8 +1013,7 @@ bool RType::ProtocolParsing::parseStateChange(const std::string& message, int& i
 
     try {
         _mediator->notify("ProtocolParsing", "GameState " + std::to_string(int(state)));
-        entity_t entity = _registry.entity_from_index(entityId);
-        (void)entity;
+        (void)entityId;
         this->updateIndexFromBinaryData("state_change", index);
         // Need to implement the method to update the entity state
     } catch (const std::out_of_range& e) {

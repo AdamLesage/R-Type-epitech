@@ -31,7 +31,7 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Size>();
     _registry.register_component<Direction>();
     _registry.register_component<Annimation>();
-
+    _registry.register_component<Id>();
     std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
 
     this->_camera  = std::make_shared<Camera>();

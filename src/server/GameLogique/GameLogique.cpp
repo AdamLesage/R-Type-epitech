@@ -134,13 +134,15 @@ void GameLogique::spawnCustomEntity(char type, float position_x, float position_
     if (entityData->size != nullptr) {
         this->reg.add_component<Size>(entity, Size{entityData->size->x, entityData->size->y});
     }
+    this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
     if (entityData->bossPatern != nullptr) {
         this->reg.add_component<BossPatern>(
             entity, BossPatern{entityData->bossPatern->speed, entityData->bossPatern->up,
                                entityData->bossPatern->down, entityData->bossPatern->spawnCooldown,
                                std::chrono::steady_clock::now()});
+        this->reg.add_component<Position>(entity, Position{1400, position_y});
+        reg.add_component<Type>(entity, Type{EntityType::ENEMY});
     }
-    this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
     this->reg.add_component<Direction>(entity, Direction{0, 0});
     this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
 }
@@ -225,7 +227,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             } else {
                 bool enemyExists = false; // check if there is still an enemy 
                 for (auto& types : reg.get_components<Type>()) {
-                    if (types && types->type == EntityType::ENEMY) {
+                    if (types && (types->type == EntityType::ENEMY || types && types->type == EntityType::BOSS)) {
                         enemyExists = true;
                         ennemyAlive = enemyExists;
                         break;
@@ -372,9 +374,9 @@ void GameLogique::runGame() {
                     sys.shoot_straight_pattern_system(this->reg, this->_networkSender);
                     sys.collision_system(reg, std::make_pair<size_t, size_t>(1920, 1080), this->_networkSender,
                                         logger, friendlyfire);
+                    sys.boss_system(reg, this->_networkSender);
                 }
                 sys.position_system(reg, this->_networkSender, logger);
-                sys.boss_system(reg, this->_networkSender);
                 _camera_x += 0.1;
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
