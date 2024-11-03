@@ -134,6 +134,12 @@ void GameLogique::spawnCustomEntity(char type, float position_x, float position_
     if (entityData->size != nullptr) {
         this->reg.add_component<Size>(entity, Size{entityData->size->x, entityData->size->y});
     }
+    if (entityData->bossPatern != nullptr) {
+        this->reg.add_component<BossPatern>(
+            entity, BossPatern{entityData->bossPatern->speed, entityData->bossPatern->up,
+                               entityData->bossPatern->down, entityData->bossPatern->spawnCooldown,
+                               std::chrono::steady_clock::now()});
+    }
     this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
     this->reg.add_component<Direction>(entity, Direction{0, 0});
     this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
@@ -400,7 +406,6 @@ void GameLogique::runGame() {
             }
 
             if (ennemyAlive == false) {
-                std::lock_guard<std::mutex> lock(this->_mutex);
                 this->handleChangeLevel(_currentLevel + 1);
             }
         }
@@ -455,6 +460,7 @@ bool GameLogique::areAllPlayersDead() {
 }
 
 void GameLogique::clearGame() {
+    std::lock_guard<std::mutex> lock(this->_mutex);
     auto& types = reg.get_components<Type>();
 
     for (size_t i = 0; i < types.size(); ++i) {
@@ -576,9 +582,11 @@ void GameLogique::handleRecieve() {
                 startGame(this->playersId[message.second]);
                 break;
             case 0x40:
+                if (running == false) continue;;
                 handleClientInput(message);
                 break;
             case 0x42: {
+                if (running == false) continue;;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
@@ -586,6 +594,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x21: {
+                if (running == false) continue;;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
@@ -593,6 +602,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x43: {
+                if (running == false) continue;;
                 int entityId;
                 std::memcpy(&entityId, &message.first[1], sizeof(int));
                 entity_t entity = reg.entity_from_index(entityId);
@@ -601,10 +611,12 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x44: {
+                if (running == false) continue;;
                 spawnWave();
                 break;
             }
             case 0x45: {
+                if (running == false) continue;;
                 auto& playerHealth = reg.get_components<Health_s>()[this->playersId[message.second]];
                 if (playerHealth) {
                     if (message.first[1] == 0x01) {
@@ -617,6 +629,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x46: {
+                if (running == false) continue;;
                 float value;
                 std::memcpy(&value, &message.first[1], sizeof(float));
                 auto& speed                           = reg.get_components<ShootingSpeed_s>();
@@ -626,6 +639,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x47: {
+                if (running == false) continue;;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
@@ -638,6 +652,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x48: {
+                if (running == false) continue;;
                 int value;
                 std::memcpy(&value, &message.first[1], sizeof(int));
                 if (this->playersId[message.second] < reg.get_components<Health_s>().size()) {

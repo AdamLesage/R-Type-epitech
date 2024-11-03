@@ -27,6 +27,7 @@
 #include "../components/StraightPattern.hpp"
 #include "../components/Wave_Pattern.hpp"
 #include "../components/Annimation.hpp"
+#include "../components/Boss.hpp"
 
 
 
@@ -51,6 +52,7 @@ typedef struct EntityData_s {
     std::shared_ptr<StraightLinePattern> straightLinePattern;
     std::shared_ptr<Wave_pattern> WavePattern;
     std::shared_ptr<Annimation> annimation;
+    std::shared_ptr<BossPatern> bossPatern;
 } EntityData;
 
 class AssetEditorParsing {
@@ -177,6 +179,13 @@ class AssetEditorParsing {
          * @param components Setting containing wave pattern data.
          */
         void parseWavePattern(EntityData &entityData, libconfig::Setting &components);
+
+        /**
+         * @brief Parses a boss pattern component of an entity.
+         * @param entityData Reference to EntityData where parsed pattern data is stored.
+         * @param components Setting containing boss pattern data.
+         */
+        void parseBossPattern(EntityData &entityData, libconfig::Setting &components);
 
         /**
          * @brief Parses animation data for an entity.

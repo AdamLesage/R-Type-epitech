@@ -32,6 +32,7 @@ AssetEditorParsing::AssetEditorParsing(libconfig::Config &config)
         parseStraightLinePattern(entityData, components);
         parseWavePattern(entityData, components);
         parseAnnimation(entityData, components);
+        parseBossPattern(entityData, components);
         this->_entityData[entityCode] = std::make_shared<EntityData>(entityData);
     }
 }
@@ -161,6 +162,7 @@ void AssetEditorParsing::parseType(EntityData &entityData, libconfig::Setting &c
     std::map<std::string, EntityType> entityMap = {
         {"PLAYER", PLAYER},
         {"ENEMY", ENEMY},
+        {"BOSS", BOSS},
         {"PLAYER_PROJECTILE", PLAYER_PROJECTILE},
         {"ENEMY_PROJECTILE", ENEMY_PROJECTILE},
         {"BACKGROUND", BACKGROUND},
@@ -256,6 +258,20 @@ void AssetEditorParsing::parseAnnimation(EntityData &entityData, libconfig::Sett
         annimation.lastExecution = std::chrono::steady_clock::now();
         annimation.annimationSpeed = annimationSpeed;
         entityData.annimation = std::make_shared<Annimation>(annimation);
+    } catch (const std::exception&) {
+        return;
+    }
+}
+
+void AssetEditorParsing::parseBossPattern(EntityData &entityData, libconfig::Setting &components)
+{
+    try {
+        libconfig::Setting &bossPatternSettings = components.lookup("BossPatern");
+        float speed = bossPatternSettings["speed"];
+        bool up = bossPatternSettings["up"];
+        bool down = bossPatternSettings["down"];
+        float spawnCooldown = bossPatternSettings["spawnCooldown"];
+        entityData.bossPatern = std::make_shared<BossPatern>(BossPatern{speed, up, down, spawnCooldown, std::chrono::steady_clock::now()});
     } catch (const std::exception&) {
         return;
     }
