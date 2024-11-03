@@ -107,7 +107,6 @@ void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window)
             for (auto& [optionName, optionText] : menuOptions) {
                 if (optionText.getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                     optionSelected[optionName] = !optionSelected[optionName];
-                    std::cout << optionName << ":" << (optionSelected[optionName] ? "ON" : "OFF") << std::endl;
                     displayMetrics(optionName);
                 }
             }

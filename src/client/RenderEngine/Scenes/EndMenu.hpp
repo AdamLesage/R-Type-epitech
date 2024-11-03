@@ -67,6 +67,8 @@ namespace RType {
             std::array<std::string, 3> _options; // Play again, Menu, Exit
             unsigned short int _selectedOption; 
             sf::Font _font;
+            bool _upKeyPressed = false;
+            bool _downKeyPressed = false;
     };
 }
 

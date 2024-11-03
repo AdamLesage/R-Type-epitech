@@ -26,8 +26,8 @@
     #include <windows.h>
     #define PATH_SEPARATOR "\\"
 #else
-    #include <unistd.h>
-    #define PATH_SEPARATOR "/"
+#include <unistd.h>
+#define PATH_SEPARATOR "/"
 #endif
 
 namespace RType {
@@ -84,11 +84,25 @@ namespace RType {
 
             /**
              * @brief Set the game selected by the client.
-             * 
+             *
              * @param gameSelected The game selected by the client.
              * @return void
+             * @author Adam Lesage
              */
-            void setGameSelected(const std::string& gameSelected) { _gameSelected = gameSelected; }
+            void setGameSelected(const std::string& gameSelected) {
+                _gameSelected = gameSelected;
+            }
+
+            /**
+             * @brief Tell to the game is current selection if online or offline
+             *
+             * @param isOffline True: Offline game, False: Online game
+             * @return void
+             * @author Adam Lesage
+             */
+            void setOfflineMode(bool isOffline) {
+                _isOffline = isOffline;
+            }
 
             void setEnd() {_running = false;}
 
@@ -97,7 +111,7 @@ namespace RType {
             Registry _registry;
             Systems _systems;
             libconfig::Config _playerConfig;
-            std::unique_ptr<RType::ProtocolParsing> _protocolParsing;
+            std::unique_ptr<ProtocolParsing> _protocolParsing;
             std::shared_ptr<NetworkEngine> _networkEngine;
             std::shared_ptr<RenderingEngine> _renderingEngine;
             std::shared_ptr<PhysicEngine> _physicEngine;
@@ -106,6 +120,7 @@ namespace RType {
             std::shared_ptr<std::mutex> _mutex;
             std::string _gameSelected;
             bool _running = true;
+            bool _isOffline = false;
     };
 } // namespace RType
 

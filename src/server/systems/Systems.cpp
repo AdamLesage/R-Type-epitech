@@ -145,7 +145,8 @@ void Systems::check_entities_collisions(Registry& reg,
                                         std::unique_ptr<NetworkSender>& networkSender,
                                         Type_s* entityType1,
                                         Type_s* entityType2,
-                                        bool friendlyfire) {
+                                        bool friendlyfire)
+{
     bool collisionX =
         entityPos1->x < entityPos2->x + entitySize2->x && entityPos1->x + entitySize1->x > entityPos2->x;
     bool collisionY =
@@ -162,8 +163,11 @@ void Systems::check_entities_collisions(Registry& reg,
     bool playerTakeBonus =
         (entityType1->type == EntityType::PLAYER && entityType2->type == EntityType::POWERUP);
 
+    bool bossTakeDamage =
+        (entityType1->type == EntityType::BOSS && entityType2->type == EntityType::PLAYER_PROJECTILE);
+
     if (collisionX == false || collisionY == false
-        || (playerTakeDamage == false && enemyTakeDamage == false && playerTakeBonus == false)) { // No collision
+        || (playerTakeDamage == false && enemyTakeDamage == false && bossTakeDamage == false && playerTakeBonus == false)) { // No collision
         return;
     }
 
@@ -192,11 +196,11 @@ void Systems::check_entities_collisions(Registry& reg,
                        "Error while getting health or damage component for player");
         }
         // Delete entity that hit the player if it's a projectile
-        if (entityType2->type == EntityType::ENEMY_PROJECTILE) {
+        if (entityType2->type == EntityType::ENEMY_PROJECTILE && playerHealth->isDamageable == true) {
             reg.kill_entity(entityId2);
             networkSender->sendDeleteEntity(entityId2);
         }
-        if (entityType2->type == EntityType::PLAYER_PROJECTILE) {
+        if (entityType2->type == EntityType::PLAYER_PROJECTILE && playerHealth->isDamageable == true) {
             reg.kill_entity(entityId2);
             networkSender->sendDeleteEntity(entityId2);
         }
@@ -271,6 +275,26 @@ void Systems::check_entities_collisions(Registry& reg,
         reg.kill_entity(entityId2);
         networkSender->sendDeleteEntity(entityId2);
     }
+
+    if (bossTakeDamage && collisionX && collisionY) {
+        logger.log(RType::Logger::RTYPEINFO, "Boss take damage");
+        auto& bossHealth      = reg.get_components<Health_s>()[entityId1];
+        auto& projectileDamage = reg.get_components<Damage_s>()[entityId2];
+
+        if (bossHealth && projectileDamage) { // if the boss has a health and the projectile has a damage
+            bossHealth->health -= projectileDamage->damage;
+            reg.kill_entity(entityId2); // destroy the projectile
+            networkSender->sendDeleteEntity(entityId2);
+            if (bossHealth->health <= 0) { // if the boss is dead
+                reg.kill_entity(entityId1);
+                networkSender->sendDeleteEntity(entityId1);
+            } else { // if the boss is still alive
+                networkSender->sendHealthUpdate(entityId1, bossHealth->health);
+            }
+        } else {
+            logger.log(RType::Logger::RTYPEERROR, "Error while getting health or damage component for enemy");
+        }
+    }
 }
 
 struct SpatialHash {
@@ -315,7 +339,10 @@ struct SpatialHash {
     }
 };
 
-void Systems::collision_system(Registry &reg, std::pair<size_t, size_t> MapSize, std::unique_ptr<NetworkSender> &networkSender, RType::Logger &logger, bool friendlyfire) {
+void Systems::collision_system(Registry& reg,
+                              std::pair<size_t, size_t> MapSize,
+                              std::unique_ptr<NetworkSender>& networkSender,
+                              RType::Logger& logger, bool friendlyfire) {
     auto &positions = reg.get_components<Position_s>();
     auto &sizes = reg.get_components<Size_s>();
     auto &types = reg.get_components<Type_s>();
@@ -630,6 +657,107 @@ void Systems::wave_pattern_system(Registry& reg, RType::Logger& logger) {
             position->y += (pattern->amplitude * std::sin(pattern->frequency * (elapsed_seconds / 10)));
         }
         // logger.log(RType::Logger::LogType::INFO, "Player %d shot a projectile", playerId);
+    }
+}
+
+void Systems::wave_of_ennemy_from_boss1(Registry& reg, std::unique_ptr<NetworkSender>& networkSender)
+{
+    for (int ennemy_number = 0; ennemy_number < 5; ++ennemy_number) {
+        size_t enemy = reg.spawn_entity();
+        reg.add_component<Position>(enemy, Position_s{1620, (float)ennemy_number * 200});
+        reg.add_component<Velocity>(enemy, Velocity_s{-1.0f, 0.0f});
+        reg.add_component<Type>(enemy, Type_s{EntityType::ENEMY});
+        reg.add_component<Health>(enemy, Health_s{100, 100, false, false});
+        reg.add_component<Size>(enemy, Size{50, 50});
+        reg.add_component<Damage>(enemy, Damage{20});
+        if (ennemy_number == 0) {              
+            reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
+            reg.add_component<ShootStraightPattern>(enemy, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+            networkSender->sendCreateEnemy(0x03, enemy, 1620, ennemy_number * 200);
+        }
+        if (ennemy_number == 1) {                       
+            reg.add_component<Wave_pattern>(enemy, Wave_pattern{1.f, 0.02f, std::chrono::steady_clock::now()});
+            reg.add_component<ShootStraightPattern>(enemy, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+            networkSender->sendCreateEnemy(0x03, enemy, 1620, ennemy_number * 200);
+        }
+        if (ennemy_number == 2) {                       
+            reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
+            reg.add_component<ShootPlayerPattern>(enemy, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+            networkSender->sendCreateEnemy(0x03, enemy, 1620, ennemy_number * 200);
+        }
+        if (ennemy_number == 3) {                       
+            reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
+            reg.add_component<ShootStraightPattern>(enemy, ShootStraightPattern{2.0, 2.0, std::chrono::steady_clock::now()});
+            networkSender->sendCreateEnemy(0x03, enemy, 1620, ennemy_number * 200);
+        }
+        if (ennemy_number == 4) {                       
+            reg.add_component<PlayerFollowingPattern>(enemy, PlayerFollowingPattern{0.5f});
+            reg.add_component<ShootPlayerPattern>(enemy, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+            networkSender->sendCreateEnemy(0x03, enemy, 1620, ennemy_number * 200);
+        }
+    }
+}
+
+void Systems::wave_of_ennemy_from_boss2(Registry& reg, std::unique_ptr<NetworkSender>& networkSender)
+{
+    for (int ennemy_number = 0; ennemy_number < 5; ++ennemy_number) {
+        size_t enemy = reg.spawn_entity();
+        reg.add_component<Position>(enemy, Position_s{(float)1620 + ennemy_number * 50, (float)300 + ennemy_number * 25});
+        reg.add_component<Velocity>(enemy, Velocity_s{-1.0f, 0.0f});
+        reg.add_component<Type>(enemy, Type_s{EntityType::ENEMY});
+        reg.add_component<Health>(enemy, Health_s{100, 100, false, false});
+        reg.add_component<Size>(enemy, Size{50, 50});
+        reg.add_component<Damage>(enemy, Damage{20});
+        reg.add_component<Wave_pattern>(enemy, Wave_pattern{2.f, 0.02f * (float)(ennemy_number + 1), std::chrono::steady_clock::now()});
+        reg.add_component<ShootPlayerPattern>(enemy, ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+        networkSender->sendCreateEnemy(0x03, enemy, 1620, ennemy_number * 200);
+    }
+}
+
+void Systems::wave_of_ennemy_from_boss3(Registry& reg, std::unique_ptr<NetworkSender>& networkSender)
+{
+    (void)reg;
+    (void)networkSender;
+}
+
+void Systems::boss_system(Registry& reg, std::unique_ptr<NetworkSender>& networkSender)
+{
+    auto& patterns = reg.get_components<BossPatern>();
+    auto& positions = reg.get_components<Position>();
+    auto& velocitys = reg.get_components<Velocity>();
+
+    for (size_t i = 0; i < positions.size() && i < patterns.size(); ++i) {
+        auto& pattern  = patterns[i];
+        auto& position = positions[i];
+        auto& velocity = velocitys[i];
+        if (pattern && position && velocity) {
+            if (position->y >= 800) {
+                pattern->up = false;
+                pattern->down = true;
+            }
+            if (position->y <= 0) {
+                pattern->up = true;
+                pattern->down = false;
+            }
+            if (pattern->up) {
+                velocity->y = -1 * pattern->speed;
+            }
+            if (pattern->down) {
+                velocity->y = pattern->speed;
+            }
+            auto now                        = std::chrono::steady_clock::now();
+            std::chrono::duration<float> fs = now - pattern->lastSpawnTime;
+            float elapsed_seconds           = std::chrono::duration_cast<std::chrono::seconds>(fs).count();
+
+            if (elapsed_seconds >= pattern->spawnCooldown && pattern->spawnCooldown > 1) {
+                if (rand() % 2 == 0) {
+                    wave_of_ennemy_from_boss1(reg, networkSender);
+                } else {
+                    wave_of_ennemy_from_boss2(reg, networkSender);
+                }
+                pattern->lastSpawnTime = now;
+            }
+        }
     }
 }
 

@@ -32,6 +32,7 @@ GameLogique::GameLogique(size_t port, int _frequency) {
     this->reg.register_component<CanShootBigMissile>();
     this->reg.register_component<IsBigMissile>();
     this->reg.register_component<Clone>();
+    this->reg.register_component<BossPatern>();
 
     try {
         std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + std::string("R-Type")
@@ -185,6 +186,16 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             this->reg.add_component<Size>(entity, Size{70, 71});
             this->reg.add_component<Type>(entity, Type{EntityType::ENEMY});
             break;
+        case 0x10:
+            reg.add_component<Position>(entity, Position{position_x, position_y});
+            reg.add_component<Tag>(entity, Tag{"boss"});
+            reg.add_component<Health>(entity, Health{1000, 100, false, false}); // We can destroy the boss with a projectile
+            reg.add_component<Damage>(entity, Damage{10});
+            reg.add_component<Velocity>(entity, Velocity{0, 0});
+            reg.add_component<Size>(entity, Size{325, 125});
+            reg.add_component<Type>(entity, Type{EntityType::BOSS});
+            reg.add_component<BossPatern>(entity, BossPatern{-1, true, false, 10.0, std::chrono::steady_clock::now()});
+            break;
         default:
             std::map<uint8_t, std::shared_ptr<EntityData>>& entities =
                 this->assetEditorParsing->getEntities();
@@ -231,7 +242,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             break;
         }
         this->reg.add_component<Direction>(entity, Direction{0, 0});
-        this->_networkSender->sendCreateEnemy(0X03, entity, position_x, position_y);
+        this->_networkSender->sendCreateEnemy(type, entity, position_x, position_y);
     }
 }
 
@@ -302,11 +313,7 @@ void GameLogique::spawnBonus(char type, float position_x, float position_y) {
 }
 
 void GameLogique::spawnWave() {
-    spawnEnnemy(0x03, 1920, 10);
-    spawnEnnemy(0x03, 1920, 160);
-    spawnEnnemy(0x03, 1920, 360);
-    spawnEnnemy(0x03, 1920, 580);
-    spawnEnnemy(0x03, 1920, 920);
+    spawnEnnemy(0x10, 1620, 500);
 }
 
 bool GameLogique::getfriendlyfire() {
@@ -361,6 +368,7 @@ void GameLogique::runGame() {
                                         logger, friendlyfire);
                 }
                 sys.position_system(reg, this->_networkSender, logger);
+                sys.boss_system(reg, this->_networkSender);
                 _camera_x += 0.1;
             }
             if (static_cast<float>(std::clock() - spawnClock) / CLOCKS_PER_SEC > 5) {
@@ -679,23 +687,23 @@ void GameLogique::handleClientConnection() {
                     auto& type     = types[i];
                     if (type && position && (i != clientId || running)) {
                         switch (type->type) {
-                        case EntityType::ENEMY:
-                            this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y,
-                                                                  clientId);
-                            break;
-                        case EntityType::PLAYER:
-                            this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
-                            break;
-                        case EntityType::PLAYER_PROJECTILE:
-                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
-                                                                      clientId);
-                            break;
-                        case EntityType::ENEMY_PROJECTILE:
-                            this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0,
-                                                                      clientId);
-                            break;
-                        default:
-                            break;
+                            case EntityType::ENEMY:
+                                this->_networkSender->sendCreateEnemy(0x03, i, position->x, position->y, clientId);
+                                break;
+                            case EntityType::BOSS:
+                                this->_networkSender->sendCreateEnemy(0x10, i, position->x, position->y, clientId);
+                                break;
+                            case EntityType::PLAYER:
+                                this->_networkSender->sendCreatePlayer(i, position->x, position->y, clientId);
+                                break;
+                            case EntityType::PLAYER_PROJECTILE:
+                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
+                                break;
+                            case EntityType::ENEMY_PROJECTILE:
+                                this->_networkSender->sendCreateProjectil(i, position->x, position->y, 0, clientId);
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }

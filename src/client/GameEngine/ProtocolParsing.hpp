@@ -96,6 +96,7 @@ namespace RType {
              * @return true if the parsing is successful and the message is valid, false otherwise.
              */
             bool parseShieldCreation(const std::string& message, int& index);
+            bool parseBossCreation(const std::string& message, int& index);
 
             /**
              * @brief Parse the message to validate and extract information for the corresponding operation

@@ -25,6 +25,7 @@
 #include "../../shared/components/ShootStraightPattern.hpp"
 #include "../../shared/components/Shoot.hpp"
 #include "../../shared/components/Direction.hpp"
+#include "../../shared/components/Boss.hpp"
 #include "../../shared/components/ParentId.hpp"
 #include "../../shared/components/ShootEnnemyMissile.hpp"
 #include "../../shared/components/CanShootMissiles.hpp"
@@ -123,6 +124,33 @@ class Systems {
          * @param totalTime The count since the start.
          */
         void wave_pattern_system(Registry& reg, RType::Logger& logger);
+
+        /**
+         * @brief Spawn a wave of enemies
+         *
+         * @param reg The registry containing the components.
+         */
+        void wave_of_ennemy_from_boss1(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
+        
+        /**
+         * @brief Spawn a wave of enemies
+         *
+         * @param reg The registry containing the components.
+         */
+        void wave_of_ennemy_from_boss2(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
+        /**
+         * @brief Spawn a wave of enemies | not created yet
+         *
+         * @param reg The registry containing the components.
+         */
+        void wave_of_ennemy_from_boss3(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
+
+        /**
+         * @brief Update the direction of all entities based on their velocity.
+         *
+         * @param reg The registry containing the components.
+         */
+        void boss_system(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
 
         /**
          * @brief Update the health of all entities based on the damages / regeneration / healing they

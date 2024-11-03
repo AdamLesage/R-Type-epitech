@@ -12,11 +12,9 @@
 #include <random>
 
 RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePath)
-    : currentFrame(1), frameDuration(0.05f), animationComplete(false)
-{
-    this->window         = _window;
-    this->_mediator      = nullptr;
-    isShooting = false;
+    : currentFrame(1), frameDuration(0.05f), animationComplete(false) {
+    this->window    = _window;
+    this->_mediator = nullptr;
 
     try {
         _cfg.readFile(scenePath.c_str());
@@ -32,7 +30,7 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     try {
         libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
         this->loadBackgroundConfig(levelSetting);
-        
+
     } catch (const std::exception& e) {
         throw std::runtime_error("Error loading level settings");
     }
@@ -43,17 +41,15 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     backgrounds[backgrounds.size() - 1].setPosition(sf::Vector2f(1920, 0));
 
     // Set up colorblind shaders
-    std::vector<std::string> shaderNames = {
-        "Deuteranopia_shader.frag",
-        "Protanopia_shader.frag",
-        "Tritanopia_shader.frag",
-        "Achromatopsia_shader.frag",
-        "Normal_shader.frag"
-    };
+    std::vector<std::string> shaderNames = {"Deuteranopia_shader.frag", "Protanopia_shader.frag",
+                                            "Tritanopia_shader.frag", "Achromatopsia_shader.frag",
+                                            "Normal_shader.frag"};
     // Load all shaders
     try {
         for (size_t i = 0; i < shaderNames.size(); ++i) {
-            if (!colorblindShader[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR + shaderNames[i], sf::Shader::Fragment)) {
+            if (!colorblindShader[i].loadFromFile(std::string("assets") + PATH_SEPARATOR + "shaders"
+                                                      + PATH_SEPARATOR + shaderNames[i],
+                                                  sf::Shader::Fragment)) {
                 throw std::runtime_error("Error loading " + shaderNames[i]);
             }
         }
@@ -65,14 +61,14 @@ RType::Game::Game(std::shared_ptr<sf::RenderWindow> _window, std::string scenePa
     RenderTexture->create(1920, 1080);
     console       = std::make_shared<Console>(window, RenderTexture);
     BackgroundClock.restart();
-    _camera = std::make_shared<Camera>();
-    _currentGame = std::make_shared<DoodleJump>();
+    _camera        = std::make_shared<Camera>();
+    _isGameOffline = false;
 }
 
 RType::Game::~Game() {
 }
 
-void RType::Game::loadBackgroundConfig(libconfig::Setting &levelSetting) {
+void RType::Game::loadBackgroundConfig(libconfig::Setting& levelSetting) {
     try {
         // Retrieve background paths from config file
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
@@ -84,12 +80,12 @@ void RType::Game::loadBackgroundConfig(libconfig::Setting &levelSetting) {
             libconfig::Setting& backgroundSetting = backgroundSettings[i];
             // Clean path to be Linux/Windows compatible
             std::string backgroundPath = backgroundSetting["path"];
-            int transparency = backgroundSetting["transparency"];
-            #ifdef _WIN32
-                std::replace(backgroundPath.begin(), backgroundPath.end(), '/', '\\');
-            #else
-                std::replace(backgroundPath.begin(), backgroundPath.end(), '\\', '/');
-            #endif
+            int transparency           = backgroundSetting["transparency"];
+#ifdef _WIN32
+            std::replace(backgroundPath.begin(), backgroundPath.end(), '/', '\\');
+#else
+            std::replace(backgroundPath.begin(), backgroundPath.end(), '\\', '/');
+#endif
 
             if (!backgroundTextures[i].loadFromFile(backgroundPath)) {
                 throw std::runtime_error("Error loading backgroundTexture " + std::to_string(i + 1));
@@ -146,7 +142,7 @@ void RType::Game::DisplaySkipIntro() {
     RenderTexture->draw(skipIntro);
 }
 
-void RType::Game::play(float &latency) {
+void RType::Game::play(float& latency) {
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) window->close();
         if (event.type == sf::Event::KeyPressed) {
@@ -172,7 +168,7 @@ void RType::Game::play(float &latency) {
 
     RenderTexture->clear();
     try {
-        libconfig::Setting& levelSetting = _cfg.lookup("Menu.Game.level")[_level];
+        libconfig::Setting& levelSetting       = _cfg.lookup("Menu.Game.level")[_level];
         libconfig::Setting& backgroundSettings = levelSetting.lookup("backgrounds");
         
         for (size_t i = 0; i < (size_t)backgroundSettings.getLength() && backgrounds.size() != i; ++i) {
@@ -180,16 +176,15 @@ void RType::Game::play(float &latency) {
             int speedY = backgroundSettings[i]["movingSpeedY"];
             
             backgrounds[i].move(speedX, speedY);
-            sf::Vector2f pos = backgrounds[i].getPosition();
-            if (pos.x < -1920) backgrounds[i].setPosition(1920, pos.y);
-            if (pos.x > 1920) backgrounds[i].setPosition(-1920, pos.y);
-            if (pos.y < -1080) backgrounds[i].setPosition(pos.x, 1080);
-            if (pos.y > 1080) backgrounds[i].setPosition(pos.x, -1080);
-
+            if (backgrounds[i].getPosition().x < -1920) backgrounds[i].setPosition(1920, 0);
+            if (backgrounds[i].getPosition().x > 1920) backgrounds[i].setPosition(-1920, 0);
+            if (backgrounds[i].getPosition().y < -1080) backgrounds[i].setPosition(0, 1080);
+            if (backgrounds[i].getPosition().y > 1080) backgrounds[i].setPosition(0, -1080);
             RenderTexture->draw(backgrounds[i]);
         }
-    } catch (std::exception &e) {
-        std::cerr << "Failed to load game backgrounds: " << e.what() << std::endl;
+        BackgroundClock.restart();
+    } catch (std::exception& e) {
+        std::cerr << "fail to load Game Backgounds" << std::endl;
     }
 
     this->set_texture();
@@ -274,6 +269,7 @@ void RType::Game::set_texture() {
     if (this->isGameOffline() == true) { // If game is offline, camera is set in the game
         this->_camera = _currentGame->getCamera();
     }
+    if (_camera == nullptr) return;
 
     for (size_t i = 0; i < _camera->listEntityToDisplay.size(); i++) {
         entity.push_back(sf::RectangleShape(convertToVector2f(_camera->listEntityToDisplay[i].size)));
@@ -386,8 +382,7 @@ bool RType::Game::loadFrameTexture() {
 }
 
 void RType::Game::setCamera(std::shared_ptr<Camera> camera) {
-    if (this->isGameOffline() == true)
-        return; // Camera is loaded from client
+    if (this->isGameOffline() == true) return; // Camera is loaded from client
     _camera = camera;
 }
 
@@ -413,11 +408,15 @@ bool RType::Game::haveCinematic() {
 }
 
 bool RType::Game::isGameOffline() {
-    // Need to fix this method to play offline with R-Type
-    if (_gameSelected == "R-Type") {
+    if (_isGameOffline == true) {
+        return true;
+    } else if (_isGameOffline == false
+               && _gameSelected == "Platformer") { // Platformer can only be played offline
+        return true;
+    } else {
         return false;
     }
-    return true;
+    return false;
 }
 
 void RType::Game::displayEntitiesHealth(std::shared_ptr<sf::RenderTexture> renderTexture) {
@@ -443,3 +442,4 @@ void RType::Game::displayEntitiesHealth(std::shared_ptr<sf::RenderTexture> rende
         }
     }
 }
+

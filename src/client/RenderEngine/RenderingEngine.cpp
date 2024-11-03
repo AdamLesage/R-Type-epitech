@@ -8,6 +8,7 @@
 #include "RenderingEngine.hpp"
 
 RType::RenderingEngine::RenderingEngine() {
+    _latency = 0;
 }
 
 RType::RenderingEngine::~RenderingEngine() {
@@ -40,6 +41,8 @@ void RType::RenderingEngine::run() {
     this->_settings->setMediator(_mediator);
     this->_lobby->setCamera(_camera);
     this->_game->setCamera(_camera);
+    this->_game->setOfflineMode(_isOffline);
+    this->_lobby->setOfflineMode(_isOffline);
 
     this->_game->setMutex(_mutex);
     this->_lobby->setMutex(_mutex);
@@ -83,6 +86,11 @@ void RType::RenderingEngine::setMutex(std::shared_ptr<std::mutex> mutex) {
 }
 
 void RType::RenderingEngine::setLatency(float latency) {
+    // if game is offline, no need to show latency
+    if (_isOffline == true) {
+        _latency = 0;
+        return;
+    }
     _latency = latency;
 }
 
@@ -96,6 +104,11 @@ void RType::RenderingEngine::setLevel(size_t level) {
     } else {
         std::cerr << "failed to set level game is null" << std::endl;
     }
+}
+
+void RType::RenderingEngine::setOfflineMode(bool isOffline)
+{
+    this->_isOffline = isOffline;
 }
 
 extern "C" RType::RenderingEngine* entryPointRenderingEngine() {

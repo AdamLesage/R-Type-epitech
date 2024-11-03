@@ -34,8 +34,8 @@ RType::GameEngine::GameEngine() {
 
     std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
 
-    this->_camera = std::make_shared<Camera>();
-    this->_mutex  = std::make_shared<std::mutex>();
+    this->_camera  = std::make_shared<Camera>();
+    this->_mutex   = std::make_shared<std::mutex>();
     this->_systems = Systems();
     _protocolParsing =
         std::make_unique<RType::ProtocolParsing>(protocolPath, _registry, _mutex);
@@ -85,6 +85,7 @@ void RType::GameEngine::run() {
             renderingEngine->setGameSelected(_gameSelected);
             renderingEngine->setCamera(this->_camera);
             renderingEngine->setMutex(this->_mutex);
+            renderingEngine->setOfflineMode(_isOffline);
             renderingEngine->run();
         } catch (const std::exception& e) {
             std::cerr << "Error running render engine: " << e.what() << std::endl;
@@ -127,8 +128,10 @@ void RType::GameEngine::send(const std::string& message) {
 void RType::GameEngine::handleServerData(const std::string& message) {
     // To tests this function, notify mediator from NetworkEngine with a message which is binary data
     _protocolParsing->parseData(message);
-    float latency = _protocolParsing->getLatency();
-    this->_mediator->notify("RenderingEngine", "LATENCY " + std::to_string(latency));
+    if (_isOffline == false) {
+        float latency = _protocolParsing->getLatency();
+        this->_mediator->notify("RenderingEngine", "LATENCY " + std::to_string(latency));
+    }
 }
 
 void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {
@@ -139,43 +142,46 @@ void RType::GameEngine::setMediator(std::shared_ptr<IMediator> mediator) {
 void RType::GameEngine::updateCamera() {
     auto& positions  = this->_registry.get_components<Position_s>();
     auto& sizes      = this->_registry.get_components<Size>();
-    auto& rotations = this->_registry.get_components<Rotation>();
+    auto& rotations  = this->_registry.get_components<Rotation>();
     auto& directions = this->_registry.get_components<Direction>();
     auto& sprites    = this->_registry.get_components<Sprite>();
-    auto& healths   = this->_registry.get_components<Health_s>();
+    auto& healths    = this->_registry.get_components<Health_s>();
 
     std::vector<EntityRenderInfo> entityRender;
-    entityRender.reserve(std::min({positions.size(), sizes.size(), rotations.size(), sprites.size(), healths.size()}));
-    for (size_t i = 0;
-         i < positions.size() && i < sizes.size() &&  i < directions.size() && i < rotations.size() && i < sprites.size() && i < healths.size(); ++i) {
-        auto& position  = positions[i];
-        auto& size      = sizes[i];
-        auto& rotation = rotations[i];
-        auto& sprite    = sprites[i];
-        auto& direction = directions[i];
-        auto& health    = healths[i];
+    {
+        std::lock_guard<std::mutex> lock(*this->_mutex.get());
+        entityRender.reserve(
+        std::min({positions.size(), sizes.size(), rotations.size(), sprites.size(), healths.size()}));
+        for (size_t i = 0; i < positions.size() && i < sizes.size() && i < directions.size()
+                        && i < rotations.size() && i < sprites.size() && i < healths.size();
+            ++i) {
+            auto& position  = positions[i];
+            auto& size      = sizes[i];
+            auto& rotation  = rotations[i];
+            auto& sprite    = sprites[i];
+            auto& direction = directions[i];
+            auto& health    = healths[i];
 
-        try
-        {
-            if (position && size && rotation && sprite && direction && health) {
-                entityRender.push_back({size.value(), position.value(), rotation.value(), direction.value(), sprite.value(), health.value()});
+            try {
+                if (position && size && rotation && sprite && direction && health) {
+                    entityRender.push_back({size.value(), position.value(), rotation.value(), direction.value(),
+                                            sprite.value(), health.value()});
+                }
+            } catch (const std::exception& e) {
+                std::cerr << e.what() << '\n';
+                return;
             }
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << e.what() << '\n';
-            return;
         }
     }
     {
         std::lock_guard<std::mutex> lock(*this->_mutex.get());
         this->_camera->listEntityToDisplay = std::move(entityRender);
     }
-    #ifdef _WIN32
-        Sleep(10);
-    #else
-        usleep(10000);
-    #endif
+#ifdef _WIN32
+    Sleep(10);
+#else
+    usleep(10000);
+#endif
 }
 
 extern "C" RType::GameEngine* entryPointGameEngine() {
