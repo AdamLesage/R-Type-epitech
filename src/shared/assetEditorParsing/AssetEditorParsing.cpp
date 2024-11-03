@@ -272,12 +272,7 @@ void AssetEditorParsing::parseBossPattern(EntityData &entityData, libconfig::Set
         bool down = static_cast<int>(bossPatternSettings["down"]);
         float spawnCooldown = bossPatternSettings["spawnCooldown"];
         entityData.bossPatern = std::make_shared<BossPatern>(BossPatern{speed, up, down, spawnCooldown, std::chrono::steady_clock::now()});
-    } catch (const libconfig::SettingNotFoundException& nfex) {
-        std::cerr << "Setting not found: " << nfex.getPath() << std::endl;
-    } catch (const libconfig::SettingTypeException& stex) {
-        std::cerr << "Setting type error: " << stex.getPath() << std::endl;
     } catch (const std::exception&) {
-        std::cout << "faild to create boss" << std::endl;
         return;
     }
 }

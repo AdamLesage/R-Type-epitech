@@ -140,7 +140,7 @@ void GameLogique::spawnCustomEntity(char type, float position_x, float position_
             entity, BossPatern{entityData->bossPatern->speed, entityData->bossPatern->up,
                                entityData->bossPatern->down, entityData->bossPatern->spawnCooldown,
                                std::chrono::steady_clock::now()});
-        this->reg.add_component<Position>(entity, Position{1400, position_y});
+        this->reg.add_component<Position>(entity, Position{1500, position_y});
         reg.add_component<Type>(entity, Type{EntityType::ENEMY});
     }
     this->reg.add_component<Direction>(entity, Direction{0, 0});
@@ -227,7 +227,7 @@ void GameLogique::spawnEnnemy(char type, float position_x, float position_y) {
             } else {
                 bool enemyExists = false; // check if there is still an enemy 
                 for (auto& types : reg.get_components<Type>()) {
-                    if (types && (types->type == EntityType::ENEMY || types && types->type == EntityType::BOSS)) {
+                    if (types && (types->type == EntityType::ENEMY || types->type == EntityType::BOSS)) {
                         enemyExists = true;
                         ennemyAlive = enemyExists;
                         break;
@@ -426,7 +426,7 @@ void GameLogique::handleChangeLevel(unsigned int newLevel) {
             #else
                 usleep(10000);
             #endif
-            this->_networkSender->sendStateChange(1, 0x01);
+            this->_networkSender->sendStateChange(1, 0x04);
             this->_currentLevel = 0;
             #ifdef _WIN32
                 Sleep(10);
@@ -506,31 +506,39 @@ void GameLogique::clearGame() {
 }
 
 std::array<char, 6> GameLogique::retrieveInputKeys() {
-    libconfig::Config cfg;
-    std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
-    cfg.readFile(configPath.c_str());
-    std::string keyStr;
-    std::array<char, 6> inputKeys;
-    const libconfig::Setting& root = cfg.getRoot();
-    const libconfig::Setting& keys = root["Keys"];
+    try
+    {
+        libconfig::Config cfg;
+        std::string configPath = std::string("config") + PATH_SEPARATOR + "key.cfg";
+        cfg.readFile(configPath.c_str());
+        std::string keyStr;
+        std::array<char, 6> inputKeys;
+        const libconfig::Setting& root = cfg.getRoot();
+        const libconfig::Setting& keys = root["Keys"];
 
-    // Map to associate key names with their respective index in the array
-    std::unordered_map<std::string, int> keyMap = {{"up", 0},    {"down", 1},  {"left", 2},
-                                                   {"right", 3}, {"shoot", 4}, {"settings", 5}};
+        // Map to associate key names with their respective index in the array
+        std::unordered_map<std::string, int> keyMap = {{"up", 0},    {"down", 1},  {"left", 2},
+                                                    {"right", 3}, {"shoot", 4}, {"settings", 5}};
 
-    for (int i = 0; i < keys.getLength(); ++i) {
-        const libconfig::Setting& key = keys[i];
-        std::string name;
-        key.lookupValue("name", name);
-        auto it = keyMap.find(name);
+        for (int i = 0; i < keys.getLength(); ++i) {
+            const libconfig::Setting& key = keys[i];
+            std::string name;
+            key.lookupValue("name", name);
+            auto it = keyMap.find(name);
 
-        // If the key name is found in the map, assign the value
-        if (it != keyMap.end()) {
-            key.lookupValue("value", keyStr);
-            inputKeys[it->second] = keyStr[0];
+            // If the key name is found in the map, assign the value
+            if (it != keyMap.end()) {
+                key.lookupValue("value", keyStr);
+                inputKeys[it->second] = keyStr[0];
+            }
         }
+        return inputKeys;        
     }
-    return inputKeys;
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        return {'Z', 'S', 'Q', 'D', 'X', 'P'};
+    }
 }
 
 void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
@@ -544,33 +552,32 @@ void GameLogique::handleClientInput(std::pair<std::string, uint32_t> message) {
     char input = 0;
     memcpy(&id, &(message.first[1]), sizeof(int));
     input = message.first[5];
+    {
+        std::lock_guard<std::mutex> lock(this->_mutex);
+        auto& velocities = reg.get_components<Velocity_s>();
+        auto& types      = reg.get_components<Type>();
+        if ((unsigned int)velocities.size() <= this->playersId[message.second]
+            && this->playersId[message.second] <= (unsigned int)types.size()) {
+            std::cerr << "Invalid entity ID: " << this->playersId[message.second] << std::endl;
+            return;
+        }
+        auto& velocitie = velocities[this->playersId[message.second]];
+        auto& type      = types[this->playersId[message.second]];
+        if (type->type != EntityType::PLAYER) {
+            return;
+        }
+        std::array<char, 6> keys = retrieveInputKeys();
 
-    auto& velocities = reg.get_components<Velocity_s>();
-    auto& types      = reg.get_components<Type>();
-    if ((unsigned int)velocities.size() <= this->playersId[message.second]
-        && this->playersId[message.second] <= (unsigned int)types.size()) {
-        std::cerr << "Invalid entity ID: " << this->playersId[message.second] << std::endl;
-        return;
-    }
-    auto& velocitie = velocities[this->playersId[message.second]];
-    auto& type      = types[this->playersId[message.second]];
-    if (type->type != EntityType::PLAYER) {
-        return;
-    }
-    std::array<char, 6> keys = retrieveInputKeys();
-
-    if (input == keys[0]) { // UP
-        velocitie->y = -2;
-    } else if (input == keys[1]) { // DOWN
-        velocitie->y = 2;
-    } else if (input == keys[2]) { // RIGHT
-        velocitie->x = 2;
-    } else if (input == keys[3]) { // LEFT
-        velocitie->x = -2;
-    } else if (input == keys[4]) { // SHOOT
-        {
-            std::lock_guard<std::mutex> lock(this->_mutex);
-            this->sys.shoot_system(reg, message.second, this->playersId[message.second], this->_networkSender, logger);
+        if (input == keys[0]) { // UP
+            velocitie->y = -2;
+        } else if (input == keys[1]) { // DOWN
+            velocitie->y = 2;
+        } else if (input == keys[2]) { // RIGHT
+            velocitie->x = 2;
+        } else if (input == keys[3]) { // LEFT
+            velocitie->x = -2;
+        } else if (input == keys[4]) { // SHOOT
+                this->sys.shoot_system(reg, message.second, this->playersId[message.second], this->_networkSender, logger);
         }
     }
 }
@@ -579,16 +586,17 @@ void GameLogique::handleRecieve() {
     while (1) {
         if (network->hasMessages()) {
             std::pair<std::string, uint32_t> message = network->popMessage();
+            if (message.first.empty()) continue;
             switch (message.first[0]) {
             case 0x41:
                 startGame(this->playersId[message.second]);
                 break;
             case 0x40:
-                if (running == false) continue;;
+                if (running == false) break;
                 handleClientInput(message);
                 break;
             case 0x42: {
-                if (running == false) continue;;
+                if (running == false) break;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
@@ -596,7 +604,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x21: {
-                if (running == false) continue;;
+                if (running == false) break;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
@@ -604,7 +612,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x43: {
-                if (running == false) continue;;
+                if (running == false) break;
                 int entityId;
                 std::memcpy(&entityId, &message.first[1], sizeof(int));
                 entity_t entity = reg.entity_from_index(entityId);
@@ -613,12 +621,12 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x44: {
-                if (running == false) continue;;
+                if (running == false) break;
                 spawnWave();
                 break;
             }
             case 0x45: {
-                if (running == false) continue;;
+                if (running == false) break;
                 auto& playerHealth = reg.get_components<Health_s>()[this->playersId[message.second]];
                 if (playerHealth) {
                     if (message.first[1] == 0x01) {
@@ -631,7 +639,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x46: {
-                if (running == false) continue;;
+                if (running == false) break;
                 float value;
                 std::memcpy(&value, &message.first[1], sizeof(float));
                 auto& speed                           = reg.get_components<ShootingSpeed_s>();
@@ -641,7 +649,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x47: {
-                if (running == false) continue;;
+                if (running == false) break;
                 int pos_x, pos_y;
                 std::memcpy(&pos_x, &message.first[2], sizeof(int));
                 std::memcpy(&pos_y, &message.first[6], sizeof(int));
@@ -654,7 +662,7 @@ void GameLogique::handleRecieve() {
                 break;
             }
             case 0x48: {
-                if (running == false) continue;;
+                if (running == false) break;
                 int value;
                 std::memcpy(&value, &message.first[1], sizeof(int));
                 if (this->playersId[message.second] < reg.get_components<Health_s>().size()) {
