@@ -198,30 +198,32 @@ void RType::Game::play(float& latency) {
         piou = false;
     }
 
-    console->displayDeveloperConsole();
-    toolbar.draw(RenderTexture);
+    // If game is online display different info retrieved by server
+    if (_isGameOffline == false) {
+        console->displayDeveloperConsole();
+        toolbar.draw(RenderTexture);
 
-    if (toolbar.showFps) {
-        metrics.displayFPS(RenderTexture);
-    }   
-    if (toolbar.showCpu) {
-        metrics.displayCPU(RenderTexture);
+        if (toolbar.showFps) {
+            metrics.displayFPS(RenderTexture);
+        }   
+        if (toolbar.showCpu) {
+            metrics.displayCPU(RenderTexture);
+        }
+        if (toolbar.showMemory) {
+            metrics.displayMemory(RenderTexture);
+        }
+        if (toolbar.showGpu) {
+            metrics.displayGpuUsage(RenderTexture);
+        }
+        if (toolbar.showNetwork) {
+        metrics.displayLatency(RenderTexture, latency);
+        }
+        if (toolbar.showPlayerPos) {
+            sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
+            metrics.displayPlayerPosition(RenderTexture, pos);
+        }
+        displayEntitiesHealth(RenderTexture);
     }
-    if (toolbar.showMemory) {
-        metrics.displayMemory(RenderTexture);
-    }
-    if (toolbar.showGpu) {
-        metrics.displayGpuUsage(RenderTexture);
-    }
-    if (toolbar.showNetwork) {
-      metrics.displayLatency(RenderTexture, latency);
-    }
-    if (toolbar.showPlayerPos) {
-        sf::Vector2f pos = convertToVector2fb(_camera->listEntityToDisplay[0].position);
-        metrics.displayPlayerPosition(RenderTexture, pos);
-    }
-    
-    displayEntitiesHealth(RenderTexture);
     window->clear();
     RenderTexture->display();
     sf::Sprite sprite(RenderTexture->getTexture());
