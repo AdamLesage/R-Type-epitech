@@ -198,21 +198,33 @@ void Systems::check_entities_collisions(Registry& reg,
 
     if (enemyTakeDamage && collisionX && collisionY) {
         logger.log(RType::Logger::RTYPEINFO, "Enemy take damage");
-        auto& enemyHealth      = reg.get_components<Health_s>()[entityId1];
+        auto& enemyHealth = reg.get_components<Health_s>()[entityId1];
         auto& projectileDamage = reg.get_components<Damage_s>()[entityId2];
 
         if (enemyHealth && projectileDamage) {
             enemyHealth->health -= projectileDamage->damage;
+
             if (enemyHealth->health <= 0) {
+                auto& scoreArray = reg.get_components<ScoreValue>();
+                size_t score = 0;
+
+                if (entityId1 < scoreArray.size() && scoreArray[entityId1].has_value()) {
+                    score = scoreArray[entityId1]->value;
+                    logger.log(RType::Logger::RTYPEINFO, ("ScoreValue found: " + std::to_string(score)).c_str());
+                } else {
+                    logger.log(RType::Logger::RTYPEWARN, ("ScoreValue missing for entity " + std::to_string(entityId1)).c_str());
+                }
+
                 reg.kill_entity(entityId1);
-                networkSender->sendDeleteEntity(entityId1);
+                logger.log(RType::Logger::RTYPEINFO, "Entity killed, sending deleteEntity with score");
+                networkSender->sendDeleteEntity(entityId1, -1, score);
             } else {
+                logger.log(RType::Logger::RTYPEINFO, "Updating entity health");
                 networkSender->sendHealthUpdate(entityId1, enemyHealth->health);
             }
         } else {
-            logger.log(RType::Logger::RTYPEERROR, "Error while getting health or damage component for enemy");
+            logger.log(RType::Logger::RTYPEERROR, "Error while retrieving health or damage component for the enemy");
         }
-        // If enemy take damage, it is only a projectile so we delete it
         reg.kill_entity(entityId2);
         networkSender->sendDeleteEntity(entityId2);
     }
@@ -541,6 +553,7 @@ void Systems::wave_of_ennemy_from_boss1(Registry& reg, std::unique_ptr<NetworkSe
         reg.add_component<Health>(enemy, Health_s{100, 100, false, false});
         reg.add_component<Size>(enemy, Size{50, 50});
         reg.add_component<Damage>(enemy, Damage{20});
+        reg.add_component<ScoreValue>(enemy, ScoreValue{10});
         if (ennemy_number == 0) {
             reg.add_component<StraightLinePattern>(enemy, StraightLinePattern{-1});
             reg.add_component<ShootStraightPattern>(
@@ -589,6 +602,7 @@ void Systems::wave_of_ennemy_from_boss2(Registry& reg, std::unique_ptr<NetworkSe
             enemy, Wave_pattern{2.f, 0.02f * (float)(ennemy_number + 1), std::chrono::steady_clock::now()});
         reg.add_component<ShootPlayerPattern>(enemy,
                                               ShootPlayerPattern{2, 5, std::chrono::steady_clock::now()});
+        reg.add_component<ScoreValue>(enemy, ScoreValue{10});
         networkSender->sendCreateEnemy(0x03, enemy, 1620, ennemy_number * 200);
     }
 }

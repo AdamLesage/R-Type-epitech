@@ -39,6 +39,7 @@
 #include <cmath>
 #include <chrono>
 #include <iomanip>
+#include "../../shared/components/ScoreValue.hpp"
 
 class Systems {
     public:

@@ -93,8 +93,9 @@ class NetworkSender {
          * @param id The unique identifier of the entity to be deleted.
          * @param clientId The identifier of the client to send the information to. Defaults to -1, meaning
          * all clients.
+         * @param extraData Additional data to send along with the delete command.
          */
-        void sendDeleteEntity(int id, int clientId = -1);
+        void sendDeleteEntity(int id, int clientId = -1, size_t extraData = 0);
 
         /**
          * @brief Sends an update on the position of an entity to all clients.

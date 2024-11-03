@@ -748,11 +748,11 @@ bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& in
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
 
     std::tm localtm;
-#ifdef _WIN32
-    gmtime_s(&localtm, &now_c);
-#else
-    gmtime_r(&now_c, &localtm);
-#endif
+    #ifdef _WIN32
+        gmtime_s(&localtm, &now_c);
+    #else
+        gmtime_r(&now_c, &localtm);
+    #endif
 
     char buffer[100];
     std::strftime(buffer, sizeof(buffer), "%d/%H/%M/%S", &localtm);
