@@ -110,6 +110,7 @@ int main(int ac, char** av) {
     std::string host           = "";
     unsigned short server_port = 0;
     std::string gameSelected   = "";
+    std::string userName       = "";
     bool isOffline = false;
 
     if (av[1] != nullptr && av[2] != nullptr && isNumber(av[2])) {
@@ -169,6 +170,7 @@ int main(int ac, char** av) {
         server_port = clientConnexionHandling->getServerPort();
         gameSelected = clientConnexionHandling->getGameSelected();
         isOffline = clientConnexionHandling->getOfflineSelection();
+        userName    = clientConnexionHandling->getUserName();
 
         auto networkEngine = loadEngine<RType::NetworkEngine>(networkEngineLoader, "entryPointNetworkEngine");
         networkEngine->setParams(host, server_port, local_port);
@@ -184,6 +186,7 @@ int main(int ac, char** av) {
         gameEngine->setEngines(networkEngine, renderingEngine, physicEngine, audioEngine);
         gameEngine->setGameSelected(gameSelected);
         gameEngine->setOfflineMode(isOffline);
+        gameEngine->setUserName(userName);
         gameEngine->run();
     } catch (const RType::DLError& e) {
         std::cerr << e.what() << std::endl;

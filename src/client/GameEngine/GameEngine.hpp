@@ -104,6 +104,17 @@ namespace RType {
                 _isOffline = isOffline;
             }
 
+            /**
+             * @brief Tell the game what name the player chose
+             *
+             * @param userName std::string of the user name
+             * @return void
+             * @author Adam Lesage
+             */
+            void setUserName(std::string userName) {
+                _userName = userName;
+            }
+
         protected:
         private:
             Registry _registry;
@@ -117,6 +128,7 @@ namespace RType {
             std::shared_ptr<Camera> _camera;
             std::shared_ptr<std::mutex> _mutex;
             std::string _gameSelected;
+            std::string _userName;
             bool _isOffline = false;
     };
 } // namespace RType

@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2024
+** rtype [WSL: Ubuntu-22.04]
+** File description:
+** Lobby
+*/
+
 #include "Lobby.hpp"
 
 RType::Lobby::Lobby(std::shared_ptr<sf::RenderWindow> _window) : window(_window), selectedOption(0) {

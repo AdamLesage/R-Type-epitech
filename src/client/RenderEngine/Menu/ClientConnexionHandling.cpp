@@ -38,6 +38,10 @@ RType::ClientConnexionHandling::ClientConnexionHandling(std::string host, unsign
     _inputTextPort.setFont(_font);
     _inputTextPort.setCharacterSize(24);
     _inputTextPort.setFillColor(sf::Color::White);
+
+    _inputTextName.setFont(_font);
+    _inputTextName.setCharacterSize(24);
+    _inputTextName.setFillColor(sf::Color::White);
 }
 
 RType::ClientConnexionHandling::~ClientConnexionHandling() {
@@ -50,12 +54,14 @@ void RType::ClientConnexionHandling::displayConnexionWindow() {
             if (event.type == sf::Event::Closed) {
                 _window->close();
             }
+            this->retrieveInputTextName(event);
             this->retrieveInputTextHost(event);
             this->retrieveInputTextPort(event);
             this->retrieveInputGameSelection(event);
         }
         _window->clear();
         this->displayBackground();
+        this->displayInputTextName();
         this->displayInputTextHost();
         this->displayInputTextPort();
         this->displaySubmitButton();
@@ -145,6 +151,40 @@ void RType::ClientConnexionHandling::displayInputTextPort() {
     _window->draw(labelPort);
     _window->draw(inputTextPort);
     _window->draw(_inputTextPort);
+}
+
+void RType::ClientConnexionHandling::displayInputTextName() {
+    sf::Text labelName;
+    labelName.setFont(_font);
+    labelName.setString("Name");
+    labelName.setCharacterSize(24);
+    labelName.setFillColor(sf::Color::Red);
+    labelName.setPosition(1920 / 2 - 100, 1080 / 2 - 175);
+
+    sf::RectangleShape inputTextName(sf::Vector2f(200, 50));
+    inputTextName.setFillColor(sf::Color(50, 50, 50, 255));
+    inputTextName.setPosition(1920 / 2 - 100, 1080 / 2 - 150);
+
+    // Ajouter un contour de 2 si sélectionné
+    if (_inputBoxSelected == "name") {
+        inputTextName.setOutlineThickness(2);
+    } else {
+        inputTextName.setOutlineThickness(0);
+    }
+    inputTextName.setOutlineColor(sf::Color::Red);
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
+    sf::FloatRect bounds  = inputTextName.getGlobalBounds();
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
+        _inputBoxSelected = "name";
+    }
+
+    _inputTextName.setPosition(inputTextName.getPosition().x + 10, inputTextName.getPosition().y + 10);
+
+    _window->draw(labelName);
+    _window->draw(inputTextName);
+    _window->draw(_inputTextName);
 }
 
 void RType::ClientConnexionHandling::displaySubmitButton() {
@@ -265,6 +305,20 @@ void RType::ClientConnexionHandling::retrieveInputTextPort(const sf::Event& even
     }
 }
 
+void RType::ClientConnexionHandling::retrieveInputTextName(const sf::Event& event) {
+    if (_inputBoxSelected == "name" && event.type == sf::Event::TextEntered) {
+        if (event.text.unicode == 8 && !_inputTextName.getString().isEmpty()) {
+            // Remove the last character if backspace
+            std::string currentText = _inputTextName.getString();
+            currentText.pop_back();
+            _inputTextName.setString(currentText);
+        } else if (event.text.unicode < 128) {
+            // Add char if user types
+            _inputTextName.setString(_inputTextName.getString() + static_cast<char>(event.text.unicode));
+        }
+    }
+}
+
 void RType::ClientConnexionHandling::retrieveInputGameSelection(const sf::Event& event) {
     if (_inputBoxSelected == "gameSelection" && event.type == sf::Event::KeyPressed) {
         switch (event.key.code) {
@@ -298,7 +352,7 @@ void RType::ClientConnexionHandling::displayModeOffline() {
 
     // create button shape
     sf::RectangleShape button(sf::Vector2f(150, 60));
-    button.setPosition(1920 / 2 - button.getSize().x / 2, 1080 / 2 - 175);
+    button.setPosition(1920 / 2 - button.getSize().x / 2, 1080 / 2 - 250);
     button.setOutlineThickness(3);
     button.setOutlineColor(sf::Color::White);
 

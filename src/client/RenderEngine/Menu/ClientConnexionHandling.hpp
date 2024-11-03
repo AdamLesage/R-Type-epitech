@@ -57,6 +57,11 @@ namespace RType {
             void displayInputTextPort();
 
             /**
+             * @brief Display the input text for the name
+             */
+            void displayInputTextName();
+
+            /**
              * @brief Display the submit button
              * @author Adam Lesage
              */
@@ -100,6 +105,13 @@ namespace RType {
              * @author Adam Lesage
              */
             void retrieveInputTextPort(const sf::Event& event);
+
+            /**
+             * @brief Retrieve the input text for the name
+             *
+             * @param event The event to retrieve
+             */
+            void retrieveInputTextName(const sf::Event& event);
 
             /**
              * @brief Retrieve the input game selection
@@ -151,6 +163,16 @@ namespace RType {
                 return _isOffline;
             }
 
+            /**
+             * @brief Get the User Name value
+             *
+             * @return std::string the value of the the string inputTextName
+             */
+            std::string getUserName() {
+                std::string inputTextName = _inputTextName.getString().toAnsiString();
+                return inputTextName;
+            }
+
         protected:
         private:
             /**
@@ -169,6 +191,7 @@ namespace RType {
 
             sf::Text _inputTextHost;
             sf::Text _inputTextPort;
+            sf::Text _inputTextName;
             sf::Font _font;
     };
 }; // namespace RType

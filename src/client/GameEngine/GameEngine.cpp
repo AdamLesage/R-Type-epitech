@@ -31,6 +31,7 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Size>();
     _registry.register_component<Direction>();
     _registry.register_component<Annimation>();
+    _registry.register_component<Name>();
 
     std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
     _protocolParsing         = std::make_unique<ProtocolParsing>(protocolPath, _registry);
