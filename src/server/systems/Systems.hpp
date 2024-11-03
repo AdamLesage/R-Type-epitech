@@ -39,6 +39,7 @@
 #include <cmath>
 #include <chrono>
 #include <iomanip>
+#include "../../shared/components/ScoreValue.hpp"
 
 class Systems {
     public:
@@ -89,7 +90,8 @@ class Systems {
         void collision_system(Registry& reg,
                               std::pair<size_t, size_t> MapSize,
                               std::unique_ptr<NetworkSender>& networkSender,
-                              RType::Logger& logger, bool friendlyfire);
+                              RType::Logger& logger,
+                              bool friendlyfire);
 
         /**
          * @brief Handles the shoot for the entities.
@@ -124,7 +126,7 @@ class Systems {
          * @param reg The registry containing the components.
          */
         void wave_of_ennemy_from_boss1(Registry& reg, std::unique_ptr<NetworkSender>& networkSender);
-        
+
         /**
          * @brief Spawn a wave of enemies
          *

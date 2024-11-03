@@ -18,7 +18,7 @@ namespace Edition {
 
     /**
      * @brief Command Manager of the Asset Editor
-     * 
+     *
      * This class will be used to manage the commands of the Asset Editor
      */
     class CommandManager {
@@ -35,7 +35,7 @@ namespace Edition {
 
             /**
              * @brief Execute a command
-             * 
+             *
              * @param command The command to execute
              */
             void createAsset(std::shared_ptr<Edition::Asset> asset);
@@ -52,34 +52,44 @@ namespace Edition {
 
             /**
              * @brief Get the undo vector
-             * 
+             *
              * @return std::vector<std::shared_ptr<ICommand>> The undo vector
              */
-            std::vector<std::shared_ptr<Edition::Asset>> getUndoAssets() const { return _undoAssets; }
+            std::vector<std::shared_ptr<Edition::Asset>> getUndoAssets() const {
+                return _undoAssets;
+            }
 
             /**
              * @brief Clear the redo vector
              */
-            void clearRedoAssets() { _redoAssets.clear(); }
+            void clearRedoAssets() {
+                _redoAssets.clear();
+            }
 
             /**
              * @brief Clear the undo vector
              */
-            void clearUndoAssets() { _undoAssets.clear(); }
+            void clearUndoAssets() {
+                _undoAssets.clear();
+            }
 
             /**
              * @brief Get the redo vector
-             * 
+             *
              * @return std::vector<std::shared_ptr<ICommand>> The redo vector
              */
-            std::vector<std::shared_ptr<Edition::Asset>> getRedoAssets() const { return _redoAssets; }
+            std::vector<std::shared_ptr<Edition::Asset>> getRedoAssets() const {
+                return _redoAssets;
+            }
 
             /**
              * @brief Set the undo vector from another vector (will be called from load scene function)
-             * 
+             *
              * @param undoAssets The undo vector to set
              */
-            void setUndoAssets(std::vector<std::shared_ptr<Edition::Asset>> undoAssets) { _undoAssets = undoAssets; }
+            void setUndoAssets(std::vector<std::shared_ptr<Edition::Asset>> undoAssets) {
+                _undoAssets = undoAssets;
+            }
 
         protected:
         private:
@@ -93,6 +103,6 @@ namespace Edition {
              */
             std::vector<std::shared_ptr<Edition::Asset>> _redoAssets;
     };
-}
+} // namespace Edition
 
 #endif /* !COMMANDMANAGER_HPP_ */

@@ -208,12 +208,14 @@ void RType::ClientConnexionHandling::displaySubmitButton() {
     sf::Vector2i mousePos = sf::Mouse::getPosition(*_window);
     sf::FloatRect bounds  = submitButtonRect.getGlobalBounds();
 
-    if ((sf::Mouse::isButtonPressed(sf::Mouse::Left)
-         && bounds.contains(static_cast<sf::Vector2f>(mousePos)) == true)
-        || sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+    if (((sf::Mouse::isButtonPressed(sf::Mouse::Left)
+          && bounds.contains(static_cast<sf::Vector2f>(mousePos)) == true)
+         || sf::Keyboard::isKeyPressed(sf::Keyboard::Return))) {
         if (this->areHostAndPortValid() == true) {
-            _window->close();
-            return;
+            if (!(_gameSelected == "Platformer" && !_isOffline)) {
+                _window->close();
+                return;
+            }
         } else {
             _invalidPortOrHost = true;
         }
@@ -250,7 +252,7 @@ void RType::ClientConnexionHandling::displayGameSelection() {
     inputTextGame.setFillColor(sf::Color(50, 50, 50, 255));
     inputTextGame.setPosition(1920 / 2 - 100, 1080 / 2 + 150);
 
-    // Ajouter un contour de 2 si sélectionné
+    // Add a 2-pixel outline if selected
     if (_inputBoxSelected == "gameSelection") {
         inputTextGame.setOutlineThickness(2);
     } else {
@@ -275,6 +277,18 @@ void RType::ClientConnexionHandling::displayGameSelection() {
     _window->draw(labelGame);
     _window->draw(inputTextGame);
     _window->draw(gameText);
+
+    // Display warning message if Platformer is selected in online mode
+    if (!_isOffline && _gameSelected == "Platformer") {
+        sf::Text warningText;
+        warningText.setFont(_font);
+        warningText.setString("Platformer is not available online");
+        warningText.setCharacterSize(24);
+        warningText.setFillColor(sf::Color::Red);
+        warningText.setPosition(1920 / 2 - warningText.getLocalBounds().width / 2, 1080 / 2 + 200);
+
+        _window->draw(warningText);
+    }
 }
 
 void RType::ClientConnexionHandling::retrieveInputTextHost(const sf::Event& event) {

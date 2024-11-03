@@ -11,12 +11,11 @@
 #include <iomanip>
 
 #ifdef _WIN32
-    PDH_HQUERY cpuQuery;
-    PDH_HCOUNTER cpuTotal;
+PDH_HQUERY cpuQuery;
+PDH_HCOUNTER cpuTotal;
 #endif
 
-GameMetrics::GameMetrics()
-{
+GameMetrics::GameMetrics() {
 #ifdef _WIN32
     if (PdhOpenQuery(NULL, NULL, &cpuQuery) != ERROR_SUCCESS) {
         std::cerr << "Failed to open PDH query." << std::endl;
@@ -32,18 +31,16 @@ GameMetrics::GameMetrics()
 #endif
 }
 
-GameMetrics::~GameMetrics()
-{
+GameMetrics::~GameMetrics() {
 #ifdef _WIN32
     PdhCloseQuery(cpuQuery);
 #endif
 }
 
-void GameMetrics::displayFPS(sf::RenderWindow& window)
-{
+void GameMetrics::displayFPS(sf::RenderWindow& window) {
     static sf::Clock clock;
     static int frameCnt = 0;
-    static int fps = 0;
+    static int fps      = 0;
     sf::Text text;
     static sf::Font font;
 
@@ -53,7 +50,7 @@ void GameMetrics::displayFPS(sf::RenderWindow& window)
         std::cerr << "Failed to load font" << std::endl;
     }
     if (clock.getElapsedTime().asSeconds() >= 1.0f) {
-        fps = frameCnt / clock.getElapsedTime().asSeconds();
+        fps      = frameCnt / clock.getElapsedTime().asSeconds();
         frameCnt = 0;
         clock.restart();
     }
@@ -64,8 +61,7 @@ void GameMetrics::displayFPS(sf::RenderWindow& window)
     window.draw(text);
 }
 
-void GameMetrics::displayMemory(sf::RenderWindow& window)
-{
+void GameMetrics::displayMemory(sf::RenderWindow& window) {
     sf::Text text;
     static sf::Font font;
 
@@ -106,11 +102,14 @@ GameMetrics::GpuInfo getGpuInfo() {
 #ifdef _WIN32
     // Under Windows, NVIDIA API is not available on chocolatey
 #elif __linux__
-    FILE* fp = popen("nvidia-smi --query-gpu=temperature.gpu,memory.used,memory.total,name --format=csv,noheader,nounits", "r");
+    FILE* fp = popen(
+        "nvidia-smi --query-gpu=temperature.gpu,memory.used,memory.total,name --format=csv,noheader,nounits",
+        "r");
     if (fp) {
         char buffer[128];
         if (fgets(buffer, sizeof(buffer), fp)) {
-            std::sscanf(buffer, "%f,%zu,%zu,%127[^\n]", &gpuInfo.temperature, &gpuInfo.vramUsed, &gpuInfo.vramTotal, buffer);
+            std::sscanf(buffer, "%f,%zu,%zu,%127[^\n]", &gpuInfo.temperature, &gpuInfo.vramUsed,
+                        &gpuInfo.vramTotal, buffer);
             gpuInfo.model = std::string(buffer);
         }
         pclose(fp);
@@ -142,8 +141,8 @@ void GameMetrics::displayGpuUsage(sf::RenderWindow& window) {
     GpuInfo gpuInfo = getGpuInfo();
 
     std::string gpuText = "GPU Model: " + gpuInfo.model + "\n"
-                        + "VRAM Used: " + std::to_string(gpuInfo.vramUsed) + " MB\n"
-                        + "GPU Temp: " + std::to_string(gpuInfo.temperature) + " C";
+                          + "VRAM Used: " + std::to_string(gpuInfo.vramUsed) + " MB\n"
+                          + "GPU Temp: " + std::to_string(gpuInfo.temperature) + " C";
 
     text.setString(gpuText);
     text.setFillColor(sf::Color::White);
@@ -152,8 +151,7 @@ void GameMetrics::displayGpuUsage(sf::RenderWindow& window) {
 #endif
 }
 
-void GameMetrics::displayCPU(sf::RenderWindow& window)
-{
+void GameMetrics::displayCPU(sf::RenderWindow& window) {
     sf::Text text;
     static sf::Font font;
 
@@ -169,7 +167,7 @@ void GameMetrics::displayCPU(sf::RenderWindow& window)
 
     if (PdhCollectQueryData(cpuQuery) == ERROR_SUCCESS) {
         if (PdhGetFormattedCounterValue(cpuTotal, PDH_FMT_DOUBLE, NULL, &counterVal) == ERROR_SUCCESS) {
-             std::stringstream ss;
+            std::stringstream ss;
             ss << std::fixed << std::setprecision(2) << counterVal.doubleValue;
             std::string cpuUsage = "CPU Usage: " + ss.str() + " %";
             text.setString(cpuUsage);
@@ -186,16 +184,16 @@ void GameMetrics::displayCPU(sf::RenderWindow& window)
         fclose(fp);
 
         static long prevUser = 0, prevNice = 0, prevSystem = 0, prevIdle = 0;
-        long deltaUser = user - prevUser;
-        long deltaNice = nice - prevNice;
+        long deltaUser   = user - prevUser;
+        long deltaNice   = nice - prevNice;
         long deltaSystem = system - prevSystem;
-        long deltaIdle = idle - prevIdle;
-        long total = deltaUser + deltaNice + deltaSystem + deltaIdle;
-        float cpuUsage = 100.0f * (deltaUser + deltaNice + deltaSystem) / total;
-        prevUser = user;
-        prevNice = nice;
-        prevSystem = system;
-        prevIdle = idle;
+        long deltaIdle   = idle - prevIdle;
+        long total       = deltaUser + deltaNice + deltaSystem + deltaIdle;
+        float cpuUsage   = 100.0f * (deltaUser + deltaNice + deltaSystem) / total;
+        prevUser         = user;
+        prevNice         = nice;
+        prevSystem       = system;
+        prevIdle         = idle;
         std::stringstream ss;
         ss << std::fixed << std::setprecision(2) << cpuUsage;
         std::string cpuText = "CPU Usage: " + ss.str() + " %";
@@ -210,8 +208,7 @@ void GameMetrics::displayCPU(sf::RenderWindow& window)
     window.draw(text);
 }
 
-void GameMetrics::displayLatency(sf::RenderWindow& window, float& latency)
-{
+void GameMetrics::displayLatency(sf::RenderWindow& window, float& latency) {
     sf::Text text;
     static sf::Font font;
 
@@ -228,8 +225,7 @@ void GameMetrics::displayLatency(sf::RenderWindow& window, float& latency)
     window.draw(text);
 }
 
-void GameMetrics::displayPlayerPosition(sf::RenderWindow& window, sf::Vector2f pos)
-{
+void GameMetrics::displayPlayerPosition(sf::RenderWindow& window, sf::Vector2f pos) {
     sf::Text text;
     sf::Font font;
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
@@ -239,9 +235,8 @@ void GameMetrics::displayPlayerPosition(sf::RenderWindow& window, sf::Vector2f p
         return;
     }
     text.setFont(font);
-    text.setString("Player Position: (" +
-        std::to_string(static_cast<int>(pos.x)) + ", " +
-        std::to_string(static_cast<int>(pos.y)) + ")");
+    text.setString("Player Position: (" + std::to_string(static_cast<int>(pos.x)) + ", "
+                   + std::to_string(static_cast<int>(pos.y)) + ")");
     text.setFillColor(sf::Color::White);
     text.setPosition(0, 150);
     window.draw(text);

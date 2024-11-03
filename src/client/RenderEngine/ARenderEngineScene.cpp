@@ -7,14 +7,13 @@
 
 #include "ARenderEngineScene.hpp"
 
-RType::ARenderEngineScene::~ARenderEngineScene(){}
+RType::ARenderEngineScene::~ARenderEngineScene() {
+}
 
-void RType::ARenderEngineScene::setMediator(std::shared_ptr<RType::IMediator> mediator)
-{
+void RType::ARenderEngineScene::setMediator(std::shared_ptr<RType::IMediator> mediator) {
     _mediator = mediator;
 }
 
-void RType::ARenderEngineScene::sendStateChange(int newState)
-{
+void RType::ARenderEngineScene::sendStateChange(int newState) {
     _mediator->notify("RenderingEngine", "StateChange " + std::to_string(newState));
 }

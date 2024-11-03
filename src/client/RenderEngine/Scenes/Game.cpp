@@ -197,7 +197,7 @@ void RType::Game::play(float& latency) {
         displayPiou();
         piou = false;
     }
-    
+
     RenderTexture->display();
     sf::Sprite sprite(RenderTexture->getTexture());
     window->draw(sprite);
@@ -217,8 +217,9 @@ void RType::Game::play(float& latency) {
         }
         console->displayDeveloperConsole();
         toolbar.draw(*window);
+        displayEntitiesHealth(*window);
+        displayScore(*window);
     }
-    displayEntitiesHealth(*window);
     window->display();
 }
 
@@ -422,7 +423,8 @@ void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
         if (entityInfo.health.health > 0) {
             sf::Text hpText;
             hpText.setFont(hpFont);
-            hpText.setString(std::to_string(entityInfo.health.health) + "/" + std::to_string(entityInfo.health.maxHealth));
+            hpText.setString(std::to_string(entityInfo.health.health) + "/"
+                             + std::to_string(entityInfo.health.maxHealth));
             hpText.setCharacterSize(18);
             hpText.setFillColor(sf::Color::White);
 
@@ -432,3 +434,49 @@ void RType::Game::displayEntitiesHealth(sf::RenderWindow& win) {
     }
 }
 
+void RType::Game::displayScore(sf::RenderWindow& win) {
+    if (_camera == nullptr) return;
+
+    std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
+    sf::Font scoreFont;
+    if (!scoreFont.loadFromFile(fontPath)) {
+        std::cerr << "Failed to load font from path: " << fontPath << std::endl;
+        return;
+    }
+
+    const int characterSize = 38;
+    const float padding = 10.0f;
+    float totalWidth = 0.0f;
+    std::vector<sf::Text> scoreTexts;
+
+    sf::Text scoreTitle;
+    scoreTitle.setFont(scoreFont);
+    scoreTitle.setString("Score:");
+    scoreTitle.setCharacterSize(characterSize);
+    scoreTitle.setFillColor(sf::Color::White);
+
+    for (const auto& entityInfo : _camera->listEntityToDisplay) {
+        if (entityInfo.score.score > 0) {
+            sf::Text scoreText;
+            scoreText.setFont(scoreFont);
+            scoreText.setString(std::to_string(entityInfo.score.score));
+            scoreText.setCharacterSize(characterSize);
+            scoreText.setFillColor(sf::Color::White);
+            totalWidth += scoreText.getLocalBounds().width + padding;
+            scoreTexts.push_back(scoreText);
+        }
+    }
+
+    float startX = (win.getSize().x - totalWidth) / 2.0f;
+    float posY = 10.0f + scoreTitle.getLocalBounds().height + padding;
+
+    float titleX = (win.getSize().x - scoreTitle.getLocalBounds().width) / 2.0f;
+    scoreTitle.setPosition(titleX, 10.0f);
+    win.draw(scoreTitle);
+
+    for (auto& scoreText : scoreTexts) {
+        scoreText.setPosition(startX, posY);
+        win.draw(scoreText);
+        startX += scoreText.getLocalBounds().width + padding;
+    }
+}

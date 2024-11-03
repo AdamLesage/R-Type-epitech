@@ -19,7 +19,7 @@ namespace RType {
             /**
              * @brief Delete IError instance
              */
-            virtual ~IError() noexcept                         = default;
+            virtual ~IError() noexcept = default;
 
             /**
              * @brief Show the error message while catching the error
@@ -31,7 +31,7 @@ namespace RType {
              * @brief Show the location of the error while catching the error
              * @author Adam Lesage
              */
-            virtual const char* where() const noexcept         = 0;
+            virtual const char* where() const noexcept = 0;
 
         protected:
     }; // class IError

@@ -32,6 +32,8 @@ RType::GameEngine::GameEngine() {
     _registry.register_component<Direction>();
     _registry.register_component<Annimation>();
     _registry.register_component<Name>();
+    _registry.register_component<Score>();
+    _registry.register_component<ScoreValue>();
 
     std::string protocolPath = std::string("config") + PATH_SEPARATOR + std::string("protocol_config.cfg");
     _protocolParsing         = std::make_unique<ProtocolParsing>(protocolPath, _registry);
@@ -146,12 +148,13 @@ void RType::GameEngine::updateCamera() {
     auto& directions = this->_registry.get_components<Direction>();
     auto& sprites    = this->_registry.get_components<Sprite>();
     auto& healths    = this->_registry.get_components<Health_s>();
+    auto& scores     = this->_registry.get_components<Score>();
 
     std::vector<EntityRenderInfo> entityRender;
     entityRender.reserve(
         std::min({positions.size(), sizes.size(), rotations.size(), sprites.size(), healths.size()}));
     for (size_t i = 0; i < positions.size() && i < sizes.size() && i < directions.size()
-                       && i < rotations.size() && i < sprites.size() && i < healths.size();
+                       && i < rotations.size() && i < sprites.size() && i < healths.size() && i < scores.size();
          ++i) {
         auto& position  = positions[i];
         auto& size      = sizes[i];
@@ -159,11 +162,12 @@ void RType::GameEngine::updateCamera() {
         auto& sprite    = sprites[i];
         auto& direction = directions[i];
         auto& health    = healths[i];
+        auto& score     = scores[i];
 
         try {
-            if (position && size && rotation && sprite && direction && health) {
+            if (position && size && rotation && sprite && direction && health && score) {
                 entityRender.push_back({size.value(), position.value(), rotation.value(), direction.value(),
-                                        sprite.value(), health.value()});
+                                        sprite.value(), health.value(), score.value()});
             }
         } catch (const std::exception& e) {
             std::cerr << e.what() << '\n';

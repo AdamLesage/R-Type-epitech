@@ -37,10 +37,12 @@ namespace RType {
 
             /**
              * @brief Set the string for the game selected
-             * 
+             *
              * @param gameSelected the game selected
              */
-            void setGameSelected(const std::string& gameSelected) override { _gameSelected = gameSelected; }
+            void setGameSelected(const std::string& gameSelected) override {
+                _gameSelected = gameSelected;
+            }
 
         protected:
             /**
@@ -89,8 +91,8 @@ namespace RType {
              * This function is responsible for manage notify from ProtocolParsing
              *
              * @param sender The sender of the event.
-            * @param event The event to notify.
-            */
+             * @param event The event to notify.
+             */
             void notifyProtocolParsing(std::string sender, const std::string& event);
 
         private:

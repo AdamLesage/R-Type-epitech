@@ -34,7 +34,7 @@ RType::Menu::Menu(std::shared_ptr<sf::RenderWindow> wndw) {
         menuOptions[i].setString(optionsText[i]);
         menuOptions[i].setPosition(sf::Vector2f(200, 300 + i * 100));
     }
-    selectedOption = 0;
+    selectedOption         = 0;
     std::string shaderPath = std::string("assets") + PATH_SEPARATOR + "shaders" + PATH_SEPARATOR;
     if (!colorblindShader[0].loadFromFile(shaderPath + "Deuteranopia_shader.frag", sf::Shader::Fragment)) {
         std::cerr << "Error loading deuteranopia shader" << std::endl;
@@ -67,6 +67,8 @@ void RType::Menu::draw() {
     for (int i = 0; i < 3; ++i) {
         RenderTexture.draw(menuOptions[i]);
     }
+    displayLastScores();
+    displayHighscores();
 }
 
 void RType::Menu::moveUp() {
@@ -92,10 +94,8 @@ int RType::Menu::getSelectedOption() const {
 }
 
 void RType::Menu::adjustVolume(bool increase) {
-    if (increase)
-        _mediator->notify("RenderingEngine", "adjustVolume True");
-    if (!increase)
-        _mediator->notify("RenderingEngine", "adjustVolume False");
+    if (increase) _mediator->notify("RenderingEngine", "adjustVolume True");
+    if (!increase) _mediator->notify("RenderingEngine", "adjustVolume False");
 }
 
 void RType::Menu::handleKeyPress(const sf::Event& event) {
@@ -174,7 +174,7 @@ void RType::Menu::displaySubtitles() {
     RenderTexture.draw(subtitle);
 }
 
-void RType::Menu::runScene(float &latency) {
+void RType::Menu::runScene(float& latency) {
     (void)latency;
     sf::Event event;
     while (window->pollEvent(event)) {
@@ -182,7 +182,6 @@ void RType::Menu::runScene(float &latency) {
             window->close();
         }
         handleKeyPress(event);
-
         if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
             case sf::Keyboard::Up:
@@ -229,7 +228,7 @@ void RType::Menu::runScene(float &latency) {
     }
     RenderTexture.display();
     sf::Sprite sprite(RenderTexture.getTexture());
-        std::string colorblind = settings->get_key_value(cfg, "Keys8");
+    std::string colorblind = settings->get_key_value(cfg, "Keys8");
     if (colorblind.find("Deuteranopia") != std::string::npos) {
         window->draw(sprite, &colorblindShader[0]);
     } else if (colorblind.find("Protanopia") != std::string::npos) {
@@ -243,4 +242,84 @@ void RType::Menu::runScene(float &latency) {
     }
     window->display();
     // return (0);
+}
+
+void RType::Menu::displayHighscores() {
+    ScoresParser scoresParser;
+    std::map<std::string, size_t> highscores = scoresParser.getHighscores();
+
+    if (highscores.empty()) {
+        highscores["No highscores yet"] = 0;
+    }
+
+    int screenWidth   = RenderTexture.getSize().x;
+    int baseYPosition = RenderTexture.getSize().y / 2 - 300;
+
+    sf::Text highScoresTitle;
+    highScoresTitle.setFont(font);
+    highScoresTitle.setString("Highscores:");
+    highScoresTitle.setCharacterSize(48);
+    highScoresTitle.setFillColor(sf::Color::Red);
+    highScoresTitle.setStyle(sf::Text::Bold);
+
+    float titleWidth = highScoresTitle.getLocalBounds().width;
+    highScoresTitle.setPosition(screenWidth - titleWidth - 100, baseYPosition);
+
+    RenderTexture.draw(highScoresTitle);
+
+    int i           = 0;
+    int scoreStartY = baseYPosition + 70;
+    for (const auto& [name, value] : highscores) {
+        sf::Text score;
+        score.setFont(font);
+        score.setString(name + ": " + std::to_string(value));
+        score.setCharacterSize(36);
+        score.setFillColor(sf::Color::White);
+
+        float scoreWidth = score.getLocalBounds().width;
+        score.setPosition(screenWidth - scoreWidth - 100, scoreStartY + i * 50);
+
+        RenderTexture.draw(score);
+        i++;
+    }
+}
+
+void RType::Menu::displayLastScores() {
+    ScoresParser scoresParser;
+    std::map<std::string, size_t> latestScores = scoresParser.getLatestScores();
+
+    if (latestScores.empty()) {
+        latestScores["No scores yet"] = 0;
+    }
+
+    int screenWidth   = RenderTexture.getSize().x;
+    int baseYPosition = RenderTexture.getSize().y / 2 - 50;
+
+    sf::Text lastScoresTitle;
+    lastScoresTitle.setFont(font);
+    lastScoresTitle.setString("Last scores:");
+    lastScoresTitle.setCharacterSize(48);
+    lastScoresTitle.setFillColor(sf::Color::Red);
+    lastScoresTitle.setStyle(sf::Text::Bold);
+
+    float titleWidth = lastScoresTitle.getLocalBounds().width;
+    lastScoresTitle.setPosition(screenWidth - titleWidth - 100, baseYPosition);
+
+    RenderTexture.draw(lastScoresTitle);
+
+    int i           = 0;
+    int scoreStartY = baseYPosition + 60;
+    for (const auto& [name, value] : latestScores) {
+        sf::Text score;
+        score.setFont(font);
+        score.setString(name + ": " + std::to_string(value));
+        score.setCharacterSize(36);
+        score.setFillColor(sf::Color::White);
+
+        float scoreWidth = score.getLocalBounds().width;
+        score.setPosition(screenWidth - scoreWidth - 100, scoreStartY + i * 25);
+
+        RenderTexture.draw(score);
+        i++;
+    }
 }

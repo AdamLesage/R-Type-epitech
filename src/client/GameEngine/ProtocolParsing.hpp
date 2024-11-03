@@ -22,6 +22,7 @@
 #include "../../shared/components/Name.hpp"
 #include "../../shared/components/Sprite.hpp"
 #include "../../shared/assetEditorParsing/AssetEditorParsing.hpp"
+#include "../../shared/components/Score.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -188,7 +189,8 @@ namespace RType {
             bool parseStateChange(const std::string& message, int& index);
 
             /**
-             * @brief Parses and validates a level update message, adjusting the index and handling level-based actions.
+             * @brief Parses and validates a level update message, adjusting the index and handling
+             * level-based actions.
              *
              * @param message Reference to the level update message string.
              * @param index Reference to the current parsing position in the message.
@@ -218,7 +220,9 @@ namespace RType {
              *
              * @return float
              */
-            float getLatency() const { return _latency; }
+            float getLatency() const {
+                return _latency;
+            }
 
             /**
              * @brief Set the mediator for component communication.
@@ -230,11 +234,12 @@ namespace RType {
             void setMediator(std::shared_ptr<IMediator> mediator);
             /**
              * @brief Set the game selected by the client.
-             * 
+             *
              * @param gameSelected The game selected by the client.
              * @return void
              */
             void setGameSelected(const std::string& gameSelected);
+
         protected:
             /**
              * @brief Check if the message type is valid and if its values are valid.
@@ -253,9 +258,10 @@ namespace RType {
              */
             int updateIndexFromBinaryData(const std::string& message, int& index);
             /**
-             * 
+             *
              */
             void loadAssetCfgEditorParsing(size_t level);
+
         private:
             // Variables
             std::unique_ptr<AssetEditorParsing> _assetEditorParsing;
@@ -266,8 +272,7 @@ namespace RType {
             Registry& _registry; // Will be used to update the game engine data
             float _latency;
             std::shared_ptr<IMediator> _mediator;
-             libconfig::Config _gameConfig;
-
+            libconfig::Config _gameConfig;
     };
 } // namespace RType
 

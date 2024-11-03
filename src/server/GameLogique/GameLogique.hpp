@@ -21,6 +21,7 @@
 #include "./NetworkSender.hpp"
 #include "../../shared/utils/Logger.hpp"
 #include <memory>
+#include "../../shared/components/ScoreValue.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
 #define PATH_SEPARATOR "\\"
@@ -50,12 +51,13 @@ class GameLogique {
          */
         bool areAllPlayersDead();
 
-                /**
+        /**
          * @brief Check if friendly fire is enabled by reading the configuration file key.cfg.
          *
          * @return true if friendly fire is enabled, false otherwise.
          */
         bool getfriendlyfire();
+
     protected:
     private:
         Registry reg;
@@ -109,7 +111,7 @@ class GameLogique {
 
         /**
          * @brief handle the change of level
-         * 
+         *
          */
         void handleChangeLevel(unsigned int);
 
@@ -141,8 +143,8 @@ class GameLogique {
         libconfig::Config _gameConfig;
         libconfig::Config _levelConfig;
         std::unique_ptr<AssetEditorParsing> assetEditorParsing;
-        bool ennemyAlive = true;
-        float _camera_x = 1920;
+        bool ennemyAlive           = true;
+        float _camera_x            = 1920;
         unsigned int _currentLevel = 0;
 };
 

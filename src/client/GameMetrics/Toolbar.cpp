@@ -7,11 +7,11 @@
 
 #include "Toolbar.hpp"
 
-Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false), showGpu(false),
-    showNetwork(false), showPlayerPos(false), isVisible(false), dropdownOpen(false)
-{
+Toolbar::Toolbar()
+    : showFps(false), showMemory(false), showCpu(false), showGpu(false), showNetwork(false),
+      showPlayerPos(false), isVisible(false), dropdownOpen(false) {
     toolbarShape.setSize({1920, 50});
-    toolbarShape.setFillColor(sf::Color(50,50,50));
+    toolbarShape.setFillColor(sf::Color(50, 50, 50));
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
@@ -27,14 +27,12 @@ Toolbar::Toolbar() : showFps(false), showMemory(false), showCpu(false), showGpu(
     initializeMenuOptions();
 }
 
-Toolbar::~Toolbar()
-{
+Toolbar::~Toolbar() {
 }
 
-void Toolbar::initializeMenuOptions()
-{
-    optionSelected = {{"FPS", false}, {"CPU Usage", false}, {"GPU Usage", false},
-        {"RAM", false}, {"World Position", false}, {"Network", false}};
+void Toolbar::initializeMenuOptions() {
+    optionSelected = {{"FPS", false}, {"CPU Usage", false},      {"GPU Usage", false},
+                      {"RAM", false}, {"World Position", false}, {"Network", false}};
     sf::Text fpsOption("FPS", font, 25);
     fpsOption.setFillColor(sf::Color::White);
     fpsOption.setPosition(20, 50);
@@ -54,21 +52,19 @@ void Toolbar::initializeMenuOptions()
     networkOption.setFillColor(sf::Color::White);
     networkOption.setPosition(20, 200);
 
-    menuOptions["FPS"] = fpsOption;
-    menuOptions["CPU Usage"] = cpuOption;
-    menuOptions["GPU Usage"] = gpuOption;
-    menuOptions["RAM"] = ramOption;
+    menuOptions["FPS"]            = fpsOption;
+    menuOptions["CPU Usage"]      = cpuOption;
+    menuOptions["GPU Usage"]      = gpuOption;
+    menuOptions["RAM"]            = ramOption;
     menuOptions["World position"] = posOption;
-    menuOptions["Network"] = networkOption;
+    menuOptions["Network"]        = networkOption;
 }
 
-void Toolbar::open()
-{
+void Toolbar::open() {
     isVisible = !isVisible;
 }
 
-void Toolbar::updateHoveredOption(sf::RenderWindow& window)
-{
+void Toolbar::updateHoveredOption(sf::RenderWindow& window) {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
     hoveredOpt.clear();
@@ -79,8 +75,7 @@ void Toolbar::updateHoveredOption(sf::RenderWindow& window)
     }
 }
 
-void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window)
-{
+void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window) {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F3) {
         if (dropdownOpen) {
             dropdownOpen = false;
@@ -114,8 +109,7 @@ void Toolbar::handleEvent(const sf::Event& event, sf::RenderWindow& window)
     }
 }
 
-void Toolbar::displayMetrics(const std::string optionName)
-{
+void Toolbar::displayMetrics(const std::string optionName) {
     if (optionName == "FPS") {
         showFps = optionSelected[optionName];
     }
@@ -136,8 +130,7 @@ void Toolbar::displayMetrics(const std::string optionName)
     }
 }
 
-void Toolbar::draw(sf::RenderWindow& window)
-{
+void Toolbar::draw(sf::RenderWindow& window) {
     if (isVisible) {
         window.draw(toolbarShape);
         window.draw(text);

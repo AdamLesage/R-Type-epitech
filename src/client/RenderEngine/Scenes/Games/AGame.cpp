@@ -7,36 +7,29 @@
 
 #include "AGame.hpp"
 
-RType::AGame::AGame()
-{
+RType::AGame::AGame() {
     _isJumping = false;
 }
 
-RType::AGame::~AGame()
-{
+RType::AGame::~AGame() {
 }
 
-void RType::AGame::jump()
-{
+void RType::AGame::jump() {
 }
 
-void RType::AGame::applyGravity()
-{
+void RType::AGame::applyGravity() {
 }
 
-void RType::AGame::setMediator(std::shared_ptr<IMediator> mediator)
-{
+void RType::AGame::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
 }
 
-void RType::AGame::gameOver()
-{
+void RType::AGame::gameOver() {
     if (_mediator == nullptr) return; // Invalid mediator
 
     _mediator->notify("RenderingEngine", "Game over offline");
 }
 
-void RType::AGame::resetGame()
-{
+void RType::AGame::resetGame() {
     this->_camera->listEntityToDisplay.clear();
 }

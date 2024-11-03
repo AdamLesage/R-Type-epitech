@@ -126,8 +126,8 @@ bool RType::ProtocolParsing::parsePlayerCreation(const std::string& message, int
         _registry.add_component<Size>(entity, Size{130, 80});
         _registry.add_component<Type>(entity, Type{EntityType::PLAYER});
         _registry.add_component<Direction>(entity, Direction{1, 0});
-        std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_"
-                           + std::to_string(playerId + 1) + ".png";
+        _registry.add_component<Score>(entity, Score{0});
+        std::string path = std::string("assets") + PATH_SEPARATOR + "player" + PATH_SEPARATOR + "player_" + std::to_string(playerId + 1) + ".png";
         _registry.add_component<Sprite>(entity, Sprite{path, {263, 116}, {0, 0}});
         this->updateIndexFromBinaryData("player_creation", index);
     } catch (const std::exception& e) {
@@ -143,7 +143,7 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
     if (message.length() - index < 13) {
         return false;
     }
-    std::shared_ptr<EntityData> &data = _assetEditorParsing->getEntityData(message[index]);
+    std::shared_ptr<EntityData>& data = _assetEditorParsing->getEntityData(message[index]);
     if (data == nullptr) {
         return false;
     }
@@ -169,19 +169,24 @@ bool RType::ProtocolParsing::parseEntityCreation(const std::string& message, int
             _registry.add_component<Size>(entity, Size{data->size->x, data->size->y});
         }
         if (data->sprite != nullptr) {
-            _registry.add_component<Sprite>(entity, Sprite{data->sprite->spritePath, {data->sprite->rectSize[0], data->sprite->rectSize[1]}, {data->sprite->rectPos[0], data->sprite->rectPos[1]}});
+            _registry.add_component<Sprite>(entity,
+                                            Sprite{data->sprite->spritePath,
+                                                   {data->sprite->rectSize[0], data->sprite->rectSize[1]},
+                                                   {data->sprite->rectPos[0], data->sprite->rectPos[1]}});
         }
         if (data->rotation != nullptr) {
             _registry.add_component<Rotation>(entity, Rotation{data->rotation->rotation});
         }
         if (data->annimation != nullptr) {
-            _registry.add_component<Annimation>(entity, Annimation{data->annimation->annimationSpeed ,data->annimation->annimation, 0, std::chrono::steady_clock::now()});
+            _registry.add_component<Annimation>(entity, Annimation{data->annimation->annimationSpeed,
+                                                                   data->annimation->annimation, 0,
+                                                                   std::chrono::steady_clock::now()});
         }
         if (data->type != nullptr) {
             _registry.add_component<Type>(entity, Type{data->type->type});
         }
         _registry.add_component<Direction>(entity, Direction{-1, 0});
-
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the player" << std::endl;
@@ -219,6 +224,7 @@ bool RType::ProtocolParsing::parseProjectileCreation(const std::string& message,
         _registry.add_component<Size>(entity, Size{70, 30});
         _registry.add_component<Direction>(entity, Direction{0, 0});
         _registry.add_component<Rotation>(entity, Rotation{0});
+        _registry.add_component<Score>(entity, Score{0});
         std::string path =
             std::string("assets") + PATH_SEPARATOR + "bullet" + PATH_SEPARATOR + "missile_1.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {71, 32}, {0, 0}});
@@ -261,6 +267,7 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
         _registry.add_component<Direction>(entity, Direction{-1, 0});
         std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "enemy_2.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {33, 36}, {0, 0}});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("enemy_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the enemy" << std::endl;
@@ -269,7 +276,6 @@ bool RType::ProtocolParsing::parseEnemyCreation(const std::string& message, int&
 
     return true;
 }
-
 
 bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& index) {
     if (!checkMessageType("BOSS_CREATION", message, index)) return false;
@@ -292,15 +298,18 @@ bool RType::ProtocolParsing::parseBossCreation(const std::string& message, int& 
         _registry.add_component<Position>(entity, Position{posX, posY});
         _registry.add_component<Tag>(entity, Tag{"boss"});
         _registry.add_component<Scale>(entity, Scale{1});
-        _registry.add_component<Health>(entity, Health{100, 100, false, false}); // We can destroy the boss with a projectile
+        _registry.add_component<Health>(
+            entity, Health{100, 100, false, false}); // We can destroy the boss with a projectile
         _registry.add_component<Damage>(entity, Damage{10});
         _registry.add_component<Level>(entity, Level{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Size>(entity, Size{325, 125});
         _registry.add_component<Direction>(entity, Direction{-1, 0});
-        std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "boss" + PATH_SEPARATOR + "boss_2.png";
+        std::string path = std::string("assets") + PATH_SEPARATOR + "ennemy" + PATH_SEPARATOR + "boss"
+                           + PATH_SEPARATOR + "boss_2.png";
         _registry.add_component<Sprite>(entity, Sprite{path, {1300, 500}, {0, 0}});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("boss_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the boss" << std::endl;
@@ -333,6 +342,7 @@ bool RType::ProtocolParsing::parseBonusCreation(const std::string& message, int&
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("bonus_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the bonus" << std::endl;
@@ -371,6 +381,7 @@ bool RType::ProtocolParsing::parseWallCreation(const std::string& message, int& 
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
         _registry.add_component<Health>(
             entity, Health{100, 100, false, false}); // We can destroy the wall with a projectile
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("wall_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the wall" << std::endl;
@@ -407,6 +418,7 @@ bool RType::ProtocolParsing::parseRewardCreation(const std::string& message, int
         _registry.add_component<Scale>(entity, Scale{1});
         _registry.add_component<Rotation>(entity, Rotation{0});
         _registry.add_component<Velocity>(entity, Velocity{0, 0});
+        _registry.add_component<Score>(entity, Score{0});
         this->updateIndexFromBinaryData("reward_creation", index);
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while creating the reward" << std::endl;
@@ -420,9 +432,11 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
     if (!checkMessageType("ENTITY_DELETION", message, index)) return false;
 
     int entityId;
+    size_t extraData;
 
     try {
         std::memcpy(&entityId, &message[index + 1], sizeof(int));
+        std::memcpy(&extraData, &message[index + 1 + sizeof(int)], sizeof(size_t));
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while parsing the entity deletion message" << std::endl;
         return false;
@@ -431,6 +445,21 @@ bool RType::ProtocolParsing::parseEntityDeletion(const std::string& message, int
     try {
         entity_t entity = _registry.entity_from_index(entityId);
         _registry.kill_entity(entity);
+
+        auto& scoreComponents = _registry.get_components<Score>();
+        auto& typeComponents = _registry.get_components<Type>();
+
+        for (size_t i = 0; i < scoreComponents.size(); ++i) {
+            if (!scoreComponents[i].has_value() || extraData == 0)
+                continue;
+
+            if (typeComponents[i] && typeComponents[i]->type == EntityType::PLAYER) {
+                Score& score = scoreComponents[i].value();
+                score.score += extraData;
+                std::cout << "Score updated for PLAYER entity: " << score.score << std::endl;
+            }
+        }
+
         this->updateIndexFromBinaryData("entity_deletion", index);
     } catch (const std::out_of_range& e) {
         std::cerr << "Entity not found for deletion" << std::endl;
@@ -739,15 +768,15 @@ bool RType::ProtocolParsing::parsePingClient(const std::string& message, int& in
 
     std::string timeCode(&message[index + 1], message.size() - index - 1);
 
-    auto now = std::chrono::system_clock::now();
+    auto now          = std::chrono::system_clock::now();
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
 
     std::tm localtm;
-#ifdef _WIN32
-    gmtime_s(&localtm, &now_c);
-#else
-    gmtime_r(&now_c, &localtm);
-#endif
+    #ifdef _WIN32
+        gmtime_s(&localtm, &now_c);
+    #else
+        gmtime_r(&now_c, &localtm);
+    #endif
 
     char buffer[100];
     std::strftime(buffer, sizeof(buffer), "%d/%H/%M/%S", &localtm);
@@ -796,7 +825,8 @@ void RType::ProtocolParsing::setMediator(std::shared_ptr<IMediator> mediator) {
 
 void RType::ProtocolParsing::setGameSelected(const std::string& gameSelected) {
     try {
-        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + gameSelected + PATH_SEPARATOR + std::string("game_config.cfg");
+        std::string gameConfigPath = std::string("config") + PATH_SEPARATOR + gameSelected + PATH_SEPARATOR
+                                     + std::string("game_config.cfg");
         _gameConfig.readFile(gameConfigPath.c_str());
     } catch (const libconfig::FileIOException& fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
@@ -807,14 +837,13 @@ void RType::ProtocolParsing::setGameSelected(const std::string& gameSelected) {
     loadAssetCfgEditorParsing(0);
 }
 
-void RType::ProtocolParsing::loadAssetCfgEditorParsing(size_t level)
-{
+void RType::ProtocolParsing::loadAssetCfgEditorParsing(size_t level) {
     try {
-        libconfig::Setting &levelConfig = _gameConfig.lookup("Menu.Game.level")[level];
-        std::string cfgAssetEditorPath = levelConfig.lookup("sceneConfig");
-        size_t startPos = 0;
-        std::string from = "/";
-        while((startPos = cfgAssetEditorPath.find(from, startPos)) != std::string::npos) {
+        libconfig::Setting& levelConfig = _gameConfig.lookup("Menu.Game.level")[level];
+        std::string cfgAssetEditorPath  = levelConfig.lookup("sceneConfig");
+        size_t startPos                 = 0;
+        std::string from                = "/";
+        while ((startPos = cfgAssetEditorPath.find(from, startPos)) != std::string::npos) {
             cfgAssetEditorPath.replace(startPos, from.length(), PATH_SEPARATOR);
             startPos += 2;
         }
@@ -825,7 +854,7 @@ void RType::ProtocolParsing::loadAssetCfgEditorParsing(size_t level)
     } catch (const libconfig::ParseException& pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError()
                   << std::endl;
-    } catch (std::exception &e) {
+    } catch (std::exception& e) {
         std::cerr << "Parse error: " << e.what() << std::endl;
     }
 }

@@ -25,100 +25,114 @@
 
 namespace Edition {
     typedef struct SpriteDisplay_s {
-        std::unique_ptr<InputNumber> rectSizeX;
-        std::unique_ptr<InputNumber> rectSizeY;
-        std::unique_ptr<InputNumber> rectPosX;
-        std::unique_ptr<InputNumber> rectPosY;
+            std::unique_ptr<InputNumber> rectSizeX;
+            std::unique_ptr<InputNumber> rectSizeY;
+            std::unique_ptr<InputNumber> rectPosX;
+            std::unique_ptr<InputNumber> rectPosY;
 
-        void initialize(std::array<int, 2> rectSize, std::array<int, 2> rectPos) {
-            this->rectSizeX = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Rect Size X: ");
-            this->rectSizeX->setInput(std::to_string(rectSize[0]));
-            this->rectSizeY = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460 + 200, 200), "Y: ");
-            this->rectSizeY->setInput(std::to_string(rectSize[1]));
+            void initialize(std::array<int, 2> rectSize, std::array<int, 2> rectPos) {
+                this->rectSizeX = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200),
+                                                                "Rect Size X: ");
+                this->rectSizeX->setInput(std::to_string(rectSize[0]));
+                this->rectSizeY =
+                    std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460 + 200, 200), "Y: ");
+                this->rectSizeY->setInput(std::to_string(rectSize[1]));
 
-            this->rectPosX = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Rect pos X: ");
-            this->rectPosX->setInput(std::to_string(rectPos[0]));
-            this->rectPosY = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460 + 200, 200), "Y: ");
-            this->rectPosY->setInput(std::to_string(rectPos[1]));
-        }
+                this->rectPosX = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200),
+                                                               "Rect pos X: ");
+                this->rectPosX->setInput(std::to_string(rectPos[0]));
+                this->rectPosY =
+                    std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460 + 200, 200), "Y: ");
+                this->rectPosY->setInput(std::to_string(rectPos[1]));
+            }
     } SpriteDisplay;
 
     typedef struct HealthDisplay_s {
-        std::unique_ptr<InputNumber> health;
+            std::unique_ptr<InputNumber> health;
 
-        void initialize(int healthValue) {
-            this->health = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "hp: ");
-            this->health->setInput(std::to_string(healthValue));
-        }
+            void initialize(int healthValue) {
+                this->health =
+                    std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "hp: ");
+                this->health->setInput(std::to_string(healthValue));
+            }
     } HealthDisplay;
 
     typedef struct ShootStraightPatternDisplay_s {
-        std::unique_ptr<InputNumber> projectileSpeed;
-        std::unique_ptr<InputNumber> shootCooldown;
-        void initialize(int speed, int cooldown) {
-            this->projectileSpeed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
-            this->projectileSpeed->setInput(std::to_string(speed));
-            this->shootCooldown = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Cooldown: ");
-            this->shootCooldown->setInput(std::to_string(cooldown));
-        }
+            std::unique_ptr<InputNumber> projectileSpeed;
+            std::unique_ptr<InputNumber> shootCooldown;
+            void initialize(int speed, int cooldown) {
+                this->projectileSpeed =
+                    std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+                this->projectileSpeed->setInput(std::to_string(speed));
+                this->shootCooldown = std::make_unique<InputNumber>(sf::Vector2f(70, 40),
+                                                                    sf::Vector2f(1460, 200), "Cooldown: ");
+                this->shootCooldown->setInput(std::to_string(cooldown));
+            }
     } ShootStraightPatternDisplay;
 
     typedef struct ShootPlayerPatternDisplay_s {
-        std::unique_ptr<InputNumber> projectileSpeed;
-        std::unique_ptr<InputNumber> shootCooldown;
-        void initialize(int speed, int cooldown) {
-            this->projectileSpeed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
-            this->projectileSpeed->setInput(std::to_string(speed));
-            this->shootCooldown = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Cooldown: ");
-            this->shootCooldown->setInput(std::to_string(cooldown));
-        }
+            std::unique_ptr<InputNumber> projectileSpeed;
+            std::unique_ptr<InputNumber> shootCooldown;
+            void initialize(int speed, int cooldown) {
+                this->projectileSpeed =
+                    std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+                this->projectileSpeed->setInput(std::to_string(speed));
+                this->shootCooldown = std::make_unique<InputNumber>(sf::Vector2f(70, 40),
+                                                                    sf::Vector2f(1460, 200), "Cooldown: ");
+                this->shootCooldown->setInput(std::to_string(cooldown));
+            }
     } ShootPlayerPatternDisplay;
 
     typedef struct PlayerFollowingPatternDisplay_s {
-        std::unique_ptr<InputNumber> speed;
-        void initialize(int speedValue) {
-            this->speed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
-            this->speed->setInput(std::to_string(speedValue));
-        }
+            std::unique_ptr<InputNumber> speed;
+            void initialize(int speedValue) {
+                this->speed =
+                    std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+                this->speed->setInput(std::to_string(speedValue));
+            }
     } PlayerFollowingPatternDisplay;
 
     typedef struct StraightLinePatternDisplay_s {
-        std::unique_ptr<InputNumber> speed;
-        void initialize(int speedValue) {
-            this->speed = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
-            this->speed->setInput(std::to_string(speedValue));
-        }
+            std::unique_ptr<InputNumber> speed;
+            void initialize(int speedValue) {
+                this->speed =
+                    std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "Speed: ");
+                this->speed->setInput(std::to_string(speedValue));
+            }
     } StraightLinePatternDisplay;
 
     typedef struct Wave_patternDisplay_s {
-        std::unique_ptr<InputNumber> amplitude;
-        std::unique_ptr<InputNumber> frequency;
-        void initialize(float amp, float freq) {
-            this->amplitude = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "amplitude: ");
-            std::ostringstream oss;
-            oss << std::fixed << std::setprecision(2) << amp;
-            this->amplitude->setInput(oss.str(
-            ));
-            oss.str("");
-            oss << std::fixed << std::setprecision(2) << freq;
-            this->frequency = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200), "fequency: ");
-            this->frequency->setInput(oss.str());
-        }
+            std::unique_ptr<InputNumber> amplitude;
+            std::unique_ptr<InputNumber> frequency;
+            void initialize(float amp, float freq) {
+                this->amplitude = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200),
+                                                                "amplitude: ");
+                std::ostringstream oss;
+                oss << std::fixed << std::setprecision(2) << amp;
+                this->amplitude->setInput(oss.str());
+                oss.str("");
+                oss << std::fixed << std::setprecision(2) << freq;
+                this->frequency = std::make_unique<InputNumber>(sf::Vector2f(70, 40), sf::Vector2f(1460, 200),
+                                                                "fequency: ");
+                this->frequency->setInput(oss.str());
+            }
     } Wave_patternDisplay;
     typedef struct TypeDisplay_s {
-        std::unique_ptr<SelectButton> type;
+            std::unique_ptr<SelectButton> type;
 
-        void initialize() {
-            std::vector<std::string> option({"PLAYER", "ENEMY", "PLAYER_PROJECTILE", "ENEMY_PROJECTILE", "BACKGROUND", "OBSTACLE", "POWERUP"});
-            this->type = std::make_unique<SelectButton>(sf::Vector2f(1460, 400), sf::Vector2f(300, 50), option);
-        }
+            void initialize() {
+                std::vector<std::string> option({"PLAYER", "ENEMY", "PLAYER_PROJECTILE", "ENEMY_PROJECTILE",
+                                                 "BACKGROUND", "OBSTACLE", "POWERUP"});
+                this->type =
+                    std::make_unique<SelectButton>(sf::Vector2f(1460, 400), sf::Vector2f(300, 50), option);
+            }
     } TypeDisplay;
     /**
      * @brief A class used for editing the attributes of assets.
-     * 
-     * The ComponentsEditor class provides functionality to modify 
-     * various properties of an asset, such as size, position, and pattern. 
-     * It interacts with the user to update the selected entity and renders 
+     *
+     * The ComponentsEditor class provides functionality to modify
+     * various properties of an asset, such as size, position, and pattern.
+     * It interacts with the user to update the selected entity and renders
      * the necessary UI components for asset editing.
      */
     class ComponentsEditor {
@@ -128,103 +142,113 @@ namespace Edition {
 
             /**
              * @brief Updates the currently selected asset with new attributes.
-             * 
+             *
              * @param asset The asset to be modified.
              */
             void updateSelectedEntity(std::shared_ptr<Edition::Asset> asset);
 
             /**
              * @brief Displays the editor UI on the provided window.
-             * 
+             *
              * @param window The render window where the UI is displayed.
              */
             void display(std::shared_ptr<sf::RenderWindow> window);
 
             /**
              * @brief Handles user input events for the editor.
-             * 
+             *
              * @param event The event to handle, typically user input such as keyboard or mouse actions.
              */
-            void handleInput(const sf::Event &event);
+            void handleInput(const sf::Event& event);
 
-            private:
+        private:
             /**
              * @brief Displays the title of a category in the specified position.
-             * 
+             *
              * @param window The render window where the title is displayed.
              * @param title The title text to be displayed.
              * @param posX The X coordinate for the position of the title.
              * @param posY The Y coordinate for the position of the title.
              */
-            void displayCategoryTitle(std::shared_ptr<sf::RenderWindow> window, std::string title, float posX, float posY);
+            void displayCategoryTitle(std::shared_ptr<sf::RenderWindow> window,
+                                      std::string title,
+                                      float posX,
+                                      float posY);
             /**
              * @brief Displays sprite properties including rectangle size and position.
-             * 
-             * This function renders input fields for the sprite's rectangle dimensions 
+             *
+             * This function renders input fields for the sprite's rectangle dimensions
              * (width and height) and its position (x and y) in the UI.
              *
              * @param window A shared pointer to the SFML render window.
              * @param posY A reference to an integer representing the vertical position for UI placement.
              */
-            void displaySprite(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displaySprite(std::shared_ptr<sf::RenderWindow> window, int& posY);
             /**
              * @brief Displays the health information in the specified position.
-             * 
+             *
              * @param window The render window where the health information is displayed.
-             * @param posY The reference to the Y coordinate where the health will be displayed and updated after rendering.
+             * @param posY The reference to the Y coordinate where the health will be displayed and updated
+             * after rendering.
              */
-            void displayHealth(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayHealth(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
-
-            void displayShootStraightPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayShootStraightPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
             /**
-             * @brief Displays the ShootPlayerPatternDisplay component, including projectile speed and shoot cooldown inputs.
-             * 
+             * @brief Displays the ShootPlayerPatternDisplay component, including projectile speed and shoot
+             * cooldown inputs.
+             *
              * @param window Shared pointer to the SFML RenderWindow.
-             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying
+             * the component.
              */
-            void displayShootPlayerPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayShootPlayerPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
             /**
              * @brief Displays the PlayerFollowingPatternDisplay component, including the speed input.
-             * 
+             *
              * @param window Shared pointer to the SFML RenderWindow.
-             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying
+             * the component.
              */
-            void displayPlayerFollowingPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayPlayerFollowingPatternDisplay(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
             /**
              * @brief Displays the StraightLinePatternDisplay component, including the speed input.
-             * 
+             *
              * @param window Shared pointer to the SFML RenderWindow.
-             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying
+             * the component.
              */
-            void displayStraightLinePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayStraightLinePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
             /**
              * @brief Displays the WavePatternDisplay component, including amplitude and frequency inputs.
-             * 
+             *
              * @param window Shared pointer to the SFML RenderWindow.
-             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying
+             * the component.
              */
-            void displayWavePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayWavePatternDisplay(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
             /**
-             * @brief Displays the TypeDisplay component, including a selection for the entity type (PLAYER, ENEMY, etc.).
-             * 
+             * @brief Displays the TypeDisplay component, including a selection for the entity type (PLAYER,
+             * ENEMY, etc.).
+             *
              * @param window Shared pointer to the SFML RenderWindow.
-             * @param posY Reference to the vertical position offset, which will be updated after displaying the component.
+             * @param posY Reference to the vertical position offset, which will be updated after displaying
+             * the component.
              */
-            void displayTypeDisplay(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayTypeDisplay(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
             /**
              * @brief Displays a UI option to add a component at a specified position.
-             * 
+             *
              * @param window The render window where the "Add Component" option is displayed.
              * @param posY The Y coordinate where the option will be displayed.
              */
-            void displayAddComponent(std::shared_ptr<sf::RenderWindow> window, int &posY);
+            void displayAddComponent(std::shared_ptr<sf::RenderWindow> window, int& posY);
 
             /**
              * @brief Adds a new component to the entity or object.
@@ -232,60 +256,67 @@ namespace Edition {
             void addComponent();
             /**
              * @brief Processes input for sprite size and position.
-             * 
+             *
              * Updates sprite properties based on user input events.
              *
              * @param event The SFML event to handle.
              */
-            void handleSpriteInput(const sf::Event &event);
+            void handleSpriteInput(const sf::Event& event);
             /**
              * @brief Handles user input for updating health values.
-             * 
-             * @param event The SFML event object representing user input events such as key presses or mouse actions.
+             *
+             * @param event The SFML event object representing user input events such as key presses or mouse
+             * actions.
              */
-            void handleHealthInput(const sf::Event &event);
+            void handleHealthInput(const sf::Event& event);
 
             /**
-             * @brief Handles input for the ShootStraightPattern component, updating the projectile speed and shoot cooldown based on user input.
-             * 
+             * @brief Handles input for the ShootStraightPattern component, updating the projectile speed and
+             * shoot cooldown based on user input.
+             *
              * @param event The SFML event capturing user input.
              */
-            void handleShootStraightPatternInput(const sf::Event &event);
+            void handleShootStraightPatternInput(const sf::Event& event);
 
             /**
-             * @brief Handles input for the ShootPlayerPattern component, updating the projectile speed and shoot cooldown based on user input.
-             * 
+             * @brief Handles input for the ShootPlayerPattern component, updating the projectile speed and
+             * shoot cooldown based on user input.
+             *
              * @param event The SFML event capturing user input.
              */
-            void handleShootPlayerPatternInput(const sf::Event &event);
+            void handleShootPlayerPatternInput(const sf::Event& event);
 
             /**
-             * @brief Handles input for the PlayerFollowingPattern component, updating the following speed based on user input.
-             * 
+             * @brief Handles input for the PlayerFollowingPattern component, updating the following speed
+             * based on user input.
+             *
              * @param event The SFML event capturing user input.
              */
-            void handlePlayerFollowingPatternInput(const sf::Event &event);
+            void handlePlayerFollowingPatternInput(const sf::Event& event);
 
             /**
-             * @brief Handles input for the StraightLinePattern component, updating the movement speed based on user input.
-             * 
+             * @brief Handles input for the StraightLinePattern component, updating the movement speed based
+             * on user input.
+             *
              * @param event The SFML event capturing user input.
              */
-            void handleStraightLinePatternInput(const sf::Event &event);
+            void handleStraightLinePatternInput(const sf::Event& event);
 
             /**
-             * @brief Handles input for the WavePattern component, updating the amplitude and frequency based on user input.
-             * 
+             * @brief Handles input for the WavePattern component, updating the amplitude and frequency based
+             * on user input.
+             *
              * @param event The SFML event capturing user input.
              */
-            void handleWavePatternInput(const sf::Event &event);
+            void handleWavePatternInput(const sf::Event& event);
 
             /**
-             * @brief Handles input for the Type component, updating the entity's type (e.g., PLAYER, ENEMY) based on user selection.
-             * 
+             * @brief Handles input for the Type component, updating the entity's type (e.g., PLAYER, ENEMY)
+             * based on user selection.
+             *
              * @param event The SFML event capturing user input.
              */
-            void handleTypeInput(const sf::Event &event);
+            void handleTypeInput(const sf::Event& event);
 
             std::shared_ptr<Edition::Asset> _asset;
             sf::Font font;
@@ -298,7 +329,13 @@ namespace Edition {
             int currentPosY;
             std::unique_ptr<SelectButton> componentSelection;
             sf::RectangleShape addButton;
-            std::vector<std::string> options = { "Health", "ShootStraightPattern", "ShootPlayerPattern", "PlayerFollowingPattern" , "StraightLinePattern", "Wave_pattern" ,"Type"};
+            std::vector<std::string> options = {"Health",
+                                                "ShootStraightPattern",
+                                                "ShootPlayerPattern",
+                                                "PlayerFollowingPattern",
+                                                "StraightLinePattern",
+                                                "Wave_pattern",
+                                                "Type"};
 
             std::unique_ptr<HealthDisplay> healthDisplay;
             std::unique_ptr<ShootStraightPatternDisplay> shootStraightPatternDisplay;
@@ -309,10 +346,10 @@ namespace Edition {
             std::unique_ptr<TypeDisplay> typeDisplay;
             std::unique_ptr<SpriteDisplay> spriteDisplay;
 
-            float scrollOffset = 0;
+            float scrollOffset      = 0;
             const float scrollSpeed = 20;
-            float maxScrollOffset = 0;
+            float maxScrollOffset   = 0;
     };
-}
+} // namespace Edition
 
 #endif /* !COMPONENTSEDITOR_HPP_ */

@@ -9,15 +9,16 @@
 #include <sstream>
 #include <regex>
 
-RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, std::shared_ptr<sf::RenderTexture> _RenderTexture) {
+RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window,
+                        std::shared_ptr<sf::RenderTexture> _RenderTexture) {
     _showDeveloperConsole = false;
 
     std::string fontPath = std::string("assets") + PATH_SEPARATOR + "r-type.ttf";
     if (!font.loadFromFile(fontPath)) {
         throw std::runtime_error("Error loading font");
     }
-    this->_typing = false;
-    this->window  = _window;
+    this->_typing       = false;
+    this->window        = _window;
     this->RenderTexture = _RenderTexture;
     _inputText.setFont(font);
     _inputText.setFillColor(sf::Color::White);
@@ -38,7 +39,7 @@ RType::Console::Console(std::shared_ptr<sf::RenderWindow> _window, std::shared_p
     FPS.setFont(font);
     FPS.setPosition(5, 5);
     show_fps = false;
-    }
+}
 
 RType::Console::~Console() {
 }
@@ -47,10 +48,9 @@ void RType::Console::setMediator(std::shared_ptr<IMediator> mediator) {
     _mediator = mediator;
 }
 
-void RType::Console::displayFPS()
-{
+void RType::Console::displayFPS() {
     float deltaTime = clock.restart().asSeconds();
-    fps = 1.0f / deltaTime;  // Calcul des FPS
+    fps             = 1.0f / deltaTime; // Calcul des FPS
     FPS.setString(std::to_string(fps));
     window->draw(FPS);
 }
@@ -60,15 +60,14 @@ void RType::Console::displayDeveloperConsole() {
         return;
 
     if (_typing) {
-    _inputText.setString("> " + _input + "|");
+        _inputText.setString("> " + _input + "|");
     } else {
         _inputText.setString("> " + _input);
     }
 
     this->displayContainer();
     this->displayCloseContainerButton();
-    if (show_fps)
-        displayFPS();
+    if (show_fps) displayFPS();
 }
 
 void RType::Console::toggleDeveloperConsoleFromEvent(sf::Event& _event) {
@@ -86,8 +85,8 @@ void RType::Console::displayContainer() {
 
     if (width < 900 || height < 800) return;
 
-    unsigned int consoleWidth  = width;
-    unsigned int consoleHeight = height * 0.36;
+    unsigned int consoleWidth          = width;
+    unsigned int consoleHeight         = height * 0.36;
     unsigned int secondContainerHeight = consoleHeight * 0.11;
 
     container.setSize(sf::Vector2f(consoleWidth, consoleHeight));
@@ -104,9 +103,7 @@ void RType::Console::displayContainer() {
     }
 }
 
-
-void RType::Console::checkClick()
-{
+void RType::Console::checkClick() {
     sf::Mouse mouse;
     sf::Vector2f mousPos;
     mousPos.x = mouse.getPosition(*this->window.get()).x;
@@ -119,7 +116,6 @@ void RType::Console::checkClick()
         }
     }
 }
-
 
 bool processEdit(const std::string& _input) {
     std::regex pattern("^edit_entity\\s+\\d+\\s+\\d+$");
@@ -137,8 +133,7 @@ bool processEdit(const std::string& _input) {
     return false;
 }
 
-bool RType::Console::isCommand()
-{
+bool RType::Console::isCommand() {
     if (_input == "clear") {
         History.clear();
         return true;
@@ -155,8 +150,7 @@ bool RType::Console::isCommand()
         _mediator->notify("RenderingEngine", _input);
         return true;
     }
-    if (processEdit(_input))
-        return true;
+    if (processEdit(_input)) return true;
     if (_input == "show_fps") {
         show_fps = true;
         return true;
@@ -190,13 +184,11 @@ bool RType::Console::isCommand()
     return false;
 }
 
-bool RType::Console::checkInput()
-{
-    checkClick();  // Check if the user clicked inside the input box
+bool RType::Console::checkInput() {
+    checkClick(); // Check if the user clicked inside the input box
     if (this->_typing == true) {
         while (this->window.get()->pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window->close();
+            if (event.type == sf::Event::Closed) window->close();
             if (event.type == sf::Event::TextEntered) {
                 if (event.text.unicode == 8) {
                     if (!_input.empty()) {
@@ -239,8 +231,7 @@ bool RType::Console::checkInput()
                             _input.clear();
                         }
                     }
-                }
-                else if (event.text.unicode >= 32 && event.text.unicode <= 126) {
+                } else if (event.text.unicode >= 32 && event.text.unicode <= 126) {
                     _input.push_back(static_cast<char>(event.text.unicode));
                 }
                 if (_typing) {
@@ -255,12 +246,11 @@ bool RType::Console::checkInput()
     return false;
 }
 
-
 void RType::Console::displayCloseContainerButton() {
     unsigned int width  = window->getSize().x;
     unsigned int height = window->getSize().y;
     if (width < 800 || height < 600) return;
-    unsigned int consoleWidth  = width;
+    unsigned int consoleWidth = width;
     unsigned int closeBtnSize = 20;
     unsigned int closeBtnPosX = consoleWidth - closeBtnSize;
     sf::RectangleShape closeBtn(sf::Vector2f(closeBtnSize, closeBtnSize));

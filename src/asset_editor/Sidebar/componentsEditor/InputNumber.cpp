@@ -7,8 +7,8 @@
 
 #include "InputNumber.hpp"
 
-Edition::InputNumber::InputNumber(sf::Vector2f size, sf::Vector2f pos, std::string title) : Input(size,pos, title)
-{
+Edition::InputNumber::InputNumber(sf::Vector2f size, sf::Vector2f pos, std::string title)
+    : Input(size, pos, title) {
     this->_input = "";
     this->_inputText.setFont(this->_font);
     this->_inputText.setString(this->_input);
@@ -17,12 +17,10 @@ Edition::InputNumber::InputNumber(sf::Vector2f size, sf::Vector2f pos, std::stri
     this->_inputText.setPosition(sf::Vector2f(this->_pos.x, this->_pos.y));
 }
 
-Edition::InputNumber::~InputNumber()
-{
+Edition::InputNumber::~InputNumber() {
 }
 
-bool Edition::InputNumber::checkInput(const sf::Event &event)
-{
+bool Edition::InputNumber::checkInput(const sf::Event& event) {
     checkClick(event);
     if (this->_typing == true) {
         if (event.type == sf::Event::TextEntered) {
@@ -32,9 +30,10 @@ bool Edition::InputNumber::checkInput(const sf::Event &event)
                     this->updateText();
                     return true;
                 }
-            } else if (static_cast<char>(event.text.unicode) >= '0' && static_cast<char>(event.text.unicode) <= '9'){
+            } else if (static_cast<char>(event.text.unicode) >= '0'
+                       && static_cast<char>(event.text.unicode) <= '9') {
                 this->_input.push_back(static_cast<char>(event.text.unicode));
-                this->updateText(); 
+                this->updateText();
                 return true;
             }
         }

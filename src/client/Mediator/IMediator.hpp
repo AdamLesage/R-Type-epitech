@@ -24,7 +24,7 @@ namespace RType {
 
             /**
              * @brief Set the string for the game selected
-             * 
+             *
              * @param gameSelected the game selected
              */
             virtual void setGameSelected(const std::string& gameSelected) = 0;

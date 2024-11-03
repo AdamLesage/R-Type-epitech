@@ -119,7 +119,7 @@ int main(int ac, char** av) {
     unsigned short server_port = 0;
     std::string gameSelected   = "";
     std::string userName       = "";
-    bool isOffline = false;
+    bool isOffline             = false;
 
     if (av[1] != nullptr && av[2] != nullptr && isNumber(av[2])) {
         host        = av[1];
@@ -174,11 +174,11 @@ int main(int ac, char** av) {
         std::shared_ptr<RType::ClientConnexionHandling> clientConnexionHandling =
             std::make_shared<RType::ClientConnexionHandling>(host, server_port);
         clientConnexionHandling->displayConnexionWindow();
-        host        = clientConnexionHandling->getHost();
-        server_port = clientConnexionHandling->getServerPort();
+        host         = clientConnexionHandling->getHost();
+        server_port  = clientConnexionHandling->getServerPort();
         gameSelected = clientConnexionHandling->getGameSelected();
-        isOffline = clientConnexionHandling->getOfflineSelection();
-        userName    = clientConnexionHandling->getUserName();
+        isOffline    = clientConnexionHandling->getOfflineSelection();
+        userName     = clientConnexionHandling->getUserName();
 
         auto networkEngine = loadEngine<RType::NetworkEngine>(networkEngineLoader, "entryPointNetworkEngine");
         networkEngine->setParams(host, server_port, local_port);

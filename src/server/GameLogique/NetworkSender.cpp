@@ -7,17 +7,14 @@
 
 #include "NetworkSender.hpp"
 
-NetworkSender::NetworkSender(std::shared_ptr<NetworkLib::Server> network)
-{
+NetworkSender::NetworkSender(std::shared_ptr<NetworkLib::Server> network) {
     this->_network = network;
 }
 
-NetworkSender::~NetworkSender()
-{
+NetworkSender::~NetworkSender() {
 }
 
-void NetworkSender::sendCreatePlayer(int id, float pos_x, float pos_y, int clientId)
-{
+void NetworkSender::sendCreatePlayer(int id, float pos_x, float pos_y, int clientId) {
     std::array<char, 13> data{};
     data[0] = 0x01;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -30,8 +27,7 @@ void NetworkSender::sendCreatePlayer(int id, float pos_x, float pos_y, int clien
     }
 }
 
-void NetworkSender::sendCreateEnemy(char type, int id, float pos_x, float pos_y, int clientId)
-{
+void NetworkSender::sendCreateEnemy(char type, int id, float pos_x, float pos_y, int clientId) {
     int test = (int)id;
     std::array<char, 13> data{};
     data[0] = type;
@@ -45,8 +41,8 @@ void NetworkSender::sendCreateEnemy(char type, int id, float pos_x, float pos_y,
     }
 }
 
-void NetworkSender::sendCreateWall(int id, float pos_x, float pos_y, float size_x, float size_y, int clientId)
-{
+void NetworkSender::sendCreateWall(
+    int id, float pos_x, float pos_y, float size_x, float size_y, int clientId) {
     std::array<char, 21> data{};
 
     data[0] = 0x025;
@@ -62,8 +58,7 @@ void NetworkSender::sendCreateWall(int id, float pos_x, float pos_y, float size_
     }
 }
 
-void NetworkSender::sendCreateProjectil(int id, float pos_x, float pos_y, int parent_id, int clientId)
-{
+void NetworkSender::sendCreateProjectil(int id, float pos_x, float pos_y, int parent_id, int clientId) {
     std::array<char, 17> data{};
     data[0] = 0x02;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -77,8 +72,7 @@ void NetworkSender::sendCreateProjectil(int id, float pos_x, float pos_y, int pa
     }
 }
 
-void NetworkSender::sendCreateReward(int id, float pos_x, float pos_y, int clientId)
-{
+void NetworkSender::sendCreateReward(int id, float pos_x, float pos_y, int clientId) {
     std::array<char, 13> data{};
     data[0] = 0x26;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -91,8 +85,7 @@ void NetworkSender::sendCreateReward(int id, float pos_x, float pos_y, int clien
     }
 }
 
-void NetworkSender::sendCreateBonus(char type, int id, float pos_x, float pos_y, int clientId)
-{
+void NetworkSender::sendCreateBonus(char type, int id, float pos_x, float pos_y, int clientId) {
     std::array<char, 13> data{};
     data[0] = type;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -105,11 +98,11 @@ void NetworkSender::sendCreateBonus(char type, int id, float pos_x, float pos_y,
     }
 }
 
-void NetworkSender::sendDeleteEntity(int id, int clientId)
-{
-    std::array<char, 5> data{};
+void NetworkSender::sendDeleteEntity(int id, int clientId, size_t extraData) {
+    std::array<char, 5 + sizeof(size_t)> data{};
     data[0] = 0x29;
     std::memcpy(&data[1], &id, sizeof(int));
+    std::memcpy(&data[5], &extraData, sizeof(size_t));
     if (clientId == -1) {
         this->_network->sendToAll(data.data(), data.size());
     } else {
@@ -117,8 +110,7 @@ void NetworkSender::sendDeleteEntity(int id, int clientId)
     }
 }
 
-void NetworkSender::sendPositionUpdate(int id, float pos_x, float pos_y, int clientId)
-{
+void NetworkSender::sendPositionUpdate(int id, float pos_x, float pos_y, int clientId) {
     std::array<char, 13> data{};
     data[0] = 0x30;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -131,8 +123,7 @@ void NetworkSender::sendPositionUpdate(int id, float pos_x, float pos_y, int cli
     }
 }
 
-void NetworkSender::sendHealthUpdate(int id, int hp, int clientId)
-{
+void NetworkSender::sendHealthUpdate(int id, int hp, int clientId) {
     std::array<char, 9> data{};
     data[0] = 0x31;
     std::memcpy(&data[1], &id, sizeof(id));
@@ -144,8 +135,7 @@ void NetworkSender::sendHealthUpdate(int id, int hp, int clientId)
     }
 }
 
-void NetworkSender::sendProjectilColision(int id_projectil, int id_entity, int clientId)
-{
+void NetworkSender::sendProjectilColision(int id_projectil, int id_entity, int clientId) {
     std::array<char, 9> data{};
     data[0] = 0x35;
     std::memcpy(&data[1], &id_projectil, sizeof(id_projectil));
@@ -169,10 +159,9 @@ void NetworkSender::sendStateChange(int id_entity, char newState, int clientId) 
     }
 }
 
-void NetworkSender::sendPing(std::string timeCode)
-{
-    //finir et ajouter à une méthode à protocol parsing.
-    //protocl parsing fichier de config dans le constructeur de game engine, bouger le fichier de config.
+void NetworkSender::sendPing(std::string timeCode) {
+    // finir et ajouter à une méthode à protocol parsing.
+    // protocl parsing fichier de config dans le constructeur de game engine, bouger le fichier de config.
     std::vector<char> data(strlen(timeCode.c_str()) + 1);
     data[0] = 0x99;
     std::memcpy(&data[1], timeCode.c_str(), strlen(timeCode.c_str()));
@@ -180,8 +169,7 @@ void NetworkSender::sendPing(std::string timeCode)
     this->_network->sendToAll(data.data(), data.size());
 }
 
-void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId)
-{
+void NetworkSender::sendDirectionUpdate(int id_entity, float x, float y, int clientId) {
     std::array<char, 13> data{};
     data[0] = 0x32;
     std::memcpy(&data[1], &id_entity, sizeof(id_entity));

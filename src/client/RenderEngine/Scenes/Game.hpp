@@ -166,6 +166,13 @@ namespace RType {
                 _isGameOffline = isOffline;
             }
 
+            /**
+             * @brief Display the score of the player
+             * 
+             * @param win the window to display the score on
+             */
+            void displayScore(sf::RenderWindow& win);
+
         protected:
             bool _isGameOffline;
 

@@ -8,6 +8,7 @@
 #include "RenderingEngine.hpp"
 
 RType::RenderingEngine::RenderingEngine() {
+    _latency = 0;
 }
 
 RType::RenderingEngine::~RenderingEngine() {
@@ -22,7 +23,8 @@ void RType::RenderingEngine::run() {
         this->_settings = std::make_shared<Settings>(window);
         this->_lobby    = std::make_shared<Lobby>(window);
         this->_endMenu  = std::make_shared<EndMenu>(window);
-        std::string configPath = std::string("config") + PATH_SEPARATOR + _gameSelected + PATH_SEPARATOR + "game_config.cfg";
+        std::string configPath =
+            std::string("config") + PATH_SEPARATOR + _gameSelected + PATH_SEPARATOR + "game_config.cfg";
         this->_game = std::make_shared<Game>(window, configPath);
     } catch (const std::runtime_error& e) {
         std::cerr << e.what() << std::endl;
@@ -49,8 +51,7 @@ void RType::RenderingEngine::run() {
     window->clear();
     _mediator->notify("RenderingEngine", "backgroundMusicPlay");
     while (window->isOpen()) {
-        switch (_stateGame)
-        {
+        switch (_stateGame) {
         case 1:
             this->_menu->runScene(_latency);
             break;
@@ -105,8 +106,7 @@ void RType::RenderingEngine::setLevel(size_t level) {
     }
 }
 
-void RType::RenderingEngine::setOfflineMode(bool isOffline)
-{
+void RType::RenderingEngine::setOfflineMode(bool isOffline) {
     this->_isOffline = isOffline;
 }
 

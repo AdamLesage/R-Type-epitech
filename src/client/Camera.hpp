@@ -14,6 +14,7 @@
 #include "../shared/components/Rotation.hpp"
 #include "../shared/components/Sprite.hpp"
 #include "../shared/components/Health.hpp"
+#include "../shared/components/Score.hpp"
 #include <array>
 
 typedef struct EntityRenderInfo_s {
@@ -23,6 +24,7 @@ typedef struct EntityRenderInfo_s {
         Direction direction;
         Sprite sprite;
         Health health;
+        Score score;
 } EntityRenderInfo;
 
 /**
